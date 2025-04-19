@@ -17,7 +17,7 @@ public class GameMenuController implements ShowCurrentMenu{
     }
 
     public Result exitGame() {
-        return new Result(true, "");
+        return new Result(true, "ioaerjgodijvoa ewijf");
     }
 
     public Result loadGame() {
