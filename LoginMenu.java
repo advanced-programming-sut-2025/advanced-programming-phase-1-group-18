@@ -22,9 +22,9 @@ public class LoginMenu extends AppMenu{
             String menuName = LoginMenuCommands.MenuEnter.getMather(input).group(1);
             controller.menuEnter(menuName);
         } else if (LoginMenuCommands.ShowCurrentMenu.getMather(input) != null) {
-            System.out.println(controller.showCurrentMenu());
+            controller.showCurrentMenu();
         } else if (LoginMenuCommands.ForgetPassword.getMather(input) != null) {
-            String username = LoginMenuCommands.ForgetPassword.getMather(input).group("username");
+            String username = LoginMenuCommands.Login.getMather(input).group("username");
             controller.forgetPassword(username, scanner);
         } else {
             System.out.println("invalid command");

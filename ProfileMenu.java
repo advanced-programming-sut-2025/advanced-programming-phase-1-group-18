@@ -16,10 +16,8 @@ public class ProfileMenu extends AppMenu {
         if (ProfileMenuCommands.MenuEnter.getMather(input) != null) {
             String menuName = ProfileMenuCommands.MenuEnter.getMather(input).group(1);
             controller.menuEnter(menuName);
-        } else if (ProfileMenuCommands.MenuExit.getMather(input) != null) {
-            controller.exit();
         } else if (ProfileMenuCommands.ShowCurrentMenu.getMather(input) != null) {
-            System.out.println(controller.showCurrentMenu());
+            controller.showCurrentMenu();
         } else if (ProfileMenuCommands.ChangeUsername.getMather(input) != null) {
             controller.changeUsername(ProfileMenuCommands.ChangeUsername.getMather(input).group("username"));
         } else if (ProfileMenuCommands.ChangePassword.getMather(input) != null) {

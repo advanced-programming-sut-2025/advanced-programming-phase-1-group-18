@@ -3,17 +3,15 @@ package enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum LoginMenuCommands {
+public enum RegisterMenuCommands {
     MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*\\S)\\s*"),
-    MenuExit("\\s*menu\\s+exit\\s*"),
+    MenuExit(""),
     ShowCurrentMenu("show\\s+current\\s+menu"),
-    Login("\\s*login\\s+-u\\s+(?<username>.*\\S)\\s+-p\\s+(?<password>.*\\S)\\s+(?<stayLoggedIn>–stay-logged-in)?\\s*"),
-    ForgetPassword("\\s*forget\\s+password\\s+-u\\s+(?<username>.*\\S)\\s*"),
-    Answer("\\s*answer\\s+-a\\s+(?<answer>.*)\\s*");
+    Register("");
 
     private final String pattern;
 
-    LoginMenuCommands(String pattern) {
+    RegisterMenuCommands(String pattern) {
         this.pattern = pattern;
     }
 

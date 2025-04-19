@@ -15,10 +15,8 @@ public class MainMenu extends AppMenu {
         if (MainMenuCommands.MenuEnter.getMather(input) != null) {
             String menuName = MainMenuCommands.MenuEnter.getMather(input).group(1);
             controller.menuEnter(menuName);
-        } else if (MainMenuCommands.MenuExit.getMather(input) != null) {
-            controller.exit();
         } else if (MainMenuCommands.ShowCurrentMenu.getMather(input) != null) {
-            System.out.println(controller.showCurrentMenu());
+            controller.showCurrentMenu();
         } else if (MainMenuCommands.Logout.getMather(input) != null) {
             controller.logout();
         } else {

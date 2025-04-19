@@ -1,5 +1,6 @@
 package Controller;
 
+
 import Model.App;
 import Model.Result;
 import Model.User;
@@ -11,7 +12,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class LoginMenuController {
+public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
+
     public Result login(String username, String password, String stayLoggedIn) {
         if (username.isEmpty()) {
             return new Result(false, "you should enter username");
@@ -84,9 +86,6 @@ public class LoginMenuController {
         return password.toString();
     }
 
-    public Result showCurrentMenu() {
-        return new Result(true, App.getCurrentMenu().toString());
-    }
     public void exit() {
         System.exit(0);
     }
@@ -105,12 +104,14 @@ public class LoginMenuController {
                 break;
         }
     }
+
     public User findUserByUsername (String username){
-    for(User user : App.getUsers()){
-        if(user.getUsername().equals(username)){
-            return user;
+        for(User user : App.getUsers()){
+            if(user.getUsername().equals(username)){
+                return user;
+            }
         }
+        return null;
     }
-    return null;
-    }
+
 }
