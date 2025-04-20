@@ -62,6 +62,8 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu
         {
              User newUser = new User(username, password, nickname, email, gender);
              App.getUsers().add(newUser);
+             App.setCurrentuser(newUser);
+             App.setCurrentMenu(Menu.MainMenu);
              return new Result(true,"You Registered Successfully");
         }
 
