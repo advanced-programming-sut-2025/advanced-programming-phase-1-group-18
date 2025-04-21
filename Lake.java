@@ -4,19 +4,40 @@ import java.util.HashMap;
 
 public class Lake
 {
+    protected ArrayList<Kashi> insideKashis;
 
-    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
-    {
-
+    public ArrayList<Kashi> getInsideKashis() {
+        return insideKashis;
     }
 
-//    protected ArrayList<ArrayList<Kashi>> LakeMap = new ArrayList<>();
-//
-//    public ArrayList<ArrayList<Kashi>> getLakeMap() {
-//        return LakeMap;
-//    }
-//
-//    public void setLakeMap(ArrayList<ArrayList<Kashi>> lakeMap) {
-//        this.LakeMap = lakeMap;
-//    }
+    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
+        this.insideKashis = insideKashis;
+    }
+
+    public void adaptMap(ArrayList<Cord> cords)
+    {
+        this.insideKashis = new ArrayList<>();
+        ArrayList<Kashi> kashis = new ArrayList<>();
+        for(Cord cord : cords)
+        {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            kashi.setX(cord.getX());
+            kashi.setY(cord.getY());
+            kashi.setInside(this);
+            kashi.setWalkable(false);
+            kashis.add(kashi);
+        }
+        this.insideKashis.addAll(kashis);
+        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getLakes().add(this);
+        for(Kashi kashi : kashis)
+        {
+            App.getCurrentGame().getPlayers()
+                    .get(App.getCurrentGame().getIndexPlayerinControl())
+                    .getMyFarm()
+                    .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
+        }
+    }
+
 }

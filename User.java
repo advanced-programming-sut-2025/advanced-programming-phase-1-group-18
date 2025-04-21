@@ -1,6 +1,6 @@
 package Model;
-public class User
-{
+
+public class User {
 
     protected String Username;
     protected String Password;
@@ -58,8 +58,7 @@ public class User
     }
 
 
-    public User(String Username, String Password, String Email, String Gender, String NickName)
-    {
+    public User(String Username, String Password, String Email, String Gender, String NickName) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;
@@ -67,4 +66,7 @@ public class User
         this.NickName = NickName;
     }
 
+    public User() {
+
+    }
 }

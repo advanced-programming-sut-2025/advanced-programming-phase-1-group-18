@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Player extends User
 {
+    protected User Owner;
     protected int Energy;
     protected int x;
     protected int y;
@@ -17,17 +18,25 @@ public class Player extends User
     protected ArrayList<Cookingrecipe> Cookingrecipes;
     protected ArrayList<Cookingrecipe> Craftingrecipes;
 
-    protected ArrayList<Cage> Cages;
-
-    protected ArrayList<Tavileh> Tavilehs;
-
     public Player(String Username, String Password, String Email, String Gender, String NickName)
     {
         super(Username, Password, Email, Gender, NickName);
     }
+    public Player()
+    {
+
+    }
 
     public void faintController(){
 
+    }
+
+    public User getOwner() {
+        return Owner;
+    }
+
+    public void setOwner(User owner) {
+        Owner = owner;
     }
 
     public int getEnergy() {
@@ -35,7 +44,23 @@ public class Player extends User
     }
 
     public void setEnergy(int energy) {
-        this.Energy = energy;
+        Energy = energy;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public Farm getMyFarm() {
@@ -51,7 +76,7 @@ public class Player extends User
     }
 
     public void setUnlimitedEnergy(boolean unlimitedEnergy) {
-        this.UnlimitedEnergy = unlimitedEnergy;
+        UnlimitedEnergy = unlimitedEnergy;
     }
 
     public Skill getFarmingSkill() {
@@ -59,7 +84,7 @@ public class Player extends User
     }
 
     public void setFarmingSkill(Skill farmingSkill) {
-        this.FarmingSkill = farmingSkill;
+        FarmingSkill = farmingSkill;
     }
 
     public Skill getExtractionSkill() {
@@ -67,7 +92,7 @@ public class Player extends User
     }
 
     public void setExtractionSkill(Skill extractionSkill) {
-        this.ExtractionSkill = extractionSkill;
+        ExtractionSkill = extractionSkill;
     }
 
     public Skill getForagingSkill() {
@@ -75,7 +100,7 @@ public class Player extends User
     }
 
     public void setForagingSkill(Skill foragingSkill) {
-        this.ForagingSkill = foragingSkill;
+        ForagingSkill = foragingSkill;
     }
 
     public Skill getFishingSkill() {
@@ -83,7 +108,7 @@ public class Player extends User
     }
 
     public void setFishingSkill(Skill fishingSkill) {
-        this.FishingSkill = fishingSkill;
+        FishingSkill = fishingSkill;
     }
 
     public Buff getFoodBuff() {
@@ -91,7 +116,7 @@ public class Player extends User
     }
 
     public void setFoodBuff(Buff foodBuff) {
-        this.FoodBuff = foodBuff;
+        FoodBuff = foodBuff;
     }
 
     public ArrayList<Cookingrecipe> getCookingrecipes() {
@@ -99,7 +124,7 @@ public class Player extends User
     }
 
     public void setCookingrecipes(ArrayList<Cookingrecipe> cookingrecipes) {
-        this.Cookingrecipes = cookingrecipes;
+        Cookingrecipes = cookingrecipes;
     }
 
     public ArrayList<Cookingrecipe> getCraftingrecipes() {
@@ -107,25 +132,12 @@ public class Player extends User
     }
 
     public void setCraftingrecipes(ArrayList<Cookingrecipe> craftingrecipes) {
-        this.Craftingrecipes = craftingrecipes;
+        Craftingrecipes = craftingrecipes;
     }
 
-    public ArrayList<Cage> getCages() {
-        return Cages;
-    }
 
-    public void setCages(ArrayList<Cage> cages) {
-        this.Cages = cages;
-    }
 
-    public ArrayList<Tavileh> getTavilehs() {
-        return Tavilehs;
-    }
-
-    public void setTavilehs(ArrayList<Tavileh> tavilehs) {
-        this.Tavilehs = tavilehs;
-    }
-//    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
+    //    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
 //    {
 //
 //    }

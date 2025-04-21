@@ -67,6 +67,7 @@ public class Animal
    public void setAnimalProducts(ArrayList<AnimalProduct> AnimalProducts) {
       this.AnimalProducts = AnimalProducts;
    }
+
    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
    {
 

@@ -2,9 +2,9 @@ package Model;
 
 import java.util.HashMap;
 
-public class Tree
+public abstract class Tree
 {
-    protected Kashi TreesMap = new Kashi();
+    protected boolean GhoolPeikar;
 
     public boolean isGhoolPeikar() {
         return GhoolPeikar;
@@ -12,19 +12,5 @@ public class Tree
 
     public void setGhoolPeikar(boolean ghoolPeikar) {
         this.GhoolPeikar = ghoolPeikar;
-    }
-
-    public Kashi getTreesMap() {
-        return TreesMap;
-    }
-
-    public void setTreesMap(Kashi treesMap) {
-        this.TreesMap = treesMap;
-    }
-
-    protected boolean GhoolPeikar;
-    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
-    {
-
     }
 }

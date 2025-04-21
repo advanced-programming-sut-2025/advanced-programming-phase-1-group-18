@@ -6,7 +6,6 @@ public class Stone
 {
 
     protected int Price;
-    protected Season Season = new Season();
 
     public int getPrice() {
         return Price;
@@ -16,20 +15,19 @@ public class Stone
         this.Price = price;
     }
 
-    public Season getSeason() {
-        return Season;
-    }
-
-    public void setSeason(Season season) {
-        this.Season = season;
-    }
-
-    public void changeseason()
-    {
-
-    }
-    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
-    {
+    public void adaptMap(Cord cord) {
+        Kashi kashi = new Kashi();
+        kashi.setShokhmZadeh(false);
+        kashi.setEnterance(false);
+        kashi.setX(cord.getX());
+        kashi.setY(cord.getY());
+        kashi.setInside(this);
+        kashi.setWalkable(false);
+        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getStones().add(this);
+        App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl())
+                .getMyFarm()
+                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
 
     }
 }

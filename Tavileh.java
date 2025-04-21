@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class Tavileh
 {
     protected String Level;
+    protected ArrayList<TavilehAnimal> TavilehAnimals;
 
     public String getLevel() {
         return Level;
@@ -22,7 +23,6 @@ public class Tavileh
         this.TavilehAnimals = tavilehAnimals;
     }
 
-    protected ArrayList<TavilehAnimal> TavilehAnimals;
     public void adaptMap(HashMap<Integer ,Integer> LakeMap)
     {
 

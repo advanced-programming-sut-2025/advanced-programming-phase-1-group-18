@@ -5,6 +5,8 @@ public class Kashi
     protected int x;
     protected int y;
     protected Object inside;
+    protected Boolean Enterance;
+    protected Boolean Walkable;
     // Getter و Setter برای ShokhmZadeh
     public boolean isShokhmZadeh() {
         return ShokhmZadeh;
@@ -29,13 +31,28 @@ public class Kashi
     public void setY(int y) {
         this.y = y;
     }
-    // Getter and Setter for the content
-    public Object getContent() {
+
+    public Boolean getEnterance() {
+        return Enterance;
+    }
+
+    public void setEnterance(Boolean enterance) {
+        Enterance = enterance;
+    }
+
+    public Object getInside() {
         return inside;
     }
 
-    public void setContent(Object content) {
-        this.inside = content;
+    public void setInside(Object inside) {
+        this.inside = inside;
     }
 
+    public Boolean getWalkable() {
+        return Walkable;
+    }
+
+    public void setWalkable(Boolean walkable) {
+        Walkable = walkable;
+    }
 }

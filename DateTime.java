@@ -4,6 +4,11 @@ public class DateTime
     protected int Hour;
     protected int Day;
 
+    public DateTime(int hour, int day) {
+        Hour = hour;
+        Day = day;
+    }
+
     public int getDay() {
         return Day;
     }

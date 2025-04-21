@@ -1,54 +1,53 @@
 package Model;
 
-import enums.Menu;
-import Model.*;
+import enums.*;
+
 import java.util.ArrayList;
 
 public class App {
-    protected static Season currentseason = new Season();
-    protected static Menu currentMenu = Menu.RegisterMenu;
-    protected static User currentuser;
-    protected static ArrayList<User> users = new ArrayList<>();
+    protected static Menu CurrentMenu = Menu.RegisterMenu;
+    protected static ArrayList<User> Users_List = new ArrayList<>();
+    protected static ArrayList<Game> Games = new ArrayList<>();
+    protected static User CurrentUser;
+    protected static Game CurrentGame;
 
-    protected static DateTime currentDateTime = new DateTime();
     public static Menu getCurrentMenu() {
-        return currentMenu;
+        return CurrentMenu;
     }
 
-    public static void setCurrentMenu(Menu currentMenu)
-    {
-        App.currentMenu = currentMenu;
+    public static void setCurrentMenu(Menu currentMenu) {
+        CurrentMenu = currentMenu;
     }
 
-    public static ArrayList<User> getUsers() {
-        return users;
+    public static ArrayList<User> getUsers_List() {
+        return Users_List;
     }
 
-    public static void setUsers(ArrayList<User> users) {
-        App.users = users;
+    public static void setUsers_List(ArrayList<User> users_List) {
+        Users_List = users_List;
     }
 
-    public static Season getCurrentseason() {
-        return currentseason;
+    public static ArrayList<Game> getGames() {
+        return Games;
     }
 
-    public static void setCurrentseason(Season currentseason) {
-        App.currentseason = currentseason;
+    public static void setGames(ArrayList<Game> games) {
+        Games = games;
     }
 
-    public static User getCurrentuser() {
-        return currentuser;
+    public static User getCurrentUser() {
+        return CurrentUser;
     }
 
-    public static void setCurrentuser(User currentuser) {
-        App.currentuser = currentuser;
+    public static void setCurrentUser(User currentUser) {
+        CurrentUser = currentUser;
     }
 
-    public static DateTime getCurrentDateTime() {
-        return currentDateTime;
+    public static Game getCurrentGame() {
+        return CurrentGame;
     }
 
-    public static void setCurrentDateTime(DateTime currentDateTime) {
-        App.currentDateTime = currentDateTime;
+    public static void setCurrentGame(Game currentGame) {
+        CurrentGame = currentGame;
     }
 }
