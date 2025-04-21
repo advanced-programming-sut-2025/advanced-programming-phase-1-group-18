@@ -1,8 +1,7 @@
 package enums;
-
+import Model.*;
 public enum ForagingTreesEnums
 {
-    Name,
     Acorns,
     MapleSeeds,
     PineCones,
