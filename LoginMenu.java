@@ -5,8 +5,9 @@ import enums.LoginMenuCommands;
 
 import java.util.Scanner;
 
-public class LoginMenu extends AppMenu{
+public class LoginMenu extends AppMenu {
     private final LoginMenuController controller = new LoginMenuController();
+
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
