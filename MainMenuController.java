@@ -5,7 +5,7 @@ import enums.Menu;
 public class MainMenuController implements MenuEnter, ShowCurrentMenu{
 
     public void logout() {
-        App.setCurrentuser(null);
+        App.setCurrentUser(null);
         App.setCurrentMenu(Menu.LoginMenu);
     }
 

@@ -61,8 +61,8 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu
         else
         {
              User newUser = new User(username, password, nickname, email, gender);
-             App.getUsers().add(newUser);
-             App.setCurrentuser(newUser);
+             App.getUsers_List().add(newUser);
+             App.setCurrentUser(newUser);
              App.setCurrentMenu(Menu.MainMenu);
              return new Result(true,"You Registered Successfully");
         }
@@ -95,7 +95,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu
 
     //check the username is Unique
     public boolean isUsernameUnique(String username) {
-        for(User user : App.getUsers())
+        for(User user : App.getUsers_List())
         {
             if(user.getUsername().equals(username))
             {

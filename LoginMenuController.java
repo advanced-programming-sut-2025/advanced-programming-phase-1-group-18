@@ -30,7 +30,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
         }
         else{
             user.setStayLoggedIn(!stayLoggedIn.isEmpty());
-            App.setCurrentuser(user);
+            App.setCurrentUser(user);
             App.setCurrentMenu(Menu.MainMenu);
             return new Result(true, "user logged successfully");
         }
@@ -106,7 +106,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
     }
 
     public User findUserByUsername (String username){
-        for(User user : App.getUsers()){
+        for(User user : App.getUsers_List()){
             if(user.getUsername().equals(username)){
                 return user;
             }
