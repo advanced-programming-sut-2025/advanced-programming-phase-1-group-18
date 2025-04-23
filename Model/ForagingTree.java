@@ -1,0 +1,34 @@
+package Model;
+
+import enums.ForagingTreesEnums;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class ForagingTree extends Tree {
+    ForagingTreesEnums type;
+
+    public ForagingTreesEnums getType() {
+        return type;
+    }
+
+    public void setType(ForagingTreesEnums type) {
+        this.type = type;
+    }
+
+    public void adaptMap(Cord cord) {
+        Kashi kashi = new Kashi();
+        kashi.setShokhmZadeh(false);
+        kashi.setEnterance(false);
+        kashi.setX(cord.getX());
+        kashi.setY(cord.getY());
+        kashi.setInside(this);
+        kashi.setWalkable(false);
+        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingTrees().add(this);
+        App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl())
+                .getMyFarm()
+                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
+
+    }
+}
