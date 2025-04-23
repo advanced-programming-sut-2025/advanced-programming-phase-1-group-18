@@ -1,0 +1,610 @@
+package Controller;
+
+import Model.*;
+import enums.Menu;
+import enums.Seasons;
+import enums.WeatherEnum;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class GameMenuController implements ShowCurrentMenu {
+    public void exit() {
+
+    }
+
+    public Result gameNew(String command, Scanner scanner) {
+        String[] usernames = new String[command.split("\\s+").length - 3];
+        if (command.split("\\s+").length - 3 >= 0)
+            System.arraycopy(command.split("\\s+"), 3, usernames, 0, command.split("\\s+").length - 3);
+        //check username regex
+        for (String username : usernames) {
+            Boolean check = false;
+            for (User user : App.getUsers_List()) {
+                if (username.equals(user.getUsername())) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                return new Result(false, "Username does not exist");
+            }
+        }
+        for (String username : usernames) {
+            Boolean check = true;
+            for (Game game : App.getGames()) {
+                for (Player player : game.getPlayers()) {
+                    if (player.getOwner().getUsername().equals(username)) {
+                        return new Result(false, "Username is already in a game");
+                    }
+                }
+            }
+        }
+        Game NewGame = new Game();
+        NewGame.setCreator(App.getCurrentUser());
+        NewGame.setIndexPlayerinControl(0);
+
+        Player player1 = new Player();
+        player1.setOwner(App.getCurrentUser());
+        NewGame.getPlayers().add(player1);
+        for (String username : usernames) {
+            Player player = new Player();
+            for (User user : App.getUsers_List()) {
+                if (username.equals(user.getUsername())) {
+                    player.setOwner(user);
+                    NewGame.getPlayers().add(player);
+                    break;
+                }
+            }
+        }
+        NewGame.setCurrentSeason(Seasons.Spring);
+        NewGame.setCurrentDateTime(new DateTime(9, 1));
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        weather.addLast(getRandomWeather(Seasons.Spring));
+
+        NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
+        NewGame.setWeather(weather);
+        App.setCurrentGame(NewGame);
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            System.out.println("Choosing map for: " + player.getOwner().getUsername());
+
+            int number = -1;
+            while (true) {
+                if (scanner.hasNextInt()) {
+                    number = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (number >= 1 && number <= 4) {
+                        break;
+                    } else {
+                        System.out.println("Error: Please enter a number between 1 and 4.");
+                    }
+                } else {
+                    System.out.println("Error: Invalid input. Please enter a **number** between 1 and 4.");
+                    scanner.nextLine();
+                }
+            }
+
+            switch (number) {
+                case 1:
+                    player.getMyFarm().createMap1();
+                    break;
+                case 2:
+                    player.getMyFarm().createMap2();
+                    break;
+                case 3:
+                    player.getMyFarm().createMap3();
+                    break;
+                case 4:
+                    player.getMyFarm().createMap4();
+                    break;
+                default:
+                    System.out.println("Unexpected error occurred.");
+                    break;
+            }
+        }
+        App.getGames().add(NewGame);
+        return new Result(true, "Game Created");
+    }
+
+    public static WeatherEnum getRandomWeather(Seasons seasons) {
+        // ۱. فهرست وضعیت‌های مجاز را می‌سازیم
+        List<WeatherEnum> candidates = Stream.of(WeatherEnum.values())
+                .filter(w -> w.isAllowedIn(seasons))
+                .collect(Collectors.toList());
+
+        // ۲. عدد تصادفی بین 0 و size-1
+        int idx = ThreadLocalRandom.current().nextInt(candidates.size());
+
+        // ۳. انتخاب و بازگشت
+        return candidates.get(idx);
+    }
+
+    private static final Random random = new Random();
+
+    public static int[][] getRandomPlaces(int amount, int farmWidth, int farmHeight) {
+        int[][] strikePositions = new int[amount][2]; // آرایه برای ذخیره مختصات (x,y)
+
+        for (int i = 0; i < amount; i++) {
+            strikePositions[i][0] = random.nextInt(farmWidth);  // مقدار x تصادفی
+            strikePositions[i][1] = random.nextInt(farmHeight); // مقدار y تصادفی
+        }
+        return strikePositions;
+
+    }
+
+    public Result gameMap(int mapNumber) {
+        return new Result(true, "");
+    }
+
+    public Result exitGame() {
+        if (App.getCurrentGame() == null) {
+            return new Result(false, "Game not started");
+        }
+        if (App.getCurrentGame().getCreator().getUsername().equals(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getUsername())) {
+            //save game
+            App.setCurrentGame(null);
+            App.setCurrentMenu(Menu.GameMenu);
+            return new Result(true, "Game Exited");
+        } else {
+            return new Result(false, "You can't exit the game");
+        }
+    }
+
+    public Result voteTerminateGame(Scanner scanner) {
+        int total_neg = 0;
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (!player.getOwner().getUsername().equals(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getUsername())) {
+                System.out.println("Enter your vote to terminate game(+/-): ");
+                String vote = scanner.nextLine();
+                if (vote.equals("-")) {
+                    total_neg++;
+                }
+            }
+        }
+        if (total_neg > 0) {
+            //delete game
+            App.setCurrentGame(null);
+            App.setCurrentMenu(Menu.GameMenu);
+            return new Result(true, "Game Exited");
+        } else {
+            return new Result(false, "Looks like someone want to still play!");
+        }
+    }
+
+    public Result loadGame() {
+        return new Result(true, "");
+    }
+
+    public Result saveGame() {
+        return new Result(true, "");
+    }
+
+    public Result removeGame() {
+        return new Result(true, "");
+    }
+
+    public void nextTurn() {
+        App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
+        if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
+            App.getCurrentGame().setIndexPlayerinControl(0);
+//            start new day
+            if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
+                App.getCurrentGame().setCurrentDateTime(new DateTime(0, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
+
+                App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
+                Deque<WeatherEnum> weather = new ArrayDeque<>();
+                if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
+                    String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
+                    switch (season2) {
+                        case "Spring":
+                            weather.addLast(getRandomWeather(Seasons.Summer));
+                            App.getCurrentGame().setWeather(weather);
+                            break;
+                        case "Summer":
+                            weather.addLast(getRandomWeather(Seasons.Fall));
+                            App.getCurrentGame().setWeather(weather);
+                            break;
+                        case "Fall":
+                            weather.addLast(getRandomWeather(Seasons.Winter));
+                            App.getCurrentGame().setWeather(weather);
+                            break;
+                        case "Winter":
+                            weather.addLast(getRandomWeather(Seasons.Spring));
+                            App.getCurrentGame().setWeather(weather);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+                    App.getCurrentGame().setWeather(weather);
+                }
+                if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
+                    Thor thor = new Thor();
+                    int farmWide = 50;
+                    int farmHeight = 50;
+                    int[][] strikePosition = new int[3][2];
+                    strikePosition = getRandomPlaces(3, farmWide, farmHeight);
+//                    ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
+                    Kashi kashi1 = new Kashi();
+                    kashi1.setX(strikePosition[0][0]);
+                    kashi1.setY(strikePosition[0][1]);
+                    Kashi kashi2 = new Kashi();
+                    kashi2.setX(strikePosition[1][0]);
+                    kashi2.setY(strikePosition[1][1]);
+                    Kashi kashi3 = new Kashi();
+                    kashi3.setX(strikePosition[2][0]);
+                    kashi3.setY(strikePosition[2][1]);
+                    ArrayList<Kashi> kashiList = new ArrayList<>();
+                    kashiList.add(kashi1);
+                    kashiList.add(kashi2);
+                    kashiList.add(kashi3);
+                    thor.setKhordeh(kashiList);
+                }
+            }
+//            just + hour
+            else {
+                App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
+                        App.getCurrentGame().getCurrentDateTime().getDay()));
+            }
+        }
+    }
+
+
+    public Result time() {
+        return new Result(true, String.valueOf(App.getCurrentGame().getCurrentDateTime().getHour()));
+    }
+
+    public Result date() {
+        String stringBuilder = App.getCurrentGame().getCurrentDateTime().getSeason() +
+                "-" +
+                App.getCurrentGame().getCurrentDateTime().getDay();
+        return new Result(true, stringBuilder);
+    }
+
+    public Result dateTime() {
+        String stringBuilder = App.getCurrentGame().getCurrentDateTime().getSeason() +
+                "-" +
+                App.getCurrentGame().getCurrentDateTime().getDay() +
+                "-" +
+                App.getCurrentGame().getCurrentDateTime().getHour();
+        return new Result(true, stringBuilder);
+
+    }
+
+    public Result dayOfWeek() {
+        int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay()%7;
+        switch (dayOfWeek) {
+            case 0:
+                return new Result(true, "Sunday");
+            case 1:
+                return new Result(true, "Monday");
+            case 2:
+                return new Result(true, "Tuesday");
+            case 3:
+                return new Result(true, "Wednesday");
+            case 4:
+                return new Result(true, "Thursday");
+            case 5:
+                return new Result(true, "Friday");
+            case 6:
+                return new Result(true, "Saturday");
+        }
+        return null;
+    }
+
+    public Result cheatAdvanceTime(int hour) {
+        if (hour < 0) {
+            return new Result(false, "cheatCode: Invalid hour");
+        }
+        int newHour = hour + App.getCurrentGame().getCurrentDateTime().getHour();
+        int hourOfDay = newHour % 24;
+        int newDay = (newHour / 24) + App.getCurrentGame().getCurrentDateTime().getDay();
+        App.getCurrentGame().setCurrentDateTime(new DateTime(hourOfDay, newDay));
+        return new Result(true, "cheatCode: Hour changed! New Hour: " + hourOfDay + " New Day: " + newDay);
+    }
+
+    public Result cheatAdvanceDate(int day) {
+        if (day < 0) {
+            return new Result(false, "cheatCode: Invalid day");
+        }
+        int newDay = day + App.getCurrentGame().getCurrentDateTime().getDay();
+        App.getCurrentGame().setCurrentDateTime(new DateTime(day, newDay));
+        return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
+    }
+
+    public Result season() {
+        return new Result(true, App.getCurrentGame().getCurrentDateTime().getSeason());
+    }
+
+    public Result cheatThor(int x, int y) {
+        Thor thor = new Thor();
+        Cord cord = new Cord(x, y);
+//        thor.setKhordeh();
+        return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
+    }
+
+    public Result weather() {
+        return new Result(true, "Weather : " + App.getCurrentGame().getCurrentWeather().toString());
+    }
+
+    public Result weatherForecast() {
+        return new Result(true, "Tomorrow Weather : " + App.getCurrentGame().getWeather().getFirst().toString());
+
+    }
+
+    public Result cheatWeather(String Type) {
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        switch (Type) {
+            case "Sunny":
+                weather.addFirst(WeatherEnum.SUNNY);
+                App.getCurrentGame().setWeather(weather);
+                return new Result(true, "cheatCode: Sunny");
+            case "Rain":
+                weather.addFirst(WeatherEnum.RAIN);
+                App.getCurrentGame().setWeather(weather);
+                return new Result(true, "cheatCode: Rain");
+            case "Storm":
+                weather.addFirst(WeatherEnum.STORM);
+                App.getCurrentGame().setWeather(weather);
+                return new Result(true, "cheatCode: Storm");
+            case "Snow":
+                weather.addFirst(WeatherEnum.SNOW);
+                App.getCurrentGame().setWeather(weather);
+                return new Result(true, "cheatCode: Snow");
+            default:
+                return new Result(false, "cheatCode: Invalid Weather");
+        }
+    }
+
+    public Result greenHouseBiuld() {
+        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() > 500
+                && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() > 1000) {
+            App.getCurrentGame().getPlayers()
+                    .get(App.getCurrentGame().getIndexPlayerinControl())
+                    .getMyFarm().getMyGreenHouse().setStatus(true);
+
+        }
+        return new Result(true, "Green House Build successfully");
+    }
+
+    public Result walk(int x, int y) {
+        return new Result(true, "");
+    }
+
+    public void printMap(int x, int y, int size) {
+        for (int i = x; i < size + x; i++) {
+            for(int j = y; j < size + y; j++) {
+//                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
+//                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
+//                } else if (.....) {
+//
+//                }
+//                System.out.println("\u001B[38;2;255;100;50m" + "متن با رنگ RGB" + "\u001B[0m");
+            }
+            System.out.println();
+        }
+    }
+
+    public void helpReadingMap() {
+        System.out.println("Tree -> T");
+        System.out.println("GreenHose -> G");
+        System.out.println("Quarry -> Q");
+//        ...
+    }
+
+    public void energyShow() {
+        System.out.println("Energy: "+
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame()
+                        .getIndexPlayerinControl()).getEnergy());
+    }
+
+    public Result energySet(int value) {
+        if (value < 0) {
+            return new Result(false, "CheatCode: Invalid energy");
+        }
+        App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(value);
+        return new Result(true, "CheatCode: Energy set to " + value);
+    }
+
+    public void energyUnlimited() {
+        App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl()).setUnlimitedEnergy(true);
+        System.out.println("**Energy unlimited**");
+
+    }
+
+    public void inventoryShow() {
+
+    }
+
+    public Result inventoryTrash(String name, int number) {
+        return new Result(true, "");
+    }
+
+    public Result toolEquip(String toolName) {
+        return new Result(true, "");
+    }
+
+    public void toolsShowCurrent() {
+
+    }
+
+    public void toolShowAvailable() {
+
+    }
+
+    public Result toolsUpgrade(String toolName) {
+        return new Result(true, "");
+    }
+
+    public Result toolsUse(String direction) {
+        return new Result(true, "");
+    }
+
+    public Result craftInfo(String carftName) {
+        return new Result(true, "");
+    }
+
+    public Result plant(String seed, String direction) {
+        return new Result(true, "");
+    }
+
+    public Result showPlant(int x, int y) {
+        return new Result(true, "");
+    }
+
+    public Result fertilize(String fertilizer, String direction) {
+        return new Result(true, "");
+    }
+
+    public void howMuchWater() {
+
+    }
+
+    public void craftingShowRecipes() {
+
+    }
+
+    public Result craftingCraft(String name) {
+        return new Result(true, "");
+    }
+
+    public Result placeItem(String name, String direction) {
+        return new Result(true, "");
+    }
+
+    public Result cheatAddItem(String name, int count) {
+        return new Result(true, "");
+    }
+
+    public Result cookingRefrigerator(String pickOrPut, String item) {
+        return new Result(true, "");
+    }
+
+    public void cookingShowRecipes() {
+
+    }
+
+    public Result cookingPrepare(String recipeName) {
+        return new Result(true, "");
+    }
+
+    public Result eat(String foodName) {
+        return new Result(true, "");
+    }
+
+    public Result build(String buildingName, int x, int y) {
+        return new Result(true, "");
+    }
+
+    public Result buyAnimal(String animal, String name) {
+        return new Result(true, "");
+    }
+
+    public Result pet(String name) {
+        return new Result(true, "");
+    }
+
+    public Result cheatSetFriendship(String animalName, int amount) {
+        return new Result(true, "");
+    }
+
+    public void animals() {
+
+    }
+
+    public Result shepherdAnimals(String animalName, int x, int y) {
+        return new Result(true, "");
+    }
+
+    public Result feedHay(String animalName) {
+        return new Result(true, "");
+    }
+
+    public void produces() {
+
+    }
+
+    public Result collectProduce(String name) {
+        return new Result(true, "");
+    }
+
+    public Result sellAnimal(String name) {
+        return new Result(true, "");
+    }
+
+    public Result fishing(String fishingPole) {
+        return new Result(true, "");
+    }
+
+    public Result artisanUse(String artisanName, String item1Name) {
+        return new Result(true, "");
+    }
+
+    public Result artisanGet(String artisanName) {
+        return new Result(true, "");
+    }
+
+    public Result cheatAdd(int count) {
+        return new Result(true, "");
+    }
+
+    public Result sell(String productName, int count) {
+        return new Result(true, "");
+    }
+
+    public void friendships() {
+
+    }
+
+    public Result talk(String username, String message) {
+        return new Result(true, "");
+    }
+
+    public Result talkHistory(String username) {
+        return new Result(true, "");
+    }
+
+    public Result gift(String userName, int amount, String item) {
+        return new Result(true, "");
+    }
+
+    public void giftList() {
+
+    }
+
+    public Result giftRate(int giftNumber, int rate) {
+        return new Result(true, "");
+    }
+
+    public Result giftHistory(String name) {
+        return new Result(true, "");
+    }
+
+    public Result hug(String userName) {
+        return new Result(true, "");
+    }
+
+    public Result flower(String userName) {
+        return new Result(true, "");
+    }
+
+    public Result askMarriage(String userName, String ring) {
+        return new Result(true, "");
+    }
+
+    public Result response(String acceptOrReject, String userName) {
+        return new Result(true, "");
+    }
+
+    public void startTrade() {
+
+    }
+
+
+}
