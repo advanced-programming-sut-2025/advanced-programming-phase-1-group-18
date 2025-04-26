@@ -17,6 +17,7 @@ public enum AllCropsEnums {
     BlueBerry,
     Corn,
     Hops,
+    HotPepper,
     Melon,
     Poppy,
     Radish,

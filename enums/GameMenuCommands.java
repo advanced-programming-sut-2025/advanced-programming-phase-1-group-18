@@ -9,6 +9,9 @@ public enum GameMenuCommands {
     ExitGame("\\s*exit\\s+game\\s*"),
     VoteTerminateGame("\\s*vote\\s+terminate\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
+    Plant("\\s*plant\\s+-s\\s+(?<seed>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*"),
+    ShowPlant("\\s*showplant\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)\\s*"),
+    HowMuchWater("\\s*howmuch\\s+water\\s*"),
     // Time & Date Commands
     TIME("\\s*time\\s*"),
     DATE("\\s*date\\s*"),
