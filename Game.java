@@ -1,8 +1,11 @@
 package Model;
 
 import enums.Seasons;
+import enums.WeatherEnum;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class Game {
     protected User Creator;
@@ -11,7 +14,24 @@ public class Game {
 //    protected Player CurrentPlayer;
     protected  Seasons CurrentSeason;
     protected  DateTime currentDateTime;
+    protected WeatherEnum currentWeather;
+    protected Deque<WeatherEnum> weather = new ArrayDeque<>();
 
+    public Deque<WeatherEnum> getWeather() {
+        return weather;
+    }
+
+    public void setWeather(Deque<WeatherEnum> weather) {
+        this.weather = weather;
+    }
+
+    public WeatherEnum getCurrentWeather() {
+        return currentWeather;
+    }
+
+    public void setCurrentWeather(WeatherEnum currentWeather) {
+        this.currentWeather = currentWeather;
+    }
 
     public User getCreator() {
         return Creator;

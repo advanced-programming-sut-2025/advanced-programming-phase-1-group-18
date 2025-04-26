@@ -1,6 +1,5 @@
 package Model;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player extends User
 {
@@ -15,6 +14,8 @@ public class Player extends User
     protected Skill ForagingSkill;
     protected Skill FishingSkill;
     protected Buff FoodBuff;
+    protected int wood;
+    protected int gold;
     protected ArrayList<Cookingrecipe> Cookingrecipes;
     protected ArrayList<Cookingrecipe> Craftingrecipes;
 
@@ -135,9 +136,23 @@ public class Player extends User
         Craftingrecipes = craftingrecipes;
     }
 
+    public int getWood() {
+        return wood;
+    }
 
+    public void setWood(int wood) {
+        this.wood = wood;
+    }
 
-    //    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+//    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
 //    {
 //
 //    }

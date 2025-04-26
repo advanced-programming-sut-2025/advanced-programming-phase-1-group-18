@@ -1,4 +1,7 @@
 package Model;
+
+import enums.Seasons;
+
 public class DateTime
 {
     protected int Hour;
@@ -23,5 +26,21 @@ public class DateTime
 
     public void setHour(int hour) {
         this.Hour = hour;
+    }
+
+    public String getSeason(){
+        int day = Day % 112;
+        int season = day / 28;
+        switch(season){
+            case 0:
+                return Seasons.Spring.toString();
+            case 1:
+                return Seasons.Summer.toString();
+            case 2:
+                return Seasons.Fall.toString();
+            case 3:
+                return Seasons.Winter.toString();
+        }
+        return "";
     }
 }
