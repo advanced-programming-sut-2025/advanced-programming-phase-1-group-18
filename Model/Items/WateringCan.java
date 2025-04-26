@@ -5,6 +5,8 @@ public class WateringCan extends Item
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
+    protected int capacity;
+    protected int max_Capacity;
 
     public String getUsage() {
         return usage;
@@ -28,6 +30,22 @@ public class WateringCan extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this. EnergyUsage = energyUsage;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getMax_Capacity() {
+        return max_Capacity;
+    }
+
+    public void setMax_Capacity(int max_Capacity) {
+        this.max_Capacity = max_Capacity;
     }
 }
 

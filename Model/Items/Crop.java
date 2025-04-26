@@ -1,20 +1,11 @@
 package Model.Items;
 
-public class Crop extends Item
+public abstract class Crop extends Item
 {
 
-   protected String Name;
    protected int BaseSellPrice;
    protected int Energy;
 
-
-   public String getName() {
-      return Name;
-   }
-
-   public void setName(String name) {
-      this.Name = name;
-   }
 
    public int getBaseSellPrice() {
       return BaseSellPrice;

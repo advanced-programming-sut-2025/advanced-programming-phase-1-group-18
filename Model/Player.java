@@ -1,5 +1,6 @@
 package Model;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends User
 {
@@ -18,6 +19,33 @@ public class Player extends User
     protected int gold;
     protected ArrayList<Cookingrecipe> Cookingrecipes;
     protected ArrayList<Cookingrecipe> Craftingrecipes;
+    protected Inventory inventory;
+
+
+
+    public int getWood() {
+        return wood;
+    }
+
+    public void setWood(int wood) {
+        this.wood = wood;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 
     public Player(String Username, String Password, String Email, String Gender, String NickName)
     {
@@ -136,23 +164,9 @@ public class Player extends User
         Craftingrecipes = craftingrecipes;
     }
 
-    public int getWood() {
-        return wood;
-    }
 
-    public void setWood(int wood) {
-        this.wood = wood;
-    }
 
-    public int getGold() {
-        return gold;
-    }
-
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
-
-//    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
+    //    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
 //    {
 //
 //    }

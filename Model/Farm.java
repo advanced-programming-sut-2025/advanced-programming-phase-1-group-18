@@ -3,8 +3,10 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Items.AllCrop;
 import Model.Items.ForagingCrop;
 import Model.Items.ForagingSeed;
+import Model.Items.MixedSeed;
 import enums.*;
 
 public class Farm {
@@ -24,7 +26,26 @@ public class Farm {
     protected ArrayList<Quarry> Quarrys;
     protected ArrayList<Stone> Stones;
     protected ArrayList<ForagingCrop> ForagingCrops;
+    protected ArrayList<AllCrop> AllCrops;
     protected ArrayList<ForagingSeed> foragingSeeds;
+    protected ArrayList<MixedSeed> MixedSeeds;
+
+
+    public ArrayList<AllCrop> getAllCrops() {
+        return AllCrops;
+    }
+
+    public void setAllCrops(ArrayList<AllCrop> allCrops) {
+        AllCrops = allCrops;
+    }
+
+    public ArrayList<MixedSeed> getMixedSeeds() {
+        return MixedSeeds;
+    }
+
+    public void setMixedSeeds(ArrayList<MixedSeed> mixedSeeds) {
+        MixedSeeds = mixedSeeds;
+    }
 
     // Getter and Setter for Map
     public ArrayList<ArrayList<Kashi>> getMap() {

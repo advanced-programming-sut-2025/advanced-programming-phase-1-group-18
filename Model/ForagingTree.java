@@ -1,9 +1,13 @@
 package Model;
 
+import enums.AllTreesEnums;
+import enums.ForagingCropsEnums;
 import enums.ForagingTreesEnums;
+import enums.TreeSeedEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ForagingTree extends Tree {
     ForagingTreesEnums type;
@@ -31,4 +35,9 @@ public class ForagingTree extends Tree {
                 .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
 
     }
+
+    public void initilizeCrop(ForagingTreesEnums foragingTreesEnums) {
+        this.setType(foragingTreesEnums);
+    }
+
 }

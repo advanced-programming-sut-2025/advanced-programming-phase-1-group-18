@@ -6,7 +6,6 @@ import enums.WeatherEnum;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-
 public class Game {
     protected User Creator;
     protected int indexPlayerinControl;
@@ -16,6 +15,8 @@ public class Game {
     protected  DateTime currentDateTime;
     protected WeatherEnum currentWeather;
     protected Deque<WeatherEnum> weather = new ArrayDeque<>();
+
+
 
     public Deque<WeatherEnum> getWeather() {
         return weather;

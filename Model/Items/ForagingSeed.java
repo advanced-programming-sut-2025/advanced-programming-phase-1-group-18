@@ -5,14 +5,13 @@ import Model.Cord;
 import Model.Kashi;
 import enums.ForagingSeedsEnums;
 
-import java.util.HashMap;
 
 public class ForagingSeed extends Seed
 {
     ForagingSeedsEnums type;
 
 
-    public ForagingSeedsEnums getEnumType() {
+    public ForagingSeedsEnums getType() {
         return type;
     }
 
