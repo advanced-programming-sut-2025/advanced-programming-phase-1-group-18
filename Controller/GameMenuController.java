@@ -1,9 +1,8 @@
 package Controller;
 
 import Model.*;
-import enums.Menu;
-import enums.Seasons;
-import enums.WeatherEnum;
+import Model.Items.*;
+import enums.*;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,15 +16,15 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public Result gameNew(String command, Scanner scanner) {
         String[] usernames = new String[command.split("\\s+").length - 3];
-        if (command.split("\\s+").length - 3 >= 0)
-            System.arraycopy(command.split("\\s+"), 3, usernames, 0, command.split("\\s+").length - 3);
+        for (int i = 3; i < command.split("\\s+").length; i++) {
+            usernames[i - 3] = command.split("\\s+")[i];
+        }
         //check username regex
         for (String username : usernames) {
             Boolean check = false;
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     check = true;
-                    break;
                 }
             }
             if (!check) {
@@ -45,7 +44,6 @@ public class GameMenuController implements ShowCurrentMenu {
         Game NewGame = new Game();
         NewGame.setCreator(App.getCurrentUser());
         NewGame.setIndexPlayerinControl(0);
-
         Player player1 = new Player();
         player1.setOwner(App.getCurrentUser());
         NewGame.getPlayers().add(player1);
@@ -61,11 +59,6 @@ public class GameMenuController implements ShowCurrentMenu {
         }
         NewGame.setCurrentSeason(Seasons.Spring);
         NewGame.setCurrentDateTime(new DateTime(9, 1));
-        Deque<WeatherEnum> weather = new ArrayDeque<>();
-        weather.addLast(getRandomWeather(Seasons.Spring));
-
-        NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
-        NewGame.setWeather(weather);
         App.setCurrentGame(NewGame);
         for (Player player : App.getCurrentGame().getPlayers()) {
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
@@ -121,9 +114,7 @@ public class GameMenuController implements ShowCurrentMenu {
         // ۳. انتخاب و بازگشت
         return candidates.get(idx);
     }
-
     private static final Random random = new Random();
-
     public static int[][] getRandomPlaces(int amount, int farmWidth, int farmHeight) {
         int[][] strikePositions = new int[amount][2]; // آرایه برای ذخیره مختصات (x,y)
 
@@ -134,7 +125,6 @@ public class GameMenuController implements ShowCurrentMenu {
         return strikePositions;
 
     }
-
     public Result gameMap(int mapNumber) {
         return new Result(true, "");
     }
@@ -190,7 +180,7 @@ public class GameMenuController implements ShowCurrentMenu {
         App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
         if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
             App.getCurrentGame().setIndexPlayerinControl(0);
-//            start new day
+            //            start new day
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
                 App.getCurrentGame().setCurrentDateTime(new DateTime(0, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
 
@@ -228,7 +218,7 @@ public class GameMenuController implements ShowCurrentMenu {
                     int farmHeight = 50;
                     int[][] strikePosition = new int[3][2];
                     strikePosition = getRandomPlaces(3, farmWide, farmHeight);
-//                    ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
+                    //                    ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
                     Kashi kashi1 = new Kashi();
                     kashi1.setX(strikePosition[0][0]);
                     kashi1.setY(strikePosition[0][1]);
@@ -245,7 +235,7 @@ public class GameMenuController implements ShowCurrentMenu {
                     thor.setKhordeh(kashiList);
                 }
             }
-//            just + hour
+            //            just + hour
             else {
                 App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
                         App.getCurrentGame().getCurrentDateTime().getDay()));
@@ -323,7 +313,7 @@ public class GameMenuController implements ShowCurrentMenu {
     public Result cheatThor(int x, int y) {
         Thor thor = new Thor();
         Cord cord = new Cord(x, y);
-//        thor.setKhordeh();
+        //        thor.setKhordeh();
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 
@@ -378,12 +368,12 @@ public class GameMenuController implements ShowCurrentMenu {
     public void printMap(int x, int y, int size) {
         for (int i = x; i < size + x; i++) {
             for(int j = y; j < size + y; j++) {
-//                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
-//                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
-//                } else if (.....) {
-//
-//                }
-//                System.out.println("\u001B[38;2;255;100;50m" + "متن با رنگ RGB" + "\u001B[0m");
+                //                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
+                //                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
+                //                } else if (.....) {
+                //
+                //                }
+                //                System.out.println("\u001B[38;2;255;100;50m" + "متن با رنگ RGB" + "\u001B[0m");
             }
             System.out.println();
         }
@@ -393,7 +383,7 @@ public class GameMenuController implements ShowCurrentMenu {
         System.out.println("Tree -> T");
         System.out.println("GreenHose -> G");
         System.out.println("Quarry -> Q");
-//        ...
+        //        ...
     }
 
     public void energyShow() {
@@ -450,20 +440,201 @@ public class GameMenuController implements ShowCurrentMenu {
         return new Result(true, "");
     }
 
-    public Result plant(String seed, String direction) {
-        return new Result(true, "");
+    public Result plant(String source, String direction) {
+        int dir_x = -1;
+        int dir_y = -1;
+        switch (direction.toLowerCase()) {
+            case "n": {
+                dir_x = 0;
+                dir_y = -1;
+                break;
+            }
+            case "ne": {
+                dir_x = 1;
+                dir_y = -1;
+                break;
+            }
+            case "e": {
+                dir_x = 1;
+                dir_y = 0;
+                break;
+            }
+            case "se": {
+                dir_x = 1;
+                dir_y = 1;
+                break;
+            }
+            case "s": {
+                dir_x = 0;
+                dir_y = 1;
+                break;
+            }
+            case "sw": {
+                dir_x = -1;
+                dir_y = 1;
+                break;
+            }
+            case "w": {
+                dir_x = -1;
+                dir_y = 0;
+                break;
+            }
+            case "nw": {
+                dir_x = -1;
+                dir_y = -1;
+                break;
+            }
+            default: {
+                return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
+            }
+        }
+        //MixedSeed
+        if (source.toLowerCase().replace(" ", "").equals("mixedseeds")) {
+            AllCrop allCrop = new AllCrop();
+            try {
+                boolean valid = false;
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof MixedSeed) {
+                        valid = true;
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                    }
+                }
+                if (!valid) {
+                    return new Result(false, "You don't have " + source + " in your inventory");
+                }
+                Random random = new Random();
+                List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
+                        .filter(crop -> crop.isAllowedIn(App.getCurrentGame().getCurrentSeason()))
+                        .collect(Collectors.toList());
+                MixedSeedsEnums mse = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
+                allCrop.setSourceMixedSeedEnum(mse);
+                allCrop.initilizeCrop(mse);
+                //put in map
+                return new Result(true, "Plant successfully placed");
+            } catch (Exception ex) {
+            }
+        } else {
+            //ForagingSeed
+
+            if (Arrays.asList(ForagingSeedsEnums.values()).contains(ForagingSeedsEnums.valueOf(source.replace(" ", "")))) {
+                AllCrop allCrop1 = new AllCrop();
+                try {
+                    ForagingSeedsEnums foragingSeedsEnums = ForagingSeedsEnums.valueOf(source.replace(" ", ""));
+                    boolean valid = false;
+                    for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                        if (item instanceof ForagingSeed) {
+                            ForagingSeed foragingSeed = (ForagingSeed) item;
+                            if (foragingSeed.getType() == foragingSeedsEnums) {
+                                valid = true;
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                                break;
+                            }
+                        }
+                    }
+                    if (!valid) {
+                        return new Result(false, "You don't have " + source + " in your inventory");
+                    }
+                    allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
+                    allCrop1.initilizeCrop(foragingSeedsEnums);
+                    //put in map
+                    return new Result(true, "Plant successfully placed");
+                } catch (Exception e) {
+
+                }
+            } else {
+                //AllTree
+                if (Arrays.asList(TreeSeedEnums.values()).contains(TreeSeedEnums.valueOf(source.replace(" ", "")))) {
+                    AllTree allTree = new AllTree();
+                    try {
+                        TreeSeedEnums allTreesEnums = TreeSeedEnums.valueOf(source.replace(" ", ""));
+                        boolean valid = false;
+                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                            if (item instanceof TreeSeed) {
+                                TreeSeed treeSeed = (TreeSeed) item;
+                                if (treeSeed.getType() == allTreesEnums) {
+                                    valid = true;
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!valid) {
+                            return new Result(false, "You don't have " + source + " in your inventory");
+                        }
+                        allTree.setSource(allTreesEnums);
+                        allTree.initilizeCrop(allTreesEnums);
+                        //put in map
+                        return new Result(true, "Tree successfully placed");
+                    } catch (Exception e) {
+
+                    }
+                } else {
+                    return new Result(false, "invalid source");
+                }
+            }
+        }
+        return null;
     }
 
     public Result showPlant(int x, int y) {
-        return new Result(true, "");
+        //have to get the kashi from map though
+        Kashi targetKashi = new Kashi();
+        if (targetKashi.getInside() instanceof AllCrop) {
+            AllCrop allCrop = (AllCrop) targetKashi.getInside();
+            StringBuilder resultBuilder = new StringBuilder();
+            resultBuilder.append("=== Crop Details ===\n");
+            resultBuilder.append(String.format("%-20s: %s%n", "Type", allCrop.getType()));
+
+            if (allCrop.getSourceForagingSeedEnum() != null) {
+                resultBuilder.append(String.format("%-20s: %s%n", "Source (Foraging Seed)", allCrop.getSourceForagingSeedEnum()));
+            } else {
+                resultBuilder.append(String.format("%-20s: %s%n", "Source (Mixed Seed)", allCrop.getSourceMixedSeedEnum()));
+            }
+
+            resultBuilder.append(String.format("%-20s: %d days%n", "Growth Counter", allCrop.getDaysGrowCounter()));
+            resultBuilder.append(String.format("%-20s: %s%n", "Growth Stages", allCrop.getStages()));
+            resultBuilder.append(String.format("%-20s: %d days%n", "Total Harvest Time", allCrop.getTotalHarvestTime()));
+            resultBuilder.append(String.format("%-20s: %s%n", "One-Time Harvest", allCrop.isOneTime()));
+
+            if (allCrop.getRegrowthTime() != -1) {
+                resultBuilder.append(String.format("%-20s: %d days%n", "Regrowth Time", allCrop.getRegrowthTime()));
+            }
+
+            resultBuilder.append(String.format("%-20s: %s%n", "Can Become Giant", allCrop.isCanBecomeGiant()));
+            resultBuilder.append(String.format("%-20s: %s%n", "Fed Today", allCrop.isFedThisDay()));
+            resultBuilder.append(String.format("%-20s: %s%n", "Edible", allCrop.isEdible()));
+            resultBuilder.append(String.format("%-20s: %s%n", "Energy", allCrop.getEnergy()));
+            resultBuilder.append(String.format("%-20s: %s%n", "Base sell Price", allCrop.getBaseSellPrice()));
+            resultBuilder.append("====================\n");
+
+            return new Result(true, resultBuilder.toString());
+        } else {
+            if (targetKashi.getInside() instanceof ForagingCrop) {
+                ForagingCrop foragingCrop = (ForagingCrop) targetKashi.getInside();
+                StringBuilder resultBuilder = new StringBuilder();
+                resultBuilder.append("=== Crop Details ===\n");
+                resultBuilder.append(String.format("%-20s: %s%n", "Type", foragingCrop.getType()));
+                resultBuilder.append(String.format("%-20s: %s%n", "Energy", foragingCrop.getEnergy()));
+                resultBuilder.append(String.format("%-20s: %s%n", "Base sell Price", foragingCrop.getBaseSellPrice()));
+                resultBuilder.append("====================\n");
+                return new Result(true, resultBuilder.toString());
+            } else {
+                return new Result(false, "No plant on this kashi");
+            }
+        }
     }
 
     public Result fertilize(String fertilizer, String direction) {
         return new Result(true, "");
     }
 
-    public void howMuchWater() {
-
+    public Result howMuchWater() {
+        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+            if (item instanceof WateringCan) {
+                return new Result(true, "Capacity: " + (((WateringCan) item).getCapacity()));
+            }
+        }
+        return new Result(false, "No WateringCan found");
     }
 
     public void craftingShowRecipes() {
