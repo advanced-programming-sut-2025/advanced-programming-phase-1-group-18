@@ -1,9 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import Model.Items.Item;
+
 public class NPC {
     protected String name;
     protected String job;

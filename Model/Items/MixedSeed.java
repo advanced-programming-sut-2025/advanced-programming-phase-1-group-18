@@ -1,10 +1,8 @@
 package Model.Items;
 
-import enums.ForagingSeedsEnums;
 import enums.MixedSeedsEnums;
 
-public class MixedSeed extends Seed
-{
+public class MixedSeed extends Source {
     MixedSeedsEnums type;
 
     public MixedSeedsEnums getType() {

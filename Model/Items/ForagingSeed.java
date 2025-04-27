@@ -1,13 +1,7 @@
 package Model.Items;
 
-import Model.App;
-import Model.Cord;
-import Model.Kashi;
-import enums.ForagingSeedsEnums;
 
-
-public class ForagingSeed extends Seed
-{
+public class ForagingSeed extends Source {
     ForagingSeedsEnums type;
 
 

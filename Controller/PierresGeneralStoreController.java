@@ -1,9 +1,5 @@
 package Controller;
 
-import Model.App;
-import Model.Result;
-import enums.Menu;
-
 public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu{
     public void showAllProducts() {
 

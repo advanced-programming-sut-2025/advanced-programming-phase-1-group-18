@@ -1,11 +1,5 @@
 package View;
 
-import Controller.RegisterMenuController;
-import enums.LoginMenuCommands;
-import Controller.LoginMenuController;
-import enums.RegisterMenuCommands;
-
-import java.util.Scanner;
 import java.util.Scanner;
 
 public class RegisterMenu extends AppMenu{

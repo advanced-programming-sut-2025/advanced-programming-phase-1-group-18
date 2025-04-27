@@ -3,10 +3,6 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Items.AllCrop;
-import Model.Items.ForagingCrop;
-import Model.Items.ForagingSeed;
-import Model.Items.MixedSeed;
 import enums.*;
 
 public class Farm {

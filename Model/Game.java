@@ -1,8 +1,5 @@
 package Model;
 
-import enums.Seasons;
-import enums.WeatherEnum;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;

@@ -1,10 +1,5 @@
 package View;
 
-import Controller.MainMenuController;
-import Controller.ProfileMenuController;
-import enums.MainMenuCommands;
-import enums.ProfileMenuCommands;
-
 import java.util.Scanner;
 
 public class ProfileMenu extends AppMenu {

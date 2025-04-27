@@ -1,8 +1,5 @@
 package View;
 
-import Controller.GameMenuController;
-import enums.GameMenuCommands;
-
 import java.util.Scanner;
 
 public class GameMenu extends AppMenu {

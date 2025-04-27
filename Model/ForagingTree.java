@@ -1,14 +1,5 @@
 package Model;
 
-import enums.AllTreesEnums;
-import enums.ForagingCropsEnums;
-import enums.ForagingTreesEnums;
-import enums.TreeSeedEnums;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class ForagingTree extends Tree {
     ForagingTreesEnums type;
 

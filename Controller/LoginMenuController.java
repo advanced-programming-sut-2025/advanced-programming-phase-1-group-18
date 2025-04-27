@@ -1,11 +1,6 @@
 package Controller;
 
 
-import Model.App;
-import Model.Result;
-import Model.User;
-import enums.LoginMenuCommands;
-import enums.Menu;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;

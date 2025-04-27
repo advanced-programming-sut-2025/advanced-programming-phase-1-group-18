@@ -1,8 +1,5 @@
 package View;
 
-import Controller.MainMenuController;
-import enums.MainMenuCommands;
-
 import java.util.Scanner;
 
 public class MainMenu extends AppMenu {

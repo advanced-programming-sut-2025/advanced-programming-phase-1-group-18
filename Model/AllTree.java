@@ -1,12 +1,8 @@
 package Model;
 
-import enums.AllCropsEnums;
-import enums.AllTreesEnums;
-import enums.MixedSeedsEnums;
 import enums.TreeSeedEnums;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AllTree extends Tree

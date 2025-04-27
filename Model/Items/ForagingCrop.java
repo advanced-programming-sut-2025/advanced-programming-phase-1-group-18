@@ -1,12 +1,5 @@
 package Model.Items;
 
-import Model.App;
-import Model.Cord;
-import Model.Kashi;
-import enums.ForagingCropsEnums;
-
-import java.util.HashMap;
-
 public class ForagingCrop extends Crop {
     ForagingCropsEnums type;
 

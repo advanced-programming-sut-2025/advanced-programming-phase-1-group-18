@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Project">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src.zip!/" />
+      <root url="jar://$PROJECT_DIR$/V3.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Project.zip!/" />
+      <root url="jar://$PROJECT_DIR$/V4.zip!/" />
+      <root url="jar://$PROJECT_DIR$/proj.zip!/" />
+      <root url="jar://$PROJECT_DIR$/V1.zip!/" />
+      <root url="jar://$PROJECT_DIR$/StardewValleyFaze0.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

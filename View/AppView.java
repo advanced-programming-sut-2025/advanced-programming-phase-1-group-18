@@ -2,8 +2,6 @@ package View;
 import Model.*;
 import java.util.Scanner;
 
-import enums.Menu;
-
 public class AppView {
     
     public void run() {

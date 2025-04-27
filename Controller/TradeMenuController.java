@@ -1,9 +1,5 @@
 package Controller;
 
-import Model.App;
-import Model.Result;
-import enums.Menu;
-
 
 public class TradeMenuController implements MenuEnter, ShowCurrentMenu{
     public Result trade(String command)
