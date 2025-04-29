@@ -1,12 +1,14 @@
 package Controller;
 
 import Model.*;
-
+import enums.Menu;
+import java.util.Scanner;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import Model.User;
 
 public class RegisterMenuController implements MenuEnter, ShowCurrentMenu
 {

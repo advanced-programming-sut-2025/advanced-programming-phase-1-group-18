@@ -1,4 +1,6 @@
 package Controller;
+import Model.App;
+import enums.Menu;
 
 public class MainMenuController implements MenuEnter, ShowCurrentMenu{
 

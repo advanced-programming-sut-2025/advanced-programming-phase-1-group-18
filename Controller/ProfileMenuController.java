@@ -1,5 +1,9 @@
 package Controller;
 
+import Model.App;
+import Model.Result;
+import enums.Menu;
+
 public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
 
     public Result changeUsername(String newUsername) {

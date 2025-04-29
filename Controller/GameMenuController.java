@@ -1,9 +1,11 @@
 package Controller;
 
 import Model.*;
+import Model.Cookingrecipe;
 import Model.Items.*;
 import enums.*;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -14,7 +16,13 @@ public class GameMenuController implements ShowCurrentMenu {
 
     }
 
-    public Result gameNew(String command, Scanner scanner) {
+    public static int getFieldValue(Class<?> gameClass, Object gameInstance, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Field field = gameClass.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.getInt(gameInstance);
+    }
+
+    public Result gameNew(String command, Scanner scanner) throws NoSuchFieldException, IllegalAccessException {
         String[] usernames = new String[command.split("\\s+").length - 3];
         for (int i = 3; i < command.split("\\s+").length; i++) {
             usernames[i - 3] = command.split("\\s+")[i];
@@ -25,6 +33,7 @@ public class GameMenuController implements ShowCurrentMenu {
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     check = true;
+                    break;
                 }
             }
             if (!check) {
@@ -59,8 +68,15 @@ public class GameMenuController implements ShowCurrentMenu {
         }
         NewGame.setCurrentSeason(Seasons.Spring);
         NewGame.setCurrentDateTime(new DateTime(9, 1));
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        weather.addLast(getRandomWeather(Seasons.Spring));
+
+        NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
+        NewGame.setWeather(weather);
         App.setCurrentGame(NewGame);
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        App.getGames().add(NewGame);
+        for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
+            Player player = App.getCurrentGame().getPlayers().get(i);
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
 
             int number = -1;
@@ -80,25 +96,30 @@ public class GameMenuController implements ShowCurrentMenu {
                 }
             }
 
-            switch (number) {
+            Class<?> gameClass = Game.class;
+            Game gameInstance = new Game();
+
+
+            int topLeftx = getFieldValue(gameClass, gameInstance, "Player" + i + "TopLeftx");
+            int topLefty = getFieldValue(gameClass, gameInstance, "Player" + i + "TopLefty");
+            switch (i) {
+                case 0:
+                    player.getMyFarm().createMap1(topLeftx, topLefty);
+                    break;
                 case 1:
-                    player.getMyFarm().createMap1();
+                    player.getMyFarm().createMap2(topLeftx, topLefty);
                     break;
                 case 2:
-                    player.getMyFarm().createMap2();
+                    player.getMyFarm().createMap3(topLeftx, topLefty);
                     break;
                 case 3:
-                    player.getMyFarm().createMap3();
-                    break;
-                case 4:
-                    player.getMyFarm().createMap4();
+                    player.getMyFarm().createMap4(topLeftx, topLefty);
                     break;
                 default:
                     System.out.println("Unexpected error occurred.");
                     break;
             }
         }
-        App.getGames().add(NewGame);
         return new Result(true, "Game Created");
     }
 
@@ -114,7 +135,9 @@ public class GameMenuController implements ShowCurrentMenu {
         // ۳. انتخاب و بازگشت
         return candidates.get(idx);
     }
+
     private static final Random random = new Random();
+
     public static int[][] getRandomPlaces(int amount, int farmWidth, int farmHeight) {
         int[][] strikePositions = new int[amount][2]; // آرایه برای ذخیره مختصات (x,y)
 
@@ -125,6 +148,7 @@ public class GameMenuController implements ShowCurrentMenu {
         return strikePositions;
 
     }
+
     public Result gameMap(int mapNumber) {
         return new Result(true, "");
     }
@@ -218,21 +242,21 @@ public class GameMenuController implements ShowCurrentMenu {
                     int farmHeight = 50;
                     int[][] strikePosition = new int[3][2];
                     strikePosition = getRandomPlaces(3, farmWide, farmHeight);
-                    //                    ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
-                    Kashi kashi1 = new Kashi();
-                    kashi1.setX(strikePosition[0][0]);
-                    kashi1.setY(strikePosition[0][1]);
-                    Kashi kashi2 = new Kashi();
-                    kashi2.setX(strikePosition[1][0]);
-                    kashi2.setY(strikePosition[1][1]);
-                    Kashi kashi3 = new Kashi();
-                    kashi3.setX(strikePosition[2][0]);
-                    kashi3.setY(strikePosition[2][1]);
-                    ArrayList<Kashi> kashiList = new ArrayList<>();
-                    kashiList.add(kashi1);
-                    kashiList.add(kashi2);
-                    kashiList.add(kashi3);
-                    thor.setKhordeh(kashiList);
+//                                        ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
+//                    Kashi kashi1 = new Kashi();
+//                    kashi1.setX(strikePosition[0][0]);
+//                    kashi1.setY(strikePosition[0][1]);
+//                    Kashi kashi2 = new Kashi();
+//                    kashi2.setX(strikePosition[1][0]);
+//                    kashi2.setY(strikePosition[1][1]);
+//                    Kashi kashi3 = new Kashi();
+//                    kashi3.setX(strikePosition[2][0]);
+//                    kashi3.setY(strikePosition[2][1]);
+//                    ArrayList<Kashi> kashiList = new ArrayList<>();
+//                    kashiList.add(kashi1);
+//                    kashiList.add(kashi2);
+//                    kashiList.add(kashi3);
+//                    thor.setKhordeh(kashiList);
                 }
             }
             //            just + hour
@@ -242,7 +266,6 @@ public class GameMenuController implements ShowCurrentMenu {
             }
         }
     }
-
 
     public Result time() {
         return new Result(true, String.valueOf(App.getCurrentGame().getCurrentDateTime().getHour()));
@@ -266,7 +289,7 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public Result dayOfWeek() {
-        int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay()%7;
+        int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay() % 7;
         switch (dayOfWeek) {
             case 0:
                 return new Result(true, "Sunday");
@@ -367,7 +390,7 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public void printMap(int x, int y, int size) {
         for (int i = x; i < size + x; i++) {
-            for(int j = y; j < size + y; j++) {
+            for (int j = y; j < size + y; j++) {
                 //                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
                 //                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
                 //                } else if (.....) {
@@ -387,7 +410,7 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public void energyShow() {
-        System.out.println("Energy: "+
+        System.out.println("Energy: " +
                 App.getCurrentGame().getPlayers().get(App.getCurrentGame()
                         .getIndexPlayerinControl()).getEnergy());
     }
@@ -509,13 +532,14 @@ public class GameMenuController implements ShowCurrentMenu {
                 MixedSeedsEnums mse = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
                 allCrop.setSourceMixedSeedEnum(mse);
                 allCrop.initilizeCrop(mse);
-                //put in map
+                Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY());
+                kashi.setInside(allCrop);
                 return new Result(true, "Plant successfully placed");
             } catch (Exception ex) {
             }
         } else {
             //ForagingSeed
-
             if (Arrays.asList(ForagingSeedsEnums.values()).contains(ForagingSeedsEnums.valueOf(source.replace(" ", "")))) {
                 AllCrop allCrop1 = new AllCrop();
                 try {
@@ -536,7 +560,9 @@ public class GameMenuController implements ShowCurrentMenu {
                     }
                     allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
                     allCrop1.initilizeCrop(foragingSeedsEnums);
-                    //put in map
+                    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                    Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY());
+                    kashi.setInside(allCrop1);
                     return new Result(true, "Plant successfully placed");
                 } catch (Exception e) {
 
@@ -563,7 +589,9 @@ public class GameMenuController implements ShowCurrentMenu {
                         }
                         allTree.setSource(allTreesEnums);
                         allTree.initilizeCrop(allTreesEnums);
-                        //put in map
+                        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                        Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY());
+                        kashi.setInside(allTree);
                         return new Result(true, "Tree successfully placed");
                     } catch (Exception e) {
 
@@ -653,20 +681,119 @@ public class GameMenuController implements ShowCurrentMenu {
         return new Result(true, "");
     }
 
-    public Result cookingRefrigerator(String pickOrPut, String item) {
-        return new Result(true, "");
+    public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
+        if (pickOrPut.equalsIgnoreCase("put")) {
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                try {
+                    Class<?> clazz = Class.forName(itemname);
+                    if (clazz.isInstance(item)) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().addItem(item, 1);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        break;
+                    }
+                    return new Result(true, "Successfully put " + itemname);
+                } catch (Exception e) {
+                    return new Result(false, "Wrong item name");
+                }
+            }
+        }
+        if (pickOrPut.equalsIgnoreCase("pick")) {
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().getItems().keySet()) {
+                try {
+                    Class<?> clazz = Class.forName(itemname);
+                    if (clazz.isInstance(item)) {
+                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().isFull()) {
+                            return new Result(false, "Inventory is full");
+                        }
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(item, 1);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().removeItem(item, 1);
+                        break;
+                    }
+                    return new Result(true, "Successfully pick " + itemname);
+                } catch (Exception e) {
+                    return new Result(false, "Wrong item name");
+                }
+            }
+        }
+        return null;
     }
 
-    public void cookingShowRecipes() {
-
+    public Result cookingShowRecipes() {
+        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingrecipes().isEmpty()) {
+            return new Result(false, "You are cooked");
+        } else {
+            StringBuilder result = new StringBuilder();
+            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingrecipes()) {
+                result.append(cookingrecipe.toString());
+                result.append("\n");
+            }
+            return new Result(true, result.toString());
+        }
     }
 
     public Result cookingPrepare(String recipeName) {
-        return new Result(true, "");
+        Set<String> FOOD_ENUMS = new HashSet<>();
+        for (FoodCookingEnums food : FoodCookingEnums.values()) {
+            FOOD_ENUMS.add(food.name().toLowerCase());
+        }
+        if (isValidFood(recipeName, FOOD_ENUMS)) {
+            FoodCookingEnums foodCookingEnums = FoodCookingEnums.valueOf(recipeName);
+            Cookingrecipe targetCookingRecipe = null;
+            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingrecipes()) {
+                if (cookingrecipe.getFood() == foodCookingEnums) {
+                    targetCookingRecipe = cookingrecipe;
+                }
+            }
+            if (targetCookingRecipe == null) {
+                return new Result(false, "You don't have the recipe");
+            }
+            HashMap<Food, Integer> ingredients = foodCookingEnums.getIngredients();
+
+            for (Food food : ingredients.keySet()) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().hasItem(food) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(food) > ingredients.get(food)) {
+
+                } else {
+                    return new Result(false, "Not enough ingredients");
+                }
+            }
+            for (Food food : ingredients.keySet()) {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(food, ingredients.get(food));
+            }
+            FoodCooking foodCooking = targetCookingRecipe.letmecook(foodCookingEnums);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(foodCooking, 1);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - 3);
+            return new Result(true, "Successfully made " + recipeName);
+        } else {
+            return new Result(false, "Invalid food");
+        }
+    }
+
+    public static boolean isValidFood(String input, Set<String> FOOD_ENUMS) {
+        return FOOD_ENUMS.contains(input.trim().toLowerCase());
     }
 
     public Result eat(String foodName) {
-        return new Result(true, "");
+        Set<String> FOOD_ENUMS = new HashSet<>();
+        for (FoodCookingEnums food : FoodCookingEnums.values()) {
+            FOOD_ENUMS.add(food.name().toLowerCase());
+        }
+        FoodCookingEnums foodCookingEnums = FoodCookingEnums.valueOf(foodName);
+        if (isValidFood(foodName, FOOD_ENUMS)) {
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof FoodCooking) {
+                    FoodCooking foodCooking = (FoodCooking) item;
+                    if (foodCooking.getName() == foodCookingEnums) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy());
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
+                        return new Result(true, "You ate " + foodName);
+                    }
+                }
+            }
+        } else {
+            return new Result(false, "Invalid food");
+        }
+        return null;
     }
 
     public Result build(String buildingName, int x, int y) {
