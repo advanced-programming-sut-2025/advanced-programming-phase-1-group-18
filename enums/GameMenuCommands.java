@@ -43,8 +43,13 @@ public enum GameMenuCommands {
     CHEAT_THOR("\\s*cheat\\s+Thor\\s+-l\\s+(\\d+)\\s*,\\s*(\\d+)\\s*"),
 
     // Greenhouse
-    GREENHOUSE_BUILD("\\s*greenhouse\\s+build\\s*");
+    GREENHOUSE_BUILD("\\s*greenhouse\\s+build\\s*"),
 
+    COOKINGREFRIGERATOR("\\s*cooking refrigerator \\s*(put|pick) \\s*([^\\s]+)\\s*"),
+    COOKINGSHOWRECIPES("\\s*cooking\\s+show\\s+recipes\\s*"),
+
+    COOKINGPREPARE("\\s*cooking\\s+prepare\\s+([\\w\\s]+)\\s*"),
+    EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)");
     private final String pattern;
     GameMenuCommands(String pattern) {
         this.pattern = pattern;

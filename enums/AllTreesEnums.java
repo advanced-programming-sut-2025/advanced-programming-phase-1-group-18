@@ -1,5 +1,8 @@
 package enums;
 
+import Model.AllTree;
+import Model.ForagingTree;
+
 public enum AllTreesEnums {
     ApricotTree,
     CherryTree,
