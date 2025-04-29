@@ -1,5 +1,14 @@
 package Model;
 
+import enums.AllTreesEnums;
+import enums.ForagingCropsEnums;
+import enums.ForagingTreesEnums;
+import enums.TreeSeedEnums;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class ForagingTree extends Tree {
     ForagingTreesEnums type;
 
@@ -15,15 +24,10 @@ public class ForagingTree extends Tree {
         Kashi kashi = new Kashi();
         kashi.setShokhmZadeh(false);
         kashi.setEnterance(false);
-        kashi.setX(cord.getX());
-        kashi.setY(cord.getY());
         kashi.setInside(this);
         kashi.setWalkable(false);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingTrees().add(this);
-        App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl())
-                .getMyFarm()
-                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
+        App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
 
     }
 

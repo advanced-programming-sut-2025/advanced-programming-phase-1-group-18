@@ -23,21 +23,13 @@ public class Lake
             Kashi kashi = new Kashi();
             kashi.setShokhmZadeh(false);
             kashi.setEnterance(false);
-            kashi.setX(cord.getX());
-            kashi.setY(cord.getY());
             kashi.setInside(this);
             kashi.setWalkable(false);
             kashis.add(kashi);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getLakes().add(this);
-        for(Kashi kashi : kashis)
-        {
-            App.getCurrentGame().getPlayers()
-                    .get(App.getCurrentGame().getIndexPlayerinControl())
-                    .getMyFarm()
-                    .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-        }
     }
 
 }

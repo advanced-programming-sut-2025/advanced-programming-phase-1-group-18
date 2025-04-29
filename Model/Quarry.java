@@ -25,24 +25,16 @@ public class Quarry
             } else {
                 kashi.setEnterance(false);
             }
-            kashi.setX(cord.getX());
-            kashi.setY(cord.getY());
             kashi.setInside(this);
             if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
-                kashi.setWalkable(false);
+                kashi.setWalkable(kashi.getEnterance());
             } else {
                 kashi.setWalkable(true);
             }
             kashis.add(kashi);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getQuarrys().add(this);
-        for(Kashi kashi : kashis)
-        {
-            App.getCurrentGame().getPlayers()
-                    .get(App.getCurrentGame().getIndexPlayerinControl())
-                    .getMyFarm()
-                    .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-        }
     }
 }

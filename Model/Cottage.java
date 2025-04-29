@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Cottage
 {
     protected ArrayList<Kashi> insideKashis;
-
+    protected Refrigerator myRefrigerator;
     public ArrayList<Kashi> getInsideKashis() {
         return insideKashis;
     }
@@ -25,11 +25,10 @@ public class Cottage
             } else {
                 kashi.setEnterance(false);
             }
-            kashi.setX(cord.getX());
-            kashi.setY(cord.getY());
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
             kashi.setInside(this);
             if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
-                kashi.setWalkable(false);
+                kashi.setWalkable(kashi.getEnterance());
             } else {
                 kashi.setWalkable(true);
             }
@@ -37,12 +36,13 @@ public class Cottage
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyCottage(this);
-        for(Kashi kashi : kashis)
-        {
-            App.getCurrentGame().getPlayers()
-                    .get(App.getCurrentGame().getIndexPlayerinControl())
-                    .getMyFarm()
-                    .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-        }
+    }
+
+    public Refrigerator getMyRefrigerator() {
+        return myRefrigerator;
+    }
+
+    public void setMyRefrigerator(Refrigerator myRefrigerator) {
+        this.myRefrigerator = myRefrigerator;
     }
 }

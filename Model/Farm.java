@@ -3,10 +3,14 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Items.AllCrop;
+import Model.Items.ForagingCrop;
+import Model.Items.ForagingSeed;
+import Model.Items.MixedSeed;
 import enums.*;
 
 public class Farm {
-    protected ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
+
     protected ArrayList<Lake> Lakes = new ArrayList<>();
     protected GreenHouse myGreenHouse = new GreenHouse();
     protected Cottage myCottage = new Cottage();
@@ -41,15 +45,6 @@ public class Farm {
 
     public void setMixedSeeds(ArrayList<MixedSeed> mixedSeeds) {
         MixedSeeds = mixedSeeds;
-    }
-
-    // Getter and Setter for Map
-    public ArrayList<ArrayList<Kashi>> getMap() {
-        return Map;
-    }
-
-    public void setMap(ArrayList<ArrayList<Kashi>> Map) {
-        this.Map = Map;
     }
 
     // Getter and Setter for Lakes
@@ -168,7 +163,7 @@ public class Farm {
         this.foragingSeeds = foragingSeeds;
     }
 
-    public void createMap1() {
+    public void createMap1(int topleftx,int toplefty) {
         //Lake+
         //GreenHouse+
         //Cottage+
@@ -180,27 +175,28 @@ public class Farm {
         //ForagingCrop+
         //ForagingSeed+
         //-------------
-        Map = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
-            ArrayList<Kashi> row = new ArrayList<>();
-            Map.add(row);
-        }
-
+//        Map = new ArrayList<>(50);
+//        for (int i = 0; i < 50; i++) {
+//            ArrayList<Kashi> row = new ArrayList<>();
+//            Map.add(row);
+//        }
+        //TODO
+        //initialize map size
         Lake Lake1 = new Lake();
         ArrayList<Cord> cords = new ArrayList<>(List.of(
-                new Cord(1, 0),
-                new Cord(1, 1),
-                new Cord(2, 0),
-                new Cord(2, 1)
+                new Cord(topleftx+1, toplefty+0),
+                new Cord(topleftx+1, 1),
+                new Cord(topleftx+2, 0),
+                new Cord(topleftx+2, 1)
         ));
         Lake1.adaptMap(cords);
         cords = new ArrayList<>(List.of(
-                new Cord(4, 0), new Cord(4, 1), new Cord(4, 2), new Cord(4, 3), new Cord(4, 4), new Cord(4, 5), new Cord(4, 6),
-                new Cord(5, 0), new Cord(5, 1), new Cord(5, 2), new Cord(5, 3), new Cord(5, 4), new Cord(5, 5), new Cord(5, 6),
+                new Cord(topleftx+4, 0), new Cord(4, 1), new Cord(4, 2), new Cord(4, 3), new Cord(4, 4), new Cord(4, 5), new Cord(4, 6),
+                new Cord(topleftx+5, 0), new Cord(5, 1), new Cord(5, 2), new Cord(5, 3), new Cord(5, 4), new Cord(5, 5), new Cord(5, 6),
                 new Cord(6, 0), new Cord(6, 1), new Cord(6, 2), new Cord(6, 3), new Cord(6, 4), new Cord(6, 5), new Cord(6, 6),
-                new Cord(7, 0), new Cord(7, 1), new Cord(7, 2), new Cord(7, 3), new Cord(7, 4), new Cord(7, 5), new Cord(7, 6),
-                new Cord(8, 0), new Cord(8, 1), new Cord(8, 2), new Cord(8, 3), new Cord(8, 4), new Cord(8, 5), new Cord(8, 6),
-                new Cord(9, 0), new Cord(9, 1), new Cord(9, 2), new Cord(9, 3), new Cord(9, 4), new Cord(9, 5), new Cord(9, 6)
+                new Cord(topleftx+7, 0), new Cord(7, 1), new Cord(7, 2), new Cord(7, 3), new Cord(7, 4), new Cord(7, 5), new Cord(7, 6),
+                new Cord(topleftx+8, 0), new Cord(8, 1), new Cord(8, 2), new Cord(8, 3), new Cord(8, 4), new Cord(8, 5), new Cord(8, 6),
+                new Cord(topleftx+9, 0), new Cord(9, 1), new Cord(9, 2), new Cord(9, 3), new Cord(9, 4), new Cord(9, 5), new Cord(9, 6)
         ));
         //Enterance is 7,3
         myGreenHouse.adaptMap(cords, 7, 3, 11, 0, 15, 4);
@@ -243,19 +239,19 @@ public class Farm {
         ForagingTree foragingTree4 = new ForagingTree();
         foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
         foragingTree4.adaptMap(new Cord(15, 10));
-
-        AllTree AllTree1 = new AllTree();
-        AllTree1.setType(AllTreesEnums.AppleTree);
-        AllTree1.adaptMap(new Cord(20, 6));
-        AllTree AllTree2 = new AllTree();
-        AllTree2.setType(AllTreesEnums.BananaTree);
-        AllTree2.adaptMap(new Cord(22, 5));
-        AllTree AllTree3 = new AllTree();
-        AllTree3.setType(AllTreesEnums.MangoTree);
-        AllTree3.adaptMap(new Cord(17, 16));
-        AllTree AllTree4 = new AllTree();
-        AllTree4.setType(AllTreesEnums.OakTree);
-        AllTree4.adaptMap(new Cord(15, 11));
+//
+//        AllTree AllTree1 = new AllTree();
+//        AllTree1.setType(AllTreesEnums.AppleTree);
+//        AllTree1.adaptMap(new Cord(20, 6));
+//        AllTree AllTree2 = new AllTree();
+//        AllTree2.setType(AllTreesEnums.BananaTree);
+//        AllTree2.adaptMap(new Cord(22, 5));
+//        AllTree AllTree3 = new AllTree();
+//        AllTree3.setType(AllTreesEnums.MangoTree);
+//        AllTree3.adaptMap(new Cord(17, 16));
+//        AllTree AllTree4 = new AllTree();
+//        AllTree4.setType(AllTreesEnums.OakTree);
+//        AllTree4.adaptMap(new Cord(15, 11));
 
         Stone stone1 = new Stone();
         stone1.adaptMap(new Cord(45, 11));
@@ -265,16 +261,16 @@ public class Farm {
         stone3.adaptMap(new Cord(45, 13));
 
         ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.setType(ForagingCropsEnums.SpiceBerry);
+        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
         foragingCrop1.adaptMap(new Cord(30, 5));
         ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.setType(ForagingCropsEnums.CommonMushroom);
+        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
         foragingCrop2.adaptMap(new Cord(32, 4));
         ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.setType(ForagingCropsEnums.Crocus);
+        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
         foragingCrop3.adaptMap(new Cord(37, 15));
         ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.setType(ForagingCropsEnums.Dandelion);
+        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
         foragingCrop4.adaptMap(new Cord(35, 10));
 
         ForagingSeed foragingSeed1 = new ForagingSeed();
@@ -291,7 +287,7 @@ public class Farm {
         foragingSeed4.adaptMap(new Cord(35, 13));
     }
 
-    public void createMap2() {
+    public void createMap2(int topleft,int topright) {
         // Lake+
         // GreenHouse+ (Unchanged)
         // Cottage+ (Unchanged)
@@ -303,11 +299,11 @@ public class Farm {
         // ForagingCrop-
         // ForagingSeed-
         //-------------
-        Map = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
-            ArrayList<Kashi> row = new ArrayList<>();
-            Map.add(row);
-        }
+//        Map = new ArrayList<>(50);
+//        for (int i = 0; i < 50; i++) {
+//            ArrayList<Kashi> row = new ArrayList<>();
+//            Map.add(row);
+//        }
 
         // Adjusted Lake sizes
         Lake Lake1 = new Lake();
@@ -371,18 +367,18 @@ public class Farm {
         foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
         foragingTree4.adaptMap(new Cord(15, 10));
 
-        AllTree AllTree1 = new AllTree();
-        AllTree1.setType(AllTreesEnums.AppleTree);
-        AllTree1.adaptMap(new Cord(20, 6));
-        AllTree AllTree2 = new AllTree();
-        AllTree2.setType(AllTreesEnums.BananaTree);
-        AllTree2.adaptMap(new Cord(22, 5));
-        AllTree AllTree3 = new AllTree();
-        AllTree3.setType(AllTreesEnums.MangoTree);
-        AllTree3.adaptMap(new Cord(17, 16));
-        AllTree AllTree4 = new AllTree();
-        AllTree4.setType(AllTreesEnums.OakTree);
-        AllTree4.adaptMap(new Cord(15, 11));
+//        AllTree AllTree1 = new AllTree();
+//        AllTree1.setType(AllTreesEnums.AppleTree);
+//        AllTree1.adaptMap(new Cord(20, 6));
+//        AllTree AllTree2 = new AllTree();
+//        AllTree2.setType(AllTreesEnums.BananaTree);
+//        AllTree2.adaptMap(new Cord(22, 5));
+//        AllTree AllTree3 = new AllTree();
+//        AllTree3.setType(AllTreesEnums.MangoTree);
+//        AllTree3.adaptMap(new Cord(17, 16));
+//        AllTree AllTree4 = new AllTree();
+//        AllTree4.setType(AllTreesEnums.OakTree);
+//        AllTree4.adaptMap(new Cord(15, 11));
 
         Stone stone1 = new Stone();
         stone1.adaptMap(new Cord(45, 11));
@@ -392,16 +388,16 @@ public class Farm {
         stone3.adaptMap(new Cord(45, 13));
 
         ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.setType(ForagingCropsEnums.SpiceBerry);
+        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
         foragingCrop1.adaptMap(new Cord(30, 5));
         ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.setType(ForagingCropsEnums.CommonMushroom);
+        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
         foragingCrop2.adaptMap(new Cord(32, 4));
         ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.setType(ForagingCropsEnums.Crocus);
+        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
         foragingCrop3.adaptMap(new Cord(37, 15));
         ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.setType(ForagingCropsEnums.Dandelion);
+        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
         foragingCrop4.adaptMap(new Cord(35, 10));
 
         ForagingSeed foragingSeed1 = new ForagingSeed();
@@ -418,7 +414,7 @@ public class Farm {
         foragingSeed4.adaptMap(new Cord(35, 13));
     }
 
-    public void createMap3() {
+    public void createMap3(int topleft,int topright) {
         // Lake+
         // GreenHouse+ (Unchanged)
         // Cottage+ (Unchanged)
@@ -430,11 +426,11 @@ public class Farm {
         // ForagingCrop-
         // ForagingSeed-
         //-------------
-        Map = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
-            ArrayList<Kashi> row = new ArrayList<>();
-            Map.add(row);
-        }
+//        Map = new ArrayList<>(50);
+//        for (int i = 0; i < 50; i++) {
+//            ArrayList<Kashi> row = new ArrayList<>();
+//            Map.add(row);
+//        }
 
         // Large Lake
         Lake Lake1 = new Lake();
@@ -504,18 +500,18 @@ public class Farm {
         foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
         foragingTree4.adaptMap(new Cord(15, 10));
 
-        AllTree AllTree1 = new AllTree();
-        AllTree1.setType(AllTreesEnums.AppleTree);
-        AllTree1.adaptMap(new Cord(20, 6));
-        AllTree AllTree2 = new AllTree();
-        AllTree2.setType(AllTreesEnums.BananaTree);
-        AllTree2.adaptMap(new Cord(22, 5));
-        AllTree AllTree3 = new AllTree();
-        AllTree3.setType(AllTreesEnums.MangoTree);
-        AllTree3.adaptMap(new Cord(17, 16));
-        AllTree AllTree4 = new AllTree();
-        AllTree4.setType(AllTreesEnums.OakTree);
-        AllTree4.adaptMap(new Cord(15, 11));
+//        AllTree AllTree1 = new AllTree();
+//        AllTree1.setType(AllTreesEnums.AppleTree);
+//        AllTree1.adaptMap(new Cord(20, 6));
+//        AllTree AllTree2 = new AllTree();
+//        AllTree2.setType(AllTreesEnums.BananaTree);
+//        AllTree2.adaptMap(new Cord(22, 5));
+//        AllTree AllTree3 = new AllTree();
+//        AllTree3.setType(AllTreesEnums.MangoTree);
+//        AllTree3.adaptMap(new Cord(17, 16));
+//        AllTree AllTree4 = new AllTree();
+//        AllTree4.setType(AllTreesEnums.OakTree);
+//        AllTree4.adaptMap(new Cord(15, 11));
 
         Stone stone1 = new Stone();
         stone1.adaptMap(new Cord(45, 11));
@@ -525,16 +521,16 @@ public class Farm {
         stone3.adaptMap(new Cord(45, 13));
 
         ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.setType(ForagingCropsEnums.SpiceBerry);
+        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
         foragingCrop1.adaptMap(new Cord(30, 5));
         ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.setType(ForagingCropsEnums.CommonMushroom);
+        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
         foragingCrop2.adaptMap(new Cord(32, 4));
         ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.setType(ForagingCropsEnums.Crocus);
+        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
         foragingCrop3.adaptMap(new Cord(37, 15));
         ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.setType(ForagingCropsEnums.Dandelion);
+        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
         foragingCrop4.adaptMap(new Cord(35, 10));
 
         ForagingSeed foragingSeed1 = new ForagingSeed();
@@ -551,7 +547,7 @@ public class Farm {
         foragingSeed4.adaptMap(new Cord(35, 13));
     }
 
-    public void createMap4() {
+    public void createMap4(int topleft,int topright) {
         // Lake+
         // GreenHouse+ (Unchanged)
         // Cottage+ (Unchanged)
@@ -563,11 +559,11 @@ public class Farm {
         // ForagingCrop-
         // ForagingSeed-
         //-------------
-        Map = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
-            ArrayList<Kashi> row = new ArrayList<>();
-            Map.add(row);
-        }
+//        Map = new ArrayList<>(50);
+//        for (int i = 0; i < 50; i++) {
+//            ArrayList<Kashi> row = new ArrayList<>();
+//            Map.add(row);
+//        }
 
         // Small Lake
         Lake Lake1 = new Lake();
@@ -639,18 +635,18 @@ public class Farm {
         foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
         foragingTree4.adaptMap(new Cord(15, 10));
 
-        AllTree AllTree1 = new AllTree();
-        AllTree1.setType(AllTreesEnums.AppleTree);
-        AllTree1.adaptMap(new Cord(20, 6));
-        AllTree AllTree2 = new AllTree();
-        AllTree2.setType(AllTreesEnums.BananaTree);
-        AllTree2.adaptMap(new Cord(22, 5));
-        AllTree AllTree3 = new AllTree();
-        AllTree3.setType(AllTreesEnums.MangoTree);
-        AllTree3.adaptMap(new Cord(17, 16));
-        AllTree AllTree4 = new AllTree();
-        AllTree4.setType(AllTreesEnums.OakTree);
-        AllTree4.adaptMap(new Cord(15, 11));
+//        AllTree AllTree1 = new AllTree();
+//        AllTree1.setType(AllTreesEnums.AppleTree);
+//        AllTree1.adaptMap(new Cord(20, 6));
+//        AllTree AllTree2 = new AllTree();
+//        AllTree2.setType(AllTreesEnums.BananaTree);
+//        AllTree2.adaptMap(new Cord(22, 5));
+//        AllTree AllTree3 = new AllTree();
+//        AllTree3.setType(AllTreesEnums.MangoTree);
+//        AllTree3.adaptMap(new Cord(17, 16));
+//        AllTree AllTree4 = new AllTree();
+//        AllTree4.setType(AllTreesEnums.OakTree);
+//        AllTree4.adaptMap(new Cord(15, 11));
 
         Stone stone1 = new Stone();
         stone1.adaptMap(new Cord(45, 11));
@@ -660,16 +656,16 @@ public class Farm {
         stone3.adaptMap(new Cord(45, 13));
 
         ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.setType(ForagingCropsEnums.SpiceBerry);
+        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
         foragingCrop1.adaptMap(new Cord(30, 5));
         ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.setType(ForagingCropsEnums.CommonMushroom);
+        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
         foragingCrop2.adaptMap(new Cord(32, 4));
         ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.setType(ForagingCropsEnums.Crocus);
+        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
         foragingCrop3.adaptMap(new Cord(37, 15));
         ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.setType(ForagingCropsEnums.Dandelion);
+        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
         foragingCrop4.adaptMap(new Cord(35, 10));
 
         ForagingSeed foragingSeed1 = new ForagingSeed();

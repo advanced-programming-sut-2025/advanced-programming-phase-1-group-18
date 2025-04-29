@@ -1,7 +1,13 @@
 package Model.Items;
 
+import Model.App;
+import Model.Cord;
+import Model.Kashi;
+import enums.ForagingSeedsEnums;
 
-public class ForagingSeed extends Source {
+
+public class ForagingSeed extends Seed
+{
     ForagingSeedsEnums type;
 
 
@@ -17,15 +23,9 @@ public class ForagingSeed extends Source {
         Kashi kashi = new Kashi();
         kashi.setShokhmZadeh(false);
         kashi.setEnterance(false);
-        kashi.setX(cord.getX());
-        kashi.setY(cord.getY());
         kashi.setInside(this);
         kashi.setWalkable(false);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingSeeds().add(this);
-        App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl())
-                .getMyFarm()
-                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-
+        App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
 }

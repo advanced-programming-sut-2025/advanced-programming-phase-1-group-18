@@ -1,5 +1,7 @@
 package Model;
 
+import enums.Seasons;
+
 public class DateTime
 {
     protected int Hour;

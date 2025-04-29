@@ -2,13 +2,13 @@ package Model;
 import java.util.ArrayList;
 public class Thor
 {
-    protected ArrayList<Kashi> khordeh;
+    protected ArrayList<Cord> khordeh;
 
-    public ArrayList<Kashi> getKhordeh() {
+    public ArrayList<Cord> getKhordeh() {
         return khordeh;
     }
 
-    public void setKhordeh(ArrayList<Kashi> khordeh) {
+    public void setKhordeh(ArrayList<Cord> khordeh) {
         this.khordeh = khordeh;
     }
 }

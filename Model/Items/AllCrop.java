@@ -1,5 +1,11 @@
 package Model.Items;
 
+import Model.App;
+import Model.Cord;
+import Model.Kashi;
+import enums.AllCropsEnums;
+import enums.ForagingSeedsEnums;
+import enums.ForagingTreesEnums;
 import enums.MixedSeedsEnums;
 
 import java.util.ArrayList;
@@ -826,15 +832,10 @@ public class AllCrop extends Crop {
         Kashi kashi = new Kashi();
         kashi.setShokhmZadeh(true);
         kashi.setEnterance(false);
-        kashi.setX(cord.getX());
-        kashi.setY(cord.getY());
         kashi.setInside(this);
         kashi.setWalkable(false);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getAllCrops().add(this);
-        App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl())
-                .getMyFarm()
-                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-
+        App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
+
 }

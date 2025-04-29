@@ -34,7 +34,7 @@ public class GreenHouse {
         this.Matarsaks = Matarsaks;
     }
 
-    public void adaptMap(ArrayList<Cord> cords,int Enterancex, int Enterancey,int borderlowx,int borderlowy,int borderhighx,int borderhighy) {
+    public void adaptMap(ArrayList<Cord> cords, int Enterancex, int Enterancey, int borderlowx, int borderlowy, int borderhighx, int borderhighy) {
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
@@ -45,24 +45,16 @@ public class GreenHouse {
             } else {
                 kashi.setEnterance(false);
             }
-            kashi.setX(cord.getX());
-            kashi.setY(cord.getY());
             kashi.setInside(this);
             if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
-                kashi.setWalkable(false);
+                kashi.setWalkable(kashi.getEnterance());
             } else {
                 kashi.setWalkable(true);
             }
             kashis.add(kashi);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
-        for(Kashi kashi : kashis)
-        {
-            App.getCurrentGame().getPlayers()
-                    .get(App.getCurrentGame().getIndexPlayerinControl())
-                    .getMyFarm()
-                    .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-        }
     }
 }

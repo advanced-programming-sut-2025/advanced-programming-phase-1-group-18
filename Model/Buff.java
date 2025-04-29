@@ -1,9 +1,12 @@
 package Model;
+
+import enums.SkillEnum;
+
 public class Buff
 {
     protected int EnergyIncrease;
     protected int BuffHours;
-    protected Skill BuffSkill;
+    protected SkillEnum BuffSkillType;
     // Getter and Setter for EnergyIncrease
     public int getEnergyIncrease() {
         return EnergyIncrease;
@@ -22,13 +25,11 @@ public class Buff
         this.BuffHours = BuffHours;
     }
 
-    // Getter and Setter for BuffSkill
-    public Skill getBuffSkill() {
-        return BuffSkill;
+    public SkillEnum getBuffSkillType() {
+        return BuffSkillType;
     }
 
-    public void setBuffSkill(Skill BuffSkill) {
-        this.BuffSkill = BuffSkill;
+    public void setBuffSkillType(SkillEnum buffSkillType) {
+        BuffSkillType = buffSkillType;
     }
-
 }

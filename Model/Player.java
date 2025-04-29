@@ -21,7 +21,24 @@ public class Player extends User
     protected ArrayList<Cookingrecipe> Craftingrecipes;
     protected Inventory inventory;
 
-
+    public Player() {
+        //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
+        super();
+        this.Owner = new User();
+        this.Energy = 0;
+        this.myFarm = new Farm();
+        this.UnlimitedEnergy = false;
+        this.FarmingSkill = new Skill();
+        this.ExtractionSkill = new Skill();
+        this.ForagingSkill = new Skill();
+        this.FishingSkill = new Skill();
+        this.FoodBuff = new Buff();
+        this.wood = 0;
+        this.gold = 0;
+        this.Cookingrecipes = new ArrayList<>();
+        this.Craftingrecipes = new ArrayList<>();
+        this.inventory = new Inventory(12, "initial");
+    }
 
     public int getWood() {
         return wood;
@@ -45,15 +62,6 @@ public class Player extends User
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
-    }
-
-    public Player(String Username, String Password, String Email, String Gender, String NickName)
-    {
-        super(Username, Password, Email, Gender, NickName);
-    }
-    public Player()
-    {
-
     }
 
     public void faintController(){

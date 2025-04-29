@@ -2,7 +2,7 @@ package Model.Items;
 
 import enums.TreeSeedEnums;
 
-public class TreeSeed extends Source {
+public class TreeSeed extends Seed{
 
     TreeSeedEnums type;
 

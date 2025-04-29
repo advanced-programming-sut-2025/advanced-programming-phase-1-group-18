@@ -2,8 +2,6 @@ package Model;
 public class Kashi
 {
     protected boolean ShokhmZadeh;
-    protected int x;
-    protected int y;
     protected Object inside;
     protected Boolean Enterance;
     protected Boolean Walkable;
@@ -14,22 +12,6 @@ public class Kashi
 
     public void setShokhmZadeh(boolean ShokhmZadeh) {
         this.ShokhmZadeh = ShokhmZadeh;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public Boolean getEnterance() {
@@ -55,4 +37,5 @@ public class Kashi
     public void setWalkable(Boolean walkable) {
         Walkable = walkable;
     }
+
 }

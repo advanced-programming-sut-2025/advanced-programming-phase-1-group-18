@@ -65,8 +65,8 @@ public class User {
         this.Gender = Gender;
         this.NickName = NickName;
     }
-
-    public User() {
+    public User()
+    {
 
     }
 }

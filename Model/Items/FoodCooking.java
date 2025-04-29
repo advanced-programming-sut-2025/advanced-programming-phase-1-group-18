@@ -1,37 +1,46 @@
 package Model.Items;
+import Model.Buff;
+import enums.FoodCookingEnums;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class FoodCooking extends Item
 {
 
-    String Name;
-    ArrayList<Item> Ingredients;
-    int Energy;
+    protected FoodCookingEnums name;
+    protected int energy;
+    protected int sellPrice;
+    protected Buff buff;
 
-
-    public String getName() {
-        return Name;
+    public FoodCookingEnums getName() {
+        return name;
     }
 
-    public void setName(String name) {
-        this.Name = name;
-    }
-
-    public ArrayList<Item> getIngredients() {
-        return Ingredients;
-    }
-
-    public void setIngredients(ArrayList<Item> ingredients) {
-        this.Ingredients = ingredients;
+    public void setName(FoodCookingEnums name) {
+        this.name = name;
     }
 
     public int getEnergy() {
-        return Energy;
+        return energy;
     }
 
     public void setEnergy(int energy) {
-        this.Energy = energy;
+        this.energy = energy;
     }
 
+    public int getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(int sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    public Buff getBuff() {
+        return buff;
+    }
+
+    public void setBuff(Buff buff) {
+        this.buff = buff;
+    }
 }

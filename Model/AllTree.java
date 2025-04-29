@@ -1,8 +1,12 @@
 package Model;
 
+import enums.AllCropsEnums;
+import enums.AllTreesEnums;
+import enums.MixedSeedsEnums;
 import enums.TreeSeedEnums;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AllTree extends Tree
@@ -112,16 +116,10 @@ public class AllTree extends Tree
         Kashi kashi = new Kashi();
         kashi.setShokhmZadeh(false);
         kashi.setEnterance(false);
-        kashi.setX(cord.getX());
-        kashi.setY(cord.getY());
+        App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         kashi.setInside(this);
         kashi.setWalkable(false);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getAllTrees().add(this);
-        App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl())
-                .getMyFarm()
-                .getMap().get(kashi.getX()).set(kashi.getY(), kashi);
-
     }
 
     public void initilizeCrop(TreeSeedEnums treeSeedEnums) {

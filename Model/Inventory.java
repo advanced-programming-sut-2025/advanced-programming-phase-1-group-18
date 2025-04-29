@@ -1,15 +1,18 @@
 package Model;
 
+import Model.Items.Item;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
     protected int MaxQuantity;
     protected String Type;
-    protected HashMap<Item, Integer> Items = new HashMap<>();
+    protected HashMap<Item, Integer> Items;
 
     // Constructor
     public Inventory(int maxQuantity, String type) {
+        this.Items = new HashMap<>();
         this.MaxQuantity = maxQuantity;
         this.Type = type;
     }
@@ -32,11 +35,10 @@ public class Inventory {
         this.Type = Type;
     }
 
-    // Getter for Items (returns a copy for encapsulation)
+
     public Map<Item, Integer> getItems() {
         return Items;
     }
-
 
     public boolean addItem(Item item, int quantity) {
         if (quantity <= 0) return false;
@@ -72,35 +74,28 @@ public class Inventory {
         return true;
     }
 
-
     public int getItemQuantity(Item item) {
         return Items.getOrDefault(item, 0);
     }
-
 
     public boolean hasItem(Item item) {
         return Items.containsKey(item);
     }
 
-
     public int getUniqueItemCount() {
         return Items.size();
     }
-
 
     public int getTotalItemCount() {
         return Items.values().stream().mapToInt(Integer::intValue).sum();
     }
 
-
     public boolean isFull() {
-        return getTotalItemCount() >= MaxQuantity;
+            return getTotalItemCount() >= MaxQuantity;
     }
-
 
     public void clearInventory() {
         Items.clear();
     }
-
 
 }
