@@ -1,5 +1,8 @@
 package View;
 
+import Controller.LoginMenuController;
+import enums.LoginMenuCommands;
+
 import java.util.Scanner;
 
 public class LoginMenu extends AppMenu {
