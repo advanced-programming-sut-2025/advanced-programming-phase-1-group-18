@@ -24,12 +24,11 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public Result gameNew(String command, Scanner scanner) throws NoSuchFieldException, IllegalAccessException {
         String[] usernames = new String[command.split("\\s+").length - 3];
-        for (int i = 3; i < command.split("\\s+").length; i++) {
-            usernames[i - 3] = command.split("\\s+")[i];
-        }
+        if (command.split("\\s+").length - 3 >= 0)
+            System.arraycopy(command.split("\\s+"), 3, usernames, 0, command.split("\\s+").length - 3);
         //check username regex
         for (String username : usernames) {
-            Boolean check = false;
+            boolean check = false;
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     check = true;
@@ -127,7 +126,7 @@ public class GameMenuController implements ShowCurrentMenu {
         // ۱. فهرست وضعیت‌های مجاز را می‌سازیم
         List<WeatherEnum> candidates = Stream.of(WeatherEnum.values())
                 .filter(w -> w.isAllowedIn(seasons))
-                .collect(Collectors.toList());
+                .toList();
 
         // ۲. عدد تصادفی بین 0 و size-1
         int idx = ThreadLocalRandom.current().nextInt(candidates.size());
@@ -233,6 +232,7 @@ public class GameMenuController implements ShowCurrentMenu {
                             break;
                     }
                 } else {
+
                     weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
                     App.getCurrentGame().setWeather(weather);
                 }
@@ -261,6 +261,7 @@ public class GameMenuController implements ShowCurrentMenu {
             }
             //            just + hour
             else {
+                //TODO
                 App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
                         App.getCurrentGame().getCurrentDateTime().getDay()));
             }
@@ -290,23 +291,16 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public Result dayOfWeek() {
         int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay() % 7;
-        switch (dayOfWeek) {
-            case 0:
-                return new Result(true, "Sunday");
-            case 1:
-                return new Result(true, "Monday");
-            case 2:
-                return new Result(true, "Tuesday");
-            case 3:
-                return new Result(true, "Wednesday");
-            case 4:
-                return new Result(true, "Thursday");
-            case 5:
-                return new Result(true, "Friday");
-            case 6:
-                return new Result(true, "Saturday");
-        }
-        return null;
+        return switch (dayOfWeek) {
+            case 0 -> new Result(true, "Sunday");
+            case 1 -> new Result(true, "Monday");
+            case 2 -> new Result(true, "Tuesday");
+            case 3 -> new Result(true, "Wednesday");
+            case 4 -> new Result(true, "Thursday");
+            case 5 -> new Result(true, "Friday");
+            case 6 -> new Result(true, "Saturday");
+            default -> null;
+        };
     }
 
     public Result cheatAdvanceTime(int hour) {
@@ -528,7 +522,7 @@ public class GameMenuController implements ShowCurrentMenu {
                 Random random = new Random();
                 List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
                         .filter(crop -> crop.isAllowedIn(App.getCurrentGame().getCurrentSeason()))
-                        .collect(Collectors.toList());
+                        .toList();
                 MixedSeedsEnums mse = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
                 allCrop.setSourceMixedSeedEnum(mse);
                 allCrop.initilizeCrop(mse);
@@ -565,7 +559,7 @@ public class GameMenuController implements ShowCurrentMenu {
                     kashi.setInside(allCrop1);
                     return new Result(true, "Plant successfully placed");
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             } else {
                 //AllTree
@@ -848,12 +842,229 @@ public class GameMenuController implements ShowCurrentMenu {
         return new Result(true, "");
     }
 
-    public Result cheatAdd(int count) {
-        return new Result(true, "");
-    }
+    public Result sell(String productName, String count) {
+        int quantity = -1;
+        if (count == null) {
+            quantity = 1;
+        } else {
+            quantity = Integer.parseInt(count);
+        }
+        try {
+            AllCropsEnums allCropsEnums = AllCropsEnums.valueOf(productName);
+            boolean found = false;
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof AllCrop && ((AllCrop) item).getType() == allCropsEnums) {
+                    found = true;
+                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                        return new Result(true, "");
+                    } else {
+                        return new Result(false, "Not enough items in your inventory");
+                    }
+                }
+            }
+            if (!found) {
+                return new Result(false, "No such item in your inventory");
+            }
+        } catch (Exception e) {
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals(productName)) {
+                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                        return new Result(true, "");
+                    } else {
+                        return new Result(false, "Not enough items in your inventory");
+                    }
+                }
+            }
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof Food && ((Food) item).getName().equals(productName)) {
+                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                        return new Result(true, "");
+                    } else {
+                        return new Result(false, "Not enough items in your inventory");
+                    }
+                }
+            }
+            try {
+                FoodCookingEnums foodCookingEnums = FoodCookingEnums.valueOf(productName);
+                boolean found1 = false;
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getName() == foodCookingEnums) {
+                        found1 = true;
+                        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                            return new Result(true, "");
+                        } else {
+                            return new Result(false, "Not enough items in your inventory");
+                        }
+                    }
+                }
+                if (!found1) {
+                    return new Result(false, "No such item in your inventory");
+                }
+            } catch (Exception ee) {
+                try {
+                    ForagingCropsEnums foragingCropsEnums = ForagingCropsEnums.valueOf(productName);
+                    boolean found2 = false;
+                    for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                        if (item instanceof ForagingCrop && ((ForagingCrop) item).getType() == foragingCropsEnums) {
+                            found2 = true;
+                            if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                return new Result(true, "");
+                            } else {
+                                return new Result(false, "Not enough items in your inventory");
+                            }
+                        }
+                    }
+                    if (!found2) {
+                        return new Result(false, "No such item in your inventory");
+                    }
+                } catch (Exception eee) {
+                    try {
+                        ForagingSeedsEnums foragingSeedsEnums = ForagingSeedsEnums.valueOf(productName);
+                        boolean found3 = false;
+                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                            if (item instanceof ForagingSeed && ((ForagingSeed) item).getType() == foragingSeedsEnums) {
+                                found3 = true;
+                                if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                    return new Result(true, "");
+                                } else {
+                                    return new Result(false, "Not enough items in your inventory");
+                                }
+                            }
+                        }
+                        if (!found3) {
+                            return new Result(false, "No such item in your inventory");
+                        }
+                    } catch (Exception eeee) {
+                        if (productName.toLowerCase().equals("hay")) {
+                            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                if (item instanceof Hay) {
+                                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                        return new Result(true, "");
+                                    } else {
+                                        return new Result(false, "Not enough items in your inventory");
+                                    }
+                                }
+                            }
+                            return new Result(false, "No such item in your inventory");
+                        }
+                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                            if (item instanceof MarketProducts && ((MarketProducts) item).getName().equals(productName)) {
+                                if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                    return new Result(true, "");
+                                } else {
+                                    return new Result(false, "Not enough items in your inventory");
+                                }
+                            }
+                        }
+                        if (productName.toLowerCase().equals("milkpail")) {
+                            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                if (item instanceof MilkPail) {
+                                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                        return new Result(true, "");
+                                    } else {
+                                        return new Result(false, "Not enough items in your inventory");
+                                    }
+                                }
+                            }
+                            return new Result(false, "No such item in your inventory");
+                        }
+                        try {
+                            ForagingMineralsEnums mineral = ForagingMineralsEnums.valueOf(productName);
+                            boolean found4 = false;
+                            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                if (item instanceof Mineral && ((Mineral) item).getType() == mineral) {
+                                    found4 = true;
+                                    if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                        return new Result(true, "");
+                                    } else {
+                                        return new Result(false, "Not enough items in your inventory");
+                                    }
+                                }
+                            }
+                            if (!found4) {
+                                return new Result(false, "No such item in your inventory");
+                            }
+                        } catch (Exception eeeee) {
+                            if (productName.toLowerCase().equals("shear")) {
+                                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                    if (item instanceof Shear) {
+                                        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                            return new Result(true, "");
+                                        } else {
+                                            return new Result(false, "Not enough items in your inventory");
+                                        }
+                                    }
+                                }
+                                return new Result(false, "No such item in your inventory");
+                            }
+                            try {
+                                TreeSeedEnums treeSeedEnums = TreeSeedEnums.valueOf(productName);
+                                boolean found5 = false;
+                                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                    if (item instanceof TreeSeed && ((TreeSeed) item).getType() == treeSeedEnums) {
+                                        found5 = true;
+                                        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
+                                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+                                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+                                            return new Result(true, "");
+                                        } else {
+                                            return new Result(false, "Not enough items in your inventory");
+                                        }
+                                    }
+                                }
+                                if (!found5) {
+                                    return new Result(false, "No such item in your inventory");
+                                }
+                            } catch (Exception eeeeee) {
+                                return new Result(false, "Invalid product");
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-    public Result sell(String productName, int count) {
-        return new Result(true, "");
+        //AllCrop+
+        //AnimalProduct-
+        //TODO
+
+        //CraftingItem-
+        //TODO
+
+        //Fertilizer+
+        //Food+
+        //FoodCooking+
+        //Foraging Crop+
+        //Foraging Seed+
+        //Hay+
+        //Market Products+
+        //MilkPail+
+        //Mineral+
+        //Shear+
+        //TreeSeed+
+        return null;
     }
 
     public void friendships() {
