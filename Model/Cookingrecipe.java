@@ -7,6 +7,16 @@ import enums.SkillEnum;
 public class Cookingrecipe {
 
     protected FoodCookingEnums Foodtype;
+    protected int price;
+
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     public FoodCookingEnums getFood() {
         return Foodtype;

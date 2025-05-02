@@ -305,7 +305,7 @@ public class AllCrop extends Crop {
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.SummerSquasSeeds: {
+            case ForagingSeedsEnums.SummerSquashSeeds: {
                 this.setType(AllCropsEnums.SummerSquash);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(7);

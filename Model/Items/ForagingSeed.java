@@ -9,7 +9,16 @@ import enums.ForagingSeedsEnums;
 public class ForagingSeed extends Seed
 {
     ForagingSeedsEnums type;
+    private int price;
 
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     public ForagingSeedsEnums getType() {
         return type;

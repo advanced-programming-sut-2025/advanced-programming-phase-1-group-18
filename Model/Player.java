@@ -17,6 +17,7 @@ public class Player extends User
     protected Buff FoodBuff;
     protected int wood;
     protected int gold;
+    protected int money;
     protected ArrayList<Cookingrecipe> Cookingrecipes;
     protected ArrayList<Cookingrecipe> Craftingrecipes;
     protected Inventory inventory;
@@ -35,9 +36,18 @@ public class Player extends User
         this.FoodBuff = new Buff();
         this.wood = 0;
         this.gold = 0;
+        this.money = 0;
         this.Cookingrecipes = new ArrayList<>();
         this.Craftingrecipes = new ArrayList<>();
         this.inventory = new Inventory(12, "initial");
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public int getWood() {

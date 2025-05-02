@@ -3,10 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Items.AllCrop;
-import Model.Items.ForagingCrop;
-import Model.Items.ForagingSeed;
-import Model.Items.MixedSeed;
+import Model.Items.*;
 import enums.*;
 
 public class Farm {
@@ -29,7 +26,7 @@ public class Farm {
     protected ArrayList<AllCrop> AllCrops;
     protected ArrayList<ForagingSeed> foragingSeeds;
     protected ArrayList<MixedSeed> MixedSeeds;
-
+    protected Satl satl;
 
     public ArrayList<AllCrop> getAllCrops() {
         return AllCrops;
@@ -163,7 +160,16 @@ public class Farm {
         this.foragingSeeds = foragingSeeds;
     }
 
-    public void createMap1(int topleftx,int toplefty) {
+
+    public Satl getSatl() {
+        return satl;
+    }
+
+    public void setSatl(Satl satl) {
+        this.satl = satl;
+    }
+
+    public void createMap1(int topleftx, int toplefty) {
         //Lake+
         //GreenHouse+
         //Cottage+
