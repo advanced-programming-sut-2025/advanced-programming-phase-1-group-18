@@ -25,7 +25,7 @@ public enum ForagingSeedsEnums
     RedCabbageSeeds,
     StarfruitSeeds,
     SpangleSeeds,
-    SummerSquasSeeds,
+    SummerSquashSeeds,
     SunflowerSeeds,
     TomatoSeeds,
     WheatSeeds,

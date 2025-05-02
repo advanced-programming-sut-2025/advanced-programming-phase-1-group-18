@@ -21,7 +21,7 @@ public enum FoodCookingEnums {
                 put(createFood("dandelion"), 1);
             }}
     ),
-    Olmelet(
+    Omelet(
             new HashMap<>() {{
                 put(createFood("egg"), 1);
                 put(createFood("milk"), 1);

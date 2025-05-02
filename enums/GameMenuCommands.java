@@ -49,7 +49,8 @@ public enum GameMenuCommands {
     COOKINGSHOWRECIPES("\\s*cooking\\s+show\\s+recipes\\s*"),
 
     COOKINGPREPARE("\\s*cooking\\s+prepare\\s+([\\w\\s]+)\\s*"),
-    EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)");
+    EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)"),
+    SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*");
     private final String pattern;
     GameMenuCommands(String pattern) {
         this.pattern = pattern;
