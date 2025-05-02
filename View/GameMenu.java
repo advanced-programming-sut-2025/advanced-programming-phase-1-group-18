@@ -18,7 +18,7 @@ public class GameMenu extends AppMenu {
             } catch (Exception e) {
             }
         } else if (GameMenuCommands.ExitGame.getMather(input) != null) {
-            controller.exitGame();
+            System.out.println(controller.exitGame());
         } else if (GameMenuCommands.VoteTerminateGame.getMather(input) != null) {
             System.out.println(controller.voteTerminateGame(scanner));
         } else if (GameMenuCommands.NextTurn.getMather(input) != null) {
@@ -81,6 +81,8 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.cookingPrepare(GameMenuCommands.COOKINGPREPARE.getMather(input).group(1)));
         } else if (GameMenuCommands.EAT.getMather(input) != null) {
             System.out.println(controller.eat(GameMenuCommands.EAT.getMather(input).group(1)));
+        } else if (GameMenuCommands.SELL.getMather(input) != null) {
+            System.out.println(controller.sell(GameMenuCommands.SELL.getMather(input).group(1), GameMenuCommands.SELL.getMather(input).group(2)));
         }
     }
 }

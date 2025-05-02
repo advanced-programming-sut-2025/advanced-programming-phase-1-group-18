@@ -1,13 +1,13 @@
 package View;
 
-import Controller.MarniesRanchController;
-import Controller.PierresGeneralStoreController;
+import Controller.BlackSmithController;
+import Controller.CarpentersShopController;
 import enums.MarketMenuEnums;
 
 import java.util.Scanner;
 
-public class PirresGeneralStoreMenu extends AppMenu{
-    private final PierresGeneralStoreController controller = new PierresGeneralStoreController();
+public class CarpentersShopMenu extends AppMenu{
+    private final CarpentersShopController controller = new CarpentersShopController();
 
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
