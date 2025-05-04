@@ -205,6 +205,166 @@ public class GameMenuController implements ShowCurrentMenu {
             App.getCurrentGame().setIndexPlayerinControl(0);
             //            start new day
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().keySet()) {
+                    //AllCrop+
+                    //Fertilizer+
+                    //Food+
+                    //FoodCooking+
+                    //Foraging Crop+
+                    //Foraging Seed+
+                    //Hay+
+                    //Market Products+
+                    //MilkPail+
+                    //Mineral+
+                    //Shear+
+                    //TreeSeed+
+                    //AllCrop+
+                    //AllCrop+
+                    if (item instanceof AllCrop) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((AllCrop) item).getBaseSellPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//Fertilizer+
+                    if (item instanceof Fertilizer) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((Fertilizer) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//Food+
+                    if (item instanceof Food) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((Food) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//FoodCooking+
+                    if (item instanceof FoodCooking) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((FoodCooking) item).getSellPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//ForagingCrop+
+                    if (item instanceof ForagingCrop) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((ForagingCrop) item).getBaseSellPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//ForagingSeed+
+                    if (item instanceof ForagingSeed) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((ForagingSeed) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//Hay+
+                    if (item instanceof Hay) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((Hay) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+// Continue with MarketProducts, MilkPail, Mineral, Shear, and TreeSeed
+
+//MarketProducts+
+                    if (item instanceof MarketProducts) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((MarketProducts) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//MilkPail+
+                    if (item instanceof MilkPail) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((MilkPail) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//Mineral+
+                    if (item instanceof Mineral) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((Mineral) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMyFarm().getSatl().getItems().get(item));
+                    }
+//Shear+
+                    if (item instanceof Shear) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((Shear) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+//TreeSeed+
+                    if (item instanceof TreeSeed) {
+                        App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl())
+                                .setMoney(App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl())
+                                        .getMoney() + ((TreeSeed) item).getPrice() * App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers()
+                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                    }
+
+
+                }
                 App.getCurrentGame().setCurrentDateTime(new DateTime(0, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
 
                 App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
