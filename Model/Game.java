@@ -1,5 +1,6 @@
 package Model;
 
+import Model.Items.Gift;
 import enums.Seasons;
 import enums.WeatherEnum;
 
@@ -94,6 +95,9 @@ public class Game {
     protected PierresGeneralStoreMarket pierresGeneralStoreMarket;
     protected TheStardropSaloonMarket theStardropSaloonMarket;
 
+    protected ArrayList<Friendship> friendships;
+    protected ArrayList<Gift> gifts;
+
     public Game() {
         ArrayList<Cord> cords = new ArrayList<>();
         for (int i = BlackSmithTopLeftx; i <= BlackSmithTopLeftx + BlackSmithWidth; i++) {
@@ -166,6 +170,53 @@ public class Game {
         theStardropSaloonMarket = new TheStardropSaloonMarket();
         theStardropSaloonMarket.fillStock();
         theStardropSaloonMarket.adaptMap(cords, TheStardropSaloonEnterancex, TheStardropSaloonEnterancey, TheStardropSaloonTopLeftx, TheStardropSaloonTopLefty, TheStardropSaloonTopLeftx + TheStardropSaloonWidth, TheStardropSaloonTopLefty + TheStardropSaloonHeight);
+    }
+    public void initializeFriendships() {
+        for (int i = 0; i < Players.size(); i++) {
+            for (int j = i + 1; j < Players.size(); j++) {
+                Player p1 = Players.get(i);
+                Player p2 = Players.get(j);
+                Friendship f = new Friendship(p1, p2);
+                friendships.add(f);
+            }
+        }
+    }
+    public Player getPlayerByUsername(String username) {
+        for (Player p : this.Players)
+            if (p.getUsername().equals(username))
+                return p;
+        return null;
+    }
+
+    public Friendship getOrCreateFriendship(Player p1, Player p2) {
+        for (Friendship f : friendships) {
+            if (f.isBetween(p1, p2)) return f;
+        }
+        Friendship newF = new Friendship(p1, p2);
+        friendships.add(newF);
+        return newF;
+    }
+
+    public void endOfDayUpdate() {
+        for (Friendship f : friendships) {
+            f.updateDecay();
+        }
+    }
+
+    public ArrayList<Friendship> getFriendships() {
+        return friendships;
+    }
+
+    public void setFriendships(ArrayList<Friendship> friendships) {
+        this.friendships = friendships;
+    }
+
+    public ArrayList<Gift> getGifts() {
+        return gifts;
+    }
+
+    public void setGifts(ArrayList<Gift> gifts) {
+        this.gifts = gifts;
     }
 
     public ArrayList<ArrayList<Kashi>> getMap() {

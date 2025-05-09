@@ -28,6 +28,7 @@ public class AllCrop extends Crop {
         this.setSourceForagingSeedEnum(foragingSeedsenums);
         this.setDaysGrowCounter(0);
         this.setFedThisDay(false);
+        super.setName(foragingSeedsenums.name());
         switch (foragingSeedsenums) {
             case ForagingSeedsEnums.JazzSeeds: {
                 this.setType(AllCropsEnums.BlueJazz);
@@ -532,6 +533,7 @@ public class AllCrop extends Crop {
         this.setSourceMixedSeedEnum(mixedSeedsenums);
         this.setDaysGrowCounter(0);
         this.setFedThisDay(false);
+        super.setName(mixedSeedsenums.name());
         switch (mixedSeedsenums) {
             case MixedSeedsEnums.Artichoke: {
                 this.setType(AllCropsEnums.Artichoke);
