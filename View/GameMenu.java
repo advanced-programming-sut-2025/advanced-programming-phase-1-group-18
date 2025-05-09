@@ -84,20 +84,30 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.eat(GameMenuCommands.EAT.getMather(input).group(1)));
         } else if (GameMenuCommands.SELL.getMather(input) != null) {
             System.out.println(controller.sell(GameMenuCommands.SELL.getMather(input).group(1), GameMenuCommands.SELL.getMather(input).group(2)));
+        } else if (GameMenuCommands.MEETNPC.getMather(input) != null) {
+            System.out.println(controller.meetNPC(GameMenuCommands.MEETNPC.getMather(input).group(1)));
+        } else if (GameMenuCommands.GIFTNPC.getMather(input) != null) {
+            System.out.println(controller.giftNPC(GameMenuCommands.GIFTNPC.getMather(input).group(1), GameMenuCommands.GIFTNPC.getMather(input).group(2)));
+        } else if (GameMenuCommands.FRIENDSHIPNPCLIST.getMather(input) != null) {
+            System.out.println(controller.friendshipList());
+        } else if (GameMenuCommands.QUESTSLIST.getMather(input) != null) {
+            System.out.println(controller.questsList());
+        } else if (GameMenuCommands.QUESTSFINISH.getMather(input) != null) {
+            System.out.println(controller.questsFinish(Integer.parseInt(GameMenuCommands.QUESTSFINISH.getMather(input).group(1))));
         } else if (GameMenuCommands.FriendShip.getMather(input) != null) {
             System.out.println(controller.friendships());
         } else if (GameMenuCommands.Talk.getMather(input) != null) {
             System.out.println(controller.talk(GameMenuCommands.Talk.getMather(input).group(1),
                     GameMenuCommands.Talk.getMather(input).group(2)));
-        }else if (GameMenuCommands.TalkHistory.getMather(input) != null) {
+        } else if (GameMenuCommands.TalkHistory.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.TalkHistory.getMather(input);
             System.out.println(controller.talkHistory(matcher.group(1)));
         } else if (GameMenuCommands.Gift.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.Gift.getMather(input);
             System.out.println(controller.gift(
                     matcher.group(1),
-                    matcher.group(2),
-                    Integer.parseInt(matcher.group(3))));
+                    Integer.parseInt(matcher.group(3)),
+                    matcher.group(2)));
         } else if (GameMenuCommands.GiftList.getMather(input) != null) {
             System.out.println(controller.giftList());
         } else if (GameMenuCommands.GiftRate.getMather(input) != null) {
