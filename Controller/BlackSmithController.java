@@ -2,7 +2,6 @@ package Controller;
 
 import Model.App;
 import Model.Items.Mineral;
-import Model.Items.Satl;
 import Model.Player;
 import Model.Result;
 import enums.ForagingMineralsEnums;
