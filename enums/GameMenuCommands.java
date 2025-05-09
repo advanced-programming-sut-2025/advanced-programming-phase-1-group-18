@@ -50,7 +50,16 @@ public enum GameMenuCommands {
 
     COOKINGPREPARE("\\s*cooking\\s+prepare\\s+([\\w\\s]+)\\s*"),
     EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)"),
-    SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*");
+    SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*"),
+    FriendShip("\\s*friendships\\s*"),
+    Talk("\\s*talk -u (?<username>.*) -m (?<message>.*)\\s*"),
+    TalkHistory("\\s*talk\\s+history -u (?<username>.*)\\s*"),
+    Gift("\\s*gift -u (?<username>.*) -i (?<item>.*) -a (?<amount>.*)\\s*"),
+    GiftList("\\s*gift\\s+list\\s*"),
+    GiftRate("\\s*gift rate -i (?<giftNumber>.*) -r (<rate>.*)\\s*"),
+    GiftHistory("\\s*gift\\s+history\\s+-u (?<username>.*)\\s*"),
+    Hug("\\s*hug\\s+-u\\s+(?<username>.*)\\s*"),
+    Flower("\\s*flower -u (?<username>.*)\\s*");
     private final String pattern;
     GameMenuCommands(String pattern) {
         this.pattern = pattern;
