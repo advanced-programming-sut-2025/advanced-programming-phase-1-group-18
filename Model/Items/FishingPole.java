@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class FishingPole extends Item
+import Model.Name;
+
+public class FishingPole extends Item implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -27,5 +29,15 @@ public class FishingPole extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

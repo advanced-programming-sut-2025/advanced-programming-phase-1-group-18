@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class Axe extends Item
+import Model.Name;
+
+public class Axe extends Item implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -28,5 +30,15 @@ public class Axe extends Item
 
     public void setJens(String jens) {
         Jens = jens;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "axe";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

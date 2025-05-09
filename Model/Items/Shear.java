@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class Shear extends Item
+import Model.Name;
+
+public class Shear extends Item implements Name,Price
 {
     protected int EnergyUsage;
     protected String usage;
@@ -27,5 +29,15 @@ public class Shear extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "shear";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

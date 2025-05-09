@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class Hay extends Item {
+import Model.Name;
+
+public class Hay extends Item implements Name ,Price{
     private int price;
 
     public int getPrice() {
@@ -9,5 +11,15 @@ public class Hay extends Item {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "hay";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class MarketProducts extends Item {
+import Model.Name;
+
+public class MarketProducts extends Item implements Name ,Price{
 
     private int price;
     private String name;
@@ -20,5 +22,15 @@ public class MarketProducts extends Item {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return name.toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

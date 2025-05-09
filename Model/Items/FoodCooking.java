@@ -1,11 +1,12 @@
 package Model.Items;
+
 import Model.Buff;
+import Model.Name;
 import enums.FoodCookingEnums;
 
 import java.util.ArrayList;
 
-public class FoodCooking extends Item
-{
+public class FoodCooking extends Item implements Name, Price {
 
     protected FoodCookingEnums name;
     protected int energy;
@@ -42,5 +43,15 @@ public class FoodCooking extends Item
 
     public void setBuff(Buff buff) {
         this.buff = buff;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return this.name.toString().toLowerCase().replace(" ", "");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.sellPrice;
     }
 }

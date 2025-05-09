@@ -1,11 +1,12 @@
 package Model.Items;
 
+import Model.Name;
 import enums.TreeSeedEnums;
 
-public class TreeSeed extends Seed{
+public class TreeSeed extends Seed implements Name, Price {
 
     TreeSeedEnums type;
-private int price;
+    private int price;
 
     public int getPrice() {
         return price;
@@ -21,5 +22,16 @@ private int price;
 
     public void setType(TreeSeedEnums type) {
         this.type = type;
+    }
+
+
+    @Override
+    public String getCorrectName() {
+        return type.toString().toLowerCase().replace(" ", "");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class Food extends Item{
+import Model.Name;
+
+public class Food extends Item implements Name ,Price{
     private String name;
     private int price;
 
@@ -19,5 +21,15 @@ public class Food extends Item{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return this.name.toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

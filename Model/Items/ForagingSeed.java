@@ -3,10 +3,11 @@ package Model.Items;
 import Model.App;
 import Model.Cord;
 import Model.Kashi;
+import Model.Name;
 import enums.ForagingSeedsEnums;
 
 
-public class ForagingSeed extends Seed
+public class ForagingSeed extends Seed implements Name,Price
 {
     ForagingSeedsEnums type;
     private int price;
@@ -36,5 +37,15 @@ public class ForagingSeed extends Seed
         kashi.setWalkable(false);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingSeeds().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+    }
+
+    @Override
+    public String getCorrectName() {
+        return type.toString().toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

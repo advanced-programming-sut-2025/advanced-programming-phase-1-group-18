@@ -45,7 +45,7 @@ public class Cookingrecipe {
                 cookedFood.setEnergy(113);
                 cookedFood.setSellPrice(110);
             }
-            case Olmelet -> {
+            case Omelet -> {
                 cookedFood.setEnergy(100);
                 cookedFood.setSellPrice(125);
             }

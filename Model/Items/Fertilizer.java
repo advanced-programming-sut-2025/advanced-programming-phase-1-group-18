@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class Fertilizer extends Item{
+import Model.Name;
+
+public class Fertilizer extends Item implements Name ,Price{
 
     private String name;
     private int price;
@@ -19,5 +21,15 @@ public class Fertilizer extends Item{
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return this.name.toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.price;
     }
 }

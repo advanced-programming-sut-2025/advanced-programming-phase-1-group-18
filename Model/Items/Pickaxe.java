@@ -1,5 +1,8 @@
 package Model.Items;
-public class Pickaxe extends Item
+
+import Model.Name;
+
+public class Pickaxe extends Item implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -26,5 +29,16 @@ public class Pickaxe extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "pickaxe";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

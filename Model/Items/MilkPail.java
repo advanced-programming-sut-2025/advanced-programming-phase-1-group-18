@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class MilkPail extends Item
+import Model.Name;
+
+public class MilkPail extends Item implements Name,Price
 {
     protected int EnergyUsage;
     protected String usage;
@@ -27,5 +29,16 @@ public class MilkPail extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "milkpail";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return price;
     }
 }

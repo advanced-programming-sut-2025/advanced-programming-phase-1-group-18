@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class TrashCan extends Item
+import Model.Name;
+
+public class TrashCan extends Item implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -27,5 +29,15 @@ public class TrashCan extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "trashcan";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

@@ -1,19 +1,20 @@
 package Model.Items;
 
+import Model.Name;
+
 import java.util.ArrayList;
 
-public class CraftingItem extends Item
-{
-    protected String Name;
-    protected ArrayList<Item> Ingredients ;
+public class CraftingItem extends Item implements Name, Price {
+    protected String name;
+    protected ArrayList<Item> Ingredients;
     protected int SellPrice;
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     public ArrayList<Item> getIngredients() {
@@ -30,5 +31,15 @@ public class CraftingItem extends Item
 
     public void setSellPrice(int sellPrice) {
         this.SellPrice = sellPrice;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return name.toLowerCase().replaceAll(" ", "");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.getSellPrice();
     }
 }

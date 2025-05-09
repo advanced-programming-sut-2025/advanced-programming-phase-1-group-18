@@ -3,6 +3,7 @@ package Model.Items;
 import Model.App;
 import Model.Cord;
 import Model.Kashi;
+import Model.Name;
 import enums.AllCropsEnums;
 import enums.ForagingSeedsEnums;
 import enums.ForagingTreesEnums;
@@ -11,7 +12,7 @@ import enums.MixedSeedsEnums;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllCrop extends Crop {
+public class AllCrop extends Crop implements Name ,Price{
     private ForagingSeedsEnums sourceForagingSeedEnum;
     private MixedSeedsEnums sourceMixedSeedEnum;
     private AllCropsEnums type;
@@ -840,4 +841,13 @@ public class AllCrop extends Crop {
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
 
+    @Override
+    public String getCorrectName() {
+        return this.type.toString().toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return this.getBaseSellPrice();
+    }
 }

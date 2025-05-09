@@ -1,9 +1,10 @@
 package Model.Items;
 
+import Model.Name;
 import enums.ForagingSeedsEnums;
 import enums.MixedSeedsEnums;
 
-public class MixedSeed extends Seed
+public class MixedSeed extends Seed implements Name,Price
 {
     MixedSeedsEnums type;
 
@@ -13,5 +14,15 @@ public class MixedSeed extends Seed
 
     public void setType(MixedSeedsEnums type) {
         this.type = type;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return type.toString().toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

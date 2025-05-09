@@ -1,9 +1,9 @@
 package Model;
 
-import Model.Items.Gift;
+import enums.NPCEnums;
 import enums.Seasons;
 import enums.WeatherEnum;
-
+import Model.Items.Gift;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -78,6 +78,56 @@ public class Game {
     protected int TheStardropSaloonEnterancex;
     protected int TheStardropSaloonEnterancey;
 
+    // Sebastian
+    protected int NPCSEBASTIANTopLeftX;
+    protected int NPCSEBASTIANTopLeftY;
+    protected int NPCSEBASTIANWidth;
+    protected int NPCSEBASTIANHeight;
+    protected int NPCSEBASTIANEntranceX;
+    protected int NPCSEBASTIANEntranceY;
+
+    // Abigail
+    protected int NPCABIGAILTopLeftX;
+    protected int NPCABIGAILTopLeftY;
+    protected int NPCABIGAILWidth;
+    protected int NPCABIGAILHeight;
+    protected int NPCABIGAILEntranceX;
+    protected int NPCABIGAILEntranceY;
+
+    // Harvey
+    protected int NPCHARVEYTopLeftX;
+    protected int NPCHARVEYTopLeftY;
+    protected int NPCHARVEYWidth;
+    protected int NPCHARVEYHeight;
+    protected int NPCHARVEYEntranceX;
+    protected int NPCHARVEYEntranceY;
+
+    // Leah
+    protected int NPCLEAHTopLeftX;
+    protected int NPCLEAHTopLeftY;
+    protected int NPCLEAHWidth;
+    protected int NPCLEAHHeight;
+    protected int NPCLEAHEntranceX;
+    protected int NPCLEAHEntranceY;
+
+    // Robin
+    protected int NPCROBINTopLeftX;
+    protected int NPCROBINTopLeftY;
+    protected int NPCROBINWidth;
+    protected int NPCROBINHeight;
+    protected int NPCROBINEntranceX;
+    protected int NPCROBINEntranceY;
+
+    protected int NPCSEBASTIANx;
+    protected int NPCSEBASTIANy;
+    protected int NPCABIGAILx;
+    protected int NPCABIGAILy;
+    protected int NPCHARVEYx;
+    protected int NPCHARVEYy;
+    protected int NPCLEAHx;
+    protected int NPCLEAHy;
+    protected int NPCROBINx;
+    protected int NPCROBINy;
 
     protected ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
     protected User Creator;
@@ -94,82 +144,17 @@ public class Game {
     protected MarniesRanchMarket marniesRanchMarket;
     protected PierresGeneralStoreMarket pierresGeneralStoreMarket;
     protected TheStardropSaloonMarket theStardropSaloonMarket;
-
     protected ArrayList<Friendship> friendships;
     protected ArrayList<Gift> gifts;
+    protected NPC NPCSEBASTIAN;
+    protected NPC NPCABIGAIL;
+    protected NPC NPCHARVEY;
+    protected NPC NPCLEAH;
+    protected NPC NPCROBIN;
+
 
     public Game() {
-        ArrayList<Cord> cords = new ArrayList<>();
-        for (int i = BlackSmithTopLeftx; i <= BlackSmithTopLeftx + BlackSmithWidth; i++) {
-            for (int j = BlackSmithTopLefty; j <= BlackSmithTopLefty + BlackSmithHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        blackSmithMarket = new BlackSmithMarket();
-        blackSmithMarket.fillStock();
-        blackSmithMarket.adaptMap(cords, BlackSmithEnterancex, BlackSmithEnterancey, BlackSmithTopLeftx, BlackSmithTopLefty, BlackSmithTopLeftx + BlackSmithWidth, BlackSmithTopLefty + BlackSmithHeight);
 
-        cords = new ArrayList<>();
-        for (int i = CarpentersShopTopLeftx; i <= CarpentersShopTopLeftx + CarpentersShopWidth; i++) {
-            for (int j = CarpentersShopTopLefty; j <= CarpentersShopTopLefty + CarpentersShopHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        carpentersShopMarket = new CarpentersShopMarket();
-        //ino rah bendaz
-        //TODO
-        //carpentersShopMarket.fillStock();
-        carpentersShopMarket.adaptMap(cords, CarpentersShopEnterancex, CarpentersShopEnterancey, CarpentersShopTopLeftx, CarpentersShopTopLefty, CarpentersShopTopLeftx + CarpentersShopWidth, CarpentersShopTopLefty + CarpentersShopHeight);
-
-        cords = new ArrayList<>();
-        for (int i = FishShopTopLeftx; i <= FishShopTopLeftx + FishShopWidth; i++) {
-            for (int j = FishShopTopLefty; j <= FishShopTopLefty + FishShopHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        fishShopMarket = new FishShopMarket();
-        fishShopMarket.fillStock();
-        fishShopMarket.adaptMap(cords, FishShopEnterancex, FishShopEnterancey, FishShopTopLeftx, FishShopTopLefty, FishShopTopLeftx + FishShopWidth, FishShopTopLefty + FishShopHeight);
-
-        cords = new ArrayList<>();
-        for (int i = JojoMartTopLeftx; i <= JojoMartTopLeftx + JojoMartWidth; i++) {
-            for (int j = JojoMartTopLefty; j <= JojoMartTopLefty + JojoMartHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        jojoMartMarket = new JojoMartMarket();
-        jojoMartMarket.fillStock(getCurrentSeason());
-        jojoMartMarket.adaptMap(cords, JojoMartEnterancex, JojoMartEnterancey, JojoMartTopLeftx, JojoMartTopLefty, JojoMartTopLeftx + JojoMartWidth, JojoMartTopLefty + JojoMartHeight);
-
-        cords = new ArrayList<>();
-        for (int i = MarniesRanchTopLeftx; i <= MarniesRanchTopLeftx + MarniesRanchWidth; i++) {
-            for (int j = MarniesRanchTopLefty; j <= MarniesRanchTopLefty + MarniesRanchHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        marniesRanchMarket = new MarniesRanchMarket();
-        marniesRanchMarket.fillStock();
-        marniesRanchMarket.adaptMap(cords, MarniesRanchEnterancex, MarniesRanchEnterancey, MarniesRanchTopLeftx, MarniesRanchTopLefty, MarniesRanchTopLeftx + MarniesRanchWidth, MarniesRanchTopLefty + MarniesRanchHeight);
-
-        cords = new ArrayList<>();
-        for (int i = PierresGeneralStoreTopLeftx; i <= PierresGeneralStoreTopLeftx + PierresGeneralStoreWidth; i++) {
-            for (int j = PierresGeneralStoreTopLefty; j <= PierresGeneralStoreTopLefty + PierresGeneralStoreHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        pierresGeneralStoreMarket = new PierresGeneralStoreMarket();
-        pierresGeneralStoreMarket.fillStock(getCurrentSeason());
-        pierresGeneralStoreMarket.adaptMap(cords, PierresGeneralStoreEnterancex, PierresGeneralStoreEnterancey, PierresGeneralStoreTopLeftx, PierresGeneralStoreTopLefty, PierresGeneralStoreTopLeftx + PierresGeneralStoreWidth, PierresGeneralStoreTopLefty + PierresGeneralStoreHeight);
-
-        cords = new ArrayList<>();
-        for (int i = TheStardropSaloonTopLeftx; i <= TheStardropSaloonTopLeftx + TheStardropSaloonWidth; i++) {
-            for (int j = TheStardropSaloonTopLefty; j <= TheStardropSaloonTopLefty + TheStardropSaloonHeight; j++) {
-                cords.add(new Cord(i, j));
-            }
-        }
-        theStardropSaloonMarket = new TheStardropSaloonMarket();
-        theStardropSaloonMarket.fillStock();
-        theStardropSaloonMarket.adaptMap(cords, TheStardropSaloonEnterancex, TheStardropSaloonEnterancey, TheStardropSaloonTopLeftx, TheStardropSaloonTopLefty, TheStardropSaloonTopLeftx + TheStardropSaloonWidth, TheStardropSaloonTopLefty + TheStardropSaloonHeight);
     }
     public void initializeFriendships() {
         for (int i = 0; i < Players.size(); i++) {
@@ -218,7 +203,6 @@ public class Game {
     public void setGifts(ArrayList<Gift> gifts) {
         this.gifts = gifts;
     }
-
     public ArrayList<ArrayList<Kashi>> getMap() {
         return Map;
     }
@@ -395,118 +379,6 @@ public class Game {
         this.player4Height = player4Height;
     }
 
-    public int getBlackSmithEnterancex() {
-        return BlackSmithEnterancex;
-    }
-
-    public void setBlackSmithEnterancex(int blackSmithEnterancex) {
-        BlackSmithEnterancex = blackSmithEnterancex;
-    }
-
-    public int getBlackSmithEnterancey() {
-        return BlackSmithEnterancey;
-    }
-
-    public void setBlackSmithEnterancey(int blackSmithEnterancey) {
-        BlackSmithEnterancey = blackSmithEnterancey;
-    }
-
-    public int getJojoMartEnterancex() {
-        return JojoMartEnterancex;
-    }
-
-    public void setJojoMartEnterancex(int jojoMartEnterancex) {
-        JojoMartEnterancex = jojoMartEnterancex;
-    }
-
-    public int getJojoMartEnterancey() {
-        return JojoMartEnterancey;
-    }
-
-    public void setJojoMartEnterancey(int jojoMartEnterancey) {
-        JojoMartEnterancey = jojoMartEnterancey;
-    }
-
-    public int getPierresGeneralStoreEnterancex() {
-        return PierresGeneralStoreEnterancex;
-    }
-
-    public void setPierresGeneralStoreEnterancex(int pierresGeneralStoreEnterancex) {
-        PierresGeneralStoreEnterancex = pierresGeneralStoreEnterancex;
-    }
-
-    public int getPierresGeneralStoreEnterancey() {
-        return PierresGeneralStoreEnterancey;
-    }
-
-    public void setPierresGeneralStoreEnterancey(int pierresGeneralStoreEnterancey) {
-        PierresGeneralStoreEnterancey = pierresGeneralStoreEnterancey;
-    }
-
-    public int getCarpentersShopEnterancex() {
-        return CarpentersShopEnterancex;
-    }
-
-    public void setCarpentersShopEnterancex(int carpentersShopEnterancex) {
-        CarpentersShopEnterancex = carpentersShopEnterancex;
-    }
-
-    public int getCarpentersShopEnterancey() {
-        return CarpentersShopEnterancey;
-    }
-
-    public void setCarpentersShopEnterancey(int carpentersShopEnterancey) {
-        CarpentersShopEnterancey = carpentersShopEnterancey;
-    }
-
-    public int getFishShopEnterancex() {
-        return FishShopEnterancex;
-    }
-
-    public void setFishShopEnterancex(int fishShopEnterancex) {
-        FishShopEnterancex = fishShopEnterancex;
-    }
-
-    public int getFishShopEnterancey() {
-        return FishShopEnterancey;
-    }
-
-    public void setFishShopEnterancey(int fishShopEnterancey) {
-        FishShopEnterancey = fishShopEnterancey;
-    }
-
-    public int getMarniesRanchEnterancex() {
-        return MarniesRanchEnterancex;
-    }
-
-    public void setMarniesRanchEnterancex(int marniesRanchEnterancex) {
-        MarniesRanchEnterancex = marniesRanchEnterancex;
-    }
-
-    public int getMarniesRanchEnterancey() {
-        return MarniesRanchEnterancey;
-    }
-
-    public void setMarniesRanchEnterancey(int marniesRanchEnterancey) {
-        MarniesRanchEnterancey = marniesRanchEnterancey;
-    }
-
-    public int getTheStardropSaloonEnterancex() {
-        return TheStardropSaloonEnterancex;
-    }
-
-    public void setTheStardropSaloonEnterancex(int theStardropSaloonEnterancex) {
-        TheStardropSaloonEnterancex = theStardropSaloonEnterancex;
-    }
-
-    public int getTheStardropSaloonEnterancey() {
-        return TheStardropSaloonEnterancey;
-    }
-
-    public void setTheStardropSaloonEnterancey(int theStardropSaloonEnterancey) {
-        TheStardropSaloonEnterancey = theStardropSaloonEnterancey;
-    }
-
     public BlackSmithMarket getBlackSmithMarket() {
         return blackSmithMarket;
     }
@@ -563,6 +435,126 @@ public class Game {
         this.theStardropSaloonMarket = theStardropSaloonMarket;
     }
 
+    public NPC getNPCSEBASTIAN() {
+        return NPCSEBASTIAN;
+    }
+
+    public void setNPCSEBASTIAN(NPC NPCSEBASTIAN) {
+        this.NPCSEBASTIAN = NPCSEBASTIAN;
+    }
+
+    public NPC getNPCABIGAIL() {
+        return NPCABIGAIL;
+    }
+
+    public void setNPCABIGAIL(NPC NPCABIGAIL) {
+        this.NPCABIGAIL = NPCABIGAIL;
+    }
+
+    public NPC getNPCHARVEY() {
+        return NPCHARVEY;
+    }
+
+    public void setNPCHARVEY(NPC NPCHARVEY) {
+        this.NPCHARVEY = NPCHARVEY;
+    }
+
+    public NPC getNPCLEAH() {
+        return NPCLEAH;
+    }
+
+    public void setNPCLEAH(NPC NPCLEAH) {
+        this.NPCLEAH = NPCLEAH;
+    }
+
+    public NPC getNPCROBIN() {
+        return NPCROBIN;
+    }
+
+    public void setNPCROBIN(NPC NPCROBIN) {
+        this.NPCROBIN = NPCROBIN;
+    }
+
+    public int getNPCROBINy() {
+        return NPCROBINy;
+    }
+
+    public void setNPCROBINy(int NPCROBINy) {
+        this.NPCROBINy = NPCROBINy;
+    }
+
+    public int getNPCROBINx() {
+        return NPCROBINx;
+    }
+
+    public void setNPCROBINx(int NPCROBINx) {
+        this.NPCROBINx = NPCROBINx;
+    }
+
+    public int getNPCLEAHy() {
+        return NPCLEAHy;
+    }
+
+    public void setNPCLEAHy(int NPCLEAHy) {
+        this.NPCLEAHy = NPCLEAHy;
+    }
+
+    public int getNPCLEAHx() {
+        return NPCLEAHx;
+    }
+
+    public void setNPCLEAHx(int NPCLEAHx) {
+        this.NPCLEAHx = NPCLEAHx;
+    }
+
+    public int getNPCHARVEYy() {
+        return NPCHARVEYy;
+    }
+
+    public void setNPCHARVEYy(int NPCHARVEYy) {
+        this.NPCHARVEYy = NPCHARVEYy;
+    }
+
+    public int getNPCHARVEYx() {
+        return NPCHARVEYx;
+    }
+
+    public void setNPCHARVEYx(int NPCHARVEYx) {
+        this.NPCHARVEYx = NPCHARVEYx;
+    }
+
+    public int getNPCABIGAILy() {
+        return NPCABIGAILy;
+    }
+
+    public void setNPCABIGAILy(int NPCABIGAILy) {
+        this.NPCABIGAILy = NPCABIGAILy;
+    }
+
+    public int getNPCABIGAILx() {
+        return NPCABIGAILx;
+    }
+
+    public void setNPCABIGAILx(int NPCABIGAILx) {
+        this.NPCABIGAILx = NPCABIGAILx;
+    }
+
+    public int getNPCSEBASTIANy() {
+        return NPCSEBASTIANy;
+    }
+
+    public void setNPCSEBASTIANy(int NPCSEBASTIANy) {
+        this.NPCSEBASTIANy = NPCSEBASTIANy;
+    }
+
+    public int getNPCSEBASTIANx() {
+        return NPCSEBASTIANx;
+    }
+
+    public void setNPCSEBASTIANx(int NPCSEBASTIANx) {
+        this.NPCSEBASTIANx = NPCSEBASTIANx;
+    }
+
     public int getBlackSmithTopLeftx() {
         return BlackSmithTopLeftx;
     }
@@ -593,6 +585,22 @@ public class Game {
 
     public void setBlackSmithHeight(int blackSmithHeight) {
         BlackSmithHeight = blackSmithHeight;
+    }
+
+    public int getBlackSmithEnterancex() {
+        return BlackSmithEnterancex;
+    }
+
+    public void setBlackSmithEnterancex(int blackSmithEnterancex) {
+        BlackSmithEnterancex = blackSmithEnterancex;
+    }
+
+    public int getBlackSmithEnterancey() {
+        return BlackSmithEnterancey;
+    }
+
+    public void setBlackSmithEnterancey(int blackSmithEnterancey) {
+        BlackSmithEnterancey = blackSmithEnterancey;
     }
 
     public int getJojoMartTopLeftx() {
@@ -627,6 +635,22 @@ public class Game {
         JojoMartHeight = jojoMartHeight;
     }
 
+    public int getJojoMartEnterancex() {
+        return JojoMartEnterancex;
+    }
+
+    public void setJojoMartEnterancex(int jojoMartEnterancex) {
+        JojoMartEnterancex = jojoMartEnterancex;
+    }
+
+    public int getJojoMartEnterancey() {
+        return JojoMartEnterancey;
+    }
+
+    public void setJojoMartEnterancey(int jojoMartEnterancey) {
+        JojoMartEnterancey = jojoMartEnterancey;
+    }
+
     public int getPierresGeneralStoreTopLeftx() {
         return PierresGeneralStoreTopLeftx;
     }
@@ -657,6 +681,22 @@ public class Game {
 
     public void setPierresGeneralStoreHeight(int pierresGeneralStoreHeight) {
         PierresGeneralStoreHeight = pierresGeneralStoreHeight;
+    }
+
+    public int getPierresGeneralStoreEnterancex() {
+        return PierresGeneralStoreEnterancex;
+    }
+
+    public void setPierresGeneralStoreEnterancex(int pierresGeneralStoreEnterancex) {
+        PierresGeneralStoreEnterancex = pierresGeneralStoreEnterancex;
+    }
+
+    public int getPierresGeneralStoreEnterancey() {
+        return PierresGeneralStoreEnterancey;
+    }
+
+    public void setPierresGeneralStoreEnterancey(int pierresGeneralStoreEnterancey) {
+        PierresGeneralStoreEnterancey = pierresGeneralStoreEnterancey;
     }
 
     public int getCarpentersShopTopLeftx() {
@@ -691,6 +731,22 @@ public class Game {
         CarpentersShopHeight = carpentersShopHeight;
     }
 
+    public int getCarpentersShopEnterancex() {
+        return CarpentersShopEnterancex;
+    }
+
+    public void setCarpentersShopEnterancex(int carpentersShopEnterancex) {
+        CarpentersShopEnterancex = carpentersShopEnterancex;
+    }
+
+    public int getCarpentersShopEnterancey() {
+        return CarpentersShopEnterancey;
+    }
+
+    public void setCarpentersShopEnterancey(int carpentersShopEnterancey) {
+        CarpentersShopEnterancey = carpentersShopEnterancey;
+    }
+
     public int getFishShopTopLeftx() {
         return FishShopTopLeftx;
     }
@@ -721,6 +777,22 @@ public class Game {
 
     public void setFishShopHeight(int fishShopHeight) {
         FishShopHeight = fishShopHeight;
+    }
+
+    public int getFishShopEnterancex() {
+        return FishShopEnterancex;
+    }
+
+    public void setFishShopEnterancex(int fishShopEnterancex) {
+        FishShopEnterancex = fishShopEnterancex;
+    }
+
+    public int getFishShopEnterancey() {
+        return FishShopEnterancey;
+    }
+
+    public void setFishShopEnterancey(int fishShopEnterancey) {
+        FishShopEnterancey = fishShopEnterancey;
     }
 
     public int getMarniesRanchTopLeftx() {
@@ -755,6 +827,22 @@ public class Game {
         MarniesRanchHeight = marniesRanchHeight;
     }
 
+    public int getMarniesRanchEnterancex() {
+        return MarniesRanchEnterancex;
+    }
+
+    public void setMarniesRanchEnterancex(int marniesRanchEnterancex) {
+        MarniesRanchEnterancex = marniesRanchEnterancex;
+    }
+
+    public int getMarniesRanchEnterancey() {
+        return MarniesRanchEnterancey;
+    }
+
+    public void setMarniesRanchEnterancey(int marniesRanchEnterancey) {
+        MarniesRanchEnterancey = marniesRanchEnterancey;
+    }
+
     public int getTheStardropSaloonTopLeftx() {
         return TheStardropSaloonTopLeftx;
     }
@@ -785,6 +873,262 @@ public class Game {
 
     public void setTheStardropSaloonHeight(int theStardropSaloonHeight) {
         TheStardropSaloonHeight = theStardropSaloonHeight;
+    }
+
+    public int getTheStardropSaloonEnterancex() {
+        return TheStardropSaloonEnterancex;
+    }
+
+    public void setTheStardropSaloonEnterancex(int theStardropSaloonEnterancex) {
+        TheStardropSaloonEnterancex = theStardropSaloonEnterancex;
+    }
+
+    public int getTheStardropSaloonEnterancey() {
+        return TheStardropSaloonEnterancey;
+    }
+
+    public void setTheStardropSaloonEnterancey(int theStardropSaloonEnterancey) {
+        TheStardropSaloonEnterancey = theStardropSaloonEnterancey;
+    }
+
+    public int getNPCSEBASTIANTopLeftX() {
+        return NPCSEBASTIANTopLeftX;
+    }
+
+    public void setNPCSEBASTIANTopLeftX(int NPCSEBASTIANTopLeftX) {
+        this.NPCSEBASTIANTopLeftX = NPCSEBASTIANTopLeftX;
+    }
+
+    public int getNPCSEBASTIANTopLeftY() {
+        return NPCSEBASTIANTopLeftY;
+    }
+
+    public void setNPCSEBASTIANTopLeftY(int NPCSEBASTIANTopLeftY) {
+        this.NPCSEBASTIANTopLeftY = NPCSEBASTIANTopLeftY;
+    }
+
+    public int getNPCSEBASTIANWidth() {
+        return NPCSEBASTIANWidth;
+    }
+
+    public void setNPCSEBASTIANWidth(int NPCSEBASTIANWidth) {
+        this.NPCSEBASTIANWidth = NPCSEBASTIANWidth;
+    }
+
+    public int getNPCSEBASTIANHeight() {
+        return NPCSEBASTIANHeight;
+    }
+
+    public void setNPCSEBASTIANHeight(int NPCSEBASTIANHeight) {
+        this.NPCSEBASTIANHeight = NPCSEBASTIANHeight;
+    }
+
+    public int getNPCSEBASTIANEntranceX() {
+        return NPCSEBASTIANEntranceX;
+    }
+
+    public void setNPCSEBASTIANEntranceX(int NPCSEBASTIANEntranceX) {
+        this.NPCSEBASTIANEntranceX = NPCSEBASTIANEntranceX;
+    }
+
+    public int getNPCSEBASTIANEntranceY() {
+        return NPCSEBASTIANEntranceY;
+    }
+
+    public void setNPCSEBASTIANEntranceY(int NPCSEBASTIANEntranceY) {
+        this.NPCSEBASTIANEntranceY = NPCSEBASTIANEntranceY;
+    }
+
+    public int getNPCABIGAILTopLeftX() {
+        return NPCABIGAILTopLeftX;
+    }
+
+    public void setNPCABIGAILTopLeftX(int NPCABIGAILTopLeftX) {
+        this.NPCABIGAILTopLeftX = NPCABIGAILTopLeftX;
+    }
+
+    public int getNPCABIGAILTopLeftY() {
+        return NPCABIGAILTopLeftY;
+    }
+
+    public void setNPCABIGAILTopLeftY(int NPCABIGAILTopLeftY) {
+        this.NPCABIGAILTopLeftY = NPCABIGAILTopLeftY;
+    }
+
+    public int getNPCABIGAILWidth() {
+        return NPCABIGAILWidth;
+    }
+
+    public void setNPCABIGAILWidth(int NPCABIGAILWidth) {
+        this.NPCABIGAILWidth = NPCABIGAILWidth;
+    }
+
+    public int getNPCABIGAILHeight() {
+        return NPCABIGAILHeight;
+    }
+
+    public void setNPCABIGAILHeight(int NPCABIGAILHeight) {
+        this.NPCABIGAILHeight = NPCABIGAILHeight;
+    }
+
+    public int getNPCABIGAILEntranceX() {
+        return NPCABIGAILEntranceX;
+    }
+
+    public void setNPCABIGAILEntranceX(int NPCABIGAILEntranceX) {
+        this.NPCABIGAILEntranceX = NPCABIGAILEntranceX;
+    }
+
+    public int getNPCABIGAILEntranceY() {
+        return NPCABIGAILEntranceY;
+    }
+
+    public void setNPCABIGAILEntranceY(int NPCABIGAILEntranceY) {
+        this.NPCABIGAILEntranceY = NPCABIGAILEntranceY;
+    }
+
+    public int getNPCHARVEYTopLeftX() {
+        return NPCHARVEYTopLeftX;
+    }
+
+    public void setNPCHARVEYTopLeftX(int NPCHARVEYTopLeftX) {
+        this.NPCHARVEYTopLeftX = NPCHARVEYTopLeftX;
+    }
+
+    public int getNPCHARVEYTopLeftY() {
+        return NPCHARVEYTopLeftY;
+    }
+
+    public void setNPCHARVEYTopLeftY(int NPCHARVEYTopLeftY) {
+        this.NPCHARVEYTopLeftY = NPCHARVEYTopLeftY;
+    }
+
+    public int getNPCHARVEYWidth() {
+        return NPCHARVEYWidth;
+    }
+
+    public void setNPCHARVEYWidth(int NPCHARVEYWidth) {
+        this.NPCHARVEYWidth = NPCHARVEYWidth;
+    }
+
+    public int getNPCHARVEYHeight() {
+        return NPCHARVEYHeight;
+    }
+
+    public void setNPCHARVEYHeight(int NPCHARVEYHeight) {
+        this.NPCHARVEYHeight = NPCHARVEYHeight;
+    }
+
+    public int getNPCHARVEYEntranceX() {
+        return NPCHARVEYEntranceX;
+    }
+
+    public void setNPCHARVEYEntranceX(int NPCHARVEYEntranceX) {
+        this.NPCHARVEYEntranceX = NPCHARVEYEntranceX;
+    }
+
+    public int getNPCHARVEYEntranceY() {
+        return NPCHARVEYEntranceY;
+    }
+
+    public void setNPCHARVEYEntranceY(int NPCHARVEYEntranceY) {
+        this.NPCHARVEYEntranceY = NPCHARVEYEntranceY;
+    }
+
+    public int getNPCLEAHTopLeftX() {
+        return NPCLEAHTopLeftX;
+    }
+
+    public void setNPCLEAHTopLeftX(int NPCLEAHTopLeftX) {
+        this.NPCLEAHTopLeftX = NPCLEAHTopLeftX;
+    }
+
+    public int getNPCLEAHTopLeftY() {
+        return NPCLEAHTopLeftY;
+    }
+
+    public void setNPCLEAHTopLeftY(int NPCLEAHTopLeftY) {
+        this.NPCLEAHTopLeftY = NPCLEAHTopLeftY;
+    }
+
+    public int getNPCLEAHWidth() {
+        return NPCLEAHWidth;
+    }
+
+    public void setNPCLEAHWidth(int NPCLEAHWidth) {
+        this.NPCLEAHWidth = NPCLEAHWidth;
+    }
+
+    public int getNPCLEAHHeight() {
+        return NPCLEAHHeight;
+    }
+
+    public void setNPCLEAHHeight(int NPCLEAHHeight) {
+        this.NPCLEAHHeight = NPCLEAHHeight;
+    }
+
+    public int getNPCLEAHEntranceX() {
+        return NPCLEAHEntranceX;
+    }
+
+    public void setNPCLEAHEntranceX(int NPCLEAHEntranceX) {
+        this.NPCLEAHEntranceX = NPCLEAHEntranceX;
+    }
+
+    public int getNPCLEAHEntranceY() {
+        return NPCLEAHEntranceY;
+    }
+
+    public void setNPCLEAHEntranceY(int NPCLEAHEntranceY) {
+        this.NPCLEAHEntranceY = NPCLEAHEntranceY;
+    }
+
+    public int getNPCROBINTopLeftX() {
+        return NPCROBINTopLeftX;
+    }
+
+    public void setNPCROBINTopLeftX(int NPCROBINTopLeftX) {
+        this.NPCROBINTopLeftX = NPCROBINTopLeftX;
+    }
+
+    public int getNPCROBINTopLeftY() {
+        return NPCROBINTopLeftY;
+    }
+
+    public void setNPCROBINTopLeftY(int NPCROBINTopLeftY) {
+        this.NPCROBINTopLeftY = NPCROBINTopLeftY;
+    }
+
+    public int getNPCROBINWidth() {
+        return NPCROBINWidth;
+    }
+
+    public void setNPCROBINWidth(int NPCROBINWidth) {
+        this.NPCROBINWidth = NPCROBINWidth;
+    }
+
+    public int getNPCROBINHeight() {
+        return NPCROBINHeight;
+    }
+
+    public void setNPCROBINHeight(int NPCROBINHeight) {
+        this.NPCROBINHeight = NPCROBINHeight;
+    }
+
+    public int getNPCROBINEntranceX() {
+        return NPCROBINEntranceX;
+    }
+
+    public void setNPCROBINEntranceX(int NPCROBINEntranceX) {
+        this.NPCROBINEntranceX = NPCROBINEntranceX;
+    }
+
+    public int getNPCROBINEntranceY() {
+        return NPCROBINEntranceY;
+    }
+
+    public void setNPCROBINEntranceY(int NPCROBINEntranceY) {
+        this.NPCROBINEntranceY = NPCROBINEntranceY;
     }
 
     public Seasons getCurrentSeason() {

@@ -1,6 +1,8 @@
 package Model.Items;
 
-public class AnimalProduct extends Item
+import Model.Name;
+
+public class AnimalProduct extends Item implements Name ,Price
 {
     protected String Name;
     protected String Jens;
@@ -31,4 +33,13 @@ public class AnimalProduct extends Item
         this.SellPrice = sellPrice;
     }
 
+    @Override
+    public String getCorrectName() {
+        return "";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return getSellPrice();
+    }
 }

@@ -3,11 +3,12 @@ package Model.Items;
 import Model.App;
 import Model.Cord;
 import Model.Kashi;
+import Model.Name;
 import enums.ForagingCropsEnums;
 
 import java.util.HashMap;
 
-public class ForagingCrop extends Crop {
+public class ForagingCrop extends Crop implements Name ,Price{
     ForagingCropsEnums type;
 
 
@@ -151,4 +152,13 @@ public class ForagingCrop extends Crop {
         }
     }
 
+    @Override
+    public String getCorrectName() {
+        return type.toString().toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return getBaseSellPrice();
+    }
 }
