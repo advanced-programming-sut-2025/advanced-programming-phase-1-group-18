@@ -8,7 +8,6 @@ import enums.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameMenuController implements ShowCurrentMenu {
@@ -72,6 +71,7 @@ public class GameMenuController implements ShowCurrentMenu {
 
         NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
         NewGame.setWeather(weather);
+        NewGame.initializeFriendships();
         App.setCurrentGame(NewGame);
         App.getGames().add(NewGame);
         for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
@@ -205,168 +205,9 @@ public class GameMenuController implements ShowCurrentMenu {
             App.getCurrentGame().setIndexPlayerinControl(0);
             //            start new day
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().keySet()) {
-                    //AllCrop+
-                    //Fertilizer+
-                    //Food+
-                    //FoodCooking+
-                    //Foraging Crop+
-                    //Foraging Seed+
-                    //Hay+
-                    //Market Products+
-                    //MilkPail+
-                    //Mineral+
-                    //Shear+
-                    //TreeSeed+
-                    //AllCrop+
-                    //AllCrop+
-                    if (item instanceof AllCrop) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((AllCrop) item).getBaseSellPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//Fertilizer+
-                    if (item instanceof Fertilizer) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((Fertilizer) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//Food+
-                    if (item instanceof Food) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((Food) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//FoodCooking+
-                    if (item instanceof FoodCooking) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((FoodCooking) item).getSellPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//ForagingCrop+
-                    if (item instanceof ForagingCrop) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((ForagingCrop) item).getBaseSellPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//ForagingSeed+
-                    if (item instanceof ForagingSeed) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((ForagingSeed) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//Hay+
-                    if (item instanceof Hay) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((Hay) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item,
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-// Continue with MarketProducts, MilkPail, Mineral, Shear, and TreeSeed
-
-//MarketProducts+
-                    if (item instanceof MarketProducts) {
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((MarketProducts) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//MilkPail+
-                    if (item instanceof MilkPail) {
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((MilkPail) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//Mineral+
-                    if (item instanceof Mineral) {
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((Mineral) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMyFarm().getSatl().getItems().get(item));
-                    }
-//Shear+
-                    if (item instanceof Shear) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((Shear) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-//TreeSeed+
-                    if (item instanceof TreeSeed) {
-                        App.getCurrentGame().getPlayers()
-                                .get(App.getCurrentGame().getIndexPlayerinControl())
-                                .setMoney(App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl())
-                                        .getMoney() + ((TreeSeed) item).getPrice() * App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                                .getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers()
-                                        .get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-                    }
-
-
-                }
                 App.getCurrentGame().setCurrentDateTime(new DateTime(0, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
 
+                App.getCurrentGame().endOfDayUpdate();
                 App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
                 Deque<WeatherEnum> weather = new ArrayDeque<>();
                 if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
@@ -1227,40 +1068,303 @@ public class GameMenuController implements ShowCurrentMenu {
         return null;
     }
 
-    public void friendships() {
+    public Result friendships() {
+        StringBuilder result = new StringBuilder();
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Game currentGame = App.getCurrentGame();
+        for (Friendship friendship :currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendship.isBetween(currentPlayer, player)){
+                    result.append("Friendship between ")
+                            .append(currentPlayer.getUsername()) // فرض: Player کلاس متد getUsername داره
+                            .append(" and ")
+                            .append(player.getUsername())
+                            .append("\nLevel: ").append(friendship.getLevel())
+                            .append("\nXP: ").append(friendship.getXp())
+                            .append("\nLast Interaction: Day ").append(friendship.getLastInteractionDate().getDay())
+                            .append(", Hour ").append(friendship.getLastInteractionDate().getHour());
+                }
+            }
 
+        }
+        return new Result(true, result.toString());
     }
 
     public Result talk(String username, String message) {
-        return new Result(true, "");
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Game currentGame = App.getCurrentGame();
+        if (App.getCurrentGame().getPlayerByUsername(username) == null) {
+            return new Result(false, "Player not found");
+        }
+        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
+        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+        Friendship friendship = null;
+        friendship = getFriendship(currentGame,currentPlayer,friendship);
+//        for (Friendship friendships :currentGame.getFriendships()){
+//            for(Player player : App.getCurrentGame().getPlayers()){
+//                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+//                    friendship = friendships;
+//                }
+//            }
+//
+//        }
+        assert friendship != null;
+        friendship.interact(20);
+
+        // ذخیره پیام
+        String addressedMessage = currentPlayer.getUsername() + " : " + message + "("+
+                App.getCurrentGame().getCurrentDateTime().getDay() + " : " + App.getCurrentGame().getCurrentDateTime().getHour()
+                +")";
+        friendship.getTalkHistory().add(addressedMessage);
+        return new Result(true, "messege sent successfully");
     }
 
     public Result talkHistory(String username) {
-        return new Result(true, "");
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Game currentGame = App.getCurrentGame();
+        StringBuilder result = new StringBuilder();
+        Friendship friendship = null;
+        friendship = getFriendship(currentGame,currentPlayer,friendship);
+//        for (Friendship friendships :currentGame.getFriendships()){
+//            for(Player player : App.getCurrentGame().getPlayers()){
+//                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+//                    friendship = friendships;
+//                }
+//            }
+//        }
+        assert friendship != null;
+        for (String message : friendship.getTalkHistory()) {
+            result.append(message).append("\n");
+        }
+        result.deleteCharAt(result.length()-1);
+        return new Result(true, result.toString());
     }
 
-    public Result gift(String userName, int amount, String item) {
-        return new Result(true, "");
+    public Result gift(String username, String item ,int amount) {
+        Item gift = null;
+        Gift newGift = null;
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Inventory inventory = currentPlayer.getInventory();
+        Map<Item,Integer> itemInventory = inventory.getItems();
+        Game currentGame = App.getCurrentGame();
+        if (App.getCurrentGame().getPlayerByUsername(username) == null) {
+            return new Result(false, "Player not found");
+        }
+        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
+        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+        Friendship friendship = null;
+        friendship = getFriendship(currentGame, currentPlayer, friendship);
+        assert friendship != null;
+        if (friendship.getLevel() == 0){
+            return new Result(false, "your friendship level is not enough to gift");
+        }
+        boolean found5 = false;
+        for (Item items : itemInventory.keySet()){
+            if (items.getName().equals(item)){
+                if (itemInventory.get(items) >= amount){
+                    if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getTotalItemCount() < amount){
+                        return new Result(false, "target player does not have enough space in inventory");
+                    }
+                    itemInventory.put(items, itemInventory.get(items)-amount);
+                    found5 = true;
+                    gift = items;
+                    newGift = new Gift(items,amount,currentPlayer,targetPlayer);
+                }else {
+                    return new Result(false, "You don't have enough items in your inventory");
+                }
+            }
+        }
+        if (!found5) {
+            return new Result(false, "No such item in your inventory");
+        } else {
+            boolean found6 = false;
+            App.getCurrentGame().getGifts().add(newGift);
+            for (Item items : targetPlayer.getInventory().getItems().keySet()){
+                if(items.getName().equals(item)){
+                    found6 = true;
+                    targetPlayer.getInventory().getItems().put(items, targetPlayer.getInventory().getItems().get(items)+amount);
+                }
+            }
+            if (!found6) {
+                targetPlayer.getInventory().getItems().put(gift, amount);
+            }
+            //todo if gift is flower increase leve
+            return new Result(true, "gift sent successfully");
+        }
     }
 
-    public void giftList() {
+    private static Friendship getFriendship(Game currentGame, Player currentPlayer, Friendship friendship) {
+        for (Friendship friendships : currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+                    friendship = friendships;
+                }
+            }
+        }
+        return friendship;
+    }
 
+    public Result giftList() {
+        StringBuilder result = new StringBuilder();
+        result.append("Gift List: \n");
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        for (Gift gift : App.getCurrentGame().getGifts()){
+            if (gift.getReceiver().equals(currentPlayer)){
+                result.append("Gift id: ").append(gift.getId()).append("\n");
+                result.append("Gift Sender: ").append(gift.getSender()).append("\n");
+                result.append("Gift name: ").append(gift.getName()).append("\n");
+                result.append("Gift amount: ").append(gift.getAmount()).append("\n");
+                result.append("Gift is rated: ").append(gift.isRated()).append("\n");
+            }
+        }
+        return new Result(true, result.toString());
     }
 
     public Result giftRate(int giftNumber, int rate) {
-        return new Result(true, "");
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        for (Gift gift : App.getCurrentGame().getGifts()){
+            if (gift.getId() == giftNumber){
+                if(gift.getSender().equals(currentPlayer)){
+                    if(!gift.isRated()){
+                        if(rate>0 && rate<6){
+                            gift.setRated(true);
+                            gift.setRate(rate);
+                            Friendship friendship = null;
+                            friendship = getFriendship(App.getCurrentGame(), currentPlayer, friendship);
+//                            for (Friendship friendships :App.getCurrentGame().getFriendships()){
+//                                for(Player player : App.getCurrentGame().getPlayers()){
+//                                    if(player.equals(currentPlayer) && friendships.isBetween(currentPlayer, player)){
+//                                        friendship = friendships;
+//                                    }
+//                                }
+//                            }
+                            assert friendship != null;
+                            friendship.interact(((rate-3)*30)+15);
+                            return new Result(true, "Gift rated successfully");
+                        }
+                    }
+                }
+            }
+        }
+        return new Result(false, "Gift can't rated");
     }
 
     public Result giftHistory(String name) {
-        return new Result(true, "");
+        StringBuilder result = new StringBuilder();
+        result.append("Gift History of ").append(name).append(": \n");
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player targetPlayer=null;
+        for (Player player : App.getCurrentGame().getPlayers()){
+            if (player.getUsername().equals(name)){
+                targetPlayer = player;
+            }
+        }
+        if (targetPlayer == null){
+            return new Result(false, "Player not found");
+        }
+        result.append("As sender:\n");
+        for (Gift gift : App.getCurrentGame().getGifts()){
+            if (gift.getSender().equals(targetPlayer)){
+                result.append("\tGift id: ").append(gift.getId()).append("\n");
+                result.append("\tGift name: ").append(gift.getName()).append("\n");
+                result.append("\tGift amount: ").append(gift.getAmount()).append("\n");
+                result.append("\tGift is rated: ").append(gift.isRated()).append("\n");
+                result.append("\tGift receiver: ").append(gift.getReceiver().getUsername()).append("\n");
+            }
+        }
+        result.append("As receiver:\n");
+        for (Gift gift : App.getCurrentGame().getGifts()){
+            if (gift.getReceiver().equals(targetPlayer)){
+                result.append("\tGift id: ").append(gift.getId()).append("\n");
+                result.append("\tGift name: ").append(gift.getName()).append("\n");
+                result.append("\tGift amount: ").append(gift.getAmount()).append("\n");
+                result.append("\tGift is rated: ").append(gift.isRated()).append("\n");
+                result.append("\tGift sender: ").append(gift.getSender().getUsername()).append("\n");
+            }
+        }
+        return new Result(true, result.toString());
     }
 
-    public Result hug(String userName) {
-        return new Result(true, "");
+    public Result hug(String username) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (App.getCurrentGame().getPlayerByUsername(username) == null) {
+            return new Result(false, "Player not found");
+        }
+        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
+        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+        Friendship friendship = null;
+        friendship = getFriendship(App.getCurrentGame(), currentPlayer, friendship);
+        friendship.interact(60);
+        return new Result(true, "You hug "+username+" successfully");
     }
 
-    public Result flower(String userName) {
-        return new Result(true, "");
+    public Result flower(String username) {
+        Item gift = null;
+        Gift newGift = null;
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Inventory inventory = currentPlayer.getInventory();
+        Map<Item,Integer> itemInventory = inventory.getItems();
+        Game currentGame = App.getCurrentGame();
+        if (App.getCurrentGame().getPlayerByUsername(username) == null) {
+            return new Result(false, "Player not found");
+        }
+        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
+        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+        Friendship friendship = null;
+        friendship = getFriendship(currentGame, currentPlayer, friendship);
+        assert friendship != null;
+        boolean found5 = false;
+        for (Item items : itemInventory.keySet()){
+            if (items.getName().equals("Flower")){
+                if (itemInventory.get(items) >= 1){
+                    if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getTotalItemCount() < 1){
+                        return new Result(false, "target player does not have enough space in inventory");
+                    }
+                    itemInventory.put(items, itemInventory.get(items)-1);
+                    found5 = true;
+                }else {
+                    return new Result(false, "You don't have flower in your inventory");
+                }
+            }
+        }
+        if (!found5) {
+            return new Result(false, "No such flower is in your inventory");
+        } else {
+            boolean found6 = false;
+            for (Item items : targetPlayer.getInventory().getItems().keySet()){
+                if(items.getName().equals("Flower")){
+                    found6 = true;
+                    targetPlayer.getInventory().getItems().put(items, targetPlayer.getInventory().getItems().get(items)+1);
+                }
+            }
+            if (!found6) {
+                //todo add flower in target user's inventory
+            }
+            if(friendship.getLevel()<3){
+                friendship.setLevel(3);
+            }
+            return new Result(true, "flower sent successfully");
+        }
     }
 
     public Result askMarriage(String userName, String ring) {
