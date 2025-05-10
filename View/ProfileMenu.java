@@ -19,7 +19,7 @@ public class ProfileMenu extends AppMenu {
         } else if (ProfileMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (ProfileMenuCommands.ChangeUsername.getMather(input) != null) {
-            System.out.println( controller.changeUsername(ProfileMenuCommands.ChangeUsername.getMather(input).group(1)));
+            System.out.println(controller.changeUsername(ProfileMenuCommands.ChangeUsername.getMather(input).group("username")));
         } else if (ProfileMenuCommands.ChangePassword.getMather(input) != null) {
             String newPassword = ProfileMenuCommands.ChangePassword.getMather(input).group(1);
             String oldPassword = ProfileMenuCommands.ChangePassword.getMather(input).group(2);

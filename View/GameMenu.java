@@ -3,6 +3,7 @@ package View;
 import Controller.GameMenuController;
 import enums.GameMenuCommands;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -18,6 +19,7 @@ public class GameMenu extends AppMenu {
             try {
                 System.out.println(controller.gameNew(input, scanner));
             } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         } else if (GameMenuCommands.ExitGame.getMather(input) != null) {
             System.out.println(controller.exitGame());
@@ -57,6 +59,8 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.cheatWeather(GameMenuCommands.CHEAT_WEATHER_SET.getMather(input).group(1)));
         } else if (GameMenuCommands.GREENHOUSE_BUILD.getMather(input) != null) {
             System.out.println(controller.greenHouseBiuld());
+        } else if (GameMenuCommands.Walk.getMather(input) != null) {
+            System.out.println(controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2))));
         } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
             controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
                     Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
@@ -69,6 +73,11 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.energySet(Integer.parseInt(GameMenuCommands.EnergySet.getMather(input).group(1))));
         } else if (GameMenuCommands.EnergyUnlimited.getMather(input) != null) {
             controller.energyUnlimited();
+        } else if (GameMenuCommands.INVENTORYSHOW.getMather(input) != null) {
+            controller.inventoryShow();
+        } else if (GameMenuCommands.INVENTORYTRASH.getMather(input) != null) {
+            String item = GameMenuCommands.INVENTORYTRASH.getMather(input).group(1);
+            System.out.println(controller.inventoryTrash());
         } else if (GameMenuCommands.COOKINGREFRIGERATOR.getMather(input) != null) {
             String action = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(1);
             String item = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(2);
@@ -95,38 +104,6 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.questsList());
         } else if (GameMenuCommands.QUESTSFINISH.getMather(input) != null) {
             System.out.println(controller.questsFinish(Integer.parseInt(GameMenuCommands.QUESTSFINISH.getMather(input).group(1))));
-        } else if (GameMenuCommands.CRAFT_INFO.getMather(input) != null) {
-            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1)));
-        }else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
-            System.out.println(controller.craftingShowRecipes());
-        } else if (GameMenuCommands.CRAFT_ITEM.getMather(input) != null) {
-            Matcher matcher = GameMenuCommands.CRAFT_ITEM.getMather(input);
-            System.out.println(controller.craftingCraft(matcher.group(1).trim()));
-        } else if (GameMenuCommands.PLACE_ITEM.getMather(input) != null) {
-            Matcher matcher = GameMenuCommands.PLACE_ITEM.getMather(input);
-            String name = matcher.group(1).trim();
-            String destination = matcher.group(2).trim();
-            System.out.println(controller.placeItem(name, destination));
-        } else if (GameMenuCommands.CHEAT_ADD_ITEM.getMather(input) != null) {
-            Matcher matcher = GameMenuCommands.CHEAT_ADD_ITEM.getMather(input);
-            String name = matcher.group(1).trim();
-            int count = Integer.parseInt(matcher.group(2));
-            System.out.println(controller.cheatAddItem(name, count));
-        } else if (GameMenuCommands.Fishing.getMather(input) != null) {
-            System.out.println(controller.fishing(GameMenuCommands.Fishing.getMather(input).group(1)));
-        } else if (GameMenuCommands.ArtisanUse  .getMather(input) != null) {
-            String[] parts = input.split("\\s+");
-            if (parts.length >= 3 && parts[0].equals("artisan") && parts[1].equals("use")) {
-                String artisanName = parts[2];
-                ArrayList<String> items = new ArrayList<>();
-                for (int i = 3; i < parts.length; i++) {
-                    items.add(parts[i]);
-                }
-                System.out.println(controller.artisanUse(artisanName,items));
-            }
-        }else if (GameMenuCommands.ArtisanGet.getMather(input) != null) {
-            System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
-
         } else if (GameMenuCommands.FriendShip.getMather(input) != null) {
             System.out.println(controller.friendships());
         } else if (GameMenuCommands.Talk.getMather(input) != null) {
@@ -157,6 +134,40 @@ public class GameMenu extends AppMenu {
         } else if (GameMenuCommands.Flower.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.Flower.getMather(input);
             System.out.println(controller.flower(matcher.group(1)));
+        } else if (GameMenuCommands.CRAFT_INFO.getMather(input) != null) {
+            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1)));
+        } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
+            System.out.println(controller.craftingShowRecipes());
+        } else if (GameMenuCommands.CRAFT_ITEM.getMather(input) != null) {
+            Matcher matcher = GameMenuCommands.CRAFT_ITEM.getMather(input);
+            System.out.println(controller.craftingCraft(matcher.group(1).trim()));
+        } else if (GameMenuCommands.PLACE_ITEM.getMather(input) != null) {
+            Matcher matcher = GameMenuCommands.PLACE_ITEM.getMather(input);
+            String name = matcher.group(1).trim();
+            String destination = matcher.group(2).trim();
+            System.out.println(controller.placeItem(name, destination));
+        } else if (GameMenuCommands.CHEAT_ADD_ITEM.getMather(input) != null) {
+            Matcher matcher = GameMenuCommands.CHEAT_ADD_ITEM.getMather(input);
+            String name = matcher.group(1).trim();
+            int count = Integer.parseInt(matcher.group(2));
+            System.out.println(controller.cheatAddItem(name, count));
+        } else if (GameMenuCommands.Fishing.getMather(input) != null) {
+            System.out.println(controller.fishing(GameMenuCommands.Fishing.getMather(input).group(1)));
+        } else if (GameMenuCommands.ArtisanUse.getMather(input) != null) {
+            String[] parts = input.split("\\s+");
+            if (parts.length >= 3 && parts[0].equals("artisan") && parts[1].equals("use")) {
+                String artisanName = parts[2];
+                ArrayList<String> items = new ArrayList<>();
+                for (int i = 3; i < parts.length; i++) {
+                    items.add(parts[i]);
+                }
+                System.out.println(controller.artisanUse(artisanName, items));
+            }
+        } else if (GameMenuCommands.ArtisanGet.getMather(input) != null) {
+            System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
+
+        } else {
+            System.out.println("Invalid command");
         }
     }
 }
