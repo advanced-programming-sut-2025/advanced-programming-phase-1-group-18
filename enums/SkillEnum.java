@@ -2,7 +2,7 @@ package enums;
 
 public enum SkillEnum {
     FarmingSkill,
-    ExtractionSkill,
+    MiningSkill,
     ForagingSkill,
     FishingSkill;
 }

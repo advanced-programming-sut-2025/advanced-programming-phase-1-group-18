@@ -9,6 +9,7 @@ public enum RegisterMenuCommands {
     ShowCurrentMenu("show\\s+current\\s+menu"),
     Register("\\s*register\\s+-u\\s+(?<username>\\w{3,})\\s+-p\\s+(?<password>(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/\\\\|]).{8,})\\s+(?<passwordConfirm>\\S+)\\s+-n\\s+(?<nickname>\\S+)\\s+-e\\s+(?<email>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,})\\s+-g\\s+(?<gender>male|female)\\s*"),
     PickQuestion("Salam-Aleikom-Soosan-Khanoom");
+
     private final String pattern;
 
     RegisterMenuCommands(String pattern) {

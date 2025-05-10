@@ -1,45 +1,59 @@
 package enums;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum AllCropsEnums {
-    BlueJazz,
-    Carrot,
-    CauliFlower,
-    CoffeeBean,
-    Garlic,
-    GreenBean,
-    Kale,
-    Parsnip,
-    Potato,
-    Rhubarb,
-    StrawBerry,
-    Tulip,
-    UnmilledRice,
-    BlueBerry,
-    Corn,
-    Hops,
-    HotPepper,
-    Melon,
-    Poppy,
-    Radish,
-    RedCabbage,
-    StarFruit,
-    SummerSpangle,
-    SummerSquash,
-    SunFlower,
-    Tomato,
-    Wheat,
-    Amaranth,
-    Artichoke,
-    Beet,
-    Bokchoy,
-    Broccoly,
-    CramBerries,
-    EggPlant,
-    FairyRose,
-    Grape,
-    Pumpkin,
-    Yam,
-    SweetGemBerry,
-    PowderMelon,
-    AncientFruit;
+    BlueJazz(ForagingSeedsEnums.JazzSeeds),
+    Carrot(ForagingSeedsEnums.CarrotSeeds),
+    CauliFlower(ForagingSeedsEnums.CauliflowerSeeds),
+    CoffeeBean(ForagingSeedsEnums.CoffeeBean),
+    Garlic(ForagingSeedsEnums.GarlicSeeds),
+    GreenBean(ForagingSeedsEnums.BeanStarter),
+    Kale(ForagingSeedsEnums.KaleSeeds),
+    Parsnip(ForagingSeedsEnums.ParsnipSeeds),
+    Potato(ForagingSeedsEnums.PotatoSeeds),
+    Rhubarb(ForagingSeedsEnums.RhubarbSeeds),
+    StrawBerry(ForagingSeedsEnums.StrawberrySeeds),
+    Tulip(ForagingSeedsEnums.TulipBulb),
+    UnmilledRice(ForagingSeedsEnums.RiceShoot),
+    BlueBerry(ForagingSeedsEnums.BlueberrySeeds),
+    Corn(ForagingSeedsEnums.CornSeeds),
+    Hops(ForagingSeedsEnums.HopsStarter),
+    HotPepper(ForagingSeedsEnums.PepperSeeds),
+    Melon(ForagingSeedsEnums.MelonSeeds),
+    Poppy(ForagingSeedsEnums.PoppySeeds),
+    Radish(ForagingSeedsEnums.RadishSeeds),
+    RedCabbage(ForagingSeedsEnums.RedCabbageSeeds),
+    StarFruit(ForagingSeedsEnums.StarfruitSeeds),
+    SummerSpangle(ForagingSeedsEnums.SpangleSeeds),
+    SummerSquash(ForagingSeedsEnums.SummerSquashSeeds),
+    SunFlower(ForagingSeedsEnums.SunflowerSeeds),
+    Tomato(ForagingSeedsEnums.TomatoSeeds),
+    Wheat(ForagingSeedsEnums.WheatSeeds),
+    Amaranth(ForagingSeedsEnums.AmaranthSeeds),
+    Artichoke(ForagingSeedsEnums.ArtichokeSeeds),
+    Beet(ForagingSeedsEnums.BeetSeeds),
+    Bokchoy(ForagingSeedsEnums.BokChoySeeds),
+    Broccoli(ForagingSeedsEnums.BroccoliSeeds),
+    CramBerries(ForagingSeedsEnums.CranberrySeeds),
+    EggPlant(ForagingSeedsEnums.EggplantSeeds),
+    FairyRose(ForagingSeedsEnums.FairySeeds),
+    Grape(ForagingSeedsEnums.GrapeStarter),
+    Pumpkin(ForagingSeedsEnums.PumpkinSeeds),
+    Yam(ForagingSeedsEnums.YamSeeds),
+    SweetGemBerry(ForagingSeedsEnums.RareSeed),
+    PowderMelon(ForagingSeedsEnums.PowdermelonSeeds),
+    AncientFruit(ForagingSeedsEnums.AncientSeeds);
+
+
+    private final ForagingSeedsEnums seedSet;
+
+    AllCropsEnums(ForagingSeedsEnums seedSet) {
+        this.seedSet = seedSet;
+    }
+
+    public ForagingSeedsEnums getSeedSet() {
+        return seedSet;
+    }
 }

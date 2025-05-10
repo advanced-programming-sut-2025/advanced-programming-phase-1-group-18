@@ -58,6 +58,16 @@ public enum GameMenuCommands {
     QUESTSLIST("^\\s*quests\\s+list\\s*$"),
     QUESTSFINISH("^\\s*quests\\s+finish\\s+-i\\s+(\\d+)\\s*$"),
 
+    SHOW_RECIPES("\\s*crafting\\s+show\\s+recipes\\s*"),
+    CRAFT_ITEM("\\s*crafting\\s+craft\\s+(.*+)\\s*"),
+    PLACE_ITEM("\\s*place\\s+item\\s+-n\\s+(.*+)\\s+-d\\s+(.*)\\s*"),
+    CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*+)\\s+-c\\s+([0-9]+)\\s*"),
+
+    CRAFT_INFO("\\s*craftinfo -n\\s*"),
+    Fishing("\\s*fishing\\s+-p\\s+(.*\\S)\\s*"),
+    ArtisanUse("^artisan use (\\w+)(?:\\s+(\\w+))+$"),
+    ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*"),
+
     FriendShip("\\s*friendships\\s*"),
     Talk("\\s*talk -u (?<username>.*) -m (?<message>.*)\\s*"),
     TalkHistory("\\s*talk\\s+history -u (?<username>.*)\\s*"),
