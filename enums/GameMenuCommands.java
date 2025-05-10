@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
     ShowCurrentMenu("\\s*show\\s+current\\s+menu\\s*"),
-    GameNew("\\s*game\\s+new\\s+-u\\s+\\w+(\\s+\\w+)?(\\s+\\w+)?"),
+    GameNew("^\\s*game\\s+new\\s+-u\\s+(\\w+)\\s*(\\w*)\\s*(\\w*)\\s*$"),
     ExitGame("\\s*exit\\s+game\\s*"),
     VoteTerminateGame("\\s*vote\\s+terminate\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
@@ -45,9 +45,13 @@ public enum GameMenuCommands {
     // Greenhouse
     GREENHOUSE_BUILD("\\s*greenhouse\\s+build\\s*"),
 
+    Walk("\\s*walk\\s+-l\\s+\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*"),
+
+    INVENTORYSHOW("\\s*inventory\\s+show\\s*"),
+    INVENTORYTRASH("inventory trash-i ([^\\s]+)-n (\\d+)"),
+
     COOKINGREFRIGERATOR("\\s*cooking refrigerator \\s*(put|pick) \\s*([^\\s]+)\\s*"),
     COOKINGSHOWRECIPES("\\s*cooking\\s+show\\s+recipes\\s*"),
-
     COOKINGPREPARE("\\s*cooking\\s+prepare\\s+([\\w\\s]+)\\s*"),
     EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)"),
     SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*"),
@@ -58,16 +62,6 @@ public enum GameMenuCommands {
     QUESTSLIST("^\\s*quests\\s+list\\s*$"),
     QUESTSFINISH("^\\s*quests\\s+finish\\s+-i\\s+(\\d+)\\s*$"),
 
-    SHOW_RECIPES("\\s*crafting\\s+show\\s+recipes\\s*"),
-    CRAFT_ITEM("\\s*crafting\\s+craft\\s+(.*+)\\s*"),
-    PLACE_ITEM("\\s*place\\s+item\\s+-n\\s+(.*+)\\s+-d\\s+(.*)\\s*"),
-    CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*+)\\s+-c\\s+([0-9]+)\\s*"),
-
-    CRAFT_INFO("\\s*craftinfo -n\\s*"),
-    Fishing("\\s*fishing\\s+-p\\s+(.*\\S)\\s*"),
-    ArtisanUse("^artisan use (\\w+)(?:\\s+(\\w+))+$"),
-    ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*"),
-
     FriendShip("\\s*friendships\\s*"),
     Talk("\\s*talk -u (?<username>.*) -m (?<message>.*)\\s*"),
     TalkHistory("\\s*talk\\s+history -u (?<username>.*)\\s*"),
@@ -76,7 +70,17 @@ public enum GameMenuCommands {
     GiftRate("\\s*gift rate -i (?<giftNumber>.*) -r (<rate>.*)\\s*"),
     GiftHistory("\\s*gift\\s+history\\s+-u (?<username>.*)\\s*"),
     Hug("\\s*hug\\s+-u\\s+(?<username>.*)\\s*"),
-    Flower("\\s*flower -u (?<username>.*)\\s*");
+    Flower("\\s*flower -u (?<username>.*)\\s*"),
+
+    SHOW_RECIPES("\\s*crafting\\s+show\\s+recipes\\s*"),
+    CRAFT_ITEM("\\s*crafting\\s+craft\\s+(.*+)\\s*"),
+    PLACE_ITEM("\\s*place\\s+item\\s+-n\\s+(.*+)\\s+-d\\s+(.*)\\s*"),
+    CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*+)\\s+-c\\s+([0-9]+)\\s*"),
+
+    CRAFT_INFO("\\s*craftinfo -n\\s*"),
+    Fishing("\\s*fishing\\s+-p\\s+(.*\\S)\\s*"),
+    ArtisanUse("^artisan use (\\w+)(?:\\s+(\\w+))+$"),
+    ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*");
 
     private final String pattern;
     GameMenuCommands(String pattern) {

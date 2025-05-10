@@ -1,8 +1,5 @@
 package enums;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 public enum AllCropsEnums {
     BlueJazz(ForagingSeedsEnums.JazzSeeds),
     Carrot(ForagingSeedsEnums.CarrotSeeds),

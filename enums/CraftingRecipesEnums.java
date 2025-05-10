@@ -2,8 +2,7 @@ package enums;
 
 import java.util.HashMap;
 
-public enum CraftingRecipesEnums
-{
+public enum CraftingRecipesEnums {
     CherryBomb(
             new HashMap<>() {{
                 put("copper ore", 4);
@@ -221,10 +220,10 @@ public enum CraftingRecipesEnums
     private final int level;
     private final int price;
 
-    CraftingRecipesEnums(HashMap<String, Integer> ingredients, SkillEnum skill , int level, int price) {
-        this.level=level;
-        this.price=price;
-        this.skill=skill;
+    CraftingRecipesEnums(HashMap<String, Integer> ingredients, SkillEnum skill, int level, int price) {
+        this.level = level;
+        this.price = price;
+        this.skill = skill;
         this.ingredients = ingredients;
     }
 
