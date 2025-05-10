@@ -1,12 +1,14 @@
 package Controller;
 import Model.App;
+import Model.Result;
 import enums.Menu;
 
 public class MainMenuController implements MenuEnter, ShowCurrentMenu{
 
-    public void logout() {
+    public Result logout() {
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.LoginMenu);
+        return new Result(true, "user logged out");
     }
 
     public void menuEnter(String menuName) {

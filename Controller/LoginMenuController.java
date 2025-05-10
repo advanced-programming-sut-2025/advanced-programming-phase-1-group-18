@@ -6,13 +6,11 @@ import Model.Result;
 import Model.User;
 import enums.LoginMenuCommands;
 import enums.Menu;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
-public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
+import java.security.SecureRandom;
+import java.util.*;
+
+public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
 
     public Result login(String username, String password, String stayLoggedIn) {
         if (username.isEmpty()) {
@@ -21,19 +19,18 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
         if (password.isEmpty()) {
             return new Result(false, "you should enter password");
         }
-        if (findUserByUsername(username) != null) {
+        if (findUserByUsername(username) == null) {
             return new Result(false, "user already exist");
         }
         User user = findUserByUsername(username);
         if (!user.getPassword().equals(password)) {
             return new Result(false, "wrong password");
         }
-        else{
-            user.setStayLoggedIn(!stayLoggedIn.isEmpty());
-            App.setCurrentUser(user);
-            App.setCurrentMenu(Menu.MainMenu);
-            return new Result(true, "user logged successfully");
-        }
+        user.setStayLoggedIn(!(stayLoggedIn==null));
+        App.setCurrentUser(user);
+        App.setCurrentMenu(Menu.MainMenu);
+        return new Result(true, "user logged successfully");
+
     }
 
     public Result forgetPassword(String username, Scanner scanner) {
@@ -41,18 +38,21 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
         if (user == null) {
             return new Result(false, "user not found");
         }
-        String answerCommand = scanner.nextLine();
-        if (LoginMenuCommands.Answer.getMather(answerCommand) != null) {
-            String answer = LoginMenuCommands.Answer.getMather(answerCommand).group("answer");
-            //handling answering task ...
+        Random rand = new Random();
+        int rnd1 = rand.nextInt(0,100);
+        int rnd2 = rand.nextInt(0,100);
+        System.out.println("Answer the question : "+rnd1 + " + " + rnd2+" = ?");
+        int answerCommand = Integer.parseInt(scanner.nextLine());
+        if (answerCommand == rnd1 + rnd2) {
+            String newPassword = PasswordGenerator();
+            user.setPassword(newPassword);
+            return new Result(true, "your new password is: " + newPassword);
+        }else{
+            return new Result(false, "wrong answer");
         }
-        else {
-            return new Result(false, "wrong answer format");
-        }
-        return null;
     }
 
-    public String PasswordGenerator (){
+    public String PasswordGenerator() {
         String LOWER = "abcdefghijklmnopqrstuvwxyz";
         String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String DIGITS = "0123456789";
@@ -93,11 +93,18 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
     public void menuEnter(String menuName) {
         //from loginmenu we can move to registermenu
         menuName = menuName.toLowerCase();
-        switch(menuName)
-        {
+        switch (menuName) {
             case "registermenu":
                 App.setCurrentMenu(Menu.RegisterMenu);
                 System.out.println("You are now in RegisterMenu!");
+                break;
+            case "profilemenu":
+                App.setCurrentMenu(Menu.ProfileMenu);
+                System.out.println("You are now in ProfileMenu!");
+                break;
+            case "mainmenu":
+                App.setCurrentMenu(Menu.MainMenu);
+                System.out.println("You are now in MainMenu!");
                 break;
             default:
                 System.out.println("Invalid menu");
@@ -105,9 +112,9 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu{
         }
     }
 
-    public User findUserByUsername (String username){
-        for(User user : App.getUsers_List()){
-            if(user.getUsername().equals(username)){
+    public User findUserByUsername(String username) {
+        for (User user : App.getUsers_List()) {
+            if (user.getUsername().equals(username)) {
                 return user;
             }
         }

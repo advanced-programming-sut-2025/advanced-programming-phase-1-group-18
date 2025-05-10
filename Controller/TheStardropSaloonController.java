@@ -5,7 +5,6 @@ import Model.Items.*;
 import enums.*;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, MarketController<Object> {
 
@@ -20,7 +19,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
 
                 if (currentPlayer.getMoney() >= ((Cookingrecipe) item).getPrice()) {
-                    currentPlayer.getCookingrecipes().add((Cookingrecipe) item);
+                    currentPlayer.getCookingRecipes().add((Cookingrecipe) item);
                     App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                     return new Result(true, "");
                 } else {
@@ -60,7 +59,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "salad":
                 boolean validquantity1 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getName() == FoodCookingEnums.Salad && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Salad && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
@@ -78,7 +77,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "bread":
                 boolean validquantity2 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getName() == FoodCookingEnums.bread && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.bread && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
@@ -96,7 +95,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "spaghetti":
                 boolean validquantity3 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getName() == FoodCookingEnums.spaghetti && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.spaghetti && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity3 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
@@ -114,7 +113,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "pizza":
                 boolean validquantity4 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getName() == FoodCookingEnums.pizza && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.pizza && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity4 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
