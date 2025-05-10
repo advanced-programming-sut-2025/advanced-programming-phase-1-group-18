@@ -1,8 +1,9 @@
 package Model.Items;
 
+import Model.Name;
 import Model.Player;
 
-public class Gift {
+public class Gift extends Item implements Name, Price{
     protected Item giftItem;
     protected Player sender;
     protected Player receiver;
@@ -85,4 +86,14 @@ public class Gift {
     public void setName(String name) {
         this.name = name;
     }
+    @Override
+    public String getCorrectName() {
+        return "";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
+    }
+
 }

@@ -2,7 +2,7 @@ package Model.Items;
 
 import Model.*;
 
-public class WateringCan extends Item
+public class WateringCan extends Item implements Name, Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -181,6 +181,15 @@ public class WateringCan extends Item
 
     public void setMax_Capacity(int max_Capacity) {
         this.max_Capacity = max_Capacity;
+    }
+    @Override
+    public String getCorrectName() {
+        return "WateringCan";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }
 

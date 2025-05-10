@@ -4,19 +4,16 @@ import Model.*;
 import enums.CommonFishesEnums;
 import enums.LegendaryFishesEnums;
 import enums.Quality;
-import enums.WeatherEnum;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
-public class FishingPole extends Item
+public class FishingPole extends Item implements Name,Price
 {
     private static final int MAX_LEVEL = 5 ;
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
-
     public String use(){
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
@@ -192,5 +189,16 @@ public class FishingPole extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+
+    @Override
+    public String getCorrectName() {
+        return "";
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return getPrice();
     }
 }

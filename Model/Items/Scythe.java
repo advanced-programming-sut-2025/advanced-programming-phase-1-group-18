@@ -2,7 +2,7 @@ package Model.Items;
 
 import Model.*;
 
-public class Scythe extends Item
+public class Scythe extends Item implements Name,Price
 {
     protected int EnergyUsage;
     protected String usage;
@@ -94,5 +94,15 @@ public class Scythe extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+    @Override
+    public String getCorrectName() {
+        return "scythe";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

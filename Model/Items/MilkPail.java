@@ -2,10 +2,11 @@ package Model.Items;
 
 import Model.*;
 
-public class MilkPail extends Item
+public class MilkPail extends Item implements Name,Price
 {
     protected int EnergyUsage = 4;
     protected String usage;
+    protected int price;
 
     public void use(String direction){
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
@@ -96,5 +97,23 @@ public class MilkPail extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    @Override
+    public String getCorrectName() {
+        return "milkpail";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return price;
     }
 }

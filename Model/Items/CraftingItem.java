@@ -4,13 +4,15 @@ import enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import Model.Name;
 
-public class CraftingItem extends Item
+public class CraftingItem extends Item implements Name,Price
 {
     protected CraftingRecipesEnums craftingItem;
     protected String Name;
     protected HashMap<String,Integer> Ingredients ;
     protected int SellPrice;
+    protected int price;
 
     public CraftingItem(String name) {
         for(CraftingRecipesEnums craft : CraftingRecipesEnums.values()){
@@ -46,5 +48,15 @@ public class CraftingItem extends Item
 
     public void setSellPrice(int sellPrice) {
         this.SellPrice = sellPrice;
+    }
+    @Override
+    public String getCorrectName() {
+        return "milkpail";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return price;
     }
 }

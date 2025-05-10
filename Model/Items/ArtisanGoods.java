@@ -1,12 +1,13 @@
 package Model.Items;
 
 import Model.DateTime;
+import Model.Name;
 import enums.ArtisanGoodsEnums;
 import enums.CraftingRecipesEnums;
 
 import java.util.HashMap;
 
-public class ArtisanGoods extends Item{
+public class ArtisanGoods extends Item implements Name,Price{
     protected ArtisanGoodsEnums artisanGoods;
     protected CraftingRecipesEnums producer;
     protected int energyUsage;
@@ -14,6 +15,7 @@ public class ArtisanGoods extends Item{
     protected HashMap<Item,Integer> ingredients;
     private DateTime startTime; // زمان شروع تولید
     private boolean isDone = false;
+    protected int price;
 
     public ArtisanGoods(String artisanName) {
         for(ArtisanGoodsEnums good : ArtisanGoodsEnums.values()){
@@ -71,5 +73,24 @@ public class ArtisanGoods extends Item{
 
     public boolean isDone() {
         return isDone;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "milkpail";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return price;
     }
 }

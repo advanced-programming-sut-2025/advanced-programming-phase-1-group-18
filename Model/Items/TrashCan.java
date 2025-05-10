@@ -2,12 +2,13 @@ package Model.Items;
 
 import Model.App;
 import Model.Inventory;
+import Model.Name;
 import Model.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TrashCan extends Item
+public class TrashCan extends Item implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -54,5 +55,15 @@ public class TrashCan extends Item
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
+    }
+    @Override
+    public String getCorrectName() {
+        return "trashcan";
+    }
+
+
+    @Override
+    public int getCorrectPrice() {
+        return 0;
     }
 }

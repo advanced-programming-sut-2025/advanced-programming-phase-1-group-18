@@ -1,11 +1,12 @@
 package Model.Items;
 
+import Model.Name;
 import enums.CommonFishesEnums;
 import enums.LegendaryFishesEnums;
 import enums.Quality;
 import enums.Seasons;
 
-public class Fish extends Item
+public class Fish extends Item implements Name,Price
 {
     protected String Jens;
     protected String name;
@@ -73,5 +74,14 @@ public class Fish extends Item
             }
         }
         this.quality = Quality.Normal;
+    }
+    @Override
+    public String getCorrectName() {
+        return this.name.toLowerCase().replace(" ","");
+    }
+
+    @Override
+    public int getCorrectPrice() {
+        return (int)this.basePrice;
     }
 }
