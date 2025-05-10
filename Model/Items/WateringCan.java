@@ -1,8 +1,8 @@
 package Model.Items;
 
-import Model.Name;
+import Model.*;
 
-public class WateringCan extends Item implements Name,Price
+public class WateringCan extends Item
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -10,6 +10,139 @@ public class WateringCan extends Item implements Name,Price
     protected int capacity;
     protected int max_Capacity;
 
+    public void use(String direction){
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Cord tileCord = new Cord(player.getX(), player.getY());
+        int dir_x = -1;
+        int dir_y = -1;
+        switch (direction.toLowerCase()) {
+            case "n": {
+                dir_x = 0;
+                dir_y = -1;
+                break;
+            }
+            case "ne": {
+                dir_x = 1;
+                dir_y = -1;
+                break;
+            }
+            case "e": {
+                dir_x = 1;
+                dir_y = 0;
+                break;
+            }
+            case "se": {
+                dir_x = 1;
+                dir_y = 1;
+                break;
+            }
+            case "s": {
+                dir_x = 0;
+                dir_y = 1;
+                break;
+            }
+            case "sw": {
+                dir_x = -1;
+                dir_y = 1;
+                break;
+            }
+            case "w": {
+                dir_x = -1;
+                dir_y = 0;
+                break;
+            }
+            case "nw": {
+                dir_x = -1;
+                dir_y = -1;
+                break;
+            }
+            default: {
+                return;
+            }
+        }
+        tileCord.setX(dir_x+tileCord.getX());
+        tileCord.setY(dir_y+tileCord.getY());
+        if (player.getFarmingSkill().getLevel() == 5){
+            if (player.getEnergy() >= getEnergyUsage()-1) {
+                if (isValidForFilling(tileCord)){
+                    player.setEnergy(player.getEnergy()-getEnergyUsage()+1);
+                    setCapacity(getMax_Capacity());
+                } else if (isValidForWatering(tileCord)){
+                    player.setEnergy(player.getEnergy()-getEnergyUsage()+1);
+                    setCapacity(getCapacity()-1);
+                    //todo change stage of plant
+                }
+                else{
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        }else {
+            if (player.getEnergy() >= getEnergyUsage()) {
+                if (isValidForFilling(tileCord)){
+                    player.setEnergy(player.getEnergy()-getEnergyUsage()+1);
+                    setCapacity(getMax_Capacity());
+                } else if (isValidForWatering(tileCord)){
+                    player.setEnergy(player.getEnergy()-getEnergyUsage()+1);
+                    setCapacity(getCapacity()-1);
+                    //todo change stage of plant
+                } else{
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+    }
+    public void update(){
+        switch (this.getJens()){
+            case "initial":
+                this.setJens("copper");
+                this.setCapacity(55);
+                this.setMax_Capacity(55);
+                this.setEnergyUsage(4);
+                break;
+            case "copper":
+                this.setJens("iron");
+                this.setCapacity(70);
+                this.setMax_Capacity(70);
+                this.setEnergyUsage(3);
+                break;
+            case "iron":
+                this.setJens("gold");
+                this.setCapacity(85);
+                this.setMax_Capacity(85);
+                this.setEnergyUsage(2);
+                break;
+            case "gold":
+                this.setJens("iridium");
+                this.setCapacity(100);
+                this.setMax_Capacity(100);
+                this.setEnergyUsage(1);
+                break;
+            case "iridium":
+                break;
+            default:
+                break;
+        }
+    }
+    public static boolean isValidForFilling(Cord cord){
+        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+        if(kashi.getInside() instanceof Lake || kashi.getInside() instanceof GreenHouse){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isValidForWatering(Cord cord){
+        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+        if(kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop){
+            return true;
+        }
+        return false;
+    }
     public String getUsage() {
         return usage;
     }
@@ -48,16 +181,6 @@ public class WateringCan extends Item implements Name,Price
 
     public void setMax_Capacity(int max_Capacity) {
         this.max_Capacity = max_Capacity;
-    }
-
-    @Override
-    public String getCorrectName() {
-        return "wateringcan";
-    }
-
-    @Override
-    public int getCorrectPrice() {
-        return 0;
     }
 }
 

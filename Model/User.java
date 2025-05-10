@@ -58,7 +58,7 @@ public class User {
     }
 
 
-    public User(String Username, String Password, String Email, String Gender, String NickName) {
+    public User(String Username, String Password, String NickName,String Email,String Gender) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;

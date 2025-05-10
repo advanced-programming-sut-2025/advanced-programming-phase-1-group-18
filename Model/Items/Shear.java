@@ -1,21 +1,87 @@
 package Model.Items;
 
-import Model.Name;
+import Model.*;
 
-public class Shear extends Item implements Name,Price
+public class Shear extends Item
 {
-    protected int EnergyUsage;
+    protected int EnergyUsage = 4;
     protected String usage;
-    protected int price;
-
-    public int getPrice() {
-        return price;
+    public void use(String direction){
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Cord tileCord = new Cord(player.getX(), player.getY());
+        int dir_x = -1;
+        int dir_y = -1;
+        switch (direction.toLowerCase()) {
+            case "n": {
+                dir_x = 0;
+                dir_y = -1;
+                break;
+            }
+            case "ne": {
+                dir_x = 1;
+                dir_y = -1;
+                break;
+            }
+            case "e": {
+                dir_x = 1;
+                dir_y = 0;
+                break;
+            }
+            case "se": {
+                dir_x = 1;
+                dir_y = 1;
+                break;
+            }
+            case "s": {
+                dir_x = 0;
+                dir_y = 1;
+                break;
+            }
+            case "sw": {
+                dir_x = -1;
+                dir_y = 1;
+                break;
+            }
+            case "w": {
+                dir_x = -1;
+                dir_y = 0;
+                break;
+            }
+            case "nw": {
+                dir_x = -1;
+                dir_y = -1;
+                break;
+            }
+            default: {
+                return;
+            }
+        }
+        tileCord.setX(dir_x+tileCord.getX());
+        tileCord.setY(dir_y+tileCord.getY());
+        if (player.getEnergy() >= getEnergyUsage()) {
+            if (isValidForShear(tileCord)) {
+                player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo cutting wool
+            }
+            else{
+                player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo just decrease energy
+                return;
+            }
+        }
+        else {
+            //todo return error for not enough energy
+            return;
+        }
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public static boolean isValidForShear(Cord cord){
+        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+        if(kashi.getInside() instanceof TavilehAnimal) {
+            return true;
+        }
+        return false;
     }
-
     public String getUsage() {
         return usage;
     }
@@ -29,15 +95,5 @@ public class Shear extends Item implements Name,Price
 
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
-    }
-
-    @Override
-    public String getCorrectName() {
-        return "shear";
-    }
-
-    @Override
-    public int getCorrectPrice() {
-        return this.price;
     }
 }

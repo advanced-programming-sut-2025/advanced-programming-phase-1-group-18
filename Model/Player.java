@@ -1,6 +1,8 @@
 package Model;
+import Model.Items.ArtisanGoods;
+import enums.CraftingRecipesEnums;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player extends User
 {
@@ -18,9 +20,11 @@ public class Player extends User
     protected int wood;
     protected int gold;
     protected int money;
-    protected ArrayList<Cookingrecipe> Cookingrecipes;
-    protected ArrayList<Cookingrecipe> Craftingrecipes;
+    protected ArrayList<Cookingrecipe> CookingRecipes;
+    protected ArrayList<CraftingRecipesEnums> CraftingRecipes;
     protected Inventory inventory;
+    protected ArrayList<ArtisanGoods> artisansInProduce;
+
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -37,8 +41,8 @@ public class Player extends User
         this.wood = 0;
         this.gold = 0;
         this.money = 0;
-        this.Cookingrecipes = new ArrayList<>();
-        this.Craftingrecipes = new ArrayList<>();
+        this.CookingRecipes = new ArrayList<>();
+        this.CraftingRecipes = new ArrayList<>();
         this.inventory = new Inventory(12, "initial");
     }
 
@@ -166,23 +170,29 @@ public class Player extends User
         FoodBuff = foodBuff;
     }
 
-    public ArrayList<Cookingrecipe> getCookingrecipes() {
-        return Cookingrecipes;
+    public ArrayList<Cookingrecipe> getCookingRecipes() {
+        return CookingRecipes;
     }
 
-    public void setCookingrecipes(ArrayList<Cookingrecipe> cookingrecipes) {
-        Cookingrecipes = cookingrecipes;
+    public void setCookingRecipes(ArrayList<Cookingrecipe> cookingRecipes) {
+        CookingRecipes = cookingRecipes;
     }
 
-    public ArrayList<Cookingrecipe> getCraftingrecipes() {
-        return Craftingrecipes;
+    public ArrayList<CraftingRecipesEnums> getCraftingRecipes() {
+        return CraftingRecipes;
     }
 
-    public void setCraftingrecipes(ArrayList<Cookingrecipe> craftingrecipes) {
-        Craftingrecipes = craftingrecipes;
+    public void setCraftingRecipes(ArrayList<CraftingRecipesEnums> craftingRecipes) {
+        CraftingRecipes = craftingRecipes;
     }
 
+    public ArrayList<ArtisanGoods> getArtisansInProduce() {
+        return artisansInProduce;
+    }
 
+    public void setArtisansInProduce(ArrayList<ArtisanGoods> artisansInProduce) {
+        this.artisansInProduce = artisansInProduce;
+    }
 
     //    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
 //    {

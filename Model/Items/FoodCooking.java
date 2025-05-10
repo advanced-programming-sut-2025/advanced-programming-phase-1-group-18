@@ -13,7 +13,7 @@ public class FoodCooking extends Item implements Name, Price {
     protected int sellPrice;
     protected Buff buff;
 
-    public FoodCookingEnums getName() {
+    public FoodCookingEnums getNamee() {
         return name;
     }
 
