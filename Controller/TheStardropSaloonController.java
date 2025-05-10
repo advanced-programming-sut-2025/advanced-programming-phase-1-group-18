@@ -5,6 +5,7 @@ import Model.Items.*;
 import enums.*;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, MarketController<Object> {
 
@@ -19,7 +20,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
 
                 if (currentPlayer.getMoney() >= ((Cookingrecipe) item).getPrice()) {
-                    currentPlayer.getCookingRecipes().add((Cookingrecipe) item);
+                    currentPlayer.getCookingrecipes().add((Cookingrecipe) item);
                     App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                     return new Result(true, "");
                 } else {

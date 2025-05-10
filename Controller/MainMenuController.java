@@ -8,7 +8,7 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
     public Result logout() {
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.LoginMenu);
-        return new Result(true, "user logged out");
+        return new Result(true,"You are logged out");
     }
 
     public void menuEnter(String menuName) {

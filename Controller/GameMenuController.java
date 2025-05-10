@@ -7,8 +7,10 @@ import enums.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameMenuController implements ShowCurrentMenu {
@@ -22,6 +24,27 @@ public class GameMenuController implements ShowCurrentMenu {
         return field.getInt(gameInstance);
     }
 
+    public void setMapp(Game game) {
+        ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
+        int columns = 1000; // Define the number of columns
+
+        for (int i = 0; i < 560; i++) {
+            ArrayList<Kashi> row = new ArrayList<>();
+            for (int j = 0; j < columns; j++) {
+                row.add(new Kashi()); // Initialize each cell with an instance of Kashi
+            }
+            Map.add(row);
+        }
+        game.setMap(Map);
+
+        for (int i = 0; i < 560; i++) {
+            for (int j = 0; j < columns; j++) {
+                Map.get(i).get(j).setWalkable(true);
+                Map.get(i).get(j).setEnterance(false);
+            }
+        }
+    }
+
     public Result gameNew(String command, Scanner scanner) throws NoSuchFieldException, IllegalAccessException {
 
         String[] parts = command.split("\\s+");
@@ -31,7 +54,6 @@ public class GameMenuController implements ShowCurrentMenu {
         String[] usernames = Arrays.copyOfRange(parts, 3, parts.length);
         if (command.split("\\s+").length - 3 >= 0)
             System.arraycopy(command.split("\\s+"), 3, usernames, 0, command.split("\\s+").length - 3);
-
 
         //check username regex
         for (String username : usernames) {
@@ -56,72 +78,79 @@ public class GameMenuController implements ShowCurrentMenu {
                 }
             }
         }
-
         Game NewGame = new Game();
+        NewGame.setPlayers(new ArrayList<>());
         NewGame.setCreator(App.getCurrentUser());
         NewGame.setIndexPlayerinControl(0);
 
         Player player1 = new Player();
         player1.setOwner(App.getCurrentUser());
+        player1.setX(1);
+        player1.setY(1);
+        player1.setEnergy(200);
         NewGame.getPlayers().add(player1);
+        //System.out.println("");
         for (String username : usernames) {
             Player player = new Player();
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     player.setOwner(user);
+                    player.setEnergy(200);
                     NewGame.getPlayers().add(player);
                     break;
                 }
             }
         }
-
         NewGame.setCurrentSeason(Seasons.Spring);
         NewGame.setCurrentDateTime(new DateTime(9, 1));
         Deque<WeatherEnum> weather = new ArrayDeque<>();
         weather.addLast(getRandomWeather(Seasons.Spring));
-
         NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
         NewGame.setWeather(weather);
-        NewGame.initializeFriendships();
-
-        for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
-            Player player = App.getCurrentGame().getPlayers().get(i);
+        for (int i = 0; i < usernames.length; i++) {
+            Player player = NewGame.getPlayers().get(i);
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
 
             int number = -1;
-            while (true) {
-                if (scanner.hasNextInt()) {
-                    number = scanner.nextInt();
-                    scanner.nextLine();
+//            while (true) {
+//                if (scanner.hasNextInt()) {
+            number = scanner.nextInt();
+            scanner.nextLine();
 
-                    if (number >= 1 && number <= 4) {
-                        break;
-                    } else {
-                        System.out.println("Error: Please enter a number between 1 and 4.");
-                    }
-                } else {
-                    System.out.println("Error: Invalid input. Please enter a **number** between 1 and 4.");
-                    scanner.nextLine();
-                }
+            if (number >= 1 && number <= 4) {
+
+            } else {
+                return new Result(false, "Invalid number");
             }
+//        else {
+//                    System.out.println("Error: Invalid input. Please enter a **number** between 1 and 4.");
+//                    scanner.nextLine();
+//                }
+//            }
 
-            Class<?> gameClass = Game.class;
-            Game gameInstance = new Game();
-
-
-            int topLeftx = getFieldValue(gameClass, gameInstance, "Player" + i + "TopLeftx");
-            int topLefty = getFieldValue(gameClass, gameInstance, "Player" + i + "TopLefty");
-            switch (i) {
+            int topLeftx = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLeftx");
+            int topLefty = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLefty");
+            if (i == 0) {
+                setMapp(NewGame);
+                App.setCurrentGame(NewGame);
+                App.setGames(new ArrayList<>());
+                App.getGames().add(NewGame);
+            }
+            switch (number - 1) {
                 case 0:
+                    player.setMyFarm(new Farm());
                     player.getMyFarm().createMap1(topLeftx, topLefty);
                     break;
                 case 1:
+                    player.setMyFarm(new Farm());
                     player.getMyFarm().createMap2(topLeftx, topLefty);
                     break;
                 case 2:
+                    player.setMyFarm(new Farm());
                     player.getMyFarm().createMap3(topLeftx, topLefty);
                     break;
                 case 3:
+                    player.setMyFarm(new Farm());
                     player.getMyFarm().createMap4(topLeftx, topLefty);
                     break;
                 default:
@@ -129,8 +158,7 @@ public class GameMenuController implements ShowCurrentMenu {
                     break;
             }
         }
-        App.setCurrentGame(NewGame);
-        App.getGames().add(NewGame);
+        NewGame.initializeFriendships();
         return new Result(true, "Game Created");
     }
 
@@ -217,6 +245,9 @@ public class GameMenuController implements ShowCurrentMenu {
             App.getCurrentGame().setIndexPlayerinControl(0);
             //            start new day
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    player.setEnergy(200);
+                }
                 //NPC gift player
                 for (Friendshipali friendshipali : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
                     if (friendshipali.getFriendshipLevel() / 200 >= 3) {
@@ -437,20 +468,20 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public Result cheatWeather(String Type) {
         Deque<WeatherEnum> weather = new ArrayDeque<>();
-        switch (Type) {
-            case "Sunny":
+        switch (Type.toLowerCase()) {
+            case "sunny":
                 weather.addFirst(WeatherEnum.SUNNY);
                 App.getCurrentGame().setWeather(weather);
                 return new Result(true, "cheatCode: Sunny");
-            case "Rain":
+            case "rain":
                 weather.addFirst(WeatherEnum.RAIN);
                 App.getCurrentGame().setWeather(weather);
                 return new Result(true, "cheatCode: Rain");
-            case "Storm":
+            case "storm":
                 weather.addFirst(WeatherEnum.STORM);
                 App.getCurrentGame().setWeather(weather);
                 return new Result(true, "cheatCode: Storm");
-            case "Snow":
+            case "snow":
                 weather.addFirst(WeatherEnum.SNOW);
                 App.getCurrentGame().setWeather(weather);
                 return new Result(true, "cheatCode: Snow");
@@ -471,7 +502,155 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public Result walk(int x, int y) {
-        return new Result(true, "");
+        System.out.println("1");
+        int index = App.getCurrentGame().getIndexPlayerinControl();
+        switch (index) {
+            case 0:
+                if (x < 0 || x < App.getCurrentGame().getPlayer1TopLeftx() || x > App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() || y < 0 || y < App.getCurrentGame().getPlayer1TopLefty() || y > App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) {
+                    return new Result(false, "You destination is out of bounds");
+                } else {
+                    System.out.println("2");
+                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+                    System.out.println("2.5");
+                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    System.out.println("3");
+                    if (result != null) {
+                        System.out.println("Way found!");
+                        for (AStarPathfinder.Node node : result.path) {
+                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        }
+                        System.out.println("4");
+                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+                        Scanner sc = new Scanner(System.in);
+                        while (true) {
+                            String input = sc.nextLine();
+                            if (input.equalsIgnoreCase("yes")) {
+                                System.out.println("6");
+                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                return new Result(true, "You went to your destination successfully!");
+                            } else if (input.equalsIgnoreCase("no")) {
+                                System.out.println("7");
+                                return new Result(true, "Transportation canceled!");
+                            } else {
+                                System.out.println("8");
+                                System.out.println("enter a correct sentence!");
+                            }
+                        }
+                    } else {
+                        System.out.println("Way not found!");
+                        break;
+                    }
+                }
+
+
+            case 1:
+                if (x < 0 || x < App.getCurrentGame().getPlayer2TopLeftx() || x > App.getCurrentGame().getPlayer2TopLeftx() + App.getCurrentGame().getPlayer2Width() || y < 0 || y < App.getCurrentGame().getPlayer2TopLefty() || y > App.getCurrentGame().getPlayer2TopLefty() + App.getCurrentGame().getPlayer2Height()) {
+                    return new Result(false, "You destination is out of bounds");
+                } else {
+                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    if (result != null) {
+                        System.out.println("Way found!");
+                        for (AStarPathfinder.Node node : result.path) {
+                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        }
+                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+                        Scanner sc = new Scanner(System.in);
+                        while (true) {
+                            String input = sc.nextLine();
+                            if (input.equalsIgnoreCase("yes")) {
+                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                return new Result(true, "You went to your destination successfully!");
+                            } else if (input.equalsIgnoreCase("no")) {
+                                return new Result(true, "Transportation canceled!");
+                            } else {
+                                System.out.println("enter a correct sentence!");
+                            }
+                        }
+                    } else {
+                        System.out.println("Way not found!");
+                        break;
+                    }
+                }
+
+
+            case 2:
+                if (x < 0 || x < App.getCurrentGame().getPlayer3TopLeftx() || x > App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() || y < 0 || y < App.getCurrentGame().getPlayer3TopLefty() || y > App.getCurrentGame().getPlayer3TopLefty() + App.getCurrentGame().getPlayer3Height()) {
+                    return new Result(false, "You destination is out of bounds");
+                } else {
+                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    if (result != null) {
+                        System.out.println("Way found!");
+                        for (AStarPathfinder.Node node : result.path) {
+                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        }
+                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+                        Scanner sc = new Scanner(System.in);
+                        while (true) {
+                            String input = sc.nextLine();
+                            if (input.equalsIgnoreCase("yes")) {
+                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                return new Result(true, "You went to your destination successfully!");
+                            } else if (input.equalsIgnoreCase("no")) {
+                                return new Result(true, "Transportation canceled!");
+                            } else {
+                                System.out.println("enter a correct sentence!");
+                            }
+                        }
+                    } else {
+                        System.out.println("Way not found!");
+                        break;
+                    }
+                }
+            case 3:
+                if (x < 0 || x < App.getCurrentGame().getPlayer3TopLeftx() || x > App.getCurrentGame().getPlayer4TopLeftx() + App.getCurrentGame().getPlayer4Width() || y < 0 || y < App.getCurrentGame().getPlayer4TopLefty() || y > App.getCurrentGame().getPlayer4TopLefty() + App.getCurrentGame().getPlayer4Height()) {
+                    return new Result(false, "You destination is out of bounds");
+                } else {
+                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    if (result != null) {
+                        System.out.println("Way found!");
+                        for (AStarPathfinder.Node node : result.path) {
+                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        }
+                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+                        Scanner sc = new Scanner(System.in);
+                        while (true) {
+                            String input = sc.nextLine();
+                            if (input.equalsIgnoreCase("yes")) {
+                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
+                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                return new Result(true, "You went to your destination successfully!");
+                            } else if (input.equalsIgnoreCase("no")) {
+                                return new Result(true, "Transportation canceled!");
+                            } else {
+                                System.out.println("enter a correct sentence!");
+                            }
+                        }
+                    } else {
+                        System.out.println("Way not found!");
+                        break;
+                    }
+                }
+        }
+        return new Result(true, "The walk section was done currectly!");
+
     }
 
     public void printMap(int x, int y, int size) {
@@ -518,11 +697,43 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public void inventoryShow() {
-
+        Map<Item, Integer> items = App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl())
+                .getInventory()
+                .getItems();
+        if (items.isEmpty()) {
+            System.out.println("**Inventory is Empty**");
+        } else {
+            for (Item item : items.keySet()) {
+                System.out.println("- " + item.getClass().getSimpleName() + " (Quantity: " + items.get(item) + ")");
+            }
+        }
     }
 
     public Result inventoryTrash(String name, int number) {
-        return new Result(true, "");
+        //find Item by name
+        Item item = findItemByName(name);
+        if (item == null) {
+            return new Result(false, "Item not found");
+        } else {
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, number);
+            return new Result(true, number + "of Item " + item.getClass().getSimpleName() + " removed");
+        }
+    }
+
+    public Item findItemByName(String name) {
+        Map<Item, Integer> items = App.getCurrentGame().getPlayers()
+                .get(App.getCurrentGame().getIndexPlayerinControl())
+                .getInventory()
+                .getItems();
+
+        for (Item item : items.keySet()) {
+            if (item.getCorrectName().equalsIgnoreCase(name)) { // مقایسه نام کلاس آیتم با ورودی
+                return item;
+            }
+        }
+
+        return null;
     }
 
     public Result toolEquip(String toolName) {
@@ -545,17 +756,16 @@ public class GameMenuController implements ShowCurrentMenu {
         return new Result(true, "");
     }
 
-
     public Result craftInfo(String craftName) {
         ForagingSeedsEnums foragingSeedsEnums;
         StringBuilder craftInfo = new StringBuilder();
         craftName.replace(" ", "");
         for (AllCropsEnums crop : AllCropsEnums.values()) {
-            if(crop.name().equals(craftName)) {
+            if (crop.name().equals(craftName)) {
                 StringBuilder stages = new StringBuilder();
                 foragingSeedsEnums = crop.getSeedSet();
                 AllCrop crop1 = new AllCrop();
-                for(int i = 0 ; i<crop1.getStages().size(); i++) {
+                for (int i = 0; i < crop1.getStages().size(); i++) {
                     stages.append(crop1.getStages().get(i));
                     stages.append("-");
                 }
@@ -565,18 +775,45 @@ public class GameMenuController implements ShowCurrentMenu {
                 craftInfo.append("Source: ").append(foragingSeedsEnums.name()).append("\n");
                 craftInfo.append("Stages: ").append(stages).append("\n");
                 craftInfo.append("Total Harvest Time: ").append(crop1.getTotalHarvestTime()).append("\n");
-                craftInfo.append("One Time: ").append(crop1.isOneTime()?"TRUE":"FALSE").append("\n");
+                craftInfo.append("One Time: ").append(crop1.isOneTime() ? "TRUE" : "FALSE").append("\n");
                 craftInfo.append("Regrowth Time: ").append(crop1.getRegrowthTime()).append("\n");
                 craftInfo.append("Base Sell Price: ").append(crop1.getBaseSellPrice()).append("\n");
-                craftInfo.append("Is Edible: ").append(crop1.isEdible()?"TRUE":"FALSE").append("\n");
-    //                craftInfo.append("Base Health: ").append(crop1.getBaseHealth()).append("\n");
-    //                craftInfo.append("Season: ").append(crop1.getSeason()).append("\n");
-                craftInfo.append("Can Become Giant: ").append(crop1.isCanBecomeGiant()?"TRUE":"FALSE");
+                craftInfo.append("Is Edible: ").append(crop1.isEdible() ? "TRUE" : "FALSE").append("\n");
+                //                craftInfo.append("Base Health: ").append(crop1.getBaseHealth()).append("\n");
+                //                craftInfo.append("Season: ").append(crop1.getSeason()).append("\n");
+                craftInfo.append("Can Become Giant: ").append(crop1.isCanBecomeGiant() ? "TRUE" : "FALSE");
                 return new Result(true, craftInfo.toString());
             }
         }
         return new Result(false, "craft not found");
     }
+
+    private static final Map<MixedSeedsEnums, AllCropsEnums> SEED_TO_CROP_MAP = Map.ofEntries(
+            // Fall crops
+            Map.entry(MixedSeedsEnums.Artichoke, AllCropsEnums.Artichoke),
+            Map.entry(MixedSeedsEnums.Corn, AllCropsEnums.Corn),
+            Map.entry(MixedSeedsEnums.Eggplant, AllCropsEnums.EggPlant), // Note case difference
+            Map.entry(MixedSeedsEnums.Pumpkin, AllCropsEnums.Pumpkin),
+            Map.entry(MixedSeedsEnums.Sunflower, AllCropsEnums.SunFlower), // Note case difference
+            Map.entry(MixedSeedsEnums.FairyRose, AllCropsEnums.FairyRose),
+
+            // Spring crops
+            Map.entry(MixedSeedsEnums.CauliFlower, AllCropsEnums.CauliFlower),
+            Map.entry(MixedSeedsEnums.Parsnip, AllCropsEnums.Parsnip),
+            Map.entry(MixedSeedsEnums.Potato, AllCropsEnums.Potato),
+            Map.entry(MixedSeedsEnums.BlueJazz, AllCropsEnums.BlueJazz),
+            Map.entry(MixedSeedsEnums.Tulip, AllCropsEnums.Tulip),
+
+            // Summer crops
+            Map.entry(MixedSeedsEnums.HotPepper, AllCropsEnums.HotPepper),
+            Map.entry(MixedSeedsEnums.Radish, AllCropsEnums.Radish),
+            Map.entry(MixedSeedsEnums.Wheat, AllCropsEnums.Wheat),
+            Map.entry(MixedSeedsEnums.Poppy, AllCropsEnums.Poppy),
+            Map.entry(MixedSeedsEnums.SummerSpangle, AllCropsEnums.SummerSpangle),
+
+            // Winter crop
+            Map.entry(MixedSeedsEnums.PowderMelon, AllCropsEnums.PowderMelon)
+    );
 
     public Result plant(String source, String direction) {
 
@@ -630,74 +867,131 @@ public class GameMenuController implements ShowCurrentMenu {
         }
 
         //MixedSeed
+//        AllCrop allCrop = new AllCrop();
+//        boolean valid = false;
+//        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+//            if (item instanceof MixedSeed && (item).getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
+//                valid = true;
+//                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+//                break;
+//            }
+//        }
+//        if (!valid) {
+//            return new Result(false, "You don't have " + source + " in your inventory");
+//        }
+//
+//        Random random = new Random();
+//
+//        List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
+//                .filter(crop -> crop.isAllowedIn(App.getCurrentGame().getCurrentSeason()))
+//                .toList();
+//
+//        MixedSeedsEnums mse = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
+//
+//        allCrop.setSourceMixedSeedEnum(mse);
+//
+//        allCrop.initilizeCrop(mse);
+//
+//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
+//        kashi.setInside(allCrop);
+//        return new Result(true, "Plant successfully placed");
+
         try {
-            MixedSeedsEnums mixedSeedsEnums = MixedSeedsEnums.valueOf(source.replace(" ", ""));
-
+            // 1. Validate the player has the mixed seed in inventory
             AllCrop allCrop = new AllCrop();
+            boolean valid = false;
 
-            try {
-                boolean valid = false;
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-                    if (item instanceof MixedSeed && ((MixedSeed) item).getType() == mixedSeedsEnums) {
-                        valid = true;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-                        break;
-                    }
+            // Normalize the input seed name (remove spaces, handle case)
+            String normalizedSeedName = source.trim().replace(" ", "").toLowerCase();
+
+            // Check inventory for the mixed seed
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof MixedSeed &&
+                        item.getCorrectName().toLowerCase().equals(normalizedSeedName)) {
+                    valid = true;
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .getInventory().removeItem(item, 1);
+                    break;
                 }
-                if (!valid) {
-                    return new Result(false, "You don't have " + source + " in your inventory");
-                }
-
-                Random random = new Random();
-                List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
-                        .filter(crop -> crop.isAllowedIn(App.getCurrentGame().getCurrentSeason()))
-                        .toList();
-                MixedSeedsEnums mse = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
-                allCrop.setSourceMixedSeedEnum(mse);
-                allCrop.initilizeCrop(mse);
-
-                Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-                Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
-                kashi.setInside(allCrop);
-                return new Result(true, "Plant successfully placed");
-            } catch (Exception e) {
-                return new Result(false, "Error");
             }
+
+            if (!valid) {
+                return new Result(false, "You don't have " + source + " in your inventory");
+            }
+
+            // 2. Get current season
+            Seasons currentSeason = App.getCurrentGame().getCurrentSeason();
+
+            // 3. Get all mixed seeds that are allowed in current season
+            List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
+                    .filter(crop -> crop.isAllowedIn(currentSeason))
+                    .collect(Collectors.toList());
+
+            if (seasonalCrops.isEmpty()) {
+                return new Result(false, "No crops available for planting in " + currentSeason);
+            }
+
+            // 4. Randomly select one of the seasonal crops
+            Random random = new Random();
+            MixedSeedsEnums selectedSeed = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
+
+            // 5. Find the corresponding AllCropsEnums using our mapping
+            AllCropsEnums cropEnum = SEED_TO_CROP_MAP.get(selectedSeed);
+
+            if (cropEnum == null) {
+                return new Result(false, "No corresponding crop found for " + selectedSeed.name());
+            }
+
+            // 6. Initialize and place the crop
+            allCrop.initilizeCrop(selectedSeed);
+
+            Player currentPlayer = App.getCurrentGame().getPlayers()
+                    .get(App.getCurrentGame().getIndexPlayerinControl());
+            Kashi kashi = App.getCurrentGame().getMap()
+                    .get(currentPlayer.getX() + dir_x)
+                    .get(currentPlayer.getY() + dir_y);
+            kashi.setInside(allCrop);
+
+            return new Result(true, "Planted " + cropEnum.name() + " successfully");
         } catch (Exception e) {
             //ForagingSeed
-            if (Arrays.asList(ForagingSeedsEnums.values()).contains(ForagingSeedsEnums.valueOf(source.replace(" ", "")))) {
+            try {
+                if (Arrays.asList(ForagingSeedsEnums.values()).contains(ForagingSeedsEnums.valueOf(source.replace(" ", "")))) {
 
-                AllCrop allCrop1 = new AllCrop();
-                try {
-                    ForagingSeedsEnums foragingSeedsEnums = ForagingSeedsEnums.valueOf(source.replace(" ", ""));
+                    AllCrop allCrop1 = new AllCrop();
+                    try {
+                        ForagingSeedsEnums foragingSeedsEnums = ForagingSeedsEnums.valueOf(source.replace(" ", ""));
 
-                    boolean valid = false;
-                    for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-                        if (item instanceof ForagingSeed) {
-                            ForagingSeed foragingSeed = (ForagingSeed) item;
-                            if (foragingSeed.getType() == foragingSeedsEnums) {
-                                valid = true;
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-                                break;
+                        boolean valid2 = false;
+                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                            if (item instanceof ForagingSeed) {
+                                ForagingSeed foragingSeed = (ForagingSeed) item;
+                                if (foragingSeed.getType() == foragingSeedsEnums) {
+                                    valid2 = true;
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                                    break;
+                                }
                             }
                         }
+                        if (!valid2) {
+                            return new Result(false, "You don't have " + source + " in your inventory");
+                        }
+
+                        allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
+                        allCrop1.initilizeCrop(foragingSeedsEnums);
+
+                        Player currentPlayer = App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl());
+                        Kashi kashi1 = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
+                        kashi1.setInside(allCrop1);
+                        return new Result(true, "Plant successfully placed");
+
+                    } catch (Exception eee) {
+                        eee.printStackTrace();
                     }
-                    if (!valid) {
-                        return new Result(false, "You don't have " + source + " in your inventory");
-                    }
-
-                    allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
-                    allCrop1.initilizeCrop(foragingSeedsEnums);
-
-                    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-                    Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
-                    kashi.setInside(allCrop1);
-                    return new Result(true, "Plant successfully placed");
-
-                } catch (Exception eee) {
-                    eee.printStackTrace();
                 }
-            } else {
+            } catch (Exception eee) {
                 //AllTree
                 if (Arrays.asList(TreeSeedEnums.values()).contains(TreeSeedEnums.valueOf(source.replace(" ", "")))) {
 
@@ -706,27 +1000,28 @@ public class GameMenuController implements ShowCurrentMenu {
                     try {
                         TreeSeedEnums allTreesEnums = TreeSeedEnums.valueOf(source.replace(" ", ""));
 
-                        boolean valid = false;
+                        boolean valid1 = false;
                         for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                             if (item instanceof TreeSeed) {
                                 TreeSeed treeSeed = (TreeSeed) item;
                                 if (treeSeed.getType() == allTreesEnums) {
-                                    valid = true;
+                                    valid1 = true;
                                     App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
                                     break;
                                 }
                             }
                         }
-                        if (!valid) {
+                        if (!valid1) {
                             return new Result(false, "You don't have " + source + " in your inventory");
                         }
 
                         allTree.setSource(allTreesEnums);
                         allTree.initilizeCrop(allTreesEnums);
 
-                        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-                        Kashi kashi = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
-                        kashi.setInside(allTree);
+                        Player currentPlayer = App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl());
+                        Kashi kashi2 = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
+                        kashi2.setInside(allTree);
                         return new Result(true, "Tree successfully placed");
                     } catch (Exception ee) {
 
@@ -842,7 +1137,7 @@ public class GameMenuController implements ShowCurrentMenu {
         CraftingItem foundItem = null;
         int craftCount = 0;
 
-        if(currentPlayer.getEnergy()>=2) {
+        if (currentPlayer.getEnergy() >= 2) {
             //finding craft in inventory
             for (Map.Entry<Item, Integer> entry : currentPlayer.getInventory().getItems().entrySet()) {
                 Item item = entry.getKey();
@@ -926,11 +1221,11 @@ public class GameMenuController implements ShowCurrentMenu {
                     } else {
                         return new Result(false, "Not enough resources to craft " + name);
                     }
-                }else{
+                } else {
                     return new Result(false, "Craft recipe not found");
                 }
             }
-        }else{
+        } else {
             return new Result(false, "Not enough energy to craft " + name);
         }
         return null;
@@ -999,13 +1294,12 @@ public class GameMenuController implements ShowCurrentMenu {
                     iterator.remove(); // اگر فقط یکی بود، کل آیتم رو حذف کن
                 }
                 //todo place in map ObjectInside?
-                tileCord.setX(dir_x+tileCord.getX());
-                tileCord.setY(dir_y+tileCord.getY());
+                tileCord.setX(dir_x + tileCord.getX());
+                tileCord.setY(dir_y + tileCord.getY());
                 return new Result(true, "craft " + name + " placed successfully");
             }
         }
-        return new Result(false, "item "+name+" not found");
-
+        return new Result(false, "item " + name + " not found");
     }
 
     public Result cheatAddItem(String name, int count) {
@@ -1023,14 +1317,14 @@ public class GameMenuController implements ShowCurrentMenu {
 //        }
 
         if (foundItem == null) {
-            return new Result(false, "cheat code: "+name+"not found");
+            return new Result(false, "cheat code: " + name + "not found");
         }
 
         // بررسی امکان اضافه کردن آیتم به اینونتوری
-        boolean canAdd = (player.getInventory().getMaxQuantity()-player.getInventory().getTotalItemCount())>= count; // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
+        boolean canAdd = (player.getInventory().getMaxQuantity() - player.getInventory().getTotalItemCount()) >= count; // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
 
         if (!canAdd) {
-            return new Result(false,"cheat code: Not enough space in inventory to add " + count + " of " + name);
+            return new Result(false, "cheat code: Not enough space in inventory to add " + count + " of " + name);
         }
         // اگر آیتم در اینونتوری هست، تعدادش را زیاد می‌کنیم
         boolean added = false;
@@ -1049,27 +1343,12 @@ public class GameMenuController implements ShowCurrentMenu {
                 Item newItem = foundItem.getClass().getDeclaredConstructor().newInstance();
                 inventory.put(newItem, count);
             } catch (Exception e) {
-                return new Result(false,"Error: Could not instantiate item '" + name + "'.");
+                return new Result(false, "Error: Could not instantiate item '" + name + "'.");
             }
         }
 
-        return new Result(true,"Successfully added " + count + " of " + name + " to inventory.");
+        return new Result(true, "Successfully added " + count + " of " + name + " to inventory.");
     }
-//    public void craftingShowRecipes() {
-//
-//    }
-//
-//    public Result craftingCraft(String name) {
-//        return new Result(true, "");
-//    }
-//
-//    public Result placeItem(String name, String direction) {
-//        return new Result(true, "");
-//    }
-//
-//    public Result cheatAddItem(String name, int count) {
-//        return new Result(true, "");
-//    }
 
     public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
 

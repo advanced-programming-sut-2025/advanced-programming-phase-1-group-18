@@ -26,7 +26,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         if (!user.getPassword().equals(password)) {
             return new Result(false, "wrong password");
         }
-        user.setStayLoggedIn(!(stayLoggedIn==null));
+        user.setStayLoggedIn(!(stayLoggedIn == null));
         App.setCurrentUser(user);
         App.setCurrentMenu(Menu.MainMenu);
         return new Result(true, "user logged successfully");
@@ -39,15 +39,15 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
             return new Result(false, "user not found");
         }
         Random rand = new Random();
-        int rnd1 = rand.nextInt(0,100);
-        int rnd2 = rand.nextInt(0,100);
-        System.out.println("Answer the question : "+rnd1 + " + " + rnd2+" = ?");
+        int rnd1 = rand.nextInt(0, 100);
+        int rnd2 = rand.nextInt(0, 100);
+        System.out.println("Answer the question : " + rnd1 + " + " + rnd2 + " = ?");
         int answerCommand = Integer.parseInt(scanner.nextLine());
         if (answerCommand == rnd1 + rnd2) {
             String newPassword = PasswordGenerator();
             user.setPassword(newPassword);
             return new Result(true, "your new password is: " + newPassword);
-        }else{
+        } else {
             return new Result(false, "wrong answer");
         }
     }
