@@ -14,17 +14,17 @@ public class RegisterMenu extends AppMenu{
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         if (RegisterMenuCommands.Register.getMatcher(input) != null) {
-            String username = RegisterMenuCommands.Register.getMatcher(input).group("username");
-            String password = RegisterMenuCommands.Register.getMatcher(input).group("password");
-            String passwordconfirm = RegisterMenuCommands.Register.getMatcher(input).group("passwordconfirm");
-            String nickname = RegisterMenuCommands.Register.getMatcher(input).group("nickname");
-            String email = RegisterMenuCommands.Register.getMatcher(input).group("email");
-            String gender = RegisterMenuCommands.Register.getMatcher(input).group("gender");
+            String username = RegisterMenuCommands.Register.getMatcher(input).group(1);
+            String password = RegisterMenuCommands.Register.getMatcher(input).group(2);
+            String passwordconfirm = RegisterMenuCommands.Register.getMatcher(input).group(3);
+            String nickname = RegisterMenuCommands.Register.getMatcher(input).group(4);
+            String email = RegisterMenuCommands.Register.getMatcher(input).group(5);
+            String gender = RegisterMenuCommands.Register.getMatcher(input).group(6);
             System.out.println(controller.register(username, password, passwordconfirm, nickname, email, gender));
         } else if (RegisterMenuCommands.MenuExit.getMatcher(input) != null) {
             controller.exit();
         } else if (RegisterMenuCommands.MenuEnter.getMatcher(input) != null) {
-            String menuName = RegisterMenuCommands.MenuEnter.getMatcher(input).group("menuname");
+            String menuName = RegisterMenuCommands.MenuEnter.getMatcher(input).group(1);
             controller.menuEnter(menuName);
         } else if (RegisterMenuCommands.ShowCurrentMenu.getMatcher(input) != null) {
             controller.showCurrentMenu();

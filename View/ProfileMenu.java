@@ -19,17 +19,17 @@ public class ProfileMenu extends AppMenu {
         } else if (ProfileMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (ProfileMenuCommands.ChangeUsername.getMather(input) != null) {
-            controller.changeUsername(ProfileMenuCommands.ChangeUsername.getMather(input).group("username"));
+            System.out.println( controller.changeUsername(ProfileMenuCommands.ChangeUsername.getMather(input).group(1)));
         } else if (ProfileMenuCommands.ChangePassword.getMather(input) != null) {
-            String newPassword = ProfileMenuCommands.ChangePassword.getMather(input).group("newPassword");
-            String oldPassword = ProfileMenuCommands.ChangePassword.getMather(input).group("oldPassword");
-            controller.changePassword(newPassword, oldPassword);
+            String newPassword = ProfileMenuCommands.ChangePassword.getMather(input).group(1);
+            String oldPassword = ProfileMenuCommands.ChangePassword.getMather(input).group(2);
+            System.out.println(controller.changePassword(newPassword, oldPassword));
         } else if (ProfileMenuCommands.ChangeNickname.getMather(input) != null) {
             String nickname = ProfileMenuCommands.ChangeNickname.getMather(input).group("nickname");
-            controller.changeNickname(nickname);
+            System.out.println(controller.changeNickname(nickname));
         } else if (ProfileMenuCommands.ChangeEmail.getMather(input) != null) {
             String email = ProfileMenuCommands.ChangeEmail.getMather(input).group("email");
-            controller.changeEmail(email);
+            System.out.println(controller.changeEmail(email));
         } else if (ProfileMenuCommands.ShowInfo.getMather(input) != null) {
             controller.userInfo();
         } else {

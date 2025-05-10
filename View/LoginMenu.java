@@ -13,10 +13,10 @@ public class LoginMenu extends AppMenu {
         String input = scanner.nextLine();
         //Matcher goToMenu = MainMenuCommands.GO_TO_MENU.getMather(input);
         if (LoginMenuCommands.Login.getMather(input) != null) {
-            String username = LoginMenuCommands.Login.getMather(input).group("username");
-            String password = LoginMenuCommands.Login.getMather(input).group("password");
-            String stayLoggedIn = LoginMenuCommands.Login.getMather(input).group("stayLoggedIn");
-            controller.login(username, password, stayLoggedIn);
+            String username = LoginMenuCommands.Login.getMather(input).group(1);
+            String password = LoginMenuCommands.Login.getMather(input).group(2);
+            String stayLoggedIn = LoginMenuCommands.Login.getMather(input).group(3);
+            System.out.println(controller.login(username, password, stayLoggedIn));
         } else if (LoginMenuCommands.MenuExit.getMather(input) != null) {
             controller.exit();
         } else if (LoginMenuCommands.MenuEnter.getMather(input) != null) {
@@ -25,8 +25,8 @@ public class LoginMenu extends AppMenu {
         } else if (LoginMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (LoginMenuCommands.ForgetPassword.getMather(input) != null) {
-            String username = LoginMenuCommands.Login.getMather(input).group("username");
-            controller.forgetPassword(username, scanner);
+            String username = LoginMenuCommands.ForgetPassword.getMather(input).group(1);
+            System.out.println(controller.forgetPassword(username, scanner));
         } else {
             System.out.println("invalid command");
         }
