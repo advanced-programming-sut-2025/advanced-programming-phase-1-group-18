@@ -404,7 +404,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 break;
             }
             case ForagingSeedsEnums.BroccoliSeeds: {
-                this.setType(AllCropsEnums.Broccoly);
+                this.setType(AllCropsEnums.Broccoli);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(7);
                 this.setOneTime(true);

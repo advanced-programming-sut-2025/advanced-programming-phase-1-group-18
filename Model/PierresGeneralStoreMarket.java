@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class PierresGeneralStoreMarket  implements adaptMapMarket{
 
-    HashMap<Item, Integer> Stock;
+    HashMap<Item, Integer> Stock = new HashMap<>();
 
     public HashMap<Item, Integer> getStock() {
         return Stock;
@@ -35,7 +35,9 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
     }
 
     public void fillStock(Seasons season) {
-        Stock.clear();
+        if (Stock.size() != 0) {
+            Stock.clear();
+        }
         Stock = new HashMap<>();
 
         Food food = new Food();

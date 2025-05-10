@@ -7,38 +7,42 @@ import enums.CraftingRecipesEnums;
 
 import java.util.HashMap;
 
-public class ArtisanGoods extends Item implements Name,Price{
+public class ArtisanGoods extends Item implements Name, Price {
+
     protected ArtisanGoodsEnums artisanGoods;
     protected CraftingRecipesEnums producer;
     protected int energyUsage;
     protected DateTime timeToProduce;
-    protected HashMap<Item,Integer> ingredients;
+    protected HashMap<Item, Integer> ingredients;
     private DateTime startTime; // زمان شروع تولید
     private boolean isDone = false;
     protected int price;
 
     public ArtisanGoods(String artisanName) {
-        for(ArtisanGoodsEnums good : ArtisanGoodsEnums.values()){
-            if(good.name().equals(artisanName)){
+        for (ArtisanGoodsEnums good : ArtisanGoodsEnums.values()) {
+            if (good.name().equals(artisanName)) {
                 this.artisanGoods = good;
-                this.producer=good.getProducer();
-                this.energyUsage=good.getEnergyUsage();
-                this.timeToProduce=good.getProcessingTime();
-                this.ingredients=new HashMap<>();
+                this.producer = good.getProducer();
+                this.energyUsage = good.getEnergyUsage();
+                this.timeToProduce = good.getProcessingTime();
+                this.ingredients = new HashMap<>();
                 break;
             }
         }
     }
+
     public void startProcessing(DateTime currentTime) {
         this.startTime = currentTime; // ذخیره زمان شروع
         this.isDone = false;
     }
+
     public boolean isProcessingDone(DateTime currentTime) {
-        if (isProcessingDone(startTime, currentTime, timeToProduce)){
+        if (isProcessingDone(startTime, currentTime, timeToProduce)) {
             this.isDone = true;
         }
         return isProcessingDone(startTime, currentTime, timeToProduce);
     }
+
     public static boolean isProcessingDone(DateTime startTime, DateTime currentTime, DateTime processingTime) {
         int startTotal = startTime.getDay() * 24 + startTime.getHour();
         int currentTotal = currentTime.getDay() * 24 + currentTime.getHour();
@@ -85,7 +89,7 @@ public class ArtisanGoods extends Item implements Name,Price{
 
     @Override
     public String getCorrectName() {
-        return "milkpail";
+        return artisanGoods.toString().toLowerCase().replace(" ", "");
     }
 
 

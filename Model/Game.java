@@ -4,15 +4,16 @@ import enums.NPCEnums;
 import enums.Seasons;
 import enums.WeatherEnum;
 import Model.Items.Gift;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
 public class Game {
-    protected int player1TopLeftx;
-    protected int player1TopLefty;
-    protected int player1Width;
-    protected int player1Height;
+    protected int player1TopLeftx = 0;
+    protected int player1TopLefty = 0;
+    protected int player1Width = 50;
+    protected int player1Height = 50;
 
     protected int player2TopLeftx;
     protected int player2TopLefty;
@@ -144,8 +145,8 @@ public class Game {
     protected MarniesRanchMarket marniesRanchMarket;
     protected PierresGeneralStoreMarket pierresGeneralStoreMarket;
     protected TheStardropSaloonMarket theStardropSaloonMarket;
-    protected ArrayList<Friendship> friendships;
-    protected ArrayList<Gift> gifts;
+    protected ArrayList<Friendship> friendships = new ArrayList<>();
+    protected ArrayList<Gift> gifts = new ArrayList<>();
     protected NPC NPCSEBASTIAN;
     protected NPC NPCABIGAIL;
     protected NPC NPCHARVEY;
@@ -156,7 +157,9 @@ public class Game {
     public Game() {
 
     }
+
     public void initializeFriendships() {
+//        friendships = new ArrayList<>();
         for (int i = 0; i < Players.size(); i++) {
             for (int j = i + 1; j < Players.size(); j++) {
                 Player p1 = Players.get(i);
@@ -166,6 +169,7 @@ public class Game {
             }
         }
     }
+
     public Player getPlayerByUsername(String username) {
         for (Player p : this.Players)
             if (p.getUsername().equals(username))
@@ -203,6 +207,7 @@ public class Game {
     public void setGifts(ArrayList<Gift> gifts) {
         this.gifts = gifts;
     }
+
     public ArrayList<ArrayList<Kashi>> getMap() {
         return Map;
     }

@@ -2,13 +2,12 @@ package Model.Items;
 
 import Model.*;
 
-public class MilkPail extends Item implements Name,Price
-{
+public class MilkPail extends Item implements Name, Price {
     protected int EnergyUsage = 4;
     protected String usage;
     protected int price;
 
-    public void use(String direction){
+    public void use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
@@ -58,32 +57,31 @@ public class MilkPail extends Item implements Name,Price
                 return;
             }
         }
-        tileCord.setX(dir_x+tileCord.getX());
-        tileCord.setY(dir_y+tileCord.getY());
+        tileCord.setX(dir_x + tileCord.getX());
+        tileCord.setY(dir_y + tileCord.getY());
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForMilking(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 //todo get crop
-            }
-            else{
+            } else {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 //todo just decrease energy
                 return;
             }
-        }
-        else {
+        } else {
             //todo return error for not enough energy
             return;
         }
     }
 
-    public static boolean isValidForMilking(Cord cord){
+    public static boolean isValidForMilking(Cord cord) {
         Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
-        if(kashi.getInside() instanceof TavilehAnimal) {
+        if (kashi.getInside() instanceof TavilehAnimal) {
             return true;
         }
         return false;
     }
+
     public String getUsage() {
         return usage;
     }
@@ -91,6 +89,7 @@ public class MilkPail extends Item implements Name,Price
     public void setUsage(String usage) {
         this.usage = usage;
     }
+
     public int getEnergyUsage() {
         return EnergyUsage;
     }
@@ -106,6 +105,7 @@ public class MilkPail extends Item implements Name,Price
     public void setPrice(int price) {
         this.price = price;
     }
+
     @Override
     public String getCorrectName() {
         return "milkpail";

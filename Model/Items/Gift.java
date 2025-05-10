@@ -88,7 +88,7 @@ public class Gift extends Item implements Name, Price{
     }
     @Override
     public String getCorrectName() {
-        return "";
+        return name.toLowerCase().replace(" ", "");
     }
 
     @Override

@@ -1,11 +1,12 @@
 package Model;
+
 import Model.Items.ArtisanGoods;
 import enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Player extends User
-{
+public class Player extends User {
     protected User Owner;
     protected int Energy;
     protected int x;
@@ -24,7 +25,6 @@ public class Player extends User
     protected ArrayList<CraftingRecipesEnums> CraftingRecipes;
     protected Inventory inventory;
     protected ArrayList<ArtisanGoods> artisansInProduce;
-
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -78,7 +78,7 @@ public class Player extends User
         this.inventory = inventory;
     }
 
-    public void faintController(){
+    public void faintController() {
 
     }
 
@@ -174,8 +174,8 @@ public class Player extends User
         return CookingRecipes;
     }
 
-    public void setCookingRecipes(ArrayList<Cookingrecipe> cookingRecipes) {
-        CookingRecipes = cookingRecipes;
+    public void setCookingRecipes(ArrayList<Cookingrecipe> cookingrecipes) {
+        CookingRecipes = cookingrecipes;
     }
 
     public ArrayList<CraftingRecipesEnums> getCraftingRecipes() {

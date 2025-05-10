@@ -9,7 +9,7 @@ import enums.FoodCookingEnums;
 import java.util.HashMap;
 
 public class TheStardropSaloonMarket  implements adaptMapMarket{
-    HashMap<Object, Integer> Stock;
+    HashMap<Object, Integer> Stock = new HashMap<>();
 
     public HashMap<Object, Integer> getStock() {
         return Stock;
@@ -35,7 +35,9 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
     }
 
     public void fillStock() {
-        Stock.clear();
+        if (Stock.size() != 0) {
+            Stock.clear();
+        }
         Stock = new HashMap<>();
 
         Food food = new Food();

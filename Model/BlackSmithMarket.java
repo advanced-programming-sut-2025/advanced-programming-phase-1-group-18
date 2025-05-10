@@ -6,8 +6,8 @@ import enums.ForagingMineralsEnums;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BlackSmithMarket implements adaptMapMarket{
-    HashMap<Mineral, Integer> Stock;
+public class BlackSmithMarket implements adaptMapMarket {
+    HashMap<Mineral, Integer> Stock = new HashMap<>();
 
     public HashMap<Mineral, Integer> getStock() {
         return Stock;
@@ -33,7 +33,9 @@ public class BlackSmithMarket implements adaptMapMarket{
     }
 
     public void fillStock() {
-        Stock.clear();
+        if (Stock.size() != 0) {
+            Stock.clear();
+        }
         Stock = new HashMap<>();
 
         Mineral mineral1 = new Mineral();

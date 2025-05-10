@@ -26,6 +26,7 @@ public class ForagingTree extends Tree {
         kashi.setEnterance(false);
         kashi.setInside(this);
         kashi.setWalkable(false);
+        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setForagingTrees(new ArrayList<>());
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingTrees().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
 

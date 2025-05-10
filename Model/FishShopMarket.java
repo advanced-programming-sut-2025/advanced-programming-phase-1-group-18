@@ -7,7 +7,7 @@ import enums.Seasons;
 import java.util.HashMap;
 
 public class FishShopMarket  implements adaptMapMarket{
-    HashMap<Item, Integer> Stock;
+    HashMap<Item, Integer> Stock = new HashMap<>();
 
     public HashMap<Item, Integer> getStock() {
         return Stock;
@@ -33,7 +33,9 @@ public class FishShopMarket  implements adaptMapMarket{
     }
 
     public void fillStock() {
-        Stock.clear();
+        if (Stock.size() != 0) {
+            Stock.clear();
+        }
         Stock = new HashMap<>();
 
         Craftingrecipe recipe = new Craftingrecipe();

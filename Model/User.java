@@ -58,15 +58,15 @@ public class User {
     }
 
 
-    public User(String Username, String Password, String NickName,String Email,String Gender) {
+    public User(String Username, String Password, String NickName, String Email, String Gender) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;
         this.Gender = Gender;
         this.NickName = NickName;
     }
-    public User()
-    {
+
+    public User() {
 
     }
 }

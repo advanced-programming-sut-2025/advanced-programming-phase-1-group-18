@@ -8,8 +8,8 @@ import enums.TavilehAnimalEnums;
 import java.util.HashMap;
 
 public class MarniesRanchMarket  implements adaptMapMarket{
-    HashMap<Item, Integer> Stock;
-    HashMap<Animal, Integer> AnimalStock;
+    HashMap<Item, Integer> Stock = new HashMap<>();
+    HashMap<Animal, Integer> AnimalStock = new HashMap<>();
 
     public HashMap<Animal, Integer> getAnimalStock() {
         return AnimalStock;
@@ -57,6 +57,9 @@ public class MarniesRanchMarket  implements adaptMapMarket{
         }
     }
     public void fillStock() {
+        if (Stock.size() != 0) {
+            Stock.clear();
+        }
         Stock = new HashMap<>();
         Hay hay = new Hay();
         hay.setPrice(50);
