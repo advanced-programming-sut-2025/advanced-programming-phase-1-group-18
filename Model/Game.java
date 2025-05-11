@@ -12,123 +12,123 @@ import java.util.Deque;
 public class Game {
     protected int player1TopLeftx = 0;
     protected int player1TopLefty = 0;
-    protected int player1Width = 50;
-    protected int player1Height = 50;
+    protected int player1Width = 450;
+    protected int player1Height = 200;
 
-    protected int player2TopLeftx;
-    protected int player2TopLefty;
-    protected int player2Width;
-    protected int player2Height;
+    protected int player2TopLeftx = 550;
+    protected int player2TopLefty = 0;
+    protected int player2Width = 449;
+    protected int player2Height = 200;
 
-    protected int player3TopLeftx;
-    protected int player3TopLefty;
-    protected int player3Width;
-    protected int player3Height;
+    protected int player3TopLeftx = 0;
+    protected int player3TopLefty = 360;
+    protected int player3Width = 450;
+    protected int player3Height = 200;
 
-    protected int player4TopLeftx;
-    protected int player4TopLefty;
-    protected int player4Width;
-    protected int player4Height;
+    protected int player4TopLeftx = 550;
+    protected int player4TopLefty = 360;
+    protected int player4Width = 449;
+    protected int player4Height = 200;
 
-    protected int BlackSmithTopLeftx;
-    protected int BlackSmithTopLefty;
-    protected int BlackSmithWidth;
-    protected int BlackSmithHeight;
-    protected int BlackSmithEnterancex;
-    protected int BlackSmithEnterancey;
+    protected int BlackSmithTopLeftx = 75;
+    protected int BlackSmithTopLefty = 230;
+    protected int BlackSmithWidth = 100;
+    protected int BlackSmithHeight = 100;
+    protected int BlackSmithEnterancex = 125;
+    protected int BlackSmithEnterancey = 230;
 
-    protected int JojoMartTopLeftx;
-    protected int JojoMartTopLefty;
-    protected int JojoMartWidth;
-    protected int JojoMartHeight;
-    protected int JojoMartEnterancex;
-    protected int JojoMartEnterancey;
+    protected int JojoMartTopLeftx = 200;
+    protected int JojoMartTopLefty = 230;
+    protected int JojoMartWidth = 100;
+    protected int JojoMartHeight = 100;
+    protected int JojoMartEnterancex = 250;
+    protected int JojoMartEnterancey = 230;
 
-    protected int PierresGeneralStoreTopLeftx;
-    protected int PierresGeneralStoreTopLefty;
-    protected int PierresGeneralStoreWidth;
-    protected int PierresGeneralStoreHeight;
-    protected int PierresGeneralStoreEnterancex;
-    protected int PierresGeneralStoreEnterancey;
+    protected int PierresGeneralStoreTopLeftx = 325;
+    protected int PierresGeneralStoreTopLefty = 230;
+    protected int PierresGeneralStoreWidth = 100;
+    protected int PierresGeneralStoreHeight = 100;
+    protected int PierresGeneralStoreEnterancex = 375;
+    protected int PierresGeneralStoreEnterancey = 230;
 
-    protected int CarpentersShopTopLeftx;
-    protected int CarpentersShopTopLefty;
-    protected int CarpentersShopWidth;
-    protected int CarpentersShopHeight;
-    protected int CarpentersShopEnterancex;
-    protected int CarpentersShopEnterancey;
+    protected int CarpentersShopTopLeftx = 450;
+    protected int CarpentersShopTopLefty = 230;
+    protected int CarpentersShopWidth = 100;
+    protected int CarpentersShopHeight = 100;
+    protected int CarpentersShopEnterancex = 500;
+    protected int CarpentersShopEnterancey = 230;
 
-    protected int FishShopTopLeftx;
-    protected int FishShopTopLefty;
-    protected int FishShopWidth;
-    protected int FishShopHeight;
-    protected int FishShopEnterancex;
-    protected int FishShopEnterancey;
+    protected int FishShopTopLeftx = 575;
+    protected int FishShopTopLefty = 230;
+    protected int FishShopWidth = 100;
+    protected int FishShopHeight = 100;
+    protected int FishShopEnterancex = 625;
+    protected int FishShopEnterancey = 230;
 
-    protected int MarniesRanchTopLeftx;
-    protected int MarniesRanchTopLefty;
-    protected int MarniesRanchWidth;
-    protected int MarniesRanchHeight;
-    protected int MarniesRanchEnterancex;
-    protected int MarniesRanchEnterancey;
+    protected int MarniesRanchTopLeftx = 700;
+    protected int MarniesRanchTopLefty = 230;
+    protected int MarniesRanchWidth = 100;
+    protected int MarniesRanchHeight = 100;
+    protected int MarniesRanchEnterancex = 750;
+    protected int MarniesRanchEnterancey = 230;
 
-    protected int TheStardropSaloonTopLeftx;
-    protected int TheStardropSaloonTopLefty;
-    protected int TheStardropSaloonWidth;
-    protected int TheStardropSaloonHeight;
-    protected int TheStardropSaloonEnterancex;
-    protected int TheStardropSaloonEnterancey;
+    protected int TheStardropSaloonTopLeftx = 825;
+    protected int TheStardropSaloonTopLefty = 230;
+    protected int TheStardropSaloonWidth = 100;
+    protected int TheStardropSaloonHeight = 100;
+    protected int TheStardropSaloonEnterancex = 875;
+    protected int TheStardropSaloonEnterancey = 230;
 
     // Sebastian
-    protected int NPCSEBASTIANTopLeftX;
-    protected int NPCSEBASTIANTopLeftY;
-    protected int NPCSEBASTIANWidth;
-    protected int NPCSEBASTIANHeight;
-    protected int NPCSEBASTIANEntranceX;
-    protected int NPCSEBASTIANEntranceY;
+    protected int NPCSEBASTIANTopLeftX = 480;
+    protected int NPCSEBASTIANTopLeftY = 100;
+//    protected int NPCSEBASTIANWidth = 1;
+//    protected int NPCSEBASTIANHeight = 1;
+//    protected int NPCSEBASTIANEntranceX;
+//    protected int NPCSEBASTIANEntranceY;
 
     // Abigail
-    protected int NPCABIGAILTopLeftX;
-    protected int NPCABIGAILTopLeftY;
-    protected int NPCABIGAILWidth;
-    protected int NPCABIGAILHeight;
-    protected int NPCABIGAILEntranceX;
-    protected int NPCABIGAILEntranceY;
+    protected int NPCABIGAILTopLeftX = 500;
+    protected int NPCABIGAILTopLeftY = 100;
+//    protected int NPCABIGAILWidth;
+//    protected int NPCABIGAILHeight;
+//    protected int NPCABIGAILEntranceX;
+//    protected int NPCABIGAILEntranceY;
 
     // Harvey
-    protected int NPCHARVEYTopLeftX;
-    protected int NPCHARVEYTopLeftY;
-    protected int NPCHARVEYWidth;
-    protected int NPCHARVEYHeight;
-    protected int NPCHARVEYEntranceX;
-    protected int NPCHARVEYEntranceY;
+    protected int NPCHARVEYTopLeftX = 520;
+    protected int NPCHARVEYTopLeftY = 100;
+//    protected int NPCHARVEYWidth;
+//    protected int NPCHARVEYHeight;
+//    protected int NPCHARVEYEntranceX;
+//    protected int NPCHARVEYEntranceY;
 
     // Leah
-    protected int NPCLEAHTopLeftX;
-    protected int NPCLEAHTopLeftY;
-    protected int NPCLEAHWidth;
-    protected int NPCLEAHHeight;
-    protected int NPCLEAHEntranceX;
-    protected int NPCLEAHEntranceY;
+    protected int NPCLEAHTopLeftX = 480;
+    protected int NPCLEAHTopLeftY = 460;
+//    protected int NPCLEAHWidth;
+//    protected int NPCLEAHHeight;
+//    protected int NPCLEAHEntranceX;
+//    protected int NPCLEAHEntranceY;
 
     // Robin
-    protected int NPCROBINTopLeftX;
-    protected int NPCROBINTopLeftY;
-    protected int NPCROBINWidth;
-    protected int NPCROBINHeight;
-    protected int NPCROBINEntranceX;
-    protected int NPCROBINEntranceY;
+    protected int NPCROBINTopLeftX = 520;
+    protected int NPCROBINTopLeftY = 460;
+//    protected int NPCROBINWidth;
+//    protected int NPCROBINHeight;
+//    protected int NPCROBINEntranceX;
+//    protected int NPCROBINEntranceY;
 
-    protected int NPCSEBASTIANx;
-    protected int NPCSEBASTIANy;
-    protected int NPCABIGAILx;
-    protected int NPCABIGAILy;
-    protected int NPCHARVEYx;
-    protected int NPCHARVEYy;
-    protected int NPCLEAHx;
-    protected int NPCLEAHy;
-    protected int NPCROBINx;
-    protected int NPCROBINy;
+    protected int NPCSEBASTIANx = 480;
+    protected int NPCSEBASTIANy = 100;
+    protected int NPCABIGAILx = 500;
+    protected int NPCABIGAILy = 100;
+    protected int NPCHARVEYx = 520;
+    protected int NPCHARVEYy = 100;
+    protected int NPCLEAHx = 480;
+    protected int NPCLEAHy = 460;
+    protected int NPCROBINx = 520;
+    protected int NPCROBINy = 460;
 
     protected ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
     protected User Creator;
@@ -912,38 +912,6 @@ public class Game {
         this.NPCSEBASTIANTopLeftY = NPCSEBASTIANTopLeftY;
     }
 
-    public int getNPCSEBASTIANWidth() {
-        return NPCSEBASTIANWidth;
-    }
-
-    public void setNPCSEBASTIANWidth(int NPCSEBASTIANWidth) {
-        this.NPCSEBASTIANWidth = NPCSEBASTIANWidth;
-    }
-
-    public int getNPCSEBASTIANHeight() {
-        return NPCSEBASTIANHeight;
-    }
-
-    public void setNPCSEBASTIANHeight(int NPCSEBASTIANHeight) {
-        this.NPCSEBASTIANHeight = NPCSEBASTIANHeight;
-    }
-
-    public int getNPCSEBASTIANEntranceX() {
-        return NPCSEBASTIANEntranceX;
-    }
-
-    public void setNPCSEBASTIANEntranceX(int NPCSEBASTIANEntranceX) {
-        this.NPCSEBASTIANEntranceX = NPCSEBASTIANEntranceX;
-    }
-
-    public int getNPCSEBASTIANEntranceY() {
-        return NPCSEBASTIANEntranceY;
-    }
-
-    public void setNPCSEBASTIANEntranceY(int NPCSEBASTIANEntranceY) {
-        this.NPCSEBASTIANEntranceY = NPCSEBASTIANEntranceY;
-    }
-
     public int getNPCABIGAILTopLeftX() {
         return NPCABIGAILTopLeftX;
     }
@@ -958,38 +926,6 @@ public class Game {
 
     public void setNPCABIGAILTopLeftY(int NPCABIGAILTopLeftY) {
         this.NPCABIGAILTopLeftY = NPCABIGAILTopLeftY;
-    }
-
-    public int getNPCABIGAILWidth() {
-        return NPCABIGAILWidth;
-    }
-
-    public void setNPCABIGAILWidth(int NPCABIGAILWidth) {
-        this.NPCABIGAILWidth = NPCABIGAILWidth;
-    }
-
-    public int getNPCABIGAILHeight() {
-        return NPCABIGAILHeight;
-    }
-
-    public void setNPCABIGAILHeight(int NPCABIGAILHeight) {
-        this.NPCABIGAILHeight = NPCABIGAILHeight;
-    }
-
-    public int getNPCABIGAILEntranceX() {
-        return NPCABIGAILEntranceX;
-    }
-
-    public void setNPCABIGAILEntranceX(int NPCABIGAILEntranceX) {
-        this.NPCABIGAILEntranceX = NPCABIGAILEntranceX;
-    }
-
-    public int getNPCABIGAILEntranceY() {
-        return NPCABIGAILEntranceY;
-    }
-
-    public void setNPCABIGAILEntranceY(int NPCABIGAILEntranceY) {
-        this.NPCABIGAILEntranceY = NPCABIGAILEntranceY;
     }
 
     public int getNPCHARVEYTopLeftX() {
@@ -1008,38 +944,6 @@ public class Game {
         this.NPCHARVEYTopLeftY = NPCHARVEYTopLeftY;
     }
 
-    public int getNPCHARVEYWidth() {
-        return NPCHARVEYWidth;
-    }
-
-    public void setNPCHARVEYWidth(int NPCHARVEYWidth) {
-        this.NPCHARVEYWidth = NPCHARVEYWidth;
-    }
-
-    public int getNPCHARVEYHeight() {
-        return NPCHARVEYHeight;
-    }
-
-    public void setNPCHARVEYHeight(int NPCHARVEYHeight) {
-        this.NPCHARVEYHeight = NPCHARVEYHeight;
-    }
-
-    public int getNPCHARVEYEntranceX() {
-        return NPCHARVEYEntranceX;
-    }
-
-    public void setNPCHARVEYEntranceX(int NPCHARVEYEntranceX) {
-        this.NPCHARVEYEntranceX = NPCHARVEYEntranceX;
-    }
-
-    public int getNPCHARVEYEntranceY() {
-        return NPCHARVEYEntranceY;
-    }
-
-    public void setNPCHARVEYEntranceY(int NPCHARVEYEntranceY) {
-        this.NPCHARVEYEntranceY = NPCHARVEYEntranceY;
-    }
-
     public int getNPCLEAHTopLeftX() {
         return NPCLEAHTopLeftX;
     }
@@ -1054,38 +958,6 @@ public class Game {
 
     public void setNPCLEAHTopLeftY(int NPCLEAHTopLeftY) {
         this.NPCLEAHTopLeftY = NPCLEAHTopLeftY;
-    }
-
-    public int getNPCLEAHWidth() {
-        return NPCLEAHWidth;
-    }
-
-    public void setNPCLEAHWidth(int NPCLEAHWidth) {
-        this.NPCLEAHWidth = NPCLEAHWidth;
-    }
-
-    public int getNPCLEAHHeight() {
-        return NPCLEAHHeight;
-    }
-
-    public void setNPCLEAHHeight(int NPCLEAHHeight) {
-        this.NPCLEAHHeight = NPCLEAHHeight;
-    }
-
-    public int getNPCLEAHEntranceX() {
-        return NPCLEAHEntranceX;
-    }
-
-    public void setNPCLEAHEntranceX(int NPCLEAHEntranceX) {
-        this.NPCLEAHEntranceX = NPCLEAHEntranceX;
-    }
-
-    public int getNPCLEAHEntranceY() {
-        return NPCLEAHEntranceY;
-    }
-
-    public void setNPCLEAHEntranceY(int NPCLEAHEntranceY) {
-        this.NPCLEAHEntranceY = NPCLEAHEntranceY;
     }
 
     public int getNPCROBINTopLeftX() {
@@ -1104,37 +976,6 @@ public class Game {
         this.NPCROBINTopLeftY = NPCROBINTopLeftY;
     }
 
-    public int getNPCROBINWidth() {
-        return NPCROBINWidth;
-    }
-
-    public void setNPCROBINWidth(int NPCROBINWidth) {
-        this.NPCROBINWidth = NPCROBINWidth;
-    }
-
-    public int getNPCROBINHeight() {
-        return NPCROBINHeight;
-    }
-
-    public void setNPCROBINHeight(int NPCROBINHeight) {
-        this.NPCROBINHeight = NPCROBINHeight;
-    }
-
-    public int getNPCROBINEntranceX() {
-        return NPCROBINEntranceX;
-    }
-
-    public void setNPCROBINEntranceX(int NPCROBINEntranceX) {
-        this.NPCROBINEntranceX = NPCROBINEntranceX;
-    }
-
-    public int getNPCROBINEntranceY() {
-        return NPCROBINEntranceY;
-    }
-
-    public void setNPCROBINEntranceY(int NPCROBINEntranceY) {
-        this.NPCROBINEntranceY = NPCROBINEntranceY;
-    }
 
     public Seasons getCurrentSeason() {
         return CurrentSeason;

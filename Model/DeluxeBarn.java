@@ -1,40 +1,38 @@
 package Model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Tavileh
+public class DeluxeBarn
 {
-    protected static int Tavilehamounts = 100;
+    protected static int deluxeBarnAmount = 100;
 
-    public static int getTavilehamounts()
-    {
-        return Tavilehamounts;
+    public int getDeluxeBarnAmount() {
+        return deluxeBarnAmount;
     }
 
-    public static void setTavilehamounts(int tavilehamounts) {
-        Tavilehamounts = tavilehamounts;
+    public void setDeluxeBarnAmount(int deluxeBarnAmount) {
+        DeluxeBarn.deluxeBarnAmount = deluxeBarnAmount;
     }
-
-
-    protected final int MaxCapacity = 4;
+    protected final int MaxCapacity =12;
     protected boolean Status = false;
+    protected ArrayList<Kashi> insideKashis;
     protected String Level;
     protected ArrayList<TavilehAnimal> TavilehAnimals;
-    protected ArrayList<Kashi> insideKashis;
 
-
-    public int getMaxCapacity() {
+    public int getMaxCapacity()
+    {
         return MaxCapacity;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(boolean status)
+    {
         Status = status;
     }
-    public boolean getStatus() {
+    public boolean getStatus()
+    {
         return Status;
     }
-
-
     public String getLevel() {
         return Level;
     }
@@ -51,11 +49,11 @@ public class Tavileh
         this.TavilehAnimals = tavilehAnimals;
     }
 
-    public void adaptMap(ArrayList<Cord> cords) {
+    public void adaptMap(ArrayList<Cord> cords)
+    {
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
-            //System.out.println("1");
             Kashi kashi = new Kashi();
             kashi.setShokhmZadeh(false);
             kashi.setEnterance(false);

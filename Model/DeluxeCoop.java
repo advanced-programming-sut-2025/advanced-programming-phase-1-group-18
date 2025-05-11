@@ -1,24 +1,22 @@
 package Model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Cage
+public class DeluxeCoop
 {
-    protected int cageAmounts = 100;
+    protected static int deluxeCoopAmount = 100;
 
-    public int getCageAmounts()
-    {
-        return cageAmounts;
+    public static int getDeluxeCoopAmount() {
+        return deluxeCoopAmount;
     }
 
-    public void setCageAmounts(int cageAmounts)
-    {
-        this.cageAmounts = cageAmounts;
+    public static void setDeluxeCoopAmount(int deluxeCoopAmount) {
+        DeluxeCoop.deluxeCoopAmount = deluxeCoopAmount;
     }
-
-    // make it true when Cage
+    
+    protected final int MaxCapacity = 12;
     protected boolean Status = false;
-    protected final int MaxCapacity =4;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals;
     protected ArrayList<Kashi> insideKashis;
@@ -47,11 +45,6 @@ public class Cage
         CageAnimals = cageAnimals;
     }
 
-    // max capacity of simple Cage
-    public int getMaxCapacity() {
-        return MaxCapacity;
-    }
-
     public void setStatus(boolean status) {
         Status = status;
     }
@@ -59,9 +52,11 @@ public class Cage
         return Status;
     }
 
+    public int getMaxCapacity() {
+        return MaxCapacity;
+    }
     public void adaptMap(ArrayList<Cord> cords)
     {
-
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {

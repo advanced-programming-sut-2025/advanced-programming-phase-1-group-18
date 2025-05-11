@@ -1,56 +1,18 @@
 package Model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Cage
+public class BigCoop
 {
-    protected int cageAmounts = 100;
+    protected static int bigCoop = 100;
 
-    public int getCageAmounts()
-    {
-        return cageAmounts;
-    }
-
-    public void setCageAmounts(int cageAmounts)
-    {
-        this.cageAmounts = cageAmounts;
-    }
-
-    // make it true when Cage
     protected boolean Status = false;
-    protected final int MaxCapacity =4;
+    protected final int MaxCapacity= 8;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals;
     protected ArrayList<Kashi> insideKashis;
 
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
-
-    public String getLevel() {
-        return Level;
-    }
-
-    public void setLevel(String level) {
-        Level = level;
-    }
-
-    public ArrayList<CageAnimal> getCageAnimals() {
-        return CageAnimals;
-    }
-
-    public void setCageAnimals(ArrayList<CageAnimal> cageAnimals) {
-        CageAnimals = cageAnimals;
-    }
-
-    // max capacity of simple Cage
-    public int getMaxCapacity() {
-        return MaxCapacity;
-    }
 
     public void setStatus(boolean status) {
         Status = status;
@@ -59,9 +21,27 @@ public class Cage
         return Status;
     }
 
+    public int getMaxCapacity() {
+        return MaxCapacity;
+    }
+    public String getLevel() {
+        return Level;
+    }
+
+    public void setLevel(String level) {
+        this.Level = level;
+    }
+
+    public ArrayList<CageAnimal> getCageAnimals() {
+        return CageAnimals;
+    }
+
+    public void setCageAnimals(ArrayList<CageAnimal> cageAnimals) {
+        this.CageAnimals = cageAnimals;
+    }
+
     public void adaptMap(ArrayList<Cord> cords)
     {
-
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {

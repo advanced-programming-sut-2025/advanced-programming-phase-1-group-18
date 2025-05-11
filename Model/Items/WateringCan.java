@@ -9,6 +9,14 @@ public class WateringCan extends Item implements Name, Price {
     protected int capacity;
     protected int max_Capacity;
 
+
+    public WateringCan(String jens, int energyUsage, int capacity, int max_Capacity) {
+        Jens = jens;
+        EnergyUsage = energyUsage;
+        this.capacity = capacity;
+        this.max_Capacity = max_Capacity;
+    }
+
     public void use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());

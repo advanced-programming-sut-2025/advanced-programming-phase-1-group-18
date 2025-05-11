@@ -1,6 +1,7 @@
 package Model;
 
 import Model.Items.ArtisanGoods;
+import Model.Items.WateringCan;
 import enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class Player extends User {
         this.CookingRecipes = new ArrayList<>();
         this.CraftingRecipes = new ArrayList<>();
         this.inventory = new Inventory(12, "initial");
+        WateringCan wateringCan = new WateringCan("initial", 5, 40, 40);
+        this.inventory.addItem(wateringCan, 1);
     }
 
     public int getMoney() {

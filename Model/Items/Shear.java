@@ -6,6 +6,7 @@ public class Shear extends Item implements Name,Price
 {
     protected int EnergyUsage = 4;
     protected String usage;
+    protected int price;
     public void use(String direction){
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
@@ -105,5 +106,13 @@ public class Shear extends Item implements Name,Price
     @Override
     public int getCorrectPrice() {
         return 0;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

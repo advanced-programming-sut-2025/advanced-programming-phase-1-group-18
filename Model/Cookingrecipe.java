@@ -151,7 +151,7 @@ public class Cookingrecipe {
                 cookedFood.setSellPrice(200);
                 buff = new Buff();
                 buff.setBuffHours(5);
-                buff.setBuffSkillType(SkillEnum.ExtractionSkill);
+                buff.setBuffSkillType(SkillEnum.MiningSkill);
             }
             default -> {
                 cookedFood.setEnergy(0);

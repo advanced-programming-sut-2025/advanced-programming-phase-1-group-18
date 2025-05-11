@@ -5,145 +5,113 @@ import java.util.*;
 public class AStarPathfinder {
 
     private static final int[][] DIRS = {
-            {0, 1},
-            {1, 0},
-            {0, -1},
-            {-1, 0}
+            {0, 1},  // Right
+            {1, 0},  // Down
+            {0, -1}, // Left
+            {-1, 0}  // Up
     };
 
-
-    public static class Node implements Comparable<Node> {
-        public int x;
-        public int y;
-        int g, h;
-        Node parent;
-
-        public Node(int x, int y, int g, int h, Node parent) {
-            this.x = x;
-            this.y = y;
-            this.g = g;
-            this.h = h;
-            this.parent = parent;
-        }
-
-        public int f() {
-            return g + h;
-        }
-
-        @Override
-        public int compareTo(Node other) {
-            return Integer.compare(this.f(), other.f());
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof Node)) return false;
-            Node n = (Node) o;
-            return this.x == n.x && this.y == n.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return x * 31 + y;
-        }
+    // Helper function to get direction
+    private static String getDirection(int[] from, int[] to) {
+        if (to[0] > from[0]) return "DOWN";
+        if (to[0] < from[0]) return "UP";
+        if (to[1] > from[1]) return "RIGHT";
+        return "LEFT";
     }
 
-    public static class Result {
-        public List<Node> path;
+    public static class Natigeh {
+        public List<int[]> path;
         public int turnCount;
         public int tileCount;
+        public List<Turn> turns;
 
-        public Result(List<Node> path, int turnCount, int tileCount) {
+        public Natigeh(List<int[]> path, int turnCount, int tileCount, List<Turn> turns) {
             this.path = path;
             this.turnCount = turnCount;
             this.tileCount = tileCount;
+            this.turns = turns;
         }
     }
 
-    public static Result findPath(ArrayList<ArrayList<Kashi>> map, int startX, int startY, int goalX, int goalY) {
-        System.out.println("11");
+    public static class Turn {
+        public int x;
+        public int y;
+        public String direction;
+
+        public Turn(int x, int y, String direction) {
+            this.x = x;
+            this.y = y;
+            this.direction = direction;
+        }
+    }
+
+    public static Natigeh findPath(ArrayList<ArrayList<Kashi>> map, int startX, int startY, int goalX, int goalY) {
         int rows = map.size();
         int cols = map.get(0).size();
-        System.out.println("12");
-        PriorityQueue<Node> openSet = new PriorityQueue<>();
-        Set<Node> closedSet = new HashSet<>();
-        System.out.println("13");
-        Node start = new Node(startX, startY, 0, heuristic(startX, startY, goalX, goalY), null);
-        openSet.add(start);
-        System.out.println("14");
-        while (!openSet.isEmpty()) {
-            Node current = openSet.poll();
-            System.out.println("15");
-            if (current.x == goalX && current.y == goalY) {
-                List<Node> path = reconstructPath(current);
-                int turns = countTurns(path);
-                return new Result(path, turns, path.size());
+
+        Queue<int[]> queue = new LinkedList<>();
+        Map<String, int[]> cameFrom = new HashMap<>();
+        Map<String, String> directionFrom = new HashMap<>();
+        Set<String> visited = new HashSet<>();
+        List<Turn> turns = new ArrayList<>();
+
+        queue.add(new int[]{startX, startY});
+        visited.add(startX + "," + startY);
+        cameFrom.put(startX + "," + startY, null);
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0];
+            int y = current[1];
+
+            if (x == goalX && y == goalY) {
+                // Reconstruct the path
+                List<int[]> path = new ArrayList<>();
+                while (cameFrom.get(x + "," + y) != null) {
+                    path.add(new int[]{x, y});
+                    String direction = directionFrom.get(x + "," + y);
+                    if (path.size() > 1) {
+                        int[] prev = path.get(path.size() - 2);
+                        String prevDirection = directionFrom.get(prev[0] + "," + prev[1]);
+                        // Check if direction changed
+                        if (!prevDirection.equals(direction)) {
+                            turns.add(new Turn(x, y, direction));
+                        }
+                    }
+                    String prevKey = x + "," + y;
+                    String parentKey = cameFrom.get(prevKey)[0] + "," + cameFrom.get(prevKey)[1];
+                    x = cameFrom.get(prevKey)[0];
+                    y = cameFrom.get(prevKey)[1];
+                }
+
+                Collections.reverse(path);
+                Collections.reverse(turns);
+
+                return new Natigeh(path, turns.size(), path.size(), turns);
             }
-            System.out.println("16");
-            closedSet.add(current);
-            System.out.println("17");
+
             for (int[] dir : DIRS) {
-                int nx = current.x + dir[0];
-                int ny = current.y + dir[1];
+                int nx = x + dir[0];
+                int ny = y + dir[1];
 
                 if (nx < 0 || ny < 0 || nx >= rows || ny >= cols) continue;
+                if (map.get(nx).get(ny).getWalkable() == null || !map.get(nx).get(ny).getWalkable())
+                    continue;  // Check if the tile is walkable
 
-
-                if (!map.get(nx).get(ny).getWalkable()) continue;
-
-                Node neighbor = new Node(nx, ny, current.g + 1, heuristic(nx, ny, goalX, goalY), current);
-                if (closedSet.contains(neighbor)) continue;
-
-                openSet.add(neighbor);
-            }
-            System.out.println("18");
-        }
-
-        return null;
-    }
-
-    private static int heuristic(int x1, int y1, int x2, int y2) {
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
-    }
-
-    private static List<Node> reconstructPath(Node node) {
-        List<Node> path = new ArrayList<>();
-        int tileCount = 0;
-
-        while (node != null) {
-            path.add(node);
-            tileCount++;
-            node = node.parent;
-        }
-
-        Collections.reverse(path);
-
-        return path;
-    }
-
-    private static int countTurns(List<Node> path) {
-        if (path.size() < 3) return 0;
-
-        int turns = 0;
-        for (int i = 2; i < path.size(); i++) {
-            Node prev = path.get(i - 2);
-            Node curr = path.get(i - 1);
-            Node next = path.get(i);
-
-            int dx1 = curr.x - prev.x;
-            int dy1 = curr.y - prev.y;
-            int dx2 = next.x - curr.x;
-            int dy2 = next.y - curr.y;
-
-            if (dx1 != dx2 || dy1 != dy2) {
-                turns++;
+                String neighborKey = nx + "," + ny;
+                if (!visited.contains(neighborKey)) {
+                    visited.add(neighborKey);
+                    queue.add(new int[]{nx, ny});
+                    cameFrom.put(neighborKey, current);
+                    directionFrom.put(neighborKey, getDirection(current, new int[]{nx, ny}));
+                }
             }
         }
-        return turns;
+
+        return null;  // No path found
     }
 
-    public static int CalculateEnergy(int tiles, int turns) {
-        int Energy = (10 * turns + tiles) / 20;
-        return Energy;
+    public static int calculatePower(int tileCount, int turnCount) {
+        return (tileCount + 10 * turnCount) / 20;
     }
 }
