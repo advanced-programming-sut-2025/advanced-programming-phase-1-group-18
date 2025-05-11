@@ -23,7 +23,7 @@ public enum GameMenuCommands {
     CHEAT_ADVANCE_DATE("\\s*cheat\\s+advance\\s+date\\s+(-?\\d+)d\\s*"),
 
     // Show Map
-    PrintMap("\\s*print\\s+map\\s+-l\\s+(.*)\\s+(.*)\\s+(.*)\\s*"),
+    PrintMap("\\s*print\\s+map\\s+-l\\s+(\\d+)\\s+(\\d+)\\s+-s\\s+(\\d+)\\s+(\\d+)\\s*"),
     HelpReadingMap("\\s*help\\s+reading\\s+map\\s*"),
 
     //Energy
@@ -48,12 +48,12 @@ public enum GameMenuCommands {
     Walk("\\s*walk\\s+-l\\s+\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*"),
 
     INVENTORYSHOW("\\s*inventory\\s+show\\s*"),
-    INVENTORYTRASH("inventory trash-i ([^\\s]+)-n (\\d+)"),
+    INVENTORYTRASH("\\s*inventory\\s*trash\\s+-i\\s+(.*)\\s+-n\\s+(\\d+)\\s*"),
 
-    COOKINGREFRIGERATOR("\\s*cooking refrigerator \\s*(put|pick) \\s*([^\\s]+)\\s*"),
+    COOKINGREFRIGERATOR("\\s*cooking\\s+refrigerator\\s+(put|pick)\\s+(.+)\\s*"),
     COOKINGSHOWRECIPES("\\s*cooking\\s+show\\s+recipes\\s*"),
     COOKINGPREPARE("\\s*cooking\\s+prepare\\s+([\\w\\s]+)\\s*"),
-    EAT("eat\\s+([^\\s].*[^\\s]|[^\\s]+)"),
+    EAT("eat\\s+(.+)\\s*"),
     SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*"),
 
     MEETNPC("^\\s*meet\\s+NPC\\s+(.+?)\\s*$"),
@@ -77,12 +77,14 @@ public enum GameMenuCommands {
     PLACE_ITEM("\\s*place\\s+item\\s+-n\\s+(.*+)\\s+-d\\s+(.*)\\s*"),
     CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*+)\\s+-c\\s+([0-9]+)\\s*"),
 
-    CRAFT_INFO("\\s*craftinfo -n\\s*"),
+    CRAFT_INFO("\\s*craftinfo\\s+-n\\s*(.*)\\s*"),
     Fishing("\\s*fishing\\s+-p\\s+(.*\\S)\\s*"),
     ArtisanUse("^artisan use (\\w+)(?:\\s+(\\w+))+$"),
-    ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*");
+    ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*"),
 
+    MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*\\S)\\s*");
     private final String pattern;
+
     GameMenuCommands(String pattern) {
         this.pattern = pattern;
     }

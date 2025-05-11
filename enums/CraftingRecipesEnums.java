@@ -227,6 +227,15 @@ public enum CraftingRecipesEnums {
         this.ingredients = ingredients;
     }
 
+    public static boolean containsCraft(String itemName) {
+        for (CraftingRecipesEnums recipe : CraftingRecipesEnums.values()) {
+            if(recipe.name().equalsIgnoreCase(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public HashMap<String, Integer> getIngredients() {
         return ingredients;
     }
