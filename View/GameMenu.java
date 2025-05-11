@@ -2,6 +2,7 @@ package View;
 
 import Controller.GameMenuController;
 import enums.GameMenuCommands;
+import enums.LoginMenuCommands;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class GameMenu extends AppMenu {
         } else if (GameMenuCommands.Plant.getMather(input) != null) {
             System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"), GameMenuCommands.Plant.getMather(input).group("direction")));
         } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
-            System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.Plant.getMather(input).group("x")), Integer.parseInt(GameMenuCommands.Plant.getMather(input).group("y"))));
+            System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2))));
         } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
             System.out.println(controller.howMuchWater());
         } else if (GameMenuCommands.TIME.getMather(input) != null) {
@@ -64,7 +65,9 @@ public class GameMenu extends AppMenu {
         } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
             controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
                     Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)));
+                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
+                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
+
         } else if (GameMenuCommands.HelpReadingMap.getMather(input) != null) {
             controller.helpReadingMap();
         } else if (GameMenuCommands.EnergyShow.getMather(input) != null) {
@@ -77,14 +80,15 @@ public class GameMenu extends AppMenu {
             controller.inventoryShow();
         } else if (GameMenuCommands.INVENTORYTRASH.getMather(input) != null) {
             String item = GameMenuCommands.INVENTORYTRASH.getMather(input).group(1);
-            System.out.println(controller.inventoryTrash());
+            int number = Integer.parseInt(GameMenuCommands.INVENTORYTRASH.getMather(input).group(2));
+            System.out.println(controller.inventoryTrash(item, number));
         } else if (GameMenuCommands.COOKINGREFRIGERATOR.getMather(input) != null) {
             String action = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(1);
             String item = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(2);
             try {
                 System.out.println(controller.cookingRefrigerator(action, item));
-            } catch (Exception _) {
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else if (GameMenuCommands.COOKINGSHOWRECIPES.getMather(input) != null) {
             System.out.println(controller.cookingShowRecipes());
@@ -163,6 +167,9 @@ public class GameMenu extends AppMenu {
                 }
                 System.out.println(controller.artisanUse(artisanName, items));
             }
+        } else if (LoginMenuCommands.MenuEnter.getMather(input) != null) {
+            String menuName = LoginMenuCommands.MenuEnter.getMather(input).group(1);
+            controller.menuEnter(menuName);
         } else if (GameMenuCommands.ArtisanGet.getMather(input) != null) {
             System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
 
