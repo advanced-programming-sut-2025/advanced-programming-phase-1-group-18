@@ -13,8 +13,13 @@ import enums.TreeSeedEnums;
 import java.util.HashMap;
 
 public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu, MarketController<Item> {
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    Player currentPlayer;
 
+    public PierresGeneralStoreController() {
+        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
+            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        }
+    }
     @Override
     public HashMap<Item, Integer> getStock() {
         return App.getCurrentGame().getPierresGeneralStoreMarket().getStock();

@@ -10,7 +10,14 @@ import enums.Menu;
 import java.util.HashMap;
 
 public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketController<Mineral> {
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+    Player currentPlayer;
+
+    public BlackSmithController() {
+        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
+            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        }
+    }
 
     @Override
     public HashMap<Mineral, Integer> getStock() {

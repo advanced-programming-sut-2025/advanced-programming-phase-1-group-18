@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GameMenuController implements ShowCurrentMenu {
+public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public void exit() {
 
     }
@@ -26,9 +26,9 @@ public class GameMenuController implements ShowCurrentMenu {
 
     public void setMapp(Game game) {
         ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
-        int columns = 1000; // Define the number of columns
+        int columns = 560; // Define the number of columns
 
-        for (int i = 0; i < 560; i++) {
+        for (int i = 0; i < 1000; i++) {
             ArrayList<Kashi> row = new ArrayList<>();
             for (int j = 0; j < columns; j++) {
                 row.add(new Kashi()); // Initialize each cell with an instance of Kashi
@@ -37,7 +37,7 @@ public class GameMenuController implements ShowCurrentMenu {
         }
         game.setMap(Map);
 
-        for (int i = 0; i < 560; i++) {
+        for (int i = 0; i < 1000; i++) {
             for (int j = 0; j < columns; j++) {
                 Map.get(i).get(j).setWalkable(true);
                 Map.get(i).get(j).setEnterance(false);
@@ -107,13 +107,16 @@ public class GameMenuController implements ShowCurrentMenu {
         weather.addLast(getRandomWeather(Seasons.Spring));
         NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
         NewGame.setWeather(weather);
-        for (int i = 0; i < usernames.length; i++) {
-            Player player = NewGame.getPlayers().get(i);
+        for (int i = 0; i < NewGame.getPlayers().size(); i++) {
+            Player player;
+            if (i != 0) {
+                player = NewGame.getPlayers().get(i);
+            } else {
+                player = player1;
+            }
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
 
             int number = -1;
-//            while (true) {
-//                if (scanner.hasNextInt()) {
             number = scanner.nextInt();
             scanner.nextLine();
 
@@ -122,11 +125,6 @@ public class GameMenuController implements ShowCurrentMenu {
             } else {
                 return new Result(false, "Invalid number");
             }
-//        else {
-//                    System.out.println("Error: Invalid input. Please enter a **number** between 1 and 4.");
-//                    scanner.nextLine();
-//                }
-//            }
 
             int topLeftx = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLeftx");
             int topLefty = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLefty");
@@ -434,6 +432,36 @@ public class GameMenuController implements ShowCurrentMenu {
         int hourOfDay = newHour % 24;
         int newDay = (newHour / 24) + App.getCurrentGame().getCurrentDateTime().getDay();
         App.getCurrentGame().setCurrentDateTime(new DateTime(hourOfDay, newDay));
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+        App.getCurrentGame().setCurrentWeather(weather.pollFirst());
+        App.getCurrentGame().setWeather(weather);
+        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
+            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
+            switch (season2) {
+                case "Spring":
+                    weather.addLast(getRandomWeather(Seasons.Summer));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Summer":
+                    weather.addLast(getRandomWeather(Seasons.Fall));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Fall":
+                    weather.addLast(getRandomWeather(Seasons.Winter));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Winter":
+                    weather.addLast(getRandomWeather(Seasons.Spring));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+            App.getCurrentGame().setWeather(weather);
+        }
         return new Result(true, "cheatCode: Hour changed! New Hour: " + hourOfDay + " New Day: " + newDay);
     }
 
@@ -443,6 +471,36 @@ public class GameMenuController implements ShowCurrentMenu {
         }
         int newDay = day + App.getCurrentGame().getCurrentDateTime().getDay();
         App.getCurrentGame().setCurrentDateTime(new DateTime(day, newDay));
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+        App.getCurrentGame().setCurrentWeather(weather.pollFirst());
+        App.getCurrentGame().setWeather(weather);
+        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
+            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
+            switch (season2) {
+                case "Spring":
+                    weather.addLast(getRandomWeather(Seasons.Summer));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Summer":
+                    weather.addLast(getRandomWeather(Seasons.Fall));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Fall":
+                    weather.addLast(getRandomWeather(Seasons.Winter));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Winter":
+                    weather.addLast(getRandomWeather(Seasons.Spring));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+            App.getCurrentGame().setWeather(weather);
+        }
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
     }
 
@@ -502,42 +560,42 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public Result walk(int x, int y) {
-        System.out.println("1");
         int index = App.getCurrentGame().getIndexPlayerinControl();
         switch (index) {
             case 0:
                 if (x < 0 || x < App.getCurrentGame().getPlayer1TopLeftx() || x > App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() || y < 0 || y < App.getCurrentGame().getPlayer1TopLefty() || y > App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) {
                     return new Result(false, "You destination is out of bounds");
                 } else {
-                    System.out.println("2");
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    System.out.println("2.5");
-                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
-                    System.out.println("3");
+                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(listMap,
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(),
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(),
+                            x, y);
+
                     if (result != null) {
                         System.out.println("Way found!");
-                        for (AStarPathfinder.Node node : result.path) {
-                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        for (int[] node : result.path) {
+                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
                         }
-                        System.out.println("4");
-                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+
+                        int requiredEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+                        System.out.printf("You need %d parts of energy to go there.\n", requiredEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
                             if (input.equalsIgnoreCase("yes")) {
-                                System.out.println("6");
-                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                int shomareh = App.getCurrentGame().getIndexPlayerinControl();
+                                Player player = App.getCurrentGame().getPlayers().get(shomareh);
+                                player.setEnergy(player.getEnergy() - requiredEnergy);
+                                player.setX(x);
+                                player.setY(y);
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
-                                System.out.println("7");
                                 return new Result(true, "Transportation canceled!");
                             } else {
-                                System.out.println("8");
-                                System.out.println("enter a correct sentence!");
+                                System.out.println("Enter a correct sentence!");
                             }
                         }
                     } else {
@@ -552,27 +610,35 @@ public class GameMenuController implements ShowCurrentMenu {
                     return new Result(false, "You destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(listMap,
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(),
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(),
+                            x, y);
+
                     if (result != null) {
                         System.out.println("Way found!");
-                        for (AStarPathfinder.Node node : result.path) {
-                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        for (int[] node : result.path) {
+                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
                         }
-                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+
+                        int requiredEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+                        System.out.printf("You need %d parts of energy to go there.\n", requiredEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
                             if (input.equalsIgnoreCase("yes")) {
-                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                int shomareh = App.getCurrentGame().getIndexPlayerinControl();
+                                Player player = App.getCurrentGame().getPlayers().get(shomareh);
+                                player.setEnergy(player.getEnergy() - requiredEnergy);
+                                player.setX(x);
+                                player.setY(y);
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
                                 return new Result(true, "Transportation canceled!");
                             } else {
-                                System.out.println("enter a correct sentence!");
+                                System.out.println("Enter a correct sentence!");
                             }
                         }
                     } else {
@@ -580,34 +646,40 @@ public class GameMenuController implements ShowCurrentMenu {
                         break;
                     }
                 }
-
-
             case 2:
                 if (x < 0 || x < App.getCurrentGame().getPlayer3TopLeftx() || x > App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() || y < 0 || y < App.getCurrentGame().getPlayer3TopLefty() || y > App.getCurrentGame().getPlayer3TopLefty() + App.getCurrentGame().getPlayer3Height()) {
                     return new Result(false, "You destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(listMap,
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(),
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(),
+                            x, y);
+
                     if (result != null) {
                         System.out.println("Way found!");
-                        for (AStarPathfinder.Node node : result.path) {
-                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        for (int[] node : result.path) {
+                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
                         }
-                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+
+                        int requiredEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+                        System.out.printf("You need %d parts of energy to go there.\n", requiredEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
                             if (input.equalsIgnoreCase("yes")) {
-                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                int shomareh = App.getCurrentGame().getIndexPlayerinControl();
+                                Player player = App.getCurrentGame().getPlayers().get(shomareh);
+                                player.setEnergy(player.getEnergy() - requiredEnergy);
+                                player.setX(x);
+                                player.setY(y);
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
                                 return new Result(true, "Transportation canceled!");
                             } else {
-                                System.out.println("enter a correct sentence!");
+                                System.out.println("Enter a correct sentence!");
                             }
                         }
                     } else {
@@ -620,27 +692,35 @@ public class GameMenuController implements ShowCurrentMenu {
                     return new Result(false, "You destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    AStarPathfinder.Result result = AStarPathfinder.findPath(listMap, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(), x, y);
+                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(listMap,
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(),
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(),
+                            x, y);
+
                     if (result != null) {
                         System.out.println("Way found!");
-                        for (AStarPathfinder.Node node : result.path) {
-                            System.out.println("  (" + node.x + ", " + node.y + ")");
+                        for (int[] node : result.path) {
+                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
                         }
-                        System.out.printf("You need %d parts of energy to go there.\n", AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount));
+
+                        int requiredEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+                        System.out.printf("You need %d parts of energy to go there.\n", requiredEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
                             if (input.equalsIgnoreCase("yes")) {
-                                int newEnergy = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - AStarPathfinder.CalculateEnergy(result.tileCount, result.turnCount);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(newEnergy);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setX(x);
-                                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setY(y);
+                                int shomareh = App.getCurrentGame().getIndexPlayerinControl();
+                                Player player = App.getCurrentGame().getPlayers().get(shomareh);
+                                player.setEnergy(player.getEnergy() - requiredEnergy);
+                                player.setX(x);
+                                player.setY(y);
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
                                 return new Result(true, "Transportation canceled!");
                             } else {
-                                System.out.println("enter a correct sentence!");
+                                System.out.println("Enter a correct sentence!");
                             }
                         }
                     } else {
@@ -648,14 +728,54 @@ public class GameMenuController implements ShowCurrentMenu {
                         break;
                     }
                 }
+//                return new Result(true, "The walk section was done currectly!");
         }
-        return new Result(true, "The walk section was done currectly!");
-
+        return null;
     }
 
-    public void printMap(int x, int y, int size) {
-        for (int i = x; i < size + x; i++) {
-            for (int j = y; j < size + y; j++) {
+    public void printMap(int x, int y, int Xsize, int Ysize) {
+        ArrayList<ArrayList<Kashi>> Map = App.getCurrentGame().getMap();
+        for (int j = y; j < Xsize + y; j++) {
+            for (int i = x; i < Ysize + x; i++) {
+                // T for All Tree
+                if (Map.get(i).get(j).getInside() instanceof AllTree) {
+                    System.out.print("\u001B[32mT\u001B[0m");
+                }
+                // T for Tavilehs
+                else if (Map.get(i).get(j).getInside() instanceof BigBarn || Map.get(x).get(y).getInside() instanceof Tavileh || Map.get(x).get(y).getInside() instanceof DeluxeBarn) {
+                    System.out.print("V");
+                }
+                // v for Tavilehanimal
+                else if (Map.get(i).get(j).getInside() instanceof TavilehAnimal) {
+                    System.out.print("v");
+                }
+                //
+                else if (Map.get(i).get(j).getInside() instanceof Cage || Map.get(x).get(y).getInside() instanceof BigCoop || Map.get(x).get(y).getInside() instanceof DeluxeCoop) {
+                    System.out.print("C");
+                } else if (Map.get(i).get(j).getInside() instanceof CageAnimal) {
+                    System.out.print("c");
+                } else if (Map.get(i).get(j).getInside() instanceof Stone) {
+                    System.out.print("s");
+                } else if (Map.get(i).get(j).getInside() instanceof Refrigerator) {
+                    System.out.print("R");
+                } else if (Map.get(i).get(j).getInside() instanceof Quarry) {
+                    System.out.print("\u001B[33mQ\u001B[0m");
+                } else if (Map.get(i).get(j).getInside() instanceof TheStardropSaloonMarket || Map.get(i).get(j).getInside() instanceof BlackSmithMarket || Map.get(i).get(j).getInside() instanceof JojoMartMarket || Map.get(i).get(j).getInside() instanceof MarniesRanchMarket || Map.get(i).get(j).getInside() instanceof PierresGeneralStoreMarket) {
+                    System.out.print("\u001B[34mM\u001B[0m");
+                } else if (Map.get(i).get(j).getInside() instanceof Matarsak) {
+                    System.out.print("m");
+                } else if (Map.get(i).get(j).getInside() instanceof NPC) {
+                    System.out.print("N");
+                } else if (Map.get(i).get(j).getInside() instanceof Lake) {
+                    System.out.print("L");
+                } else if (Map.get(i).get(j).getInside() instanceof GreenHouse) {
+                    System.out.print("G");
+                } else if (Map.get(i).get(j).getInside() instanceof Cottage) {
+                    System.out.print("K");
+                } else {
+                    System.out.print("\u001B[37m#\u001B[0m");
+                }
+
                 //                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
                 //                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
                 //                } else if (.....) {
@@ -668,10 +788,28 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public void helpReadingMap() {
-        System.out.println("Tree -> T");
-        System.out.println("GreenHose -> G");
-        System.out.println("Quarry -> Q");
-        //        ...
+        System.out.println("Show elements in Map:");
+        System.out.println("=============================");
+        System.out.println("All Tree -> T");
+        System.out.println("Animals -> A");
+        System.out.println("Cage-> C");
+        System.out.println("CageAnimals-> c");
+        System.out.println("Cottage-> K");
+        System.out.println("GreenHouse-> G");
+        System.out.println("Lake-> L");
+        System.out.println("Market-> M");
+        System.out.println("Matarsak-> m");
+        System.out.println("NPCs -> N");
+        System.out.println("Quarry-> Q");
+        System.out.println("Refrigerator-> R");
+        System.out.println("Stone-> S");
+        System.out.println("Tavileh-> V");
+        System.out.println("TavilehAnimals-> v");
+        System.out.println("SimpleLand-> #");
+        System.out.print("\n");
+        System.out.println("end Elements");
+        System.out.println("=============================");
+
     }
 
     public void energyShow() {
@@ -765,12 +903,13 @@ public class GameMenuController implements ShowCurrentMenu {
                 StringBuilder stages = new StringBuilder();
                 foragingSeedsEnums = crop.getSeedSet();
                 AllCrop crop1 = new AllCrop();
+                crop1.initilizeCrop(foragingSeedsEnums);
                 for (int i = 0; i < crop1.getStages().size(); i++) {
                     stages.append(crop1.getStages().get(i));
                     stages.append("-");
                 }
                 stages.deleteCharAt(stages.length() - 1);
-                crop1.initilizeCrop(foragingSeedsEnums);
+                //crop1.initilizeCrop(foragingSeedsEnums);
                 craftInfo.append("Name: ").append(craftName).append("\n");
                 craftInfo.append("Source: ").append(foragingSeedsEnums.name()).append("\n");
                 craftInfo.append("Stages: ").append(stages).append("\n");
@@ -967,7 +1106,7 @@ public class GameMenuController implements ShowCurrentMenu {
                         for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                             if (item instanceof ForagingSeed) {
                                 ForagingSeed foragingSeed = (ForagingSeed) item;
-                                if (foragingSeed.getType() == foragingSeedsEnums) {
+                                if (foragingSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
                                     valid2 = true;
                                     App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
                                     break;
@@ -1004,7 +1143,7 @@ public class GameMenuController implements ShowCurrentMenu {
                         for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                             if (item instanceof TreeSeed) {
                                 TreeSeed treeSeed = (TreeSeed) item;
-                                if (treeSeed.getType() == allTreesEnums) {
+                                if (treeSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
                                     valid1 = true;
                                     App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
                                     break;
@@ -1125,110 +1264,118 @@ public class GameMenuController implements ShowCurrentMenu {
 
             resultBuilder.append("\n");
         }
-        resultBuilder.deleteCharAt(resultBuilder.length() - 1);
+        //resultBuilder.deleteCharAt(resultBuilder.length() - 1);
+        if (resultBuilder.isEmpty()) {
+            resultBuilder.append("No crafting recipes found");
+        }
         return new Result(true, resultBuilder.toString());
     }
 
-    public Result craftingCraft(String name) {
-        Player currentPlayer = App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl());
-        ArrayList<CraftingRecipesEnums> craftingRecipes = currentPlayer.getCraftingRecipes();
-        int countRequired = 0;
-        CraftingItem foundItem = null;
-        int craftCount = 0;
+    public Result craftingCraft(String itemName) {
+        Player currentPlayer = getCurrentPlayer();
 
-        if (currentPlayer.getEnergy() >= 2) {
-            //finding craft in inventory
-            for (Map.Entry<Item, Integer> entry : currentPlayer.getInventory().getItems().entrySet()) {
-                Item item = entry.getKey();
-                if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
-                    if (item instanceof CraftingItem) {
-                        foundItem = (CraftingItem) item;
-                        craftCount = entry.getValue();
-                        break;
-                    }
-                }
-            }
-
-            //crafting item
-            for (CraftingRecipesEnums craftingRecipe : craftingRecipes) {
-                if (craftingRecipe.name().equals(name)) {
-                    HashMap<String, Integer> requiredItems = craftingRecipe.getIngredients();
-                    boolean hasAllItems = true;
-
-                    for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
-                        String requiredName = entry.getKey();
-                        int requiredCount = entry.getValue();
-                        int playerCount = 0;
-                        countRequired += requiredCount;
-                        for (Map.Entry<Item, Integer> inventoryEntry : currentPlayer.getInventory().getItems().entrySet()) {
-                            Item item = inventoryEntry.getKey();
-                            int count = inventoryEntry.getValue();
-
-                            if (item.getClass().getSimpleName().equalsIgnoreCase(requiredName)) {
-                                playerCount += count;
-                            }
-                        }
-
-                        if (playerCount < requiredCount) {
-                            hasAllItems = false;
-                            break;
-                        }
-                    }
-
-                    if (hasAllItems) {
-                        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
-                            String requiredName = entry.getKey();
-                            int remainingToRemove = entry.getValue();
-
-                            Iterator<Map.Entry<Item, Integer>> iterator = currentPlayer.getInventory().getItems().entrySet().iterator();
-
-                            while (iterator.hasNext() && remainingToRemove > 0) {
-                                Map.Entry<Item, Integer> inventoryEntry = iterator.next();
-                                Item item = inventoryEntry.getKey();
-                                int count = inventoryEntry.getValue();
-
-                                if (item.getClass().getSimpleName().equalsIgnoreCase(requiredName)) {
-                                    if (count <= remainingToRemove) {
-                                        remainingToRemove -= count;
-                                        iterator.remove();
-                                    } else {
-                                        currentPlayer.getInventory().getItems().put(item, count - remainingToRemove);
-                                        remainingToRemove = 0;
-                                    }
-                                }
-                            }
-                        }
-                        boolean found = false;
-                        for (Map.Entry<Item, Integer> entry : currentPlayer.getInventory().getItems().entrySet()) {
-                            Item item = entry.getKey();
-                            if (item instanceof CraftingItem && item.getClass().getSimpleName().equalsIgnoreCase(name)) {
-                                int count = entry.getValue();
-                                currentPlayer.getInventory().getItems().put(item, count + 1);
-                                found = true;
-                                //currentPlayer.setCurrentTool(craftingItem);
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            CraftingItem craftingItem = new CraftingItem(name);
-                            craftingItem.setName(name);
-                            currentPlayer.getInventory().getItems().put(craftingItem, 1);
-                            //currentPlayer.setCurrentTool(craftingItem);
-                        }
-                        currentPlayer.setEnergy(currentPlayer.getEnergy() - 2);
-                        return new Result(true, "craft " + name + " created successfully");
-                    } else {
-                        return new Result(false, "Not enough resources to craft " + name);
-                    }
-                } else {
-                    return new Result(false, "Craft recipe not found");
-                }
-            }
-        } else {
-            return new Result(false, "Not enough energy to craft " + name);
+        // 1. بررسی انرژی و دسترسی‌های اولیه
+        if (currentPlayer.getEnergy() < 2) {
+            return new Result(false, "Not enough energy to craft " + itemName);
         }
-        return null;
+
+        if (!CraftingRecipesEnums.containsCraft(itemName)) {
+            return new Result(false, "No crafting recipe found for " + itemName);
+        }
+
+        // 2. پیدا کردن دستور ساخت
+        CraftingRecipesEnums recipe = findRecipe(currentPlayer, itemName);
+        if (recipe == null) {
+            return new Result(false, "Craft recipe not found");
+        }
+
+        // 3. بررسی مواد اولیه
+        if (!hasRequiredMaterials(currentPlayer, recipe)) {
+            return new Result(false, "Not enough resources to craft " + itemName);
+        }
+
+        // 4. انجام عملیات ساخت
+        return executeCrafting(currentPlayer, itemName, recipe);
+    }
+
+// --------- متدهای کمکی --------- //
+
+    private Player getCurrentPlayer() {
+        Game currentGame = App.getCurrentGame();
+        return currentGame.getPlayers().get(currentGame.getIndexPlayerinControl());
+    }
+
+    private CraftingRecipesEnums findRecipe(Player player, String itemName) {
+        return player.getCraftingRecipes().stream()
+                .filter(recipe -> recipe.name().equalsIgnoreCase(itemName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private boolean hasRequiredMaterials(Player player, CraftingRecipesEnums recipe) {
+        Map<String, Integer> requiredItems = recipe.getIngredients();
+
+        return requiredItems.entrySet().stream()
+                .allMatch(entry -> {
+                    String itemName = entry.getKey();
+                    int requiredCount = entry.getValue();
+                    return countPlayerItems(player, itemName) >= requiredCount;
+                });
+    }
+
+    private int countPlayerItems(Player player, String itemName) {
+        return player.getInventory().getItems().entrySet().stream()
+                .filter(entry -> entry.getKey().getCorrectName().equalsIgnoreCase(itemName))
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+    }
+
+    private Result executeCrafting(Player player, String itemName, CraftingRecipesEnums recipe) {
+        // مصرف مواد اولیه
+        consumeMaterials(player, recipe);
+
+        // افزودن آیتم ساخته شده
+        addCraftedItem(player, itemName);
+
+        // کاهش انرژی
+        player.setEnergy(player.getEnergy() - 2);
+
+        return new Result(true, itemName + " crafted successfully");
+    }
+
+    private void consumeMaterials(Player player, CraftingRecipesEnums recipe) {
+        recipe.getIngredients().forEach((itemName, requiredCount) -> {
+            int remaining = requiredCount;
+            Iterator<Map.Entry<Item, Integer>> iterator = player.getInventory().getItems().entrySet().iterator();
+
+            while (iterator.hasNext() && remaining > 0) {
+                Map.Entry<Item, Integer> entry = iterator.next();
+                if (entry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
+                    if (entry.getValue() <= remaining) {
+                        remaining -= entry.getValue();
+                        iterator.remove();
+                    } else {
+                        entry.setValue(entry.getValue() - remaining);
+                        remaining = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    private void addCraftedItem(Player player, String itemName) {
+        player.getInventory().getItems().entrySet().stream()
+                .filter(entry -> entry.getKey() instanceof CraftingItem &&
+                        entry.getKey().getClass().getSimpleName().equalsIgnoreCase(itemName))
+                .findFirst()
+                .ifPresentOrElse(
+                        entry -> entry.setValue(entry.getValue() + 1),
+                        () -> {
+                            CraftingItem newItem = new CraftingItem(itemName);
+                            newItem.setName(itemName);
+                            player.getInventory().getItems().put(newItem, 1);
+                        }
+                );
     }
 
     public Result placeItem(String name, String direction) {
@@ -1368,6 +1515,9 @@ public class GameMenuController implements ShowCurrentMenu {
         }
         if (pickOrPut.equalsIgnoreCase("pick")) {
             boolean found = false;
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator() == null) {
+                return new Result(false, "You don't have that item");
+            }
             for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().getItems().keySet()) {
                 if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
                     found = true;
@@ -1405,8 +1555,13 @@ public class GameMenuController implements ShowCurrentMenu {
         for (FoodCookingEnums food : FoodCookingEnums.values()) {
             FOOD_ENUMS.add(food.name().toLowerCase());
         }
-        if (isValidFood(recipeName, FOOD_ENUMS)) {
-            FoodCookingEnums foodCookingEnums = FoodCookingEnums.valueOf(recipeName);
+        if (isValidFood(recipeName.toLowerCase(), FOOD_ENUMS)) {
+            FoodCookingEnums foodCookingEnums;
+            try {
+                foodCookingEnums = FoodCookingEnums.valueOf(recipeName);
+            } catch (IllegalArgumentException e) {
+                return new Result(false, "invalid food");
+            }
             Cookingrecipe targetCookingRecipe = null;
             for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes()) {
                 if (cookingrecipe.getFood() == foodCookingEnums) {
@@ -1448,7 +1603,12 @@ public class GameMenuController implements ShowCurrentMenu {
         for (FoodCookingEnums food : FoodCookingEnums.values()) {
             FOOD_ENUMS.add(food.name().toLowerCase());
         }
-        FoodCookingEnums foodCookingEnums = FoodCookingEnums.valueOf(foodName);
+        FoodCookingEnums foodCookingEnums;
+        try {
+            foodCookingEnums = FoodCookingEnums.valueOf(foodName);
+        } catch (Exception e) {
+            return new Result(false, "Invalid food");
+        }
         if (isValidFood(foodName, FOOD_ENUMS)) {
             for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                 if (item instanceof FoodCooking) {
@@ -1508,15 +1668,93 @@ public class GameMenuController implements ShowCurrentMenu {
     }
 
     public Result fishing(String fishingPole) {
-        return new Result(true, "");
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Map<Item, Integer> inventory = player.getInventory().getItems();
+        for (Item item : inventory.keySet()) {
+            if (item instanceof FishingPole) {
+                String type = ((FishingPole) item).getJens();
+                if (type.equalsIgnoreCase(fishingPole)) {
+                    return new Result(true, ((FishingPole) item).use());
+                }
+            }
+        }
+        return new Result(false, "Fishing pole not found");
     }
 
-    public Result artisanUse(String artisanName, String item1Name) {
-        return new Result(true, "");
+    public Result artisanUse(String craftName, ArrayList<String> itemName) {
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        craftName = craftName.replace("_", "");
+        Inventory inventory = player.getInventory();
+        Map<Item, Integer> inventoryItems = inventory.getItems();
+        boolean isEnoughIngredient = false;
+        boolean foundInInventory = false;
+        String artisanName = "";
+        ArrayList<ArtisanGoodsEnums> artisanGoodsPossible = new ArrayList<>();
+        for (Item item : inventoryItems.keySet()) {
+            if (item instanceof CraftingItem) {
+                if (((CraftingItem) item).getCraftingItem().name().equalsIgnoreCase(craftName)) {
+                    for (ArtisanGoodsEnums goods : ArtisanGoodsEnums.values()) {
+                        if (goods.getProducer().name().equals(craftName)) {
+                            artisanGoodsPossible.add(goods);
+                            foundInInventory = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (!foundInInventory) {
+            return new Result(false, "craft not found in inventory");
+        }
+        for (ArtisanGoodsEnums goods : artisanGoodsPossible) {
+            Set<String> mapKeys = new HashSet<>(goods.getIngredients().keySet());
+            Set<String> listItems = new HashSet<>(itemName);
+            if (mapKeys.equals(listItems)) {
+                isEnoughIngredient = true;
+                artisanName = goods.name();
+                break;
+            }
+//            for(String ingredient: itemName){
+//                for(String ingredient1 : goods.getIngredients().keySet()){
+//                    if(goods.getIngredients().equals(ingredient)){
+//                        itemCount++;
+//                    }
+//                    isEnoughIngredient = goods.getProducer().getIngredients().size() == itemCount || itemName.size() == itemCount;
+//                    if(isEnoughIngredient){
+//                        artisanName = goods.getProducer().name();
+//                    }
+//                }
+//            }
+//            if(isEnoughIngredient){
+//                break;
+//            }
+//            itemCount=0;
+        }
+        if (isEnoughIngredient) {
+            ArtisanGoods artisanGood = new ArtisanGoods(artisanName);
+            artisanGood.startProcessing(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour(), App.getCurrentGame().getCurrentDateTime().getDay()));
+            player.getArtisansInProduce().add(artisanGood);
+            return new Result(true, "artisan: " + artisanName + "start to produce");
+        }
+        return new Result(false, "ingredients and crafting does not match");
     }
 
     public Result artisanGet(String artisanName) {
-        return new Result(true, "");
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Inventory inventory = player.getInventory();
+        ArrayList<ArtisanGoods> artisanGoods = new ArrayList<>();
+        artisanGoods = player.getArtisansInProduce();
+        for (ArtisanGoods goods : artisanGoods) {
+            if (goods.getArtisanGoods().name().equalsIgnoreCase(artisanName)) {
+                if (goods.isProcessingDone(App.getCurrentGame().getCurrentDateTime())) {
+                    inventory.addItem(goods, inventory.getItemQuantity(goods) + 1);
+                    player.getArtisansInProduce().remove(goods);
+                    return new Result(true, "artisan: " + artisanName + "added to artisans");
+                } else {
+                    return new Result(false, "artisan isn't ready.");
+                }
+            }
+        }
+        return new Result(false, "artisan not found");
     }
 
     public Result sell(String productName, String count) {
@@ -3232,6 +3470,45 @@ public class GameMenuController implements ShowCurrentMenu {
             }
         }
         return null;
+    }
+
+    @Override
+    public void menuEnter(String menuName) {
+        //from registermenu we can move to loginmenu
+        menuName = menuName.toLowerCase();
+        switch (menuName) {
+            case "blacksmithmenu":
+                App.setCurrentMenu(Menu.BlacksmithMenu);
+                System.out.println("You are now in BlacksmithMenu!");
+                break;
+            case "carpentersshopmenu":
+                App.setCurrentMenu(Menu.CarpentersshopMenu);
+                System.out.println("You are now in CarpentersshopMenu!");
+                break;
+            case "fishshopmenu":
+                App.setCurrentMenu(Menu.FishshopMenu);
+                System.out.println("You are now in FishshopMenu!");
+                break;
+            case "jojamartmenu":
+                App.setCurrentMenu(Menu.JojamartMenu);
+                System.out.println("You are now in JojamartMenu!");
+                break;
+            case "marniesranchmenu":
+                App.setCurrentMenu(Menu.MarniesranchMenu);
+                System.out.println("You are now in MarniesranchMenu!");
+                break;
+            case "pirresgeneralstoremenu":
+                App.setCurrentMenu(Menu.PirresgeneralstoreMenu);
+                System.out.println("You are now in PirresgeneralstoreMenu!");
+                break;
+            case "thestardropsaloonmenu":
+                App.setCurrentMenu(Menu.ThestardropsaloonMenu);
+                System.out.println("You are now in ThestardropsaloonMenu!");
+                break;
+            default:
+                System.out.println("Invalid menu");
+                break;
+        }
     }
 
 }

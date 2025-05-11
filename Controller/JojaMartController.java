@@ -17,7 +17,13 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
         return App.getCurrentGame().getJojoMartMarket().getStock();
     }
 
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    Player currentPlayer;
+
+    public JojaMartController() {
+        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
+            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        }
+    }
 
     private Result handleSeedPurchase(ForagingSeedsEnums seedType, int quantity) {
         for (Item item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {

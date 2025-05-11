@@ -13,14 +13,24 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
     public HashMap<Object, Integer> getStock() {
         return App.getCurrentGame().getTheStardropSaloonMarket().getStock();
     }
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+
+    Player currentPlayer;
+
+    public TheStardropSaloonController() {
+        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
+            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        }
+    }
+
+
     private Result handlePurchase(FoodCookingEnums cookingEnums, int quantity) {
         for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-            if (item instanceof Cookingrecipe && ((Cookingrecipe) item).getFood() ==  cookingEnums &&
+            if (item instanceof Cookingrecipe && ((Cookingrecipe) item).getFood() == cookingEnums &&
                     App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
 
                 if (currentPlayer.getMoney() >= ((Cookingrecipe) item).getPrice()) {
-                    currentPlayer.getCookingrecipes().add((Cookingrecipe) item);
+                    currentPlayer.getCookingRecipes().add((Cookingrecipe) item);
                     App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                     return new Result(true, "");
                 } else {
@@ -45,7 +55,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof Food && ((Food) item).getName().equals("Beer") && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity = true;
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
-                            currentPlayer.getInventory().addItem((Food)item, quantity);
+                            currentPlayer.getInventory().addItem((Food) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
@@ -63,7 +73,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Salad && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
-                            currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
@@ -81,7 +91,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.bread && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
-                            currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
@@ -99,7 +109,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.spaghetti && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity3 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
-                            currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
@@ -117,7 +127,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.pizza && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity4 = true;
                         if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
-                            currentPlayer.getInventory().addItem((FoodCooking)item, quantity);
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
@@ -135,7 +145,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                     if (item instanceof Food && ((Food) item).getName().equals("coffee") && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity5 = true;
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
-                            currentPlayer.getInventory().addItem((Food)item, quantity);
+                            currentPlayer.getInventory().addItem((Food) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
                             return new Result(true, "");
                         } else {
