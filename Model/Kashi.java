@@ -1,10 +1,14 @@
 package Model;
+
+import Model.Items.Item;
+
 public class Kashi
 {
     protected boolean ShokhmZadeh;
     protected Object inside;
-    protected Boolean Enterance;
-    protected Boolean Walkable;
+    protected Item itemInside;
+    protected boolean Enterance;
+    protected boolean Walkable;
     // Getter و Setter برای ShokhmZadeh
     public boolean isShokhmZadeh() {
         return ShokhmZadeh;
@@ -38,4 +42,11 @@ public class Kashi
         Walkable = walkable;
     }
 
+    public Item getItemInside() {
+        return itemInside;
+    }
+
+    public void setItemInside(Item itemInside) {
+        this.itemInside = itemInside;
+    }
 }

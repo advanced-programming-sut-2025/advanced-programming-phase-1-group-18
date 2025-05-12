@@ -63,7 +63,7 @@ public class MarniesRanchMarket  implements adaptMapMarket{
         Stock = new HashMap<>();
         Hay hay = new Hay();
         hay.setPrice(50);
-        Stock.put(hay, -1);
+        Stock.put(hay, Integer.MAX_VALUE);
 
         MilkPail milkPail = new MilkPail();
         milkPail.setPrice(1000);

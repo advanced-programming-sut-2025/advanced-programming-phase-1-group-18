@@ -43,32 +43,32 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         Food food = new Food();
         food.setName("Beer");
         food.setPrice(400);
-        Stock.put(food, -1);
+        Stock.put(food, Integer.MAX_VALUE);
 
         FoodCooking foodCooking = new FoodCooking();
         foodCooking.setName(FoodCookingEnums.Salad);
         foodCooking.setSellPrice(220);
-        Stock.put(foodCooking, -1);
+        Stock.put(foodCooking, Integer.MAX_VALUE);
 
         FoodCooking bread = new FoodCooking();
         bread.setName(FoodCookingEnums.bread);
         bread.setSellPrice(120);
-        Stock.put(bread, -1);
+        Stock.put(bread, Integer.MAX_VALUE);
 
         FoodCooking spaghetti = new FoodCooking();
         spaghetti.setName(FoodCookingEnums.spaghetti);
         spaghetti.setSellPrice(240);
-        Stock.put(spaghetti, -1);
+        Stock.put(spaghetti, Integer.MAX_VALUE);
 
         FoodCooking pizza = new FoodCooking();
         pizza.setName(FoodCookingEnums.pizza);
         pizza.setSellPrice(600);
-        Stock.put(pizza, -1);
+        Stock.put(pizza, Integer.MAX_VALUE);
 
         Food food1 = new Food();
         food1.setName("coffee");
         food1.setPrice(300);
-        Stock.put(food1, -1);
+        Stock.put(food1, Integer.MAX_VALUE);
 
         Cookingrecipe hashbrowns = new Cookingrecipe();
         hashbrowns.setFood(FoodCookingEnums.hashbrowns);

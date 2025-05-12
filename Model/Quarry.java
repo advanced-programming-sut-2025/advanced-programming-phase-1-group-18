@@ -14,23 +14,13 @@ public class Quarry
         this.insideKashis = insideKashis;
     }
 
-    public void adaptMap(ArrayList<Cord> cords,int Enterancex, int Enterancey,int borderlowx,int borderlowy,int borderhighx,int borderhighy) {
+    public void adaptMap(ArrayList<Cord> cords) {
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
             kashi.setShokhmZadeh(false);
-            if (cord.getX() == Enterancex && cord.getY() == Enterancey) {
-                kashi.setEnterance(true);
-            } else {
-                kashi.setEnterance(false);
-            }
             kashi.setInside(this);
-            if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
-                kashi.setWalkable(kashi.getEnterance());
-            } else {
-                kashi.setWalkable(true);
-            }
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }

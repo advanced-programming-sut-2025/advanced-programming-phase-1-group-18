@@ -43,12 +43,12 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         Food food = new Food();
         food.setName("rice");
         food.setPrice(200);
-        Stock.put(food, -1);
+        Stock.put(food, Integer.MAX_VALUE);
 
         Food food1 = new Food();
         food1.setName("wheat flour");
         food1.setPrice(100);
-        Stock.put(food1, -1);
+        Stock.put(food1, Integer.MAX_VALUE);
 
         MarketProducts products = new MarketProducts();
         products.setName("Bouquet");
@@ -71,22 +71,22 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         Food food2 = new Food();
         food2.setName("sugar");
         food2.setPrice(100);
-        Stock.put(food2, -1);
+        Stock.put(food2, Integer.MAX_VALUE);
 
         Food food3 = new Food();
         food3.setName("oil");
         food3.setPrice(200);
-        Stock.put(food3, -1);
+        Stock.put(food3, Integer.MAX_VALUE);
 
         MarketProducts products3 = new MarketProducts();
         products3.setName("Vinegar");
         products3.setPrice(200);
-        Stock.put(products3, -1);
+        Stock.put(products3, Integer.MAX_VALUE);
 
         Fertilizer fertilizer = new Fertilizer();
         fertilizer.setName("Deluxe Retaining Soil");
         fertilizer.setPrice(150);
-        Stock.put(fertilizer, -1);
+        Stock.put(fertilizer, Integer.MAX_VALUE);
 
         //grass starter again wtf
         //TODO
@@ -94,47 +94,47 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         Fertilizer fertilizer1 = new Fertilizer();
         fertilizer1.setName("Speed-Gro");
         fertilizer1.setPrice(100);
-        Stock.put(fertilizer1, -1);
+        Stock.put(fertilizer1,Integer.MAX_VALUE);
 
         TreeSeed treeSeed = new TreeSeed();
         treeSeed.setType(TreeSeedEnums.AppleSapling);
         treeSeed.setPrice(4000);
-        Stock.put(treeSeed, -1);
+        Stock.put(treeSeed, Integer.MAX_VALUE);
 
         TreeSeed treeSeed1 = new TreeSeed();
         treeSeed1.setType(TreeSeedEnums.ApricotSapling);
         treeSeed1.setPrice(2000);
-        Stock.put(treeSeed1, -1);
+        Stock.put(treeSeed1, Integer.MAX_VALUE);
 
         TreeSeed treeSeed2 = new TreeSeed();
         treeSeed2.setType(TreeSeedEnums.CherrySapling);
         treeSeed2.setPrice(3400);
-        Stock.put(treeSeed2, -1);
+        Stock.put(treeSeed2, Integer.MAX_VALUE);
 
         TreeSeed treeSeed3 = new TreeSeed();
         treeSeed3.setType(TreeSeedEnums.OrangeSapling);
         treeSeed3.setPrice(4000);
-        Stock.put(treeSeed3, -1);
+        Stock.put(treeSeed3, Integer.MAX_VALUE);
 
         TreeSeed treeSeed4 = new TreeSeed();
         treeSeed4.setType(TreeSeedEnums.PeachSapling);
         treeSeed4.setPrice(6000);
-        Stock.put(treeSeed4, -1);
+        Stock.put(treeSeed4, Integer.MAX_VALUE);
 
         TreeSeed treeSeed5 = new TreeSeed();
         treeSeed5.setType(TreeSeedEnums.PomegranateSapling);
         treeSeed5.setPrice(6000);
-        Stock.put(treeSeed5, -1);
+        Stock.put(treeSeed5, Integer.MAX_VALUE);
 
         Fertilizer fertilizer2 = new Fertilizer();
         fertilizer2.setName("Basic Retaining Soil");
         fertilizer2.setPrice(100);
-        Stock.put(fertilizer2, -1);
+        Stock.put(fertilizer2, Integer.MAX_VALUE);
 
         Fertilizer fertilizer3 = new Fertilizer();
         fertilizer3.setName("Quality Retaining Soil");
         fertilizer3.setPrice(150);
-        Stock.put(fertilizer3, -1);
+        Stock.put(fertilizer3, Integer.MAX_VALUE);
 
         //backback
         //TODO

@@ -43,7 +43,7 @@ public class JojoMartMarket  implements adaptMapMarket{
         Food food = new Food();
         food.setName("Joja Cola");
         food.setPrice(75);
-        Stock.put(food, -1);
+        Stock.put(food, Integer.MAX_VALUE);
 
         ForagingSeed foragingSeed = new ForagingSeed();
         foragingSeed.setType(ForagingSeedsEnums.AncientSeeds);
@@ -53,22 +53,22 @@ public class JojoMartMarket  implements adaptMapMarket{
         MarketProducts marketProducts = new MarketProducts();
         marketProducts.setName("Grass Starter");
         marketProducts.setPrice(125);
-        Stock.put(marketProducts, -1);
+        Stock.put(marketProducts, Integer.MAX_VALUE);
 
         Food food1 = new Food();
         food1.setName("sugar");
         food1.setPrice(125);
-        Stock.put(food1, -1);
+        Stock.put(food1, Integer.MAX_VALUE);
 
         Food food2 = new Food();
         food2.setName("wheat flour");
         food2.setPrice(125);
-        Stock.put(food2, -1);
+        Stock.put(food2, Integer.MAX_VALUE);
 
         Food food3 = new Food();
         food3.setName("rice");
         food3.setPrice(250);
-        Stock.put(food3, -1);
+        Stock.put(food3, Integer.MAX_VALUE);
 
         if (season == Seasons.Spring) {
             ForagingSeed parsnipSeeds = new ForagingSeed();

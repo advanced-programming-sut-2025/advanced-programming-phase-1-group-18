@@ -49,7 +49,15 @@ public class Inventory {
         if (newQuantity > MaxQuantity) {
             return false;
         }
-
+        for (Item entry : Items.keySet()) {
+            if (entry.getCorrectName().equals(item.getCorrectName())) {
+                newQuantity = Items.getOrDefault(entry, 0) + quantity;
+                Items.remove(entry);
+                Items.put(item, newQuantity);
+                return true;
+            }
+        }
+        Items.remove(item);
         Items.put(item, newQuantity);
         return true;
     }
@@ -91,7 +99,7 @@ public class Inventory {
     }
 
     public boolean isFull() {
-            return getTotalItemCount() >= MaxQuantity;
+        return getTotalItemCount() >= MaxQuantity;
     }
 
     public void clearInventory() {

@@ -1,7 +1,6 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import Model.Items.*;
 import enums.*;
@@ -240,19 +239,33 @@ public class Farm {
         this.satl = satl;
     }
 
+    private double distance(Cord a, Cord b) {
+        return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
+    }
+
+    private Cord getRandomPosition(int topleftx, int toplefty, int mapWidth, int mapHeight,
+                                   Set<Cord> occupied, int minDistance) {
+        Random random = new Random();
+        while (true) {
+            int x = topleftx + random.nextInt(mapWidth);
+            int y = toplefty + random.nextInt(mapHeight);
+            Cord candidate = new Cord(x, y);
+
+            boolean valid = true;
+            for (Cord occupiedPos : occupied) {
+                if (distance(candidate, occupiedPos) < minDistance) {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid && !occupied.contains(candidate)) {
+                return candidate;
+            }
+        }
+    }
+
     public void createMap1(int topleftx, int toplefty) {
-        //Lake+
-        //GreenHouse+
-        //Cottage+
-        //Quarry+
-        //+++++++++++++
-        //ForagingTree+
-        //AllTree+
-        //Stone+
-        //ForagingCrop+
-        //ForagingSeed+
-        //-------------
-        //initialize map size
         Lake Lake1 = new Lake();
         ArrayList<Cord> cords = new ArrayList<>(List.of(
                 new Cord(topleftx + 1, toplefty + 0),
@@ -306,8 +319,7 @@ public class Farm {
                 new Cord(topleftx + 9, toplefty + 5),
                 new Cord(topleftx + 9, toplefty + 6)
         ));
-        //Enterance is 7,3
-        myGreenHouse.adaptMap(cords, topleftx + 7, toplefty + 3, topleftx + 11, toplefty + 0, topleftx + 15, toplefty + 4);
+        myGreenHouse.adaptMap(cords, topleftx + 7, toplefty + 6, topleftx + 4, toplefty + 0, topleftx + 9, toplefty + 6);
 
         cords = new ArrayList<>(List.of(
                 new Cord(topleftx + 11, toplefty + 0),
@@ -336,9 +348,8 @@ public class Farm {
                 new Cord(topleftx + 15, toplefty + 3),
                 new Cord(topleftx + 15, toplefty + 4)
         ));
-        //Enterance is 13,2
         MyCottage = new Cottage();
-        MyCottage.adaptMap(cords, topleftx + 13, toplefty + 2, topleftx + 17, toplefty + 0, topleftx + 18, toplefty + 1);
+        MyCottage.adaptMap(cords, topleftx + 13, toplefty + 4, topleftx + 11, toplefty + 0, topleftx + 15, toplefty + 4);
 
         Lake Lake2 = new Lake();
         cords = new ArrayList<>(List.of(
@@ -356,54 +367,169 @@ public class Farm {
                 new Cord(topleftx + 21, toplefty + 0),
                 new Cord(topleftx + 21, toplefty + 1)
         ));
-        quarry1.adaptMap(cords, topleftx + 20, toplefty + 1, topleftx + 20, toplefty + 0, topleftx + 21, toplefty + 1);
+        quarry1.adaptMap(cords);
 
-        ForagingTree foragingTree1 = new ForagingTree();
-        foragingTree1.setType(ForagingTreesEnums.Acorns);
-        foragingTree1.adaptMap(new Cord(topleftx + 20, toplefty + 5));
-        ForagingTree foragingTree2 = new ForagingTree();
-        foragingTree2.setType(ForagingTreesEnums.MahoganySeeds);
-        foragingTree2.adaptMap(new Cord(topleftx + 22, toplefty + 4));
-        ForagingTree foragingTree3 = new ForagingTree();
-        foragingTree3.setType(ForagingTreesEnums.PineCones);
-        foragingTree3.adaptMap(new Cord(topleftx + 17, toplefty + 15));
-        ForagingTree foragingTree4 = new ForagingTree();
-        foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
-        foragingTree4.adaptMap(new Cord(topleftx + 15, toplefty + 10));
+        // Track all occupied positions
+        Set<Cord> occupiedPositions = new HashSet<>();
 
-        Stone stone1 = new Stone();
-        stone1.adaptMap(new Cord(topleftx + 45, toplefty + 11));
-        Stone stone2 = new Stone();
-        stone2.adaptMap(new Cord(topleftx + 45, toplefty + 12));
-        Stone stone3 = new Stone();
-        stone3.adaptMap(new Cord(topleftx + 45, toplefty + 13));
+// Add Lake1 positions (using the cords list we already have)
+        ArrayList<Cord> lake1Cords = new ArrayList<>(List.of(
+                new Cord(topleftx + 1, toplefty + 0),
+                new Cord(topleftx + 1, toplefty + 1),
+                new Cord(topleftx + 2, toplefty + 0),
+                new Cord(topleftx + 2, toplefty + 1)
+        ));
 
-        ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
-        foragingCrop1.adaptMap(new Cord(topleftx + 30, toplefty + 5));
-        ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
-        foragingCrop2.adaptMap(new Cord(topleftx + 32, toplefty + 4));
-        ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
-        foragingCrop3.adaptMap(new Cord(topleftx + 37, toplefty + 15));
-        ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
-        foragingCrop4.adaptMap(new Cord(topleftx + 35, toplefty + 10));
+        occupiedPositions.addAll(lake1Cords);
 
-        ForagingSeed foragingSeed1 = new ForagingSeed();
-        foragingSeed1.setType(ForagingSeedsEnums.AncientSeeds);
-        foragingSeed1.adaptMap(new Cord(topleftx + 30, toplefty + 15));
-        ForagingSeed foragingSeed2 = new ForagingSeed();
-        foragingSeed2.setType(ForagingSeedsEnums.BlueberrySeeds);
-        foragingSeed2.adaptMap(new Cord(topleftx + 32, toplefty + 14));
-        ForagingSeed foragingSeed3 = new ForagingSeed();
-        foragingSeed3.setType(ForagingSeedsEnums.BeanStarter);
-        foragingSeed3.adaptMap(new Cord(topleftx + 37, toplefty + 17));
-        ForagingSeed foragingSeed4 = new ForagingSeed();
-        foragingSeed4.setType(ForagingSeedsEnums.CauliflowerSeeds);
-        foragingSeed4.adaptMap(new Cord(topleftx + 35, toplefty + 13));
+// Add Greenhouse positions
+        ArrayList<Cord> greenhouseCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 4, toplefty + 0),
+                new Cord(topleftx + 4, toplefty + 1),
+                new Cord(topleftx + 4, toplefty + 2),
+                new Cord(topleftx + 4, toplefty + 3),
+                new Cord(topleftx + 4, toplefty + 4),
+                new Cord(topleftx + 4, toplefty + 5),
+                new Cord(topleftx + 4, toplefty + 6),
+                new Cord(topleftx + 5, toplefty + 0),
+                new Cord(topleftx + 5, toplefty + 1),
+                new Cord(topleftx + 5, toplefty + 2),
+                new Cord(topleftx + 5, toplefty + 3),
+                new Cord(topleftx + 5, toplefty + 4),
+                new Cord(topleftx + 5, toplefty + 5),
+                new Cord(topleftx + 5, toplefty + 6),
+                new Cord(topleftx + 6, toplefty + 0),
+                new Cord(topleftx + 6, toplefty + 1),
+                new Cord(topleftx + 6, toplefty + 2),
+                new Cord(topleftx + 6, toplefty + 3),
+                new Cord(topleftx + 6, toplefty + 4),
+                new Cord(topleftx + 6, toplefty + 5),
+                new Cord(topleftx + 6, toplefty + 6),
+                new Cord(topleftx + 7, toplefty + 0),
+                new Cord(topleftx + 7, toplefty + 1),
+                new Cord(topleftx + 7, toplefty + 2),
+                new Cord(topleftx + 7, toplefty + 3),
+                new Cord(topleftx + 7, toplefty + 4),
+                new Cord(topleftx + 7, toplefty + 5),
+                new Cord(topleftx + 7, toplefty + 6),
+                new Cord(topleftx + 8, toplefty + 0),
+                new Cord(topleftx + 8, toplefty + 1),
+                new Cord(topleftx + 8, toplefty + 2),
+                new Cord(topleftx + 8, toplefty + 3),
+                new Cord(topleftx + 8, toplefty + 4),
+                new Cord(topleftx + 8, toplefty + 5),
+                new Cord(topleftx + 8, toplefty + 6),
+                new Cord(topleftx + 9, toplefty + 0),
+                new Cord(topleftx + 9, toplefty + 1),
+                new Cord(topleftx + 9, toplefty + 2),
+                new Cord(topleftx + 9, toplefty + 3),
+                new Cord(topleftx + 9, toplefty + 4),
+                new Cord(topleftx + 9, toplefty + 5),
+                new Cord(topleftx + 9, toplefty + 6)
+        ));
+        occupiedPositions.addAll(greenhouseCords);
 
+// Add Cottage positions
+        ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 11, toplefty + 0),
+                new Cord(topleftx + 11, toplefty + 1),
+                new Cord(topleftx + 11, toplefty + 2),
+                new Cord(topleftx + 11, toplefty + 3),
+                new Cord(topleftx + 11, toplefty + 4),
+                new Cord(topleftx + 12, toplefty + 0),
+                new Cord(topleftx + 12, toplefty + 1),
+                new Cord(topleftx + 12, toplefty + 2),
+                new Cord(topleftx + 12, toplefty + 3),
+                new Cord(topleftx + 12, toplefty + 4),
+                new Cord(topleftx + 13, toplefty + 0),
+                new Cord(topleftx + 13, toplefty + 1),
+                new Cord(topleftx + 13, toplefty + 2),
+                new Cord(topleftx + 13, toplefty + 3),
+                new Cord(topleftx + 13, toplefty + 4),
+                new Cord(topleftx + 14, toplefty + 0),
+                new Cord(topleftx + 14, toplefty + 1),
+                new Cord(topleftx + 14, toplefty + 2),
+                new Cord(topleftx + 14, toplefty + 3),
+                new Cord(topleftx + 14, toplefty + 4),
+                new Cord(topleftx + 15, toplefty + 0),
+                new Cord(topleftx + 15, toplefty + 1),
+                new Cord(topleftx + 15, toplefty + 2),
+                new Cord(topleftx + 15, toplefty + 3),
+                new Cord(topleftx + 15, toplefty + 4)
+        ));
+        occupiedPositions.addAll(cottageCords);
+
+// Add Lake2 positions
+        ArrayList<Cord> lake2Cords = new ArrayList<>(List.of(
+                new Cord(topleftx + 17, toplefty + 0),
+                new Cord(topleftx + 17, toplefty + 1),
+                new Cord(topleftx + 18, toplefty + 0),
+                new Cord(topleftx + 18, toplefty + 1)
+        ));
+        occupiedPositions.addAll(lake2Cords);
+
+// Add Quarry positions
+        ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 20, toplefty + 0),
+                new Cord(topleftx + 20, toplefty + 1),
+                new Cord(topleftx + 21, toplefty + 0),
+                new Cord(topleftx + 21, toplefty + 1)
+        ));
+        occupiedPositions.addAll(quarryCords);
+
+// Now continue with the random generation as before
+        Random random = new Random();
+        int mapWidth = 450;
+        int mapHeight = 200;
+        int minDistanceFromFixed = 5;
+
+// Generate random ForagingTrees (4 trees)
+        for (int i = 0; i < 4; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+
+            ForagingTree tree = new ForagingTree();
+            ForagingTreesEnums[] treeTypes = ForagingTreesEnums.values();
+            tree.setType(treeTypes[random.nextInt(treeTypes.length)]);
+            tree.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+// Generate random Stones (3 stones)
+        for (int i = 0; i < 3; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+
+            Stone stone = new Stone();
+            stone.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+// Generate random ForagingCrops (4 crops)
+        for (int i = 0; i < 4; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+
+            ForagingCrop crop = new ForagingCrop();
+            ForagingCropsEnums[] cropTypes = ForagingCropsEnums.values();
+            crop.initilizeCrop(cropTypes[random.nextInt(cropTypes.length)]);
+            crop.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+// Generate random ForagingSeeds (4 seeds)
+        for (int i = 0; i < 4; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+
+            ForagingSeed seed = new ForagingSeed();
+            ForagingSeedsEnums[] seedTypes = ForagingSeedsEnums.values();
+            seed.setType(seedTypes[random.nextInt(seedTypes.length)]);
+            seed.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Continue with markets and NPCs (unchanged from your original code)
         topleftx = 0;
         toplefty = 0;
 
@@ -540,414 +666,462 @@ public class Farm {
         );
 
         App.getCurrentGame().setNPCSEBASTIAN(new NPC(NPCEnums.SEBASTIAN));
-        App.getCurrentGame().getNPCSEBASTIAN().adaptMap(new Cord(topleftx + App.getCurrentGame().getNPCSEBASTIANx(), toplefty + App.getCurrentGame().getNPCSEBASTIANy()));
+        App.getCurrentGame().getNPCSEBASTIAN().adaptMap(new Cord(App.getCurrentGame().getNPCSEBASTIANx(), +App.getCurrentGame().getNPCSEBASTIANy()));
 
         App.getCurrentGame().setNPCABIGAIL(new NPC(NPCEnums.ABIGAIL));
-        App.getCurrentGame().getNPCABIGAIL().adaptMap(new Cord(topleftx + App.getCurrentGame().getNPCABIGAILx(), toplefty + App.getCurrentGame().getNPCABIGAILy()));
+        App.getCurrentGame().getNPCABIGAIL().adaptMap(new Cord(App.getCurrentGame().getNPCABIGAILx(), +App.getCurrentGame().getNPCABIGAILy()));
 
         App.getCurrentGame().setNPCHARVEY(new NPC(NPCEnums.HARVEY));
-        App.getCurrentGame().getNPCHARVEY().adaptMap(new Cord(topleftx + App.getCurrentGame().getNPCHARVEYx(), toplefty + App.getCurrentGame().getNPCHARVEYy()));
+        App.getCurrentGame().getNPCHARVEY().adaptMap(new Cord(App.getCurrentGame().getNPCHARVEYx(), App.getCurrentGame().getNPCHARVEYy()));
 
         App.getCurrentGame().setNPCLEAH(new NPC(NPCEnums.LEAH));
-        App.getCurrentGame().getNPCLEAH().adaptMap(new Cord(topleftx + App.getCurrentGame().getNPCLEAHx(), toplefty + App.getCurrentGame().getNPCLEAHy()));
+        App.getCurrentGame().getNPCLEAH().adaptMap(new Cord(App.getCurrentGame().getNPCLEAHx(), App.getCurrentGame().getNPCLEAHy()));
 
         App.getCurrentGame().setNPCROBIN(new NPC(NPCEnums.ROBIN));
-        App.getCurrentGame().getNPCROBIN().adaptMap(new Cord(topleftx + App.getCurrentGame().getNPCROBINx(), toplefty + App.getCurrentGame().getNPCROBINy()));
+        App.getCurrentGame().getNPCROBIN().adaptMap(new Cord(App.getCurrentGame().getNPCROBINx(), App.getCurrentGame().getNPCROBINy()));
     }
 
-    public void createMap2(int topleft, int topright) {
-        // Lake+
-        // GreenHouse+ (Unchanged)
-        // Cottage+ (Unchanged)
-        // Quarry+
-        //+++++++++++++
-        // ForagingTree-
-        // AllTree-
-        // Stone-
-        // ForagingCrop-
-        // ForagingSeed-
-        //-------------
-//        Map = new ArrayList<>(50);
-//        for (int i = 0; i < 50; i++) {
-//            ArrayList<Kashi> row = new ArrayList<>();
-//            Map.add(row);
-//        }
-
-        // Adjusted Lake sizes
+    public void createMap2(int topleftx, int toplefty) {
+        // Lake - Smaller and in the corner
         Lake Lake1 = new Lake();
-        ArrayList<Cord> cords = new ArrayList<>(List.of(
-                new Cord(1, 0), new Cord(1, 1), new Cord(2, 0), new Cord(2, 1),
-                new Cord(3, 0), new Cord(3, 1) // Expanded Lake1
+        ArrayList<Cord> lakeCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 1, toplefty + 1),
+                new Cord(topleftx + 1, toplefty + 2),
+                new Cord(topleftx + 2, toplefty + 1),
+                new Cord(topleftx + 2, toplefty + 2)
         ));
-        Lake1.adaptMap(cords);
+        Lake1.adaptMap(lakeCords);
 
-        // Greenhouse (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(4, 0), new Cord(4, 1), new Cord(4, 2), new Cord(4, 3), new Cord(4, 4),
-                new Cord(4, 5), new Cord(4, 6), new Cord(5, 0), new Cord(5, 1), new Cord(5, 2),
-                new Cord(5, 3), new Cord(5, 4), new Cord(5, 5), new Cord(5, 6), new Cord(6, 0),
-                new Cord(6, 1), new Cord(6, 2), new Cord(6, 3), new Cord(6, 4), new Cord(6, 5),
-                new Cord(6, 6), new Cord(7, 0), new Cord(7, 1), new Cord(7, 2), new Cord(7, 3),
-                new Cord(7, 4), new Cord(7, 5), new Cord(7, 6), new Cord(8, 0), new Cord(8, 1),
-                new Cord(8, 2), new Cord(8, 3), new Cord(8, 4), new Cord(8, 5), new Cord(8, 6),
-                new Cord(9, 0), new Cord(9, 1), new Cord(9, 2), new Cord(9, 3), new Cord(9, 4),
-                new Cord(9, 5), new Cord(9, 6)
+        // Greenhouse - Compact version
+        ArrayList<Cord> greenhouseCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 5, toplefty + 5),
+                new Cord(topleftx + 5, toplefty + 6),
+                new Cord(topleftx + 6, toplefty + 5),
+                new Cord(topleftx + 6, toplefty + 6)
         ));
-        myGreenHouse.adaptMap(cords, 7, 3, 11, 0, 15, 4);
+        myGreenHouse.adaptMap(greenhouseCords, topleftx + 6, toplefty + 6,
+                topleftx + 5, toplefty + 5, topleftx + 6, toplefty + 6);
 
-        // Cottage (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(11, 0), new Cord(11, 1), new Cord(11, 2), new Cord(11, 3), new Cord(11, 4),
-                new Cord(12, 0), new Cord(12, 1), new Cord(12, 2), new Cord(12, 3), new Cord(12, 4),
-                new Cord(13, 0), new Cord(13, 1), new Cord(13, 2), new Cord(13, 3), new Cord(13, 4),
-                new Cord(14, 0), new Cord(14, 1), new Cord(14, 2), new Cord(14, 3), new Cord(14, 4),
-                new Cord(15, 0), new Cord(15, 1), new Cord(15, 2), new Cord(15, 3), new Cord(15, 4)
+        // Cottage - Smaller footprint
+        ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 8, toplefty + 8),
+                new Cord(topleftx + 8, toplefty + 9),
+                new Cord(topleftx + 9, toplefty + 8),
+                new Cord(topleftx + 9, toplefty + 9)
         ));
-        MyCottage.adaptMap(cords, 13, 2, 17, 0, 18, 1);
+        MyCottage = new Cottage();
+        MyCottage.adaptMap(cottageCords, topleftx + 9, toplefty + 9,
+                topleftx + 8, toplefty + 8, topleftx + 9, toplefty + 9);
 
-        // Adjusted Lake2 sizes
-        Lake Lake2 = new Lake();
-        cords = new ArrayList<>(List.of(
-                new Cord(17, 0), new Cord(17, 1),
-                new Cord(18, 0), new Cord(18, 1),
-                new Cord(19, 0), new Cord(19, 1) // Expanded Lake2
+        // Quarry - Larger version
+        ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 15, toplefty + 15),
+                new Cord(topleftx + 15, toplefty + 16),
+                new Cord(topleftx + 16, toplefty + 15),
+                new Cord(topleftx + 16, toplefty + 16),
+                new Cord(topleftx + 15, toplefty + 17),
+                new Cord(topleftx + 16, toplefty + 17)
         ));
-        Lake2.adaptMap(cords);
-
-        // Adjusted Quarry sizes
         Quarry quarry1 = new Quarry();
-        cords = new ArrayList<>(List.of(
-                new Cord(20, 0), new Cord(20, 1), new Cord(21, 0), new Cord(21, 1),
-                new Cord(22, 0) // Expanded Quarry
-        ));
-        quarry1.adaptMap(cords, 20, 1, 20, 0, 22, 0);
+        quarry1.adaptMap(quarryCords);
 
-        ForagingTree foragingTree1 = new ForagingTree();
-        foragingTree1.setType(ForagingTreesEnums.Acorns);
-        foragingTree1.adaptMap(new Cord(20, 5));
-        ForagingTree foragingTree2 = new ForagingTree();
-        foragingTree2.setType(ForagingTreesEnums.MahoganySeeds);
-        foragingTree2.adaptMap(new Cord(22, 4));
-        ForagingTree foragingTree3 = new ForagingTree();
-        foragingTree3.setType(ForagingTreesEnums.PineCones);
-        foragingTree3.adaptMap(new Cord(17, 15));
-        ForagingTree foragingTree4 = new ForagingTree();
-        foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
-        foragingTree4.adaptMap(new Cord(15, 10));
+        // Track occupied positions
+        Set<Cord> occupiedPositions = new HashSet<>();
+        occupiedPositions.addAll(lakeCords);
+        occupiedPositions.addAll(greenhouseCords);
+        occupiedPositions.addAll(cottageCords);
+        occupiedPositions.addAll(quarryCords);
 
-//        AllTree AllTree1 = new AllTree();
-//        AllTree1.setType(AllTreesEnums.AppleTree);
-//        AllTree1.adaptMap(new Cord(20, 6));
-//        AllTree AllTree2 = new AllTree();
-//        AllTree2.setType(AllTreesEnums.BananaTree);
-//        AllTree2.adaptMap(new Cord(22, 5));
-//        AllTree AllTree3 = new AllTree();
-//        AllTree3.setType(AllTreesEnums.MangoTree);
-//        AllTree3.adaptMap(new Cord(17, 16));
-//        AllTree AllTree4 = new AllTree();
-//        AllTree4.setType(AllTreesEnums.OakTree);
-//        AllTree4.adaptMap(new Cord(15, 11));
+        // Random generation with forest focus
+        Random random = new Random();
+        int mapWidth = 300;
+        int mapHeight = 150;
+        int minDistanceFromFixed = 4;
 
-        Stone stone1 = new Stone();
-        stone1.adaptMap(new Cord(45, 11));
-        Stone stone2 = new Stone();
-        stone2.adaptMap(new Cord(45, 12));
-        Stone stone3 = new Stone();
-        stone3.adaptMap(new Cord(45, 13));
+        // More trees (8 instead of 4)
+        for (int i = 0; i < 8; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingTree tree = new ForagingTree();
+            tree.setType(ForagingTreesEnums.values()[random.nextInt(ForagingTreesEnums.values().length)]);
+            tree.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-        ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
-        foragingCrop1.adaptMap(new Cord(30, 5));
-        ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
-        foragingCrop2.adaptMap(new Cord(32, 4));
-        ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
-        foragingCrop3.adaptMap(new Cord(37, 15));
-        ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
-        foragingCrop4.adaptMap(new Cord(35, 10));
+        // Fewer stones (2 instead of 3)
+        for (int i = 0; i < 2; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            new Stone().adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-        ForagingSeed foragingSeed1 = new ForagingSeed();
-        foragingSeed1.setType(ForagingSeedsEnums.AncientSeeds);
-        foragingSeed1.adaptMap(new Cord(30, 15));
-        ForagingSeed foragingSeed2 = new ForagingSeed();
-        foragingSeed2.setType(ForagingSeedsEnums.BlueberrySeeds);
-        foragingSeed2.adaptMap(new Cord(32, 14));
-        ForagingSeed foragingSeed3 = new ForagingSeed();
-        foragingSeed3.setType(ForagingSeedsEnums.BeanStarter);
-        foragingSeed3.adaptMap(new Cord(37, 17));
-        ForagingSeed foragingSeed4 = new ForagingSeed();
-        foragingSeed4.setType(ForagingSeedsEnums.CauliflowerSeeds);
-        foragingSeed4.adaptMap(new Cord(35, 13));
+        // More crops (6 instead of 4)
+        for (int i = 0; i < 6; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingCrop crop = new ForagingCrop();
+            crop.initilizeCrop(ForagingCropsEnums.values()[random.nextInt(ForagingCropsEnums.values().length)]);
+            crop.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Same seeds (4)
+        for (int i = 0; i < 4; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingSeed seed = new ForagingSeed();
+            seed.setType(ForagingSeedsEnums.values()[random.nextInt(ForagingSeedsEnums.values().length)]);
+            seed.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Initialize markets and NPCs (same as original)
+        initializeMarketsAndNPCs(topleftx, toplefty);
     }
 
-    public void createMap3(int topleft, int topright) {
-        // Lake+
-        // GreenHouse+ (Unchanged)
-        // Cottage+ (Unchanged)
-        // Quarry+
-        //+++++++++++++
-        // ForagingTree-
-        // AllTree-
-        // Stone-
-        // ForagingCrop-
-        // ForagingSeed-
-        //-------------
-//        Map = new ArrayList<>(50);
-//        for (int i = 0; i < 50; i++) {
-//            ArrayList<Kashi> row = new ArrayList<>();
-//            Map.add(row);
-//        }
+    public void initializeMarketsAndNPCs(int topleftx, int toplefty) {
+        // Continue with markets and NPCs (unchanged from your original code)
+        topleftx = 0;
+        toplefty = 0;
 
-        // Large Lake
-        Lake Lake1 = new Lake();
-        ArrayList<Cord> cords = new ArrayList<>(List.of(
-                new Cord(1, 0), new Cord(1, 1), new Cord(1, 2), new Cord(1, 3), new Cord(1, 4),
-                new Cord(2, 0), new Cord(2, 1), new Cord(2, 2), new Cord(2, 3), new Cord(2, 4),
-                new Cord(3, 0), new Cord(3, 1), new Cord(3, 2), new Cord(3, 3), new Cord(3, 4)
-        ));
-        Lake1.adaptMap(cords);
+        // Blacksmith Shop
+        ArrayList<Cord> cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getBlackSmithTopLeftx(); i < topleftx + App.getCurrentGame().getBlackSmithTopLeftx() + App.getCurrentGame().getBlackSmithWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getBlackSmithTopLefty(); j < toplefty + App.getCurrentGame().getBlackSmithTopLefty() + App.getCurrentGame().getBlackSmithHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setBlackSmithMarket(new BlackSmithMarket());
+        App.getCurrentGame().getBlackSmithMarket().fillStock();
+        App.getCurrentGame().getBlackSmithMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getBlackSmithEnterancex(),
+                toplefty + App.getCurrentGame().getBlackSmithEnterancey(),
+                topleftx + App.getCurrentGame().getBlackSmithTopLeftx(),
+                toplefty + App.getCurrentGame().getBlackSmithTopLefty(),
+                topleftx + App.getCurrentGame().getBlackSmithTopLeftx() + App.getCurrentGame().getBlackSmithWidth(),
+                toplefty + App.getCurrentGame().getBlackSmithTopLefty() + App.getCurrentGame().getBlackSmithHeight()
+        );
 
-        // Medium Lake
-        Lake Lake2 = new Lake();
-        cords = new ArrayList<>(List.of(
-                new Cord(5, 0), new Cord(5, 1), new Cord(5, 2),
-                new Cord(6, 0), new Cord(6, 1), new Cord(6, 2)
-        ));
-        Lake2.adaptMap(cords);
+        //Carpenter's Shop
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getCarpentersShopTopLeftx(); i < topleftx + App.getCurrentGame().getCarpentersShopTopLeftx() + App.getCurrentGame().getCarpentersShopWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getCarpentersShopTopLefty(); j < toplefty + App.getCurrentGame().getCarpentersShopTopLefty() + App.getCurrentGame().getCarpentersShopHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setCarpentersShopMarket(new CarpentersShopMarket());
+        App.getCurrentGame().getCarpentersShopMarket().fillStock();
+        App.getCurrentGame().getCarpentersShopMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getCarpentersShopEnterancex(),
+                toplefty + App.getCurrentGame().getCarpentersShopEnterancey(),
+                topleftx + App.getCurrentGame().getCarpentersShopTopLeftx(),
+                toplefty + App.getCurrentGame().getCarpentersShopTopLefty(),
+                topleftx + App.getCurrentGame().getCarpentersShopTopLeftx() + App.getCurrentGame().getCarpentersShopWidth(),
+                toplefty + App.getCurrentGame().getCarpentersShopTopLefty() + App.getCurrentGame().getCarpentersShopHeight()
+        );
 
-        // Small Lake
-        Lake Lake3 = new Lake();
-        cords = new ArrayList<>(List.of(
-                new Cord(8, 0), new Cord(8, 1),
-                new Cord(9, 0), new Cord(9, 1)
-        ));
-        Lake3.adaptMap(cords);
+        // Fish Shop
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getFishShopTopLeftx(); i < topleftx + App.getCurrentGame().getFishShopTopLeftx() + App.getCurrentGame().getFishShopWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getFishShopTopLefty(); j < toplefty + App.getCurrentGame().getFishShopTopLefty() + App.getCurrentGame().getFishShopHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setFishShopMarket(new FishShopMarket());
+        App.getCurrentGame().getFishShopMarket().fillStock();
+        App.getCurrentGame().getFishShopMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getFishShopEnterancex(),
+                toplefty + App.getCurrentGame().getFishShopEnterancey(),
+                topleftx + App.getCurrentGame().getFishShopTopLeftx(),
+                toplefty + App.getCurrentGame().getFishShopTopLefty(),
+                topleftx + App.getCurrentGame().getFishShopTopLeftx() + App.getCurrentGame().getFishShopWidth(),
+                toplefty + App.getCurrentGame().getFishShopTopLefty() + App.getCurrentGame().getFishShopHeight()
+        );
+        // JojaMart
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getJojoMartTopLeftx(); i < topleftx + App.getCurrentGame().getJojoMartTopLeftx() + App.getCurrentGame().getJojoMartWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getJojoMartTopLefty(); j < toplefty + App.getCurrentGame().getJojoMartTopLefty() + App.getCurrentGame().getJojoMartHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setJojoMartMarket(new JojoMartMarket());
+        App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentSeason());
+        App.getCurrentGame().getJojoMartMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getJojoMartEnterancex(),
+                toplefty + App.getCurrentGame().getJojoMartEnterancey(),
+                topleftx + App.getCurrentGame().getJojoMartTopLeftx(),
+                toplefty + App.getCurrentGame().getJojoMartTopLefty(),
+                topleftx + App.getCurrentGame().getJojoMartTopLeftx() + App.getCurrentGame().getJojoMartWidth(),
+                toplefty + App.getCurrentGame().getJojoMartTopLefty() + App.getCurrentGame().getJojoMartHeight()
+        );
 
-        // Greenhouse (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(10, 0), new Cord(10, 1), new Cord(10, 2), new Cord(10, 3), new Cord(10, 4),
-                new Cord(10, 5), new Cord(10, 6), new Cord(11, 0), new Cord(11, 1), new Cord(11, 2),
-                new Cord(11, 3), new Cord(11, 4), new Cord(11, 5), new Cord(11, 6), new Cord(12, 0),
-                new Cord(12, 1), new Cord(12, 2), new Cord(12, 3), new Cord(12, 4), new Cord(12, 5),
-                new Cord(12, 6), new Cord(13, 0), new Cord(13, 1), new Cord(13, 2), new Cord(13, 3),
-                new Cord(13, 4), new Cord(13, 5), new Cord(13, 6), new Cord(14, 0), new Cord(14, 1),
-                new Cord(14, 2), new Cord(14, 3), new Cord(14, 4), new Cord(14, 5), new Cord(14, 6)
-        ));
-        myGreenHouse.adaptMap(cords, 12, 3, 16, 0, 18, 4);
+        // Marnie's Ranch
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getMarniesRanchTopLeftx(); i < topleftx + App.getCurrentGame().getMarniesRanchTopLeftx() + App.getCurrentGame().getMarniesRanchWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getMarniesRanchTopLefty(); j < toplefty + App.getCurrentGame().getMarniesRanchTopLefty() + App.getCurrentGame().getMarniesRanchHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setMarniesRanchMarket(new MarniesRanchMarket());
+        App.getCurrentGame().getMarniesRanchMarket().fillStock();
+        App.getCurrentGame().getMarniesRanchMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getMarniesRanchEnterancex(),
+                toplefty + App.getCurrentGame().getMarniesRanchEnterancey(),
+                topleftx + App.getCurrentGame().getMarniesRanchTopLeftx(),
+                toplefty + App.getCurrentGame().getMarniesRanchTopLefty(),
+                topleftx + App.getCurrentGame().getMarniesRanchTopLeftx() + App.getCurrentGame().getMarniesRanchWidth(),
+                toplefty + App.getCurrentGame().getMarniesRanchTopLefty() + App.getCurrentGame().getMarniesRanchHeight()
+        );
 
-        // Cottage (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(16, 0), new Cord(16, 1), new Cord(16, 2), new Cord(16, 3), new Cord(16, 4),
-                new Cord(17, 0), new Cord(17, 1), new Cord(17, 2), new Cord(17, 3), new Cord(17, 4),
-                new Cord(18, 0), new Cord(18, 1), new Cord(18, 2), new Cord(18, 3), new Cord(18, 4),
-                new Cord(19, 0), new Cord(19, 1), new Cord(19, 2), new Cord(19, 3), new Cord(19, 4),
-                new Cord(20, 0), new Cord(20, 1), new Cord(20, 2), new Cord(20, 3), new Cord(20, 4)
-        ));
-        MyCottage.adaptMap(cords, 18, 2, 22, 0, 23, 1);
+        // Pierre's General Store
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx(); i < topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx() + App.getCurrentGame().getPierresGeneralStoreWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty(); j < toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty() + App.getCurrentGame().getPierresGeneralStoreHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setPierresGeneralStoreMarket(new PierresGeneralStoreMarket());
+        App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
+        App.getCurrentGame().getPierresGeneralStoreMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getPierresGeneralStoreEnterancex(),
+                toplefty + App.getCurrentGame().getPierresGeneralStoreEnterancey(),
+                topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx(),
+                toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty(),
+                topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx() + App.getCurrentGame().getPierresGeneralStoreWidth(),
+                toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty() + App.getCurrentGame().getPierresGeneralStoreHeight()
+        );
 
-        // Additional Fishing Lake (Small)
-        Lake Lake4 = new Lake();
-        cords = new ArrayList<>(List.of(
-                new Cord(22, 0), new Cord(22, 1),
-                new Cord(23, 0), new Cord(23, 1)
-        ));
-        Lake4.adaptMap(cords);
+        // Stardrop Saloon
+        cords = new ArrayList<>();
+        for (int i = topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx(); i < topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx() + App.getCurrentGame().getTheStardropSaloonWidth(); i++) {
+            for (int j = toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty(); j < toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty() + App.getCurrentGame().getTheStardropSaloonHeight(); j++) {
+                cords.add(new Cord(i, j));
+            }
+        }
+        App.getCurrentGame().setTheStardropSaloonMarket(new TheStardropSaloonMarket());
+        App.getCurrentGame().getTheStardropSaloonMarket().fillStock();
+        App.getCurrentGame().getTheStardropSaloonMarket().adaptMap(
+                cords,
+                topleftx + App.getCurrentGame().getTheStardropSaloonEnterancex(),
+                toplefty + App.getCurrentGame().getTheStardropSaloonEnterancey(),
+                topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx(),
+                toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty(),
+                topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx() + App.getCurrentGame().getTheStardropSaloonWidth(),
+                toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty() + App.getCurrentGame().getTheStardropSaloonHeight()
+        );
 
-        ForagingTree foragingTree1 = new ForagingTree();
-        foragingTree1.setType(ForagingTreesEnums.Acorns);
-        foragingTree1.adaptMap(new Cord(20, 5));
-        ForagingTree foragingTree2 = new ForagingTree();
-        foragingTree2.setType(ForagingTreesEnums.MahoganySeeds);
-        foragingTree2.adaptMap(new Cord(22, 4));
-        ForagingTree foragingTree3 = new ForagingTree();
-        foragingTree3.setType(ForagingTreesEnums.PineCones);
-        foragingTree3.adaptMap(new Cord(17, 15));
-        ForagingTree foragingTree4 = new ForagingTree();
-        foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
-        foragingTree4.adaptMap(new Cord(15, 10));
+        App.getCurrentGame().setNPCSEBASTIAN(new NPC(NPCEnums.SEBASTIAN));
+        App.getCurrentGame().getNPCSEBASTIAN().adaptMap(new Cord(App.getCurrentGame().getNPCSEBASTIANx(), +App.getCurrentGame().getNPCSEBASTIANy()));
 
-//        AllTree AllTree1 = new AllTree();
-//        AllTree1.setType(AllTreesEnums.AppleTree);
-//        AllTree1.adaptMap(new Cord(20, 6));
-//        AllTree AllTree2 = new AllTree();
-//        AllTree2.setType(AllTreesEnums.BananaTree);
-//        AllTree2.adaptMap(new Cord(22, 5));
-//        AllTree AllTree3 = new AllTree();
-//        AllTree3.setType(AllTreesEnums.MangoTree);
-//        AllTree3.adaptMap(new Cord(17, 16));
-//        AllTree AllTree4 = new AllTree();
-//        AllTree4.setType(AllTreesEnums.OakTree);
-//        AllTree4.adaptMap(new Cord(15, 11));
+        App.getCurrentGame().setNPCABIGAIL(new NPC(NPCEnums.ABIGAIL));
+        App.getCurrentGame().getNPCABIGAIL().adaptMap(new Cord(App.getCurrentGame().getNPCABIGAILx(), +App.getCurrentGame().getNPCABIGAILy()));
 
-        Stone stone1 = new Stone();
-        stone1.adaptMap(new Cord(45, 11));
-        Stone stone2 = new Stone();
-        stone2.adaptMap(new Cord(45, 12));
-        Stone stone3 = new Stone();
-        stone3.adaptMap(new Cord(45, 13));
+        App.getCurrentGame().setNPCHARVEY(new NPC(NPCEnums.HARVEY));
+        App.getCurrentGame().getNPCHARVEY().adaptMap(new Cord(App.getCurrentGame().getNPCHARVEYx(), App.getCurrentGame().getNPCHARVEYy()));
 
-        ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
-        foragingCrop1.adaptMap(new Cord(30, 5));
-        ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
-        foragingCrop2.adaptMap(new Cord(32, 4));
-        ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
-        foragingCrop3.adaptMap(new Cord(37, 15));
-        ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
-        foragingCrop4.adaptMap(new Cord(35, 10));
+        App.getCurrentGame().setNPCLEAH(new NPC(NPCEnums.LEAH));
+        App.getCurrentGame().getNPCLEAH().adaptMap(new Cord(App.getCurrentGame().getNPCLEAHx(), App.getCurrentGame().getNPCLEAHy()));
 
-        ForagingSeed foragingSeed1 = new ForagingSeed();
-        foragingSeed1.setType(ForagingSeedsEnums.AncientSeeds);
-        foragingSeed1.adaptMap(new Cord(30, 15));
-        ForagingSeed foragingSeed2 = new ForagingSeed();
-        foragingSeed2.setType(ForagingSeedsEnums.BlueberrySeeds);
-        foragingSeed2.adaptMap(new Cord(32, 14));
-        ForagingSeed foragingSeed3 = new ForagingSeed();
-        foragingSeed3.setType(ForagingSeedsEnums.BeanStarter);
-        foragingSeed3.adaptMap(new Cord(37, 17));
-        ForagingSeed foragingSeed4 = new ForagingSeed();
-        foragingSeed4.setType(ForagingSeedsEnums.CauliflowerSeeds);
-        foragingSeed4.adaptMap(new Cord(35, 13));
+        App.getCurrentGame().setNPCROBIN(new NPC(NPCEnums.ROBIN));
+        App.getCurrentGame().getNPCROBIN().adaptMap(new Cord(App.getCurrentGame().getNPCROBINx(), App.getCurrentGame().getNPCROBINy()));
     }
 
-    public void createMap4(int topleft, int topright) {
-        // Lake+
-        // GreenHouse+ (Unchanged)
-        // Cottage+ (Unchanged)
-        // Quarry+
-        //+++++++++++++
-        // ForagingTree-
-        // AllTree-
-        // Stone-
-        // ForagingCrop-
-        // ForagingSeed-
-        //-------------
-//        Map = new ArrayList<>(50);
-//        for (int i = 0; i < 50; i++) {
-//            ArrayList<Kashi> row = new ArrayList<>();
-//            Map.add(row);
-//        }
-
-        // Small Lake
+    public void createMap3(int topleftx, int toplefty) {
+        // Lake - Long and narrow
         Lake Lake1 = new Lake();
-        ArrayList<Cord> cords = new ArrayList<>(List.of(
-                new Cord(1, 0), new Cord(1, 1),
-                new Cord(2, 0), new Cord(2, 1)
-        ));
-        Lake1.adaptMap(cords);
+        ArrayList<Cord> lakeCords = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            lakeCords.add(new Cord(topleftx + 3, toplefty + i));
+        }
+        Lake1.adaptMap(lakeCords);
 
-        // Greenhouse (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(4, 0), new Cord(4, 1), new Cord(4, 2), new Cord(4, 3), new Cord(4, 4),
-                new Cord(4, 5), new Cord(4, 6), new Cord(5, 0), new Cord(5, 1), new Cord(5, 2),
-                new Cord(5, 3), new Cord(5, 4), new Cord(5, 5), new Cord(5, 6), new Cord(6, 0),
-                new Cord(6, 1), new Cord(6, 2), new Cord(6, 3), new Cord(6, 4), new Cord(6, 5),
-                new Cord(6, 6), new Cord(7, 0), new Cord(7, 1), new Cord(7, 2), new Cord(7, 3),
-                new Cord(7, 4), new Cord(7, 5), new Cord(7, 6), new Cord(8, 0), new Cord(8, 1),
-                new Cord(8, 2), new Cord(8, 3), new Cord(8, 4), new Cord(8, 5), new Cord(8, 6),
-                new Cord(9, 0), new Cord(9, 1), new Cord(9, 2), new Cord(9, 3), new Cord(9, 4),
-                new Cord(9, 5), new Cord(9, 6)
-        ));
-        myGreenHouse.adaptMap(cords, 7, 3, 11, 0, 15, 4);
+        // Greenhouse - Vertical layout
+        ArrayList<Cord> greenhouseCords = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            greenhouseCords.add(new Cord(topleftx + 8, toplefty + i));
+        }
+        myGreenHouse.adaptMap(greenhouseCords, topleftx + 8, toplefty + 2,
+                topleftx + 8, toplefty + 0, topleftx + 8, toplefty + 4);
 
-        // Cottage (Unchanged)
-        cords = new ArrayList<>(List.of(
-                new Cord(11, 0), new Cord(11, 1), new Cord(11, 2), new Cord(11, 3), new Cord(11, 4),
-                new Cord(12, 0), new Cord(12, 1), new Cord(12, 2), new Cord(12, 3), new Cord(12, 4),
-                new Cord(13, 0), new Cord(13, 1), new Cord(13, 2), new Cord(13, 3), new Cord(13, 4),
-                new Cord(14, 0), new Cord(14, 1), new Cord(14, 2), new Cord(14, 3), new Cord(14, 4),
-                new Cord(15, 0), new Cord(15, 1), new Cord(15, 2), new Cord(15, 3), new Cord(15, 4)
+        // Cottage - On a "hill"
+        ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 15, toplefty + 10),
+                new Cord(topleftx + 15, toplefty + 11),
+                new Cord(topleftx + 16, toplefty + 10),
+                new Cord(topleftx + 16, toplefty + 11)
         ));
-        MyCottage.adaptMap(cords, 13, 2, 17, 0, 18, 1);
+        MyCottage = new Cottage();
+        MyCottage.adaptMap(cottageCords, topleftx + 16, toplefty + 11,
+                topleftx + 15, toplefty + 10, topleftx + 16, toplefty + 11);
 
-        // Large Quarry
+        // Large quarry
+        ArrayList<Cord> quarryCords = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                quarryCords.add(new Cord(topleftx + 20 + i, toplefty + 20 + j));
+            }
+        }
         Quarry quarry1 = new Quarry();
-        cords = new ArrayList<>(List.of(
-                new Cord(17, 0), new Cord(17, 1), new Cord(17, 2), new Cord(17, 3),
-                new Cord(18, 0), new Cord(18, 1), new Cord(18, 2), new Cord(18, 3),
-                new Cord(19, 0), new Cord(19, 1), new Cord(19, 2), new Cord(19, 3)
-        ));
-        quarry1.adaptMap(cords, 18, 1, 17, 0, 19, 3);
+        quarry1.adaptMap(quarryCords);
 
-        // Medium Quarry
-        Quarry quarry2 = new Quarry();
-        cords = new ArrayList<>(List.of(
-                new Cord(20, 0), new Cord(20, 1), new Cord(20, 2),
-                new Cord(21, 0), new Cord(21, 1), new Cord(21, 2)
-        ));
-        quarry2.adaptMap(cords, 21, 1, 20, 0, 21, 2);
+        // Track occupied positions
+        Set<Cord> occupiedPositions = new HashSet<>();
+        occupiedPositions.addAll(lakeCords);
+        occupiedPositions.addAll(greenhouseCords);
+        occupiedPositions.addAll(cottageCords);
+        occupiedPositions.addAll(quarryCords);
 
-        // Small Quarry
-        Quarry quarry3 = new Quarry();
-        cords = new ArrayList<>(List.of(
-                new Cord(23, 0), new Cord(23, 1),
-                new Cord(24, 0), new Cord(24, 1)
-        ));
-        quarry3.adaptMap(cords, 23, 1, 23, 0, 24, 1);
+        // Random generation with mountain focus
+        Random random = new Random();
+        int mapWidth = 400;
+        int mapHeight = 200;
+        int minDistanceFromFixed = 6; // More spacing for mountainous terrain
 
-        ForagingTree foragingTree1 = new ForagingTree();
-        foragingTree1.setType(ForagingTreesEnums.Acorns);
-        foragingTree1.adaptMap(new Cord(20, 5));
-        ForagingTree foragingTree2 = new ForagingTree();
-        foragingTree2.setType(ForagingTreesEnums.MahoganySeeds);
-        foragingTree2.adaptMap(new Cord(22, 4));
-        ForagingTree foragingTree3 = new ForagingTree();
-        foragingTree3.setType(ForagingTreesEnums.PineCones);
-        foragingTree3.adaptMap(new Cord(17, 15));
-        ForagingTree foragingTree4 = new ForagingTree();
-        foragingTree4.setType(ForagingTreesEnums.MapleSeeds);
-        foragingTree4.adaptMap(new Cord(15, 10));
+        // Fewer trees (3 instead of 4)
+        for (int i = 0; i < 3; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingTree tree = new ForagingTree();
+            tree.setType(ForagingTreesEnums.values()[random.nextInt(ForagingTreesEnums.values().length)]);
+            tree.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-//        AllTree AllTree1 = new AllTree();
-//        AllTree1.setType(AllTreesEnums.AppleTree);
-//        AllTree1.adaptMap(new Cord(20, 6));
-//        AllTree AllTree2 = new AllTree();
-//        AllTree2.setType(AllTreesEnums.BananaTree);
-//        AllTree2.adaptMap(new Cord(22, 5));
-//        AllTree AllTree3 = new AllTree();
-//        AllTree3.setType(AllTreesEnums.MangoTree);
-//        AllTree3.adaptMap(new Cord(17, 16));
-//        AllTree AllTree4 = new AllTree();
-//        AllTree4.setType(AllTreesEnums.OakTree);
-//        AllTree4.adaptMap(new Cord(15, 11));
+        // More stones (6 instead of 3)
+        for (int i = 0; i < 6; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            new Stone().adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-        Stone stone1 = new Stone();
-        stone1.adaptMap(new Cord(45, 11));
-        Stone stone2 = new Stone();
-        stone2.adaptMap(new Cord(45, 12));
-        Stone stone3 = new Stone();
-        stone3.adaptMap(new Cord(45, 13));
+        // Fewer crops (2 instead of 4)
+        for (int i = 0; i < 2; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingCrop crop = new ForagingCrop();
+            crop.initilizeCrop(ForagingCropsEnums.values()[random.nextInt(ForagingCropsEnums.values().length)]);
+            crop.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-        ForagingCrop foragingCrop1 = new ForagingCrop();
-        foragingCrop1.initilizeCrop(ForagingCropsEnums.SpiceBerry);
-        foragingCrop1.adaptMap(new Cord(30, 5));
-        ForagingCrop foragingCrop2 = new ForagingCrop();
-        foragingCrop2.initilizeCrop(ForagingCropsEnums.CommonMushroom);
-        foragingCrop2.adaptMap(new Cord(32, 4));
-        ForagingCrop foragingCrop3 = new ForagingCrop();
-        foragingCrop3.initilizeCrop(ForagingCropsEnums.Crocus);
-        foragingCrop3.adaptMap(new Cord(37, 15));
-        ForagingCrop foragingCrop4 = new ForagingCrop();
-        foragingCrop4.initilizeCrop(ForagingCropsEnums.Dandelion);
-        foragingCrop4.adaptMap(new Cord(35, 10));
+        // More seeds (6 instead of 4)
+        for (int i = 0; i < 6; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingSeed seed = new ForagingSeed();
+            seed.setType(ForagingSeedsEnums.values()[random.nextInt(ForagingSeedsEnums.values().length)]);
+            seed.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
 
-        ForagingSeed foragingSeed1 = new ForagingSeed();
-        foragingSeed1.setType(ForagingSeedsEnums.AncientSeeds);
-        foragingSeed1.adaptMap(new Cord(30, 15));
-        ForagingSeed foragingSeed2 = new ForagingSeed();
-        foragingSeed2.setType(ForagingSeedsEnums.BlueberrySeeds);
-        foragingSeed2.adaptMap(new Cord(32, 14));
-        ForagingSeed foragingSeed3 = new ForagingSeed();
-        foragingSeed3.setType(ForagingSeedsEnums.BeanStarter);
-        foragingSeed3.adaptMap(new Cord(37, 17));
-        ForagingSeed foragingSeed4 = new ForagingSeed();
-        foragingSeed4.setType(ForagingSeedsEnums.CauliflowerSeeds);
-        foragingSeed4.adaptMap(new Cord(35, 13));
+        // Initialize markets and NPCs (same as original)
+        initializeMarketsAndNPCs(topleftx, toplefty);
     }
 
+    //
+    public void createMap4(int topleftx, int toplefty) {
+        // Central lake
+        Lake Lake1 = new Lake();
+        ArrayList<Cord> lakeCords = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                lakeCords.add(new Cord(topleftx + 10 + i, toplefty + 10 + j));
+            }
+        }
+        Lake1.adaptMap(lakeCords);
+
+        // Large greenhouse
+        ArrayList<Cord> greenhouseCords = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 6; j++) {
+                greenhouseCords.add(new Cord(topleftx + 5 + i, toplefty + 5 + j));
+            }
+        }
+        myGreenHouse.adaptMap(greenhouseCords, topleftx + 7, toplefty + 8,
+                topleftx + 5, toplefty + 5, topleftx + 8, toplefty + 10);
+
+        // Cottage near greenhouse
+        ArrayList<Cord> cottageCords = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                cottageCords.add(new Cord(topleftx + 3 + i, toplefty + 5 + j));
+            }
+        }
+        MyCottage = new Cottage();
+        MyCottage.adaptMap(cottageCords, topleftx + 4, toplefty + 6,
+                topleftx + 3, toplefty + 5, topleftx + 4, toplefty + 7);
+
+        // Small quarry in corner
+        ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
+                new Cord(topleftx + 20, toplefty + 1),
+                new Cord(topleftx + 20, toplefty + 2),
+                new Cord(topleftx + 21, toplefty + 1),
+                new Cord(topleftx + 21, toplefty + 2)
+        ));
+        Quarry quarry1 = new Quarry();
+        quarry1.adaptMap(quarryCords);
+
+        // Track occupied positions
+        Set<Cord> occupiedPositions = new HashSet<>();
+        occupiedPositions.addAll(lakeCords);
+        occupiedPositions.addAll(greenhouseCords);
+        occupiedPositions.addAll(cottageCords);
+        occupiedPositions.addAll(quarryCords);
+
+        // Random generation with farm focus
+        Random random = new Random();
+        int mapWidth = 350;
+        int mapHeight = 180;
+        int minDistanceFromFixed = 3; // Closer spacing for farm layout
+
+        // Balanced trees (5)
+        for (int i = 0; i < 5; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingTree tree = new ForagingTree();
+            tree.setType(ForagingTreesEnums.values()[random.nextInt(ForagingTreesEnums.values().length)]);
+            tree.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Balanced stones (4)
+        for (int i = 0; i < 4; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            new Stone().adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Lots of crops (8 instead of 4)
+        for (int i = 0; i < 8; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingCrop crop = new ForagingCrop();
+            crop.initilizeCrop(ForagingCropsEnums.values()[random.nextInt(ForagingCropsEnums.values().length)]);
+            crop.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Lots of seeds (8 instead of 4)
+        for (int i = 0; i < 8; i++) {
+            Cord randomPos = getRandomPosition(topleftx, toplefty, mapWidth, mapHeight,
+                    occupiedPositions, minDistanceFromFixed);
+            ForagingSeed seed = new ForagingSeed();
+            seed.setType(ForagingSeedsEnums.values()[random.nextInt(ForagingSeedsEnums.values().length)]);
+            seed.adaptMap(randomPos);
+            occupiedPositions.add(randomPos);
+        }
+
+        // Initialize markets and NPCs (same as original)
+        initializeMarketsAndNPCs(topleftx, toplefty);
+
+    }
 }

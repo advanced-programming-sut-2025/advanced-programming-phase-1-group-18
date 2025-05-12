@@ -18,14 +18,15 @@ public class NPC implements adaptMapMarket {
 //    private HashMap<Item, NPCItem> rewards;
 
     public NPC(NPCEnums name) {
+
         friendships = new ArrayList<>();
+
         for (Player player : App.getCurrentGame().getPlayers()) {
             Friendshipali friendship = new Friendshipali(player, 0);
             friendships.add(friendship);
         }
 
         quests = new HashMap<>();
-//        rewards = new HashMap<>();
 
         this.name = name;
         this.talkedWithToday = false;
@@ -39,121 +40,102 @@ public class NPC implements adaptMapMarket {
         NPCItem npcItemlvl2 = new NPCItem();
         npcItemlvl2.setRequiredLevel(2);
 
-        switch (name) {
-            case SEBASTIAN:
-                job = "wool, pumpkin pie, pizza";
 
-                Mineral iron = new Mineral();
-                iron.setType(ForagingMineralsEnums.Iron);
-                npcItemlvl0.setQuantity(50);
-                quests.put(iron, npcItemlvl0);
-//                Mineral diamond = new Mineral();
-//                diamond.setType(ForagingMineralsEnums.Diamond);
-//                npcItemlvl0.setQuantity(2);
-//                rewards.put(diamond, npcItemlvl0);
+        if (name == NPCEnums.SEBASTIAN) {
+            job = "wool, pumpkin pie, pizza";
 
+            Mineral iron = new Mineral();
+            iron.setType(ForagingMineralsEnums.IronOre);
+            npcItemlvl0.setQuantity(50);
+            quests.put(iron, npcItemlvl0);
 
-                FoodCooking pumpkinPie = new FoodCooking();
-                pumpkinPie.setName(FoodCookingEnums.pumpkinpie);
-                npcItemlvl1.setQuantity(1);
-                quests.put(pumpkinPie, npcItemlvl1);
+            FoodCooking pumpkinPie = new FoodCooking();
+            pumpkinPie.setName(FoodCookingEnums.pumpkinpie);
+            npcItemlvl1.setQuantity(1);
+            quests.put(pumpkinPie, npcItemlvl1);
 
-                Stone stone = new Stone();
-                npcItemlvl2.setQuantity(150);
-                quests.put(stone, npcItemlvl2);
-//                Mineral quartz = new Mineral();
-//                quartz.setType(ForagingMineralsEnums.Quartz);
-//                npcItemlvl2.setQuantity(50);
-//                rewards.put(quartz, npcItemlvl2);
-                break;
+            StoneItem stone = new StoneItem();
+            npcItemlvl2.setQuantity(150);
+            quests.put(stone, npcItemlvl2);
 
-            case ABIGAIL:
-                job = "stone, iron ore, coffee";
+        } else if (name == NPCEnums.ABIGAIL) {
+            job = "stone, iron ore, coffee";
 
-                Mineral goldBar = new Mineral();
-                goldBar.setType(ForagingMineralsEnums.Gold);
-                npcItemlvl0.setQuantity(1);
-                quests.put(goldBar, npcItemlvl0);
+            ArtisanGoods artisanGoods = new ArtisanGoods("GoldBar");
+            npcItemlvl0.setQuantity(1);
+            quests.put(artisanGoods, npcItemlvl0);
 
+            AllCrop pumpkin = new AllCrop();
+            pumpkin.setSourceForagingSeedEnum(ForagingSeedsEnums.PumpkinSeeds);
+            npcItemlvl1.setQuantity(1);
+            quests.put(pumpkin, npcItemlvl1);
 
-                AllCrop pumpkin = new AllCrop();
-                pumpkin.setSourceForagingSeedEnum(ForagingSeedsEnums.PumpkinSeeds);
-                npcItemlvl1.setQuantity(1);
-                quests.put(pumpkin, npcItemlvl1);
+            AllCrop wheat = new AllCrop();
+            wheat.setSourceMixedSeedEnum(MixedSeedsEnums.Wheat);
+            npcItemlvl2.setQuantity(50);
+            quests.put(wheat, npcItemlvl2);
 
+        } else if (name == NPCEnums.HARVEY) {
+            job = "coffee, pickles, wine";
 
-                AllCrop wheat = new AllCrop();
-                wheat.setSourceMixedSeedEnum(MixedSeedsEnums.Wheat);
-                npcItemlvl2.setQuantity(50);
-                quests.put(wheat, npcItemlvl2);
-                break;
+            AllCrop allCrop2 = new AllCrop();
+            npcItemlvl0.setQuantity(12);
+            quests.put(allCrop2, npcItemlvl0);
 
-            case HARVEY:
-                job = "coffee, pickles, wine";
+            Fish fish = new Fish("Salmon");
+            npcItemlvl1.setQuantity(1);
+            quests.put(fish, npcItemlvl1);
 
-                AllCrop allCrop2 = new AllCrop();
-                npcItemlvl0.setQuantity(12);
-                quests.put(allCrop2, npcItemlvl0);
+            ArtisanGoods artisanGoods = new ArtisanGoods("Wine");
+            npcItemlvl2.setQuantity(1);
+            quests.put(artisanGoods, npcItemlvl2);
 
+        } else if (name == NPCEnums.LEAH) {
+            job = "salad, grape, wine";
 
-//                Fish salmon = new Fish();
-//                salmon.setName(FishEnums.Salmon);
-//                npcItemlvl1.setQuantity(1);
-//                quests.put(salmon, npcItemlvl1);
+            // Uncomment when ready
 
+//    Wood wood = new Wood();
+//    wood.setType(WoodEnums.Normal);
+//    NPCItem leaItem0 = new NPCItem();
+//    leaItem0.setQuantity(200);
+//    quests.put(wood, leaItem0);
 
-//                Beverage wine = new Beverage();
-//                wine.setType(BeverageEnums.Wine);
-//                npcItemlvl2.setQuantity(1);
-//                quests.put(wine, npcItemlvl2);
-//                break;
-//                FoodCooking salad = new FoodCooking();
-//                salad.setName(FoodCookingEnums.Salad);
-//                npcItemlvl2.setQuantity(5);
-//                rewards.put(salad, npcItemlvl2);
+            Fish fish = new Fish("Salmon");
+            npcItemlvl1.setQuantity(1);
+            quests.put(fish, npcItemlvl1);
 
-            case LEAH:
-                job = "salad, grape, wine";
+//    Furniture scarecrow = new Furniture();
+//    scarecrow.setName(FurnitureEnums.DeluxeScarecrow);
+//    NPCItem leaItem2 = new NPCItem();
+//    leaItem2.setQuantity(3);
+//    quests.put(scarecrow, leaItem2);
 
-//                Wood wood = new Wood();
-//                wood.setType(WoodEnums.Normal);
-//                npcItemlvl0.setQuantity(200);
-//                quests.put(wood, npcItemlvl0);
-//                break;
+        } else if (name == NPCEnums.ROBIN) {
+            job = "spaghetti, wood, iron bar";
 
+            // Uncomment when ready
+    /*
+    Wood woodLvl1 = new Wood();
+    woodLvl1.setType(WoodEnums.Normal);
+    NPCItem robItem0 = new NPCItem();
+    robItem0.setQuantity(80);
+    quests.put(woodLvl1, robItem0);
+    */
 
-//                Fish salmon2 = new Fish();
-//                salmon2.setName(FishEnums.Salmon);
-//                npcItemlvl1.setQuantity(1);
-//                quests.put(salmon2, npcItemlvl1);
+            Mineral ironbar = new Mineral();
+            ironbar.setType(ForagingMineralsEnums.IronOre);
+            npcItemlvl1.setQuantity(10);
+            quests.put(ironbar, npcItemlvl1);
 
-
-//                Furniture scarecrow = new Furniture();
-//                scarecrow.setName(FurnitureEnums.DeluxeScarecrow);
-//                npcItemlvl2.setQuantity(3);
-//                quests.put(scarecrow, npcItemlvl2);
-
-            case ROBIN:
-                job = "spaghetti, wood, iron bar";
-
-//                Wood woodLvl1 = new Wood();
-//                woodLvl1.setType(WoodEnums.Normal);
-//                npcItemlvl0.setQuantity(80);
-//                quests.put(woodLvl1, npcItemlvl0);
-
-
-                Mineral ironbar = new Mineral();
-                ironbar.setType(ForagingMineralsEnums.Iron);
-                npcItemlvl1.setQuantity(10);
-                quests.put(ironbar, npcItemlvl1);
-
-
-//                Wood woodLvl3 = new Wood();
-//                woodLvl3.setType(WoodEnums.Normal);
-//                npcItemlvl2.setQuantity(1000);
-//                quests.put(woodLvl3, npcItemlvl2);
-//                break;
-
+            // Uncomment when ready
+    /*
+    Wood woodLvl3 = new Wood();
+    woodLvl3.setType(WoodEnums.Normal);
+    NPCItem robItem2 = new NPCItem();
+    robItem2.setQuantity(1000);
+    quests.put(woodLvl3, robItem2);
+    */
         }
     }
 
