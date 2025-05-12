@@ -33,7 +33,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 if (currentPlayer.getMoney() >= ((ForagingSeed) item).getPrice()) {
                     currentPlayer.getInventory().addItem(item, quantity);
                     App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                    return new Result(true, "");
+                    return new Result(true, "You purchased " + item.getCorrectName() + " of " + seedType.toString());
                 } else {
                     return new Result(false, "You don't have enough money");
                 }
@@ -58,7 +58,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -76,7 +76,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -94,7 +94,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((MarketProducts) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -112,7 +112,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((MarketProducts) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -132,7 +132,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((MarketProducts) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -150,7 +150,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -168,7 +168,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -186,7 +186,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -204,7 +204,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Fertilizer) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -222,7 +222,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Fertilizer) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -240,7 +240,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -258,7 +258,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -276,7 +276,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -294,7 +294,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -312,7 +312,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -330,7 +330,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((TreeSeed) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -348,7 +348,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Fertilizer) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -366,7 +366,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         if (currentPlayer.getMoney() >= ((Fertilizer) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + item.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }

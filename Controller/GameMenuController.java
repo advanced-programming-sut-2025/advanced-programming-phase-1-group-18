@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public void exit() {
-
+        System.exit(0);
     }
 
     public static int getFieldValue(Class<?> gameClass, Object gameInstance, String fieldName) throws NoSuchFieldException, IllegalAccessException {
@@ -198,6 +198,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             //save game
             App.setCurrentGame(null);
             App.setCurrentMenu(Menu.GameMenu);
+            System.exit(0);
             return new Result(true, "Game Exited");
         } else {
             return new Result(false, "You can't exit the game");
@@ -246,6 +247,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     player.setEnergy(200);
                 }
+
                 //NPC gift player
                 for (Friendshipali friendshipali : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
                     if (friendshipali.getFriendshipLevel() / 200 >= 3) {
@@ -262,7 +264,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Friendshipali friendshipali : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
                     if (friendshipali.getFriendshipLevel() / 200 >= 3) {
                         Mineral mineral = new Mineral();
-                        mineral.setType(ForagingMineralsEnums.Iron);
+                        mineral.setType(ForagingMineralsEnums.IronOre);
                         mineral.setPrice(10);
                         Random random = new Random();
                         if (random.nextInt(0, 2) == 1) {
@@ -296,7 +298,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Friendshipali friendshipali : App.getCurrentGame().getNPCROBIN().getFriendships()) {
                     if (friendshipali.getFriendshipLevel() / 200 >= 3) {
                         Mineral mineral = new Mineral();
-                        mineral.setType(ForagingMineralsEnums.Iron);
+                        mineral.setType(ForagingMineralsEnums.IronOre);
                         mineral.setPrice(10);
                         Random random = new Random();
                         if (random.nextInt(0, 2) == 1) {
@@ -304,6 +306,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         }
                     }
                 }
+
                 // Sell Satl end of the day
                 for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().keySet()) {
                     //AllCrop+
@@ -325,6 +328,21 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
                 }
+
+                //grow plants
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    for (AllTree allTree : player.getMyFarm().getAllTrees()) {
+                        if (allTree.isFedThisDay()) {
+                            allTree.setDaysGrowCounter(allTree.getDaysGrowCounter() + 1);
+                        }
+                    }
+                    for (AllCrop allCrop : player.getMyFarm().getAllCrops()) {
+                        if (allCrop.isFedThisDay()) {
+                            allCrop.setDaysGrowCounter(allCrop.getDaysGrowCounter() + 1);
+                        }
+                    }
+                }
+
                 App.getCurrentGame().setCurrentDateTime(new DateTime(0, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
 
                 App.getCurrentGame().endOfDayUpdate();
@@ -737,51 +755,93 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         ArrayList<ArrayList<Kashi>> Map = App.getCurrentGame().getMap();
         for (int j = y; j < Xsize + y; j++) {
             for (int i = x; i < Ysize + x; i++) {
-                // T for All Tree
-                if (Map.get(i).get(j).getInside() instanceof AllTree) {
-                    System.out.print("\u001B[32mT\u001B[0m");
-                }
-                // T for Tavilehs
-                else if (Map.get(i).get(j).getInside() instanceof BigBarn || Map.get(x).get(y).getInside() instanceof Tavileh || Map.get(x).get(y).getInside() instanceof DeluxeBarn) {
-                    System.out.print("V");
-                }
-                // v for Tavilehanimal
-                else if (Map.get(i).get(j).getInside() instanceof TavilehAnimal) {
-                    System.out.print("v");
-                }
-                //
-                else if (Map.get(i).get(j).getInside() instanceof Cage || Map.get(x).get(y).getInside() instanceof BigCoop || Map.get(x).get(y).getInside() instanceof DeluxeCoop) {
-                    System.out.print("C");
-                } else if (Map.get(i).get(j).getInside() instanceof CageAnimal) {
-                    System.out.print("c");
-                } else if (Map.get(i).get(j).getInside() instanceof Stone) {
-                    System.out.print("s");
-                } else if (Map.get(i).get(j).getInside() instanceof Refrigerator) {
-                    System.out.print("R");
-                } else if (Map.get(i).get(j).getInside() instanceof Quarry) {
-                    System.out.print("\u001B[33mQ\u001B[0m");
-                } else if (Map.get(i).get(j).getInside() instanceof TheStardropSaloonMarket || Map.get(i).get(j).getInside() instanceof BlackSmithMarket || Map.get(i).get(j).getInside() instanceof JojoMartMarket || Map.get(i).get(j).getInside() instanceof MarniesRanchMarket || Map.get(i).get(j).getInside() instanceof PierresGeneralStoreMarket) {
-                    System.out.print("\u001B[34mM\u001B[0m");
-                } else if (Map.get(i).get(j).getInside() instanceof Matarsak) {
-                    System.out.print("m");
-                } else if (Map.get(i).get(j).getInside() instanceof NPC) {
-                    System.out.print("N");
-                } else if (Map.get(i).get(j).getInside() instanceof Lake) {
-                    System.out.print("L");
-                } else if (Map.get(i).get(j).getInside() instanceof GreenHouse) {
-                    System.out.print("G");
-                } else if (Map.get(i).get(j).getInside() instanceof Cottage) {
-                    System.out.print("K");
-                } else {
-                    System.out.print("\u001B[37m#\u001B[0m");
-                }
-
-                //                if (App.getCurrentGame().getMap().getInside(i,j) == "Tree") {
-                //                    System.out.print("\u001B[38;2;255;100;50m" + App.getCurrentGame().getMap().getInside(i, j)+ "\u001B[0m");
-                //                } else if (.....) {
-                //
-                //                }
-                //                System.out.println("\u001B[38;2;255;100;50m" + "متن با رنگ RGB" + "\u001B[0m");
+                // Color reset code
+                String reset = "\u001B[0m";
+                if (Map.get(i).get(j).getEnterance()) {
+                    System.out.print("\u001B[38;5;196mE" + reset);
+                } else
+                    // All Tree - Bright Green
+                    if (Map.get(i).get(j).getInside() instanceof AllTree) {
+                        System.out.print("\u001B[38;5;46mT" + reset); // Bright Green
+                    }
+                    // Buildings (Barns) - Cyan
+                    else if (Map.get(i).get(j).getInside() instanceof BigBarn ||
+                            Map.get(i).get(j).getInside() instanceof Tavileh ||
+                            Map.get(i).get(j).getInside() instanceof DeluxeBarn) {
+                        System.out.print("\u001B[36mV" + reset); // Cyan
+                    }
+                    // Barn Animals - Light Cyan
+                    else if (Map.get(i).get(j).getInside() instanceof TavilehAnimal) {
+                        System.out.print("\u001B[96mv" + reset); // Light Cyan
+                    }
+                    // Coops - Yellow
+                    else if (Map.get(i).get(j).getInside() instanceof Cage ||
+                            Map.get(i).get(j).getInside() instanceof BigCoop ||
+                            Map.get(i).get(j).getInside() instanceof DeluxeCoop) {
+                        System.out.print("\u001B[33mC" + reset); // Yellow
+                    }
+                    // Coop Animals - Light Yellow
+                    else if (Map.get(i).get(j).getInside() instanceof CageAnimal) {
+                        System.out.print("\u001B[93mc" + reset); // Light Yellow
+                    }
+                    // Stone - Gray
+                    else if (Map.get(i).get(j).getInside() instanceof Stone) {
+                        System.out.print("\u001B[37ms" + reset); // Gray
+                    }
+                    // Refrigerator - White
+                    else if (Map.get(i).get(j).getInside() instanceof Refrigerator) {
+                        System.out.print("\u001B[97mR" + reset); // White
+                    }
+                    // Quarry - Orange
+                    else if (Map.get(i).get(j).getInside() instanceof Quarry) {
+                        System.out.print("\u001B[38;5;208mQ" + reset); // Orange
+                    }
+                    // Markets - Bright Blue
+                    else if (Map.get(i).get(j).getInside() instanceof TheStardropSaloonMarket ||
+                            Map.get(i).get(j).getInside() instanceof BlackSmithMarket ||
+                            Map.get(i).get(j).getInside() instanceof JojoMartMarket ||
+                            Map.get(i).get(j).getInside() instanceof MarniesRanchMarket ||
+                            Map.get(i).get(j).getInside() instanceof PierresGeneralStoreMarket ||
+                            Map.get(i).get(j).getInside() instanceof CarpentersShopMarket ||
+                            Map.get(i).get(j).getInside() instanceof FishShopMarket) {
+                        System.out.print("\u001B[38;5;27mM" + reset); // Bright Blue
+                    }
+                    // Matarsak - Purple
+                    else if (Map.get(i).get(j).getInside() instanceof Matarsak) {
+                        System.out.print("\u001B[35mm" + reset); // Purple
+                    }
+                    // NPCs - Magenta
+                    else if (Map.get(i).get(j).getInside() instanceof NPC) {
+                        System.out.print("\u001B[95mN" + reset); // Light Magenta
+                    }
+                    // Lake - Bright Blue
+                    else if (Map.get(i).get(j).getInside() instanceof Lake) {
+                        System.out.print("\u001B[38;5;33mL" + reset); // Bright Blue
+                    }
+                    // GreenHouse - Green
+                    else if (Map.get(i).get(j).getInside() instanceof GreenHouse) {
+                        System.out.print("\u001B[32mG" + reset); // Green
+                    }
+                    // Cottage - Brown
+                    else if (Map.get(i).get(j).getInside() instanceof Cottage) {
+                        System.out.print("\u001B[38;5;130mK" + reset); // Brown
+                    }
+                    // ForagingTree - Light Green
+                    else if (Map.get(i).get(j).getInside() instanceof ForagingTree) {
+                        System.out.print("\u001B[38;5;112mF" + reset); // Light Green
+                    }
+                    // ForagingCrop - Light Yellow
+                    else if (Map.get(i).get(j).getInside() instanceof ForagingCrop) {
+                        System.out.print("\u001B[38;5;228mP" + reset); // Light Yellow
+                    }
+                    // ForagingSeed - Light Cyan
+                    else if (Map.get(i).get(j).getInside() instanceof ForagingSeed) {
+                        System.out.print("\u001B[38;5;159mS" + reset); // Light Cyan
+                    }
+                    // Default (empty/ground) - Dark Gray
+                    else {
+                        System.out.print("\u001B[38;5;240m#" + reset); // Dark Gray
+                    }
             }
             System.out.println();
         }
@@ -843,7 +903,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             System.out.println("**Inventory is Empty**");
         } else {
             for (Item item : items.keySet()) {
-                System.out.println("- " + item.getClass().getSimpleName() + " (Quantity: " + items.get(item) + ")");
+                System.out.println("- " + item.getCorrectName() + " (Quantity: " + items.get(item) + ")");
             }
         }
     }
@@ -1232,7 +1292,90 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public Result fertilize(String fertilizer, String direction) {
-        return new Result(true, "");
+        int dir_x = -1;
+        int dir_y = -1;
+
+        switch (direction.toLowerCase()) {
+            case "n": {
+                dir_x = 0;
+                dir_y = -1;
+                break;
+            }
+            case "ne": {
+                dir_x = 1;
+                dir_y = -1;
+                break;
+            }
+            case "e": {
+                dir_x = 1;
+                dir_y = 0;
+                break;
+            }
+            case "se": {
+                dir_x = 1;
+                dir_y = 1;
+                break;
+            }
+            case "s": {
+                dir_x = 0;
+                dir_y = 1;
+                break;
+            }
+            case "sw": {
+                dir_x = -1;
+                dir_y = 1;
+                break;
+            }
+            case "w": {
+                dir_x = -1;
+                dir_y = 0;
+                break;
+            }
+            case "nw": {
+                dir_x = -1;
+                dir_y = -1;
+                break;
+            }
+            default: {
+                return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
+            }
+        }
+        boolean found = false;
+        switch (fertilizer.toLowerCase()) {
+            case "deluxe retaining soil":
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("deluxeretainingsoil")) {
+                        found = true;
+                        //TODO fertilizer shit
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        break;
+                    }
+                }
+                break;
+            case "basic retaining soil":
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("basicretainingsoil")) {
+                        found = true;
+                        //TODO fertilizer shit
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        break;
+                    }
+                }
+                break;
+            case "quality retaining soil":
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("qualityretainingsoil")) {
+                        found = true;
+                        //TODO fertilizer shit
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        break;
+                    }
+                }
+                break;
+            default:
+                return new Result(false, "Please select a valid fertilizer");
+        }
+        return null;
     }
 
     public Result howMuchWater() {
@@ -1434,7 +1577,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             Item item = entry.getKey();
             int count = entry.getValue();
 
-            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
+            if (item.getCorrectName().equalsIgnoreCase(name)) {
                 if (count > 1) {
                     player.getInventory().getItems().put(item, count - 1); // یکی کم کن
                 } else {
@@ -1443,6 +1586,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 //todo place in map ObjectInside?
                 tileCord.setX(dir_x + tileCord.getX());
                 tileCord.setY(dir_y + tileCord.getY());
+                App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).setItemInside(item);
                 return new Result(true, "craft " + name + " placed successfully");
             }
         }
@@ -1453,8 +1597,32 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Map<Item, Integer> inventory = player.getInventory().getItems();
 
-        Item foundItem = null;
+        boolean addItem = false;
+        boolean canAdd = (player.getInventory().getMaxQuantity() - player.getInventory().getTotalItemCount()) >= count; // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
 
+        if (!canAdd) {
+            return new Result(false, "cheat code: Not enough space in inventory to add " + count + " of " + name);
+        }
+
+        switch (name) {
+            case "stone":
+                player.getInventory().addItem(new StoneItem(), count);
+                addItem = true;
+                break;
+            case "iron":
+                MarketProducts marketProducts = new MarketProducts();
+                marketProducts.setName("iron");
+                player.getInventory().addItem(new MarketProducts(), count);
+                addItem = true;
+                break;
+            case "pizza":
+                Food food = new Food();
+                food.setName("pizza");
+                player.getInventory().addItem(new Food(), count);
+                addItem = true;
+                break;
+
+        }
         //todo if name is Item
 //        for (Item item : AllGameItems.getAllItems()) {
 //            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
@@ -1463,38 +1631,35 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            }
 //        }
 
-        if (foundItem == null) {
-            return new Result(false, "cheat code: " + name + "not found");
-        }
 
         // بررسی امکان اضافه کردن آیتم به اینونتوری
-        boolean canAdd = (player.getInventory().getMaxQuantity() - player.getInventory().getTotalItemCount()) >= count; // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
-
-        if (!canAdd) {
-            return new Result(false, "cheat code: Not enough space in inventory to add " + count + " of " + name);
-        }
         // اگر آیتم در اینونتوری هست، تعدادش را زیاد می‌کنیم
-        boolean added = false;
-        for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
-            if (entry.getKey().getClass().getSimpleName().equalsIgnoreCase(name)) {
-                inventory.put(entry.getKey(), entry.getValue() + count);
-                added = true;
-                break;
-            }
-        }
+//        boolean added = false;
+//        for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
+//            if (entry.getKey().getClass().getSimpleName().equalsIgnoreCase(name)) {
+//                inventory.put(entry.getKey(), entry.getValue() + count);
+//                added = true;
+//                break;
+//            }
+//        }
 
         // اگر آیتم جدید بود، اضافه‌اش می‌کنیم
-        if (!added) {
-            // یک نمونه جدید از آیتم بساز (clone یا new) چون باید کلید جدید برای هش‌مپ ساخته شود
-            try {
-                Item newItem = foundItem.getClass().getDeclaredConstructor().newInstance();
-                inventory.put(newItem, count);
-            } catch (Exception e) {
-                return new Result(false, "Error: Could not instantiate item '" + name + "'.");
-            }
-        }
+//        if (!added) {
+//            // یک نمونه جدید از آیتم بساز (clone یا new) چون باید کلید جدید برای هش‌مپ ساخته شود
+//            try {
+//                Item newItem = foundItem.getClass().getDeclaredConstructor().newInstance();
+//                inventory.put(newItem, count);
+//            } catch (Exception e) {
+//                return new Result(false, "Error: Could not instantiate item '" + name + "'.");
+//            }
+//        }
 
-        return new Result(true, "Successfully added " + count + " of " + name + " to inventory.");
+        if (addItem) {
+
+            return new Result(true, "Successfully added " + count + " of " + name + " to inventory.");
+        } else {
+            return new Result(false, "Failed to add " + count + " of " + name + " to inventory.");
+        }
     }
 
     public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
@@ -2512,6 +2677,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         }
                                     }
                                     App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
+                                    return new Result(false, "NPC got " + item);
+                                } else {
+                                    return new Result(false, "NPC doesn't like " + item);
                                 }
                             }
                         } else {
@@ -2548,25 +2716,25 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                    }
 //                } catch (Exception e) {
 //                    if (item.replace(" ", "").equalsIgnoreCase("stone")) {
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (itm instanceof Stone && ((FoodCooking) itm).getName() == FoodCookingEnums.pumpkinpie) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
+//                    boolean found = false;
+//                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
+//                        if (itm instanceof Stone && ((FoodCooking) itm).getName() == FoodCookingEnums.pumpkinpie) {
+//                            found = true;
+//                            currentPlayer.getInventory().removeItem(itm, 1);
+//                            if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
+//                                App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
+//                                for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+//                                    if (friendship.getPlayer() == currentPlayer) {
+//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+//                                        return new Result(true, "Gifted successfully");
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    if (!found) {
+//                        return new Result(false, "No item found with that name");
+//                    }
 //                    } else {
 //                        if (item.replace(" ", "").equalsIgnoreCase("iron")) {
 //                            boolean found = false;
@@ -2653,6 +2821,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         }
                                     }
                                     App.getCurrentGame().getNPCABIGAIL().setGiftedToday(true);
+                                    return new Result(false, "NPC got " + item);
+                                } else {
+                                    return new Result(false, "NPC doesn't like " + item);
                                 }
                             }
                         } else {
@@ -2749,6 +2920,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         }
                                     }
                                     App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
+                                    return new Result(false, "NPC got " + item);
+                                } else {
+                                    return new Result(false, "NPC doesn't like " + item);
                                 }
                             }
                         } else {
@@ -2868,6 +3042,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         }
                                     }
                                     App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
+                                    return new Result(false, "NPC got " + item);
+                                } else {
+                                    return new Result(false, "NPC doesn't like " + item);
                                 }
                             }
                         } else {
@@ -2985,6 +3162,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         }
                                     }
                                     App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+                                    return new Result(false, "NPC got " + item);
+                                } else {
+                                    return new Result(false, "NPC doesn't like " + item);
                                 }
                             }
                         } else {
@@ -3047,13 +3227,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         StringBuilder result = new StringBuilder();
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         int friendshipLVL = -1;
+
         for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
             if (friendship.getPlayer() == currentPlayer) {
                 friendshipLVL = friendship.getFriendshipLevel() / 200;
                 break;
             }
         }
-
         result.append("SEBASTIAN\n");
         int counter = 0;
         for (Object object : App.getCurrentGame().getNPCSEBASTIAN().getQuests().keySet()) {
@@ -3062,7 +3242,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 result.append(counter + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
                 counter++;
             } else {
-                break;
             }
         }
 
@@ -3080,7 +3259,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 result.append(counter2 + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
                 counter2++;
             } else {
-                break;
             }
         }
 
@@ -3098,7 +3276,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 result.append(counter3 + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
                 counter3++;
             } else {
-                break;
             }
         }
 
@@ -3116,7 +3293,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 result.append(counter5 + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
                 counter5++;
             } else {
-                break;
             }
         }
 
@@ -3134,7 +3310,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 result.append(counter6 + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
                 counter6++;
             } else {
-                break;
             }
         }
 

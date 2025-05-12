@@ -1,13 +1,16 @@
 package Controller;
 
 import Model.App;
+import Model.Items.Item;
 import Model.Result;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public interface MarketController<T> {
     public default void cheatAdd(int count) {
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setMoney(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMoney() + count);
+        System.out.println("new Balance: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMoney());
     }
 
     HashMap<T, Integer> getStock();
@@ -17,9 +20,15 @@ public interface MarketController<T> {
         HashMap<T, Integer> stock = getStock();
         stringBuilder.append("All Products:\n");
         for (Map.Entry<T, Integer> entry : stock.entrySet()) {
-            stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+            if (entry.getKey() instanceof Item) {
+                Item convertItem = (Item) entry.getKey();
+                stringBuilder.append(convertItem.getCorrectName()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+            } else {
+                stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+            }
+            stringBuilder.append("\n");
         }
-        return new Result(true,stringBuilder.toString());
+        return new Result(true, stringBuilder.toString());
     }
 
     default Result showAllAvailableProduct() {
@@ -28,9 +37,15 @@ public interface MarketController<T> {
         stringBuilder.append("Available Products:\n");
         for (Map.Entry<T, Integer> entry : stock.entrySet()) {
             if (entry.getValue() > 0 || entry.getValue() == -1) {
-                stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+                if (entry.getKey() instanceof Item) {
+                    Item convertItem = (Item) entry.getKey();
+                    stringBuilder.append(convertItem.getCorrectName()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+                } else {
+                    stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue() == -1 ? "Unlimited" : entry.getValue());
+                }
+                stringBuilder.append("\n");
             }
         }
-        return new Result(true,stringBuilder.toString());
+        return new Result(true, stringBuilder.toString());
     }
 }

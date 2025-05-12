@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
+    public int add;
 
     public Result login(String username, String password, String stayLoggedIn) {
         if (username.isEmpty()) {

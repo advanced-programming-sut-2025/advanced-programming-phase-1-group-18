@@ -36,12 +36,12 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
             case "copper ore":
                 boolean validquantity = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
-                    if (mineral.getType() == ForagingMineralsEnums.Copper && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
+                    if (mineral.getType() == ForagingMineralsEnums.CopperOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
                         validquantity = true;
                         if (currentPlayer.getMoney() >= mineral.getPrice()) {
                             currentPlayer.getInventory().addItem(mineral, quantity);
                             App.getCurrentGame().getBlackSmithMarket().removeItem(mineral, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + mineral.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -54,12 +54,12 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
             case "iron ore":
                 boolean validquantity1 = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
-                    if (mineral.getType() == ForagingMineralsEnums.Iron && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
+                    if (mineral.getType() == ForagingMineralsEnums.IronOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
                         validquantity1 = true;
                         if (currentPlayer.getMoney() >= mineral.getPrice()) {
                             currentPlayer.getInventory().addItem(mineral, quantity);
                             App.getCurrentGame().getBlackSmithMarket().removeItem(mineral, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + mineral.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -77,7 +77,7 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
                         if (currentPlayer.getMoney() >= mineral.getPrice()) {
                             currentPlayer.getInventory().addItem(mineral, quantity);
                             App.getCurrentGame().getBlackSmithMarket().removeItem(mineral, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + mineral.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -90,12 +90,12 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
             case "gold ore":
                 boolean validquantity3 = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
-                    if (mineral.getType() == ForagingMineralsEnums.Gold && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
+                    if (mineral.getType() == ForagingMineralsEnums.GoldOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
                         validquantity3 = true;
                         if (currentPlayer.getMoney() >= mineral.getPrice()) {
                             currentPlayer.getInventory().addItem(mineral, quantity);
                             App.getCurrentGame().getBlackSmithMarket().removeItem(mineral, quantity);
-                            return new Result(true, "");
+                            return new Result(true, "You purchased " + mineral.getCorrectName() + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
