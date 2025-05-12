@@ -12,6 +12,8 @@ public enum GameMenuCommands {
     Plant("\\s*plant\\s+-s\\s+(?<seed>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*"),
     ShowPlant("\\s*showplant\\s+-l\\s+(?<x>-?\\d+)\\s+(?<y>-?\\d+)\\s*"),
     HowMuchWater("\\s*howmuch\\s+water\\s*"),
+    Fertilize("\\s*fertilize\\s+-f\\s+(.+)\\s+-d\\s+(.+)\\s*"),
+
     // Time & Date Commands
     TIME("\\s*time\\s*"),
     DATE("\\s*date\\s*"),
@@ -57,7 +59,7 @@ public enum GameMenuCommands {
     SELL("\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*"),
 
     MEETNPC("^\\s*meet\\s+NPC\\s+(.+?)\\s*$"),
-    GIFTNPC("^\\s*gift\\s+NPC\\s+(.+?)\\s+-i\\s+(.+?)\\s*$"),
+    GIFTNPC("^\\s*gift\\s+NPC\\s+(.+)\\s+-i\\s+(.+)\\s*$"),
     FRIENDSHIPNPCLIST("^\\s*friendship\\s+NPC\\s+list\\s*$"),
     QUESTSLIST("^\\s*quests\\s+list\\s*$"),
     QUESTSFINISH("^\\s*quests\\s+finish\\s+-i\\s+(\\d+)\\s*$"),

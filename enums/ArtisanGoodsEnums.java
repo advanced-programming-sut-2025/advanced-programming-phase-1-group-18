@@ -2,7 +2,6 @@ package enums;
 
 import Model.DateTime;
 
-import java.util.Date;
 import java.util.HashMap;
 
 public enum ArtisanGoodsEnums {
@@ -153,7 +152,42 @@ public enum ArtisanGoodsEnums {
             }},
             300
     ),
-
+    Wine(
+            CraftingRecipesEnums.Keg,
+            0, // Energy = 1.75 × Base Fruit Energy → محاسبه‌شونده
+            new DateTime(7, 0),
+            new HashMap<>() {{
+                put("AnyFruit", 1);
+            }},
+            0 // Price = 3 × Base Fruit Price
+    ),
+    Juice(
+            CraftingRecipesEnums.Keg,
+            0, // Energy = 2 × Base Vegetable Energy
+            new DateTime(4, 0),
+            new HashMap<>() {{
+                put("AnyVegetable", 1);
+            }},
+            0 // Price = 2.25 × Base Vegetable Price
+    ),
+    Jelly(
+            CraftingRecipesEnums.PreservesJar,
+            0, // Energy = 2 × Base Fruit Energy
+            new DateTime(3, 0),
+            new HashMap<>() {{
+                put("AnyFruit", 1);
+            }},
+            0 // Price = 2 × Base Fruit Price + 50
+    ),
+    Pickles(
+            CraftingRecipesEnums.PreservesJar,
+            0, // Energy = 1.75 × Base Ingredient Energy
+            new DateTime(0, 6),
+            new HashMap<>() {{
+                put("AnyVegetable", 1);
+            }},
+            0 // Price = 2 × Base Ingredient Price + 50
+    ),
     TruffleOil(
             CraftingRecipesEnums.OilMaker,
             38,
@@ -195,6 +229,7 @@ public enum ArtisanGoodsEnums {
     ),
 
 
+
     Raisins(
             CraftingRecipesEnums.Dehydrator,
             125,
@@ -220,7 +255,7 @@ public enum ArtisanGoodsEnums {
             75,
             new DateTime(0, 1),
             new HashMap<>() {{
-                put("AnyFruit(exceptGrapes)", 5);
+                put("AnyFruit", 5);
             }},
             0 // Price = 7.5 × Fruit Base Price + 25
     ),
@@ -246,24 +281,58 @@ public enum ArtisanGoodsEnums {
             50
     ),
 
-    MetalBar(
+    IronBar(
             CraftingRecipesEnums.Furnace,
             0,
             new DateTime(4, 0),
             new HashMap<>() {{
-                put("AnyOre", 5);
+                put("IronOre", 5);
                 put("Coal", 1);
             }},
-            0 // Price = 10 × Ore Price
+            100 // Price = 10 × Ore Price
+    ),
+    CopperBar(
+            CraftingRecipesEnums.Furnace,
+            0,
+            new DateTime(4, 0),
+            new HashMap<>() {{
+                put("CopperOre", 5);
+                put("Coal", 1);
+            }},
+            50 // Price = 5 × Ore Price
+    ),
+    GoldBar(
+            CraftingRecipesEnums.Furnace,
+            0,
+            new DateTime(5, 0),
+            new HashMap<>() {{
+                put("GoldOre", 5);
+                put("Coal", 1);
+            }},
+            125 // Price = 5 × 25
+    ),
+
+    IridiumBar(
+            CraftingRecipesEnums.Furnace,
+            0,
+            new DateTime(8, 0),
+            new HashMap<>() {{
+                put("IridiumOre", 5);
+                put("Coal", 1);
+            }},
+            500 // Price = 5 × 100
     );
+
+
+
     private final HashMap<String, Integer> ingredients;
     private final CraftingRecipesEnums producer;
-    private final int energyUsage;
+    private final int energy;
     private final int price;
     private final DateTime ProcessingTime;
 
-    ArtisanGoodsEnums(CraftingRecipesEnums producer , int energyUsage, DateTime ProcessingTime, HashMap<String, Integer> ingredients, int price) {
-        this.energyUsage=energyUsage;
+    ArtisanGoodsEnums(CraftingRecipesEnums producer , int energy, DateTime ProcessingTime, HashMap<String, Integer> ingredients, int price) {
+        this.energy = energy;
         this.price=price;
         this.producer=producer;
         this.ingredients = ingredients;
@@ -278,8 +347,8 @@ public enum ArtisanGoodsEnums {
         return producer;
     }
 
-    public int getEnergyUsage() {
-        return energyUsage;
+    public int getEnergy() {
+        return energy;
     }
 
     public int getPrice() {
@@ -288,5 +357,9 @@ public enum ArtisanGoodsEnums {
 
     public DateTime getProcessingTime() {
         return ProcessingTime;
+    }
+
+    public int getEnergyUsage() {
+        return energy;
     }
 }

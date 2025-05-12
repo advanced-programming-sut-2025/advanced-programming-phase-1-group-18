@@ -14,10 +14,10 @@ public enum ForagingMineralsEnums
     Jade,
     Diamond,
     PrismaticShard,
-    Copper,
-    Iron,
-    Gold,
-    Iriduim,
+    CopperOre,
+    IronOre,
+    GoldOre,
+    IridiumOre,
     Coal;
 
     }
