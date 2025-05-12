@@ -19,8 +19,10 @@ public class TheStardropSaloonMenu extends AppMenu {
             System.out.println(controller.purchase(MarketMenuEnums.PURCHASE.getMather(input).group(1), MarketMenuEnums.PURCHASE.getMather(input).group(2)));
         } else if (MarketMenuEnums.CHEATADD.getMather(input) != null) {
             controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
-        }else if (MarketMenuEnums.MenuEnter.getMather(input) != null) {
+        } else if (MarketMenuEnums.MenuEnter.getMather(input) != null) {
             controller.menuEnter(MarketMenuEnums.MenuEnter.getMather(input).group(1));
+        } else {
+            System.out.println("Invalid command");
         }
     }
 

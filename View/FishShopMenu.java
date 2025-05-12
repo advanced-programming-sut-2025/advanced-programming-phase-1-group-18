@@ -21,6 +21,8 @@ public class FishShopMenu extends AppMenu{
             controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
         }else if (MarketMenuEnums.MenuEnter.getMather(input) != null) {
             controller.menuEnter(MarketMenuEnums.MenuEnter.getMather(input).group(1));
+        }else {
+            System.out.println("Invalid command");
         }
     }
 }

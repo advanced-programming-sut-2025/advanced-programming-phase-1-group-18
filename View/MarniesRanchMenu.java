@@ -1,6 +1,7 @@
 package View;
 
 import Controller.JojaMartController;
+//import Controller.MarniesRanchController;
 import Controller.MarniesRanchController;
 import enums.MarketMenuEnums;
 
@@ -21,6 +22,8 @@ public class MarniesRanchMenu extends AppMenu{
             controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
         }else if (MarketMenuEnums.MenuEnter.getMather(input) != null) {
             controller.menuEnter(MarketMenuEnums.MenuEnter.getMather(input).group(1));
+        }else {
+            System.out.println("Invalid command");
         }
     }
 }

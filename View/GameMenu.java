@@ -34,6 +34,8 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2))));
         } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
             System.out.println(controller.howMuchWater());
+        } else if (GameMenuCommands.Fertilize.getMather(input) != null) {
+            System.out.println(controller.fertilize(GameMenuCommands.Fertilize.getMather(input).group(1), GameMenuCommands.Fertilize.getMather(input).group(2)));
         } else if (GameMenuCommands.TIME.getMather(input) != null) {
             System.out.println(controller.time());
         } else if (GameMenuCommands.DATE.getMather(input) != null) {
