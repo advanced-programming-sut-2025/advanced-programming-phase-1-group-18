@@ -35,4 +35,20 @@ public enum MixedSeedsEnums {
     public boolean isAllowedIn(Seasons Seasons) {
         return allowedSeasons.contains(Seasons);
     }
+    public static boolean isContain(String name){
+        for(MixedSeedsEnums enums : values()){
+            if(enums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static MixedSeedsEnums getEnum(String name) {
+        for(MixedSeedsEnums mixedSeedsEnums : MixedSeedsEnums.values()){
+            if (mixedSeedsEnums.name().equalsIgnoreCase(name)){
+                return mixedSeedsEnums;
+            }
+        }
+        return null;
+    }
 }

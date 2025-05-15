@@ -20,4 +20,20 @@ public enum ForagingMineralsEnums
     IridiumOre,
     Coal;
 
+    public static boolean isContain(String name){
+        for(ForagingMineralsEnums enums : values()){
+            if(enums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
     }
+    public static ForagingMineralsEnums getEnum(String name) {
+        for(ForagingMineralsEnums foragingMineralsEnums : ForagingMineralsEnums.values()){
+            if (foragingMineralsEnums.name().equalsIgnoreCase(name)){
+                return foragingMineralsEnums;
+            }
+        }
+        return null;
+    }
+}

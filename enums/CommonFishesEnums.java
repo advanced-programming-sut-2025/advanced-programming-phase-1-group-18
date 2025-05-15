@@ -39,4 +39,20 @@ public enum CommonFishesEnums {
         return season;
     }
 
+    public static boolean isContain (String name){
+        for (CommonFishesEnums allTreesEnums : CommonFishesEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static CommonFishesEnums getEnum(String name) {
+        for(CommonFishesEnums allTreesEnums : CommonFishesEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return allTreesEnums;
+            }
+        }
+        return null;
+    }
 }

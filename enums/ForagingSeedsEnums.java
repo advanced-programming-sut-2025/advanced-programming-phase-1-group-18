@@ -44,4 +44,24 @@ public enum ForagingSeedsEnums
     PowdermelonSeeds,
     AncientSeeds,
     MixedSeeds;
+
+    ForagingSeedsEnums() {
+    }
+
+    public static boolean isContain (String name){
+        for (ForagingSeedsEnums foragingSeedsEnum : ForagingSeedsEnums.values()){
+            if (foragingSeedsEnum.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static ForagingSeedsEnums getEnum(String name) {
+        for(ForagingSeedsEnums foragingSeedsEnum : ForagingSeedsEnums.values()){
+            if (foragingSeedsEnum.name().equalsIgnoreCase(name)){
+                return foragingSeedsEnum;
+            }
+        }
+        return null;
+    }
 }

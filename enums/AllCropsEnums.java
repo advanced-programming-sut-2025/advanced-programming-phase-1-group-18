@@ -53,4 +53,21 @@ public enum AllCropsEnums {
     public ForagingSeedsEnums getSeedSet() {
         return seedSet;
     }
+
+    public static boolean isContain (String name){
+        for (AllCropsEnums allTreesEnums : AllCropsEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static AllCropsEnums getEnum(String name) {
+        for(AllCropsEnums allTreesEnums : AllCropsEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return allTreesEnums;
+            }
+        }
+        return null;
+    }
 }

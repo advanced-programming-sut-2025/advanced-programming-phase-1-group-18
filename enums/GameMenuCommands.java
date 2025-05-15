@@ -4,8 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
+    WHOAMI("\\s*who\\s+am\\s+i\\s*"),
     ShowCurrentMenu("\\s*show\\s+current\\s+menu\\s*"),
-    GameNew("^\\s*game\\s+new\\s+-u\\s+(\\w+)\\s*(\\w*)\\s*(\\w*)\\s*$"),
+    GameNew("^\\s*game\\s+new\\s+-u\\s+(\\w+)\\s*(\\w*)\\s*(\\w*)\\s*(\\w*)\\s*$"),
     ExitGame("\\s*exit\\s+game\\s*"),
     VoteTerminateGame("\\s*vote\\s+terminate\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
@@ -77,14 +78,22 @@ public enum GameMenuCommands {
     SHOW_RECIPES("\\s*crafting\\s+show\\s+recipes\\s*"),
     CRAFT_ITEM("\\s*crafting\\s+craft\\s+(.*+)\\s*"),
     PLACE_ITEM("\\s*place\\s+item\\s+-n\\s+(.*+)\\s+-d\\s+(.*)\\s*"),
-    CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*+)\\s+-c\\s+([0-9]+)\\s*"),
+    CHEAT_ADD_ITEM("\\s*cheat\\s+add\\s+item\\s+-n\\s+(.*)\\s+-c\\s+([0-9]+)\\s*"),
 
     CRAFT_INFO("\\s*craftinfo\\s+-n\\s*(.*)\\s*"),
     Fishing("\\s*fishing\\s+-p\\s+(.*\\S)\\s*"),
     ArtisanUse("^artisan use (\\w+)(?:\\s+(\\w+))+$"),
     ArtisanGet("\\s*artisan\\s+get\\s+(.*)\\s*"),
 
-    MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*\\S)\\s*");
+    MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*\\S)\\s*"),
+
+
+    //tools commands
+    TOOLEQUIP("\\s*tool\\s+equip\\s+(\\w+)"),
+    TOOLSSHOWCURRENT("\\s*tools\\s+show\\s+current\\s*"),
+    TOOLSSHOWAVAILABLE("\\s*tools\\s+show\\s+available\\s*"),
+    TOOLSUPGRADE("\\s*tools\\s+upgrade\\s*(\\w+)\\s*"),
+    TOOLSUSE("\\s*tools\\s+use\\s+-d\\s*(.+)\\s*");
     private final String pattern;
 
     GameMenuCommands(String pattern) {

@@ -359,7 +359,20 @@ public enum ArtisanGoodsEnums {
         return ProcessingTime;
     }
 
-    public int getEnergyUsage() {
-        return energy;
+    public static boolean isContain (String name){
+        for (ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static ArtisanGoodsEnums getEnum(String name) {
+        for(ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return allTreesEnums;
+            }
+        }
+        return null;
     }
 }

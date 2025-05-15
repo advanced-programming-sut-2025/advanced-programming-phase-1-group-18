@@ -53,5 +53,13 @@ public enum AllFishesEnum {
         }
         return false;
     }
+    public static AllFishesEnum getEnum(String name) {
+        for(AllFishesEnum allTreesEnums : AllFishesEnum.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return allTreesEnums;
+            }
+        }
+        return null;
+    }
 
 }

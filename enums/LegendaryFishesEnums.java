@@ -26,4 +26,20 @@ public enum LegendaryFishesEnums {
     public Seasons getSeason() {
         return season;
     }
+    public static boolean isContain (String name){
+        for (LegendaryFishesEnums allTreesEnums : LegendaryFishesEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static LegendaryFishesEnums getEnum(String name) {
+        for(LegendaryFishesEnums allTreesEnums : LegendaryFishesEnums.values()){
+            if (allTreesEnums.name().equalsIgnoreCase(name)){
+                return allTreesEnums;
+            }
+        }
+        return null;
+    }
 }
