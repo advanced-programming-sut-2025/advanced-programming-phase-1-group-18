@@ -17,8 +17,10 @@ public class CarpentersShopMenu extends AppMenu {
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         if (MarketMenuEnums.SHOWALLPRODUCTS.getMather(input) != null) {
+            System.out.println("Wood: 2147483647");
             System.out.println(controller.showAllProducts());
         } else if (MarketMenuEnums.SHOWALLAVAILABLEPRODUCTS.getMather(input) != null) {
+            System.out.println("Wood: 2147483647");
             System.out.println(controller.showAllAvailableProduct());
         } else if (MarketMenuEnums.PURCHASE.getMather(input) != null) {
             System.out.println(controller.purchase(MarketMenuEnums.PURCHASE.getMather(input).group(1), MarketMenuEnums.PURCHASE.getMather(input).group(2)));
@@ -31,7 +33,7 @@ public class CarpentersShopMenu extends AppMenu {
             System.out.println(controller.build(buildingName, xOfBuilding, yOfBuilding));
         } else if (CarpentersShopCommands.MenuEnter.getMather(input) != null) {
             controller.menuEnter(CarpentersShopCommands.MenuEnter.getMather(input).group(1));
-        }else {
+        } else {
             System.out.println("Invalid command");
         }
     }

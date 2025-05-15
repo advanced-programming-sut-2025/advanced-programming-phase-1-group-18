@@ -84,6 +84,16 @@ public class GameMenu extends AppMenu {
             String item = GameMenuCommands.INVENTORYTRASH.getMather(input).group(1);
             int number = Integer.parseInt(GameMenuCommands.INVENTORYTRASH.getMather(input).group(2));
             System.out.println(controller.inventoryTrash(item, number));
+        } else if (GameMenuCommands.TOOLEQUIP.getMather(input) != null) {
+            String name = GameMenuCommands.TOOLEQUIP.getMather(input).group(1);
+            System.out.println(controller.toolEquip(name));
+        } else if (GameMenuCommands.TOOLSSHOWCURRENT.getMather(input) != null) {
+            System.out.println(controller.toolsShowCurrent());
+        } else if (GameMenuCommands.TOOLSSHOWAVAILABLE.getMather(input) != null) {
+            System.out.println(controller.toolShowAvailable());
+        } else if (GameMenuCommands.TOOLSUSE.getMather(input) != null) {
+            String direction = GameMenuCommands.TOOLSUSE.getMather(input).group(1);
+            System.out.println(controller.toolsUse(direction));
         } else if (GameMenuCommands.COOKINGREFRIGERATOR.getMather(input) != null) {
             String action = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(1);
             String item = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(2);
@@ -175,6 +185,8 @@ public class GameMenu extends AppMenu {
         } else if (GameMenuCommands.ArtisanGet.getMather(input) != null) {
             System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
 
+        } else if (GameMenuCommands.WHOAMI.getMather(input) != null) {
+            System.out.println(controller.whoAmI());
         } else {
             System.out.println("Invalid command");
         }
