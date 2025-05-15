@@ -11,11 +11,36 @@ import java.util.List;
 import java.util.Random;
 
 import Model.User;
+import com.google.gson.Gson;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
+
+    public static String hashPasswordSHA256(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : encodedHash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not found", e);
+        }
+    }
+
     //first part of controller: Register
     public Result register(String username, String password, String repassword, String nickname, String email,
                            String gender) {
+        App.loadUsersFromFile();
         if (username.isEmpty()) {
             return new Result(false, "Username cannot be empty");
         }
@@ -108,16 +133,18 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         if (email.matches(".*[?><,\"'`;:\\\\|\\]\\[\\}\\{\\+=\\)\\(\\*&\\^%$#!].*")) {
             return new Result(false, "Email contains illegal characters");
         }
-
-        User newUser = new User(username, password, nickname, email, gender);
+        String hashedPassword = hashPasswordSHA256(password);
+        User newUser = new User(username, hashedPassword, nickname, email, gender);
         App.getUsers_List().add(newUser);
         App.setCurrentUser(newUser);
         App.setCurrentMenu(Menu.MainMenu);
+        saveUsersToFile();
         return new Result(true, "You Registered Successfully");
     }
 
     public Result register2(String username, String nickname, String email,
                             String gender, Scanner scanner) {
+        App.loadUsersFromFile();
         if (username.isEmpty()) {
             return new Result(false, "Username cannot be empty");
         }
@@ -218,10 +245,12 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                     }
                 case 3:
                     if (answer == random5 + random6) {
-                        User newUser = new User(username, generatedpassword, nickname, email, gender);
+                        String hashedPassword = hashPasswordSHA256(generatedpassword);
+                        User newUser = new User(username, hashedPassword, nickname, email, gender);
                         App.getUsers_List().add(newUser);
                         App.setCurrentUser(newUser);
                         App.setCurrentMenu(Menu.MainMenu);
+                        saveUsersToFile();
                         return new Result(true, "You Registered Successfully");
                     } else {
                         return new Result(false, "Your answer is incorrect!");
@@ -237,6 +266,16 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
 
     public void exit() {
         System.exit(0);
+    }
+
+    private void saveUsersToFile() {
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter("users.json")) {
+            gson.toJson(App.getUsers_List(), writer);
+            System.out.println("Users saved to users.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

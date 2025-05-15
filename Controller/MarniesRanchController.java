@@ -34,10 +34,12 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                 for (Item item : App.getCurrentGame().getMarniesRanchMarket().getStock().keySet()) {
                     if (item instanceof Hay && App.getCurrentGame().getMarniesRanchMarket().getStock().get(item) >= quantity) {
                         validquantity = true;
-                        if (currentPlayer.getMoney() >= ((Hay) item).getPrice()) {
+                        if (currentPlayer.getGold() >= ((Hay) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getMarniesRanchMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -52,10 +54,12 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                 for (Item item : App.getCurrentGame().getMarniesRanchMarket().getStock().keySet()) {
                     if (item instanceof MilkPail && App.getCurrentGame().getMarniesRanchMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
-                        if (currentPlayer.getMoney() >= ((MilkPail) item).getPrice()) {
+                        if (currentPlayer.getGold() >= ((MilkPail) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getMarniesRanchMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -70,10 +74,12 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                 for (Item item : App.getCurrentGame().getMarniesRanchMarket().getStock().keySet()) {
                     if (item instanceof Shear && App.getCurrentGame().getMarniesRanchMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
-                        if (currentPlayer.getMoney() >= ((MilkPail) item).getPrice()) {
+                        if (currentPlayer.getGold() >= ((Shear) item).getPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getMarniesRanchMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -390,17 +396,18 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
 //        return true;
 //    }
 //
-//    public void menuEnter(String menuName) {
-//        //from markets we can move to gamemenu
-//        menuName = menuName.toLowerCase();
-//        switch (menuName) {
-//            case "gamemenu":
-//                App.setCurrentMenu(Menu.GameMenu);
-//                System.out.println("You are now in GameMenu!");
-//                break;
-//            default:
-//                System.out.println("Invalid menu");
-//                break;
-//        }
-//    }
+
+    public void menuEnter(String menuName) {
+        //from markets we can move to gamemenu
+        menuName = menuName.toLowerCase();
+        switch (menuName) {
+            case "gamemenu":
+                App.setCurrentMenu(Menu.GameMenu);
+                System.out.println("You are now in GameMenu!");
+                break;
+            default:
+                System.out.println("Invalid menu");
+                break;
+        }
+    }
 }

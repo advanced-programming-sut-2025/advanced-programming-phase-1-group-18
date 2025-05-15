@@ -25,14 +25,16 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
 
 
     private Result handlePurchase(FoodCookingEnums cookingEnums, int quantity) {
+        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
             if (item instanceof Cookingrecipe && ((Cookingrecipe) item).getFood() == cookingEnums &&
                     App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
 
-                if (currentPlayer.getMoney() >= ((Cookingrecipe) item).getPrice()) {
+                if (currentPlayer.getGold() >= ((Cookingrecipe) item).getPrice()) {
                     currentPlayer.getCookingRecipes().add((Cookingrecipe) item);
                     App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                    return new Result(true, "You purchased " + quantity + " of " + ((Cookingrecipe)item).getFood().toString());
+                    currentPlayer.setGold(currentPlayer.getGold() - ((Cookingrecipe) item).getPrice());
+                    return new Result(true, "You purchased " + quantity + " of " + ((Cookingrecipe) item).getFood().toString() + " recipe");
                 } else {
                     return new Result(false, "You don't have enough money");
                 }
@@ -42,6 +44,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
     }
 
     public Result purchase(String name, String count) {
+        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         int quantity = -1;
         if (count == null) {
             quantity = 1;
@@ -54,10 +57,12 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("Beer") && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity = true;
-                        if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
+                        if (currentPlayer.getGold() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem((Food) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((Food) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((Food) item, quantity);
+                            return new Result(true, "You purchased " + quantity + " of " + ((Food) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -72,10 +77,13 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
                     if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Salad && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
-                        if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
+                        if (currentPlayer.getGold() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((FoodCooking) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
+
+                            return new Result(true, "You purchased " + quantity + " of " + ((FoodCooking) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -88,12 +96,14 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "bread":
                 boolean validquantity2 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.bread && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Bread && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
-                        if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
+                        if (currentPlayer.getGold() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((FoodCooking) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
+                            return new Result(true, "You purchased " + quantity + " of " + ((FoodCooking) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -106,12 +116,15 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "spaghetti":
                 boolean validquantity3 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.spaghetti && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Spaghetti && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity3 = true;
-                        if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
+                        if (currentPlayer.getGold() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((FoodCooking) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
+
+                            return new Result(true, "You purchased " + quantity + " of " + ((FoodCooking) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -124,12 +137,15 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
             case "pizza":
                 boolean validquantity4 = false;
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
-                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.pizza && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FoodCooking && ((FoodCooking) item).getNamee() == FoodCookingEnums.Pizza && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity4 = true;
-                        if (currentPlayer.getMoney() >= ((FoodCooking) item).getSellPrice()) {
+                        if (currentPlayer.getGold() >= ((FoodCooking) item).getSellPrice()) {
                             currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((FoodCooking) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((FoodCooking) item, quantity);
+
+                            return new Result(true, "You purchased " + quantity + " of " + ((FoodCooking) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -144,10 +160,13 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                 for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("coffee") && App.getCurrentGame().getTheStardropSaloonMarket().getStock().get(item) >= quantity) {
                         validquantity5 = true;
-                        if (currentPlayer.getMoney() >= ((Food) item).getPrice()) {
+                        if (currentPlayer.getGold() >= ((Food) item).getPrice()) {
                             currentPlayer.getInventory().addItem((Food) item, quantity);
                             App.getCurrentGame().getTheStardropSaloonMarket().removeItem(item, quantity);
-                            return new Result(true, "You purchased " + quantity + " of " + ((Food)item).getCorrectName());
+                            currentPlayer.setGold(currentPlayer.getGold() - ((Food) item).getCorrectPrice());
+                            currentPlayer.getInventory().addItem((Food) item, quantity);
+
+                            return new Result(true, "You purchased " + quantity + " of " + ((Food) item).getCorrectName());
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -158,17 +177,17 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
                 }
                 break;
             case "hashbrowns recipe":
-                return handlePurchase(FoodCookingEnums.hashbrowns, quantity);
+                return handlePurchase(FoodCookingEnums.HashBrowns, quantity);
             case "omelet recipe":
                 return handlePurchase(FoodCookingEnums.Omelet, quantity);
             case "pancakes recipe":
-                return handlePurchase(FoodCookingEnums.pancakes, quantity);
+                return handlePurchase(FoodCookingEnums.Pancakes, quantity);
             case "bread recipe":
-                return handlePurchase(FoodCookingEnums.bread, quantity);
+                return handlePurchase(FoodCookingEnums.Bread, quantity);
             case "tortilla recipe":
                 return handlePurchase(FoodCookingEnums.Tortilla, quantity);
             case "pizza recipe":
-                return handlePurchase(FoodCookingEnums.pizza, quantity);
+                return handlePurchase(FoodCookingEnums.Pizza, quantity);
             case "maki roll recipe":
                 return handlePurchase(FoodCookingEnums.MakiRoll, quantity);
             case "triple shot espresso recipe":

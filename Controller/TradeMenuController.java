@@ -6,10 +6,14 @@ import enums.Menu;
 
 
 public class TradeMenuController implements MenuEnter, ShowCurrentMenu{
+
+
     public Result trade(String command)
     {
         return new Result(true, "");
     }
+
+
     public void tradeList()
     {
 

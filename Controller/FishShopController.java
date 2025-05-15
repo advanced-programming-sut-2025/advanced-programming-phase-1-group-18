@@ -2,6 +2,7 @@ package Controller;
 
 import Model.App;
 import Model.Items.CraftingItem;
+import Model.Items.FishingPole;
 import Model.Items.Item;
 import Model.Items.Mineral;
 import Model.Player;
@@ -29,12 +30,13 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
             case "fish smoker":
                 boolean validquantity = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
-                    if (item.getCorrectName().equalsIgnoreCase("fishsmoker") && App.getCurrentGame().getBlackSmithMarket().getStock().get(item) >= quantity) {
+                    if (item.getCorrectName().equalsIgnoreCase("fishsmoker") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
                         validquantity = true;
-                        if (currentPlayer.getMoney() >= item.getCorrectPrice()) {
+                        if (currentPlayer.getGold() >= item.getCorrectPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -52,12 +54,14 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
             case "bamboo pole":
                 boolean validquantity1 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
-                    if (item.getCorrectName().equalsIgnoreCase("bamboopole") && App.getCurrentGame().getBlackSmithMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Bamboo") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
-                        if (currentPlayer.getMoney() >= item.getCorrectPrice()) {
+                        if (currentPlayer.getGold() >= item.getCorrectPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -71,12 +75,14 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
             case "training rod":
                 boolean validquantity2 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
-                    if (item.getCorrectName().equalsIgnoreCase("trainingrod") && App.getCurrentGame().getBlackSmithMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Training") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
-                        if (currentPlayer.getMoney() >= item.getCorrectPrice()) {
+                        if (currentPlayer.getGold() >= item.getCorrectPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -90,12 +96,15 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
             case "fiberglass rod":
                 boolean validquantity3 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
-                    if (item.getCorrectName().equalsIgnoreCase("fiberglassrod") && App.getCurrentGame().getBlackSmithMarket().getStock().get(item) >= quantity) {
+//                    System.out.println(quantity + " " + item.getCorrectName());
+                    if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Fiberglass") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
                         validquantity3 = true;
-                        if (currentPlayer.getMoney() >= item.getCorrectPrice()) {
+                        if (currentPlayer.getGold() >= item.getCorrectPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -109,12 +118,14 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
             case "iridium rod":
                 boolean validquantity4 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
-                    if (item.getCorrectName().equalsIgnoreCase("iridiumrod") && App.getCurrentGame().getBlackSmithMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Iridium") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
                         validquantity4 = true;
-                        if (currentPlayer.getMoney() >= item.getCorrectPrice()) {
+                        if (currentPlayer.getGold() >= item.getCorrectPrice()) {
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
-                            return new Result(true, "");
+                            currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
+
+                            return new Result(true, "You purchased " + count + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }

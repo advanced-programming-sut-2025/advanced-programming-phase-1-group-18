@@ -4,9 +4,12 @@ package Controller;
 import Model.App;
 import Model.Result;
 import Model.User;
+import com.google.gson.Gson;
 import enums.LoginMenuCommands;
 import enums.Menu;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -20,18 +23,29 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         if (password.isEmpty()) {
             return new Result(false, "you should enter password");
         }
-        if (findUserByUsername(username) == null) {
-            return new Result(false, "user already exist");
-        }
+//        if (findUserByUsername(username) != null) {
+//            return new Result(false, "user already exist");
+//        }
         User user = findUserByUsername(username);
-        if (!user.getPassword().equals(password)) {
+        String hashedInput = RegisterMenuController.hashPasswordSHA256(password);
+        if (!user.getPassword().equals(hashedInput)) {
             return new Result(false, "wrong password");
         }
+
         user.setStayLoggedIn(!(stayLoggedIn == null));
         App.setCurrentUser(user);
         App.setCurrentMenu(Menu.MainMenu);
-        return new Result(true, "user logged successfully");
 
+
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter("loggedInUser.json")) {
+            gson.toJson(user, writer);
+            System.out.println("User info saved to loggedInUser.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "Login successful but failed to save user data.");
+        }
+        return new Result(true, "user logged successfully");
     }
 
     public Result forgetPassword(String username, Scanner scanner) {
