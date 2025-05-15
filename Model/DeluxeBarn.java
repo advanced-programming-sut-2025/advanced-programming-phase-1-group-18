@@ -3,22 +3,19 @@ package Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DeluxeBarn
+public class DeluxeBarn implements Name
 {
-    protected static int deluxeBarnAmount = 100;
 
-    public int getDeluxeBarnAmount() {
-        return deluxeBarnAmount;
-    }
-
-    public void setDeluxeBarnAmount(int deluxeBarnAmount) {
-        DeluxeBarn.deluxeBarnAmount = deluxeBarnAmount;
-    }
     protected final int MaxCapacity =12;
     protected boolean Status = false;
     protected ArrayList<Kashi> insideKashis;
     protected String Level;
     protected ArrayList<TavilehAnimal> TavilehAnimals;
+    protected  int goldNeeded = 25000;
+    protected  int woodNeeded =550;
+    protected  int stoneNeeded = 300;
+    protected String Name;
+
 
     public int getMaxCapacity()
     {
@@ -33,6 +30,39 @@ public class DeluxeBarn
     {
         return Status;
     }
+
+    public int getStoneNeeded() {
+        return stoneNeeded;
+    }
+
+    public void setStoneNeeded(int stoneNeeded) {
+        this.stoneNeeded = stoneNeeded;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public int getWoodNeeded() {
+        return woodNeeded;
+    }
+
+    public void setWoodNeeded(int woodNeeded) {
+        this.woodNeeded = woodNeeded;
+    }
+
+    public int getGoldNeeded() {
+        return goldNeeded;
+    }
+
+    public void setGoldNeeded(int goldNeeded) {
+        this.goldNeeded = goldNeeded;
+    }
+
     public String getLevel() {
         return Level;
     }
@@ -63,5 +93,10 @@ public class DeluxeBarn
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "deluxebarn";
     }
 }

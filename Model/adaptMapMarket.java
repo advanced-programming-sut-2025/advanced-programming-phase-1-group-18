@@ -15,11 +15,11 @@ public interface adaptMapMarket {
             }
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
             kashi.setInside(this);
-            if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
-                kashi.setWalkable(kashi.getEnterance());
-            } else {
+//            if (cord.getX() == borderlowx || cord.getX() == borderhighx || cord.getY() == borderlowy || cord.getY() == borderhighy) {
+//                kashi.setWalkable(kashi.getEnterance());
+//            } else {
                 kashi.setWalkable(true);
-            }
+//            }
             kashis.add(kashi);
         }
     }

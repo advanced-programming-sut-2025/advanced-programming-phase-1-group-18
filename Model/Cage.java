@@ -1,20 +1,10 @@
 package Model;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Cage
+public class Cage implements Name
 {
-    protected int cageAmounts = 100;
-
-    public int getCageAmounts()
-    {
-        return cageAmounts;
-    }
-
-    public void setCageAmounts(int cageAmounts)
-    {
-        this.cageAmounts = cageAmounts;
-    }
 
     // make it true when Cage
     protected boolean Status = false;
@@ -22,6 +12,10 @@ public class Cage
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals;
     protected ArrayList<Kashi> insideKashis;
+    protected  int goldNeeded = 4000;
+    protected  int woodNeeded =300;
+    protected  int stoneNeeded = 150;
+    protected String Name;
 
     public ArrayList<Kashi> getInsideKashis() {
         return insideKashis;
@@ -51,6 +45,33 @@ public class Cage
     public int getMaxCapacity() {
         return MaxCapacity;
     }
+    // setter and getter for CageMoneys;
+    public int getGoldNeeded() {
+        return goldNeeded;
+    }
+
+    public int getWoodNeeded() {
+        return woodNeeded;
+    }
+
+    public void setWoodNeeded(int woodNeeded) {
+        this.woodNeeded = woodNeeded;
+    }
+
+    public int getStoneNeeded() {
+        return stoneNeeded;
+    }
+
+    public void setStoneNeeded(int stoneNeeded) {
+        this.stoneNeeded = stoneNeeded;
+    }
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
 
     public void setStatus(boolean status) {
         Status = status;
@@ -58,6 +79,7 @@ public class Cage
     public boolean getStatus() {
         return Status;
     }
+
 
     public void adaptMap(ArrayList<Cord> cords)
     {
@@ -74,5 +96,10 @@ public class Cage
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "cage";
     }
 }

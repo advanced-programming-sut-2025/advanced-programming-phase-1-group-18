@@ -95,7 +95,7 @@ public class Inventory {
     }
 
     public int getTotalItemCount() {
-        return Items.values().stream().mapToInt(Integer::intValue).sum();
+        return Items.size();
     }
 
     public boolean isFull() {

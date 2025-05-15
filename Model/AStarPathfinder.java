@@ -12,7 +12,7 @@ public class AStarPathfinder {
     };
 
     // Helper function to get direction
-    private static String getDirection(int[] from, int[] to) {
+    public static String getDirection(int[] from, int[] to) {
         if (to[0] > from[0]) return "DOWN";
         if (to[0] < from[0]) return "UP";
         if (to[1] > from[1]) return "RIGHT";
@@ -114,4 +114,5 @@ public class AStarPathfinder {
     public static int calculatePower(int tileCount, int turnCount) {
         return (tileCount + 10 * turnCount) / 20;
     }
+
 }

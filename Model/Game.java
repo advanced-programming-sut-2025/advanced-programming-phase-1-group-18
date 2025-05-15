@@ -10,125 +10,125 @@ import java.util.ArrayList;
 import java.util.Deque;
 
 public class Game {
-    protected int player1TopLeftx = 0;
-    protected int player1TopLefty = 0;
-    protected int player1Width = 450;
-    protected int player1Height = 200;
+    protected static int player1TopLeftx = 0;
+    protected static int player1TopLefty = 0;
+    protected static int player1Width = 450;
+    protected static int player1Height = 200;
 
-    protected int player2TopLeftx = 550;
-    protected int player2TopLefty = 0;
-    protected int player2Width = 449;
-    protected int player2Height = 200;
+    protected static int player2TopLeftx = 550;
+    protected static int player2TopLefty = 0;
+    protected static int player2Width = 449;
+    protected static int player2Height = 200;
 
-    protected int player3TopLeftx = 0;
-    protected int player3TopLefty = 360;
-    protected int player3Width = 450;
-    protected int player3Height = 200;
+    protected static int player3TopLeftx = 0;
+    protected static int player3TopLefty = 360;
+    protected static int player3Width = 450;
+    protected static int player3Height = 200;
 
-    protected int player4TopLeftx = 550;
-    protected int player4TopLefty = 360;
-    protected int player4Width = 449;
-    protected int player4Height = 200;
+    protected static int player4TopLeftx = 550;
+    protected static int player4TopLefty = 360;
+    protected static int player4Width = 449;
+    protected static int player4Height = 200;
 
-    protected int BlackSmithTopLeftx = 75;
-    protected int BlackSmithTopLefty = 230;
-    protected int BlackSmithWidth = 100;
-    protected int BlackSmithHeight = 100;
-    protected int BlackSmithEnterancex = 125;
-    protected int BlackSmithEnterancey = 230;
+    protected static int BlackSmithTopLeftx = 75;
+    protected static int BlackSmithTopLefty = 230;
+    protected static int BlackSmithWidth = 100;
+    protected static int BlackSmithHeight = 100;
+    protected static int BlackSmithEnterancex = 125;
+    protected static int BlackSmithEnterancey = 230;
 
-    protected int JojoMartTopLeftx = 200;
-    protected int JojoMartTopLefty = 230;
-    protected int JojoMartWidth = 100;
-    protected int JojoMartHeight = 100;
-    protected int JojoMartEnterancex = 250;
-    protected int JojoMartEnterancey = 230;
+    protected static int JojoMartTopLeftx = 200;
+    protected static int JojoMartTopLefty = 230;
+    protected static int JojoMartWidth = 100;
+    protected static int JojoMartHeight = 100;
+    protected static int JojoMartEnterancex = 250;
+    protected static int JojoMartEnterancey = 230;
 
-    protected int PierresGeneralStoreTopLeftx = 325;
-    protected int PierresGeneralStoreTopLefty = 230;
-    protected int PierresGeneralStoreWidth = 100;
-    protected int PierresGeneralStoreHeight = 100;
-    protected int PierresGeneralStoreEnterancex = 375;
-    protected int PierresGeneralStoreEnterancey = 230;
+    protected static int PierresGeneralStoreTopLeftx = 325;
+    protected static int PierresGeneralStoreTopLefty = 230;
+    protected static int PierresGeneralStoreWidth = 100;
+    protected static int PierresGeneralStoreHeight = 100;
+    protected static int PierresGeneralStoreEnterancex = 375;
+    protected static int PierresGeneralStoreEnterancey = 230;
 
-    protected int CarpentersShopTopLeftx = 450;
-    protected int CarpentersShopTopLefty = 230;
-    protected int CarpentersShopWidth = 100;
-    protected int CarpentersShopHeight = 100;
-    protected int CarpentersShopEnterancex = 500;
-    protected int CarpentersShopEnterancey = 230;
+    protected static int CarpentersShopTopLeftx = 450;
+    protected static int CarpentersShopTopLefty = 230;
+    protected static int CarpentersShopWidth = 100;
+    protected static int CarpentersShopHeight = 100;
+    protected static int CarpentersShopEnterancex = 500;
+    protected static int CarpentersShopEnterancey = 230;
 
-    protected int FishShopTopLeftx = 575;
-    protected int FishShopTopLefty = 230;
-    protected int FishShopWidth = 100;
-    protected int FishShopHeight = 100;
-    protected int FishShopEnterancex = 625;
-    protected int FishShopEnterancey = 230;
+    protected static int FishShopTopLeftx = 575;
+    protected static int FishShopTopLefty = 230;
+    protected static int FishShopWidth = 100;
+    protected static int FishShopHeight = 100;
+    protected static int FishShopEnterancex = 625;
+    protected static int FishShopEnterancey = 230;
 
-    protected int MarniesRanchTopLeftx = 700;
-    protected int MarniesRanchTopLefty = 230;
-    protected int MarniesRanchWidth = 100;
-    protected int MarniesRanchHeight = 100;
-    protected int MarniesRanchEnterancex = 750;
-    protected int MarniesRanchEnterancey = 230;
+    protected static int MarniesRanchTopLeftx = 700;
+    protected static int MarniesRanchTopLefty = 230;
+    protected static int MarniesRanchWidth = 100;
+    protected static int MarniesRanchHeight = 100;
+    protected static int MarniesRanchEnterancex = 750;
+    protected static int MarniesRanchEnterancey = 230;
 
-    protected int TheStardropSaloonTopLeftx = 825;
-    protected int TheStardropSaloonTopLefty = 230;
-    protected int TheStardropSaloonWidth = 100;
-    protected int TheStardropSaloonHeight = 100;
-    protected int TheStardropSaloonEnterancex = 875;
-    protected int TheStardropSaloonEnterancey = 230;
+    protected static int TheStardropSaloonTopLeftx = 825;
+    protected static int TheStardropSaloonTopLefty = 230;
+    protected static int TheStardropSaloonWidth = 100;
+    protected static int TheStardropSaloonHeight = 100;
+    protected static int TheStardropSaloonEnterancex = 875;
+    protected static int TheStardropSaloonEnterancey = 230;
 
     // Sebastian
-    protected int NPCSEBASTIANTopLeftX = 480;
-    protected int NPCSEBASTIANTopLeftY = 100;
+    protected static int NPCSEBASTIANTopLeftX = 480;
+    protected static int NPCSEBASTIANTopLeftY = 100;
 //    protected int NPCSEBASTIANWidth = 1;
 //    protected int NPCSEBASTIANHeight = 1;
 //    protected int NPCSEBASTIANEntranceX;
 //    protected int NPCSEBASTIANEntranceY;
 
     // Abigail
-    protected int NPCABIGAILTopLeftX = 500;
-    protected int NPCABIGAILTopLeftY = 100;
+    protected static int NPCABIGAILTopLeftX = 500;
+    protected static int NPCABIGAILTopLeftY = 100;
 //    protected int NPCABIGAILWidth;
 //    protected int NPCABIGAILHeight;
 //    protected int NPCABIGAILEntranceX;
 //    protected int NPCABIGAILEntranceY;
 
     // Harvey
-    protected int NPCHARVEYTopLeftX = 520;
-    protected int NPCHARVEYTopLeftY = 100;
+    protected static int NPCHARVEYTopLeftX = 520;
+    protected static int NPCHARVEYTopLeftY = 100;
 //    protected int NPCHARVEYWidth;
 //    protected int NPCHARVEYHeight;
 //    protected int NPCHARVEYEntranceX;
 //    protected int NPCHARVEYEntranceY;
 
     // Leah
-    protected int NPCLEAHTopLeftX = 480;
-    protected int NPCLEAHTopLeftY = 460;
+    protected static int NPCLEAHTopLeftX = 480;
+    protected static int NPCLEAHTopLeftY = 460;
 //    protected int NPCLEAHWidth;
 //    protected int NPCLEAHHeight;
 //    protected int NPCLEAHEntranceX;
 //    protected int NPCLEAHEntranceY;
 
     // Robin
-    protected int NPCROBINTopLeftX = 520;
-    protected int NPCROBINTopLeftY = 460;
+    protected static int NPCROBINTopLeftX = 520;
+    protected static int NPCROBINTopLeftY = 460;
 //    protected int NPCROBINWidth;
 //    protected int NPCROBINHeight;
 //    protected int NPCROBINEntranceX;
 //    protected int NPCROBINEntranceY;
 
-    protected int NPCSEBASTIANx = 480;
-    protected int NPCSEBASTIANy = 100;
-    protected int NPCABIGAILx = 500;
-    protected int NPCABIGAILy = 100;
-    protected int NPCHARVEYx = 520;
-    protected int NPCHARVEYy = 100;
-    protected int NPCLEAHx = 480;
-    protected int NPCLEAHy = 460;
-    protected int NPCROBINx = 520;
-    protected int NPCROBINy = 460;
+    protected static int NPCSEBASTIANx = 480;
+    protected static int NPCSEBASTIANy = 100;
+    protected static int NPCABIGAILx = 500;
+    protected static int NPCABIGAILy = 100;
+    protected static int NPCHARVEYx = 520;
+    protected static int NPCHARVEYy = 100;
+    protected static int NPCLEAHx = 480;
+    protected static int NPCLEAHy = 460;
+    protected static int NPCROBINx = 520;
+    protected static int NPCROBINy = 460;
 
     protected ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
     protected User Creator;

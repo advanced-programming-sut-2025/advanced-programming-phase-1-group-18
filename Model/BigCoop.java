@@ -3,22 +3,34 @@ package Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BigCoop
+public class BigCoop implements Name
 {
-    protected static int bigCoop = 100;
-
     protected boolean Status = false;
     protected final int MaxCapacity= 8;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals;
     protected ArrayList<Kashi> insideKashis;
-
+    protected final int goldNeeded = 10000;
+    protected final int woodNeeded =400;
+    protected final int stoneNeeded = 150;
 
     public void setStatus(boolean status) {
         Status = status;
     }
     public boolean getStatus() {
         return Status;
+    }
+
+    public int getStoneNeeded() {
+        return stoneNeeded;
+    }
+
+    public int getWoodNeeded() {
+        return woodNeeded;
+    }
+
+    public int getGoldNeeded() {
+        return goldNeeded;
     }
 
     public int getMaxCapacity() {
@@ -40,8 +52,7 @@ public class BigCoop
         this.CageAnimals = cageAnimals;
     }
 
-    public void adaptMap(ArrayList<Cord> cords)
-    {
+    public void adaptMap(ArrayList<Cord> cords) {
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
@@ -54,5 +65,9 @@ public class BigCoop
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
+    }
+    @Override
+    public String getCorrectName() {
+        return "bigcoop";
     }
 }

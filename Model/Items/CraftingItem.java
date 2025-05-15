@@ -57,6 +57,6 @@ public class CraftingItem extends Item implements Name,Price
 
     @Override
     public int getCorrectPrice() {
-        return price;
+        return SellPrice;
     }
 }

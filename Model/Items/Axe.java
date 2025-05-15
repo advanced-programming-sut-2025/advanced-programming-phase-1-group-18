@@ -2,7 +2,7 @@ package Model.Items;
 
 import Model.Name;
 
-public class Axe extends Item implements Name,Price
+public class Axe extends Tool implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;

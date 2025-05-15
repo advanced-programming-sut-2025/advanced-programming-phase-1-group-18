@@ -1,4 +1,5 @@
 package Model;
+
 import Model.Items.FoodCooking;
 import Model.Buff;
 import enums.FoodCookingEnums;
@@ -32,121 +33,120 @@ public class Cookingrecipe {
 
         Buff buff = null;
 
-        switch (foodtype) {
-            case Friedegg -> {
+        switch (foodtype.toString().toLowerCase()) {
+            case "friedegg" -> {
                 cookedFood.setEnergy(50);
                 cookedFood.setSellPrice(35);
             }
-            case BakedFish -> {
+            case "bakedfish" -> {
                 cookedFood.setEnergy(75);
                 cookedFood.setSellPrice(100);
             }
-            case Salad -> {
+            case "salad" -> {
                 cookedFood.setEnergy(113);
                 cookedFood.setSellPrice(110);
             }
-            case Omelet -> {
+            case "omelet" -> {
                 cookedFood.setEnergy(100);
                 cookedFood.setSellPrice(125);
             }
-            case pumpkinpie -> {
+            case "pumpkinpie" -> {
                 cookedFood.setEnergy(225);
                 cookedFood.setSellPrice(385);
             }
-            case spaghetti -> {
+            case "spaghetti" -> {
                 cookedFood.setEnergy(75);
                 cookedFood.setSellPrice(120);
             }
-            case pizza -> {
+            case "pizza" -> {
                 cookedFood.setEnergy(150);
                 cookedFood.setSellPrice(300);
             }
-            case Tortilla -> {
+            case "tortilla" -> {
                 cookedFood.setEnergy(50);
                 cookedFood.setSellPrice(50);
             }
-            case MakiRoll -> {
+            case "makiroll" -> {
                 cookedFood.setEnergy(100);
                 cookedFood.setSellPrice(220);
             }
-            case TripleShotEspresso -> {
+            case "tripleshotespresso" -> {
                 cookedFood.setEnergy(200);
                 cookedFood.setSellPrice(450);
                 buff = new Buff();
                 buff.setEnergyIncrease(100);
                 buff.setBuffHours(5);
-                // No skill set, just energy boost
             }
-            case Cookie -> {
+            case "cookie" -> {
                 cookedFood.setEnergy(90);
                 cookedFood.setSellPrice(140);
             }
-            case hashbrowns -> {
+            case "hashbrowns" -> {
                 cookedFood.setEnergy(90);
                 cookedFood.setSellPrice(120);
                 buff = new Buff();
                 buff.setBuffHours(5);
                 buff.setBuffSkillType(SkillEnum.FarmingSkill);
             }
-            case pancakes -> {
+            case "pancakes" -> {
                 cookedFood.setEnergy(90);
                 cookedFood.setSellPrice(80);
                 buff = new Buff();
                 buff.setBuffHours(11);
                 buff.setBuffSkillType(SkillEnum.ForagingSkill);
             }
-            case fruitsalad -> {
+            case "fruitsalad" -> {
                 cookedFood.setEnergy(263);
                 cookedFood.setSellPrice(450);
             }
-            case redplate -> {
+            case "redplate" -> {
                 cookedFood.setEnergy(240);
                 cookedFood.setSellPrice(400);
                 buff = new Buff();
                 buff.setEnergyIncrease(50);
                 buff.setBuffHours(3);
             }
-            case bread -> {
+            case "bread" -> {
                 cookedFood.setEnergy(50);
                 cookedFood.setSellPrice(60);
             }
-            case salmondinner -> {
+            case "salmondinner" -> {
                 cookedFood.setEnergy(125);
                 cookedFood.setSellPrice(300);
             }
-            case vegetablemedley -> {
+            case "vegetablemedley" -> {
                 cookedFood.setEnergy(165);
                 cookedFood.setSellPrice(120);
             }
-            case farmerslunch -> {
+            case "farmerslunch" -> {
                 cookedFood.setEnergy(200);
                 cookedFood.setSellPrice(150);
                 buff = new Buff();
                 buff.setBuffHours(5);
                 buff.setBuffSkillType(SkillEnum.FarmingSkill);
             }
-            case survivalburger -> {
+            case "survivalburger" -> {
                 cookedFood.setEnergy(125);
                 cookedFood.setSellPrice(180);
                 buff = new Buff();
                 buff.setBuffHours(5);
                 buff.setBuffSkillType(SkillEnum.ForagingSkill);
             }
-            case dishOtheSea -> {
+            case "dishothesea" -> {
                 cookedFood.setEnergy(150);
                 cookedFood.setSellPrice(220);
                 buff = new Buff();
                 buff.setBuffHours(5);
                 buff.setBuffSkillType(SkillEnum.FishingSkill);
             }
-            case seaformPudding -> {
+            case "seaformpudding" -> {
                 cookedFood.setEnergy(175);
                 cookedFood.setSellPrice(300);
                 buff = new Buff();
                 buff.setBuffHours(10);
                 buff.setBuffSkillType(SkillEnum.FishingSkill);
             }
-            case minerstreat -> {
+            case "minerstreat" -> {
                 cookedFood.setEnergy(125);
                 cookedFood.setSellPrice(200);
                 buff = new Buff();

@@ -23,7 +23,7 @@ public class ArtisanGoods extends Item implements Name, Price {
             if (good.name().equals(artisanName)) {
                 this.artisanGoods = good;
                 this.producer = good.getProducer();
-                this.energyUsage = good.getEnergyUsage();
+                this.energyUsage = good.getEnergy();
                 this.timeToProduce = good.getProcessingTime();
                 this.ingredients = new HashMap<>();
                 break;

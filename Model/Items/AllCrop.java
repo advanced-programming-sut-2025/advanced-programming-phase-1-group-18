@@ -31,7 +31,7 @@ public class AllCrop extends Crop implements Name ,Price{
         this.setFedThisDay(false);
         super.setName(foragingSeedsenums.name());
         switch (foragingSeedsenums) {
-            case ForagingSeedsEnums.JazzSeeds: {
+            case JazzSeeds: {
                 this.setType(AllCropsEnums.BlueJazz);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(7);
@@ -43,7 +43,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.CarrotSeeds: {
+            case CarrotSeeds: {
                 this.setType(AllCropsEnums.Carrot);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1)));
                 this.setTotalHarvestTime(3);
@@ -55,7 +55,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.CauliflowerSeeds: {
+            case CauliflowerSeeds: {
                 this.setType(AllCropsEnums.CauliFlower);
                 this.setStages(new ArrayList<>(List.of(1, 2, 4, 4, 1)));
                 this.setTotalHarvestTime(12);
@@ -67,7 +67,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.CoffeeBean: {
+            case CoffeeBean: {
                 this.setType(AllCropsEnums.CoffeeBean);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(10);
@@ -79,7 +79,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.GarlicSeeds: {
+            case GarlicSeeds: {
                 this.setType(AllCropsEnums.Garlic);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 1)));
                 this.setTotalHarvestTime(4);
@@ -91,7 +91,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.BeanStarter: {
+            case BeanStarter: {
                 this.setType(AllCropsEnums.GreenBean);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 3, 4)));
                 this.setTotalHarvestTime(10);
@@ -103,7 +103,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.KaleSeeds: {
+            case KaleSeeds: {
                 this.setType(AllCropsEnums.Kale);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 1)));
                 this.setTotalHarvestTime(6);
@@ -115,7 +115,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.ParsnipSeeds: {
+            case ParsnipSeeds: {
                 this.setType(AllCropsEnums.Parsnip);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 1)));
                 this.setTotalHarvestTime(4);
@@ -127,7 +127,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.PotatoSeeds: {
+            case PotatoSeeds: {
                 this.setType(AllCropsEnums.Potato);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 2, 1)));
                 this.setTotalHarvestTime(6);
@@ -139,7 +139,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.RhubarbSeeds: {
+            case RhubarbSeeds: {
                 this.setType(AllCropsEnums.Rhubarb);
                 this.setStages(new ArrayList<>(List.of(2, 2, 2, 3, 4)));
                 this.setTotalHarvestTime(13);
@@ -151,7 +151,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.StrawberrySeeds: {
+            case StrawberrySeeds: {
                 this.setType(AllCropsEnums.StrawBerry);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2, 2)));
                 this.setTotalHarvestTime(8);
@@ -163,7 +163,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.TulipBulb: {
+            case TulipBulb: {
                 this.setType(AllCropsEnums.Tulip);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2)));
                 this.setTotalHarvestTime(6);
@@ -175,7 +175,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.RiceShoot: {
+            case RiceShoot: {
                 this.setType(AllCropsEnums.UnmilledRice);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3)));
                 this.setTotalHarvestTime(8);
@@ -187,7 +187,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.BlueberrySeeds: {
+            case BlueberrySeeds: {
                 this.setType(AllCropsEnums.BlueBerry);
                 this.setStages(new ArrayList<>(List.of(1, 3, 3, 4, 2)));
                 this.setTotalHarvestTime(13);
@@ -199,7 +199,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.CornSeeds: {
+            case CornSeeds: {
                 this.setType(AllCropsEnums.Corn);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 3)));
                 this.setTotalHarvestTime(14);
@@ -211,7 +211,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.HopsStarter: {
+            case HopsStarter: {
                 this.setType(AllCropsEnums.Hops);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(11);
@@ -223,7 +223,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.PepperSeeds: {
+            case PepperSeeds: {
                 this.setType(AllCropsEnums.HotPepper);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(10);
@@ -235,7 +235,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.MelonSeeds: {
+            case MelonSeeds: {
                 this.setType(AllCropsEnums.Melon);
                 this.setStages(new ArrayList<>(List.of(2, 3, 3, 4, 3)));
                 this.setTotalHarvestTime(12);
@@ -247,7 +247,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.PoppySeeds: {
+            case PoppySeeds: {
                 this.setType(AllCropsEnums.Poppy);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 1)));
                 this.setTotalHarvestTime(7);
@@ -259,7 +259,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.RadishSeeds: {
+            case RadishSeeds: {
                 this.setType(AllCropsEnums.Radish);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2)));
                 this.setTotalHarvestTime(6);
@@ -271,7 +271,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.RedCabbageSeeds: {
+            case RedCabbageSeeds: {
                 this.setType(AllCropsEnums.RedCabbage);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(9);
@@ -283,7 +283,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.StarfruitSeeds: {
+            case StarfruitSeeds: {
                 this.setType(AllCropsEnums.StarFruit);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 4)));
                 this.setTotalHarvestTime(13);
@@ -295,7 +295,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.SpangleSeeds: {
+            case SpangleSeeds: {
                 this.setType(AllCropsEnums.SummerSpangle);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(8);
@@ -307,7 +307,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.SummerSquashSeeds: {
+            case SummerSquashSeeds: {
                 this.setType(AllCropsEnums.SummerSquash);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(7);
@@ -319,7 +319,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.SunflowerSeeds: {
+            case SunflowerSeeds: {
                 this.setType(AllCropsEnums.SunFlower);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(8);
@@ -331,7 +331,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.TomatoSeeds: {
+            case TomatoSeeds: {
                 this.setType(AllCropsEnums.Tomato);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(11);
@@ -343,7 +343,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.WheatSeeds: {
+            case WheatSeeds: {
                 this.setType(AllCropsEnums.Wheat);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 1)));
                 this.setTotalHarvestTime(4);
@@ -355,7 +355,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.AmaranthSeeds: {
+            case AmaranthSeeds: {
                 this.setType(AllCropsEnums.Amaranth);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3)));
                 this.setTotalHarvestTime(7);
@@ -367,7 +367,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.ArtichokeSeeds: {
+            case ArtichokeSeeds: {
                 this.setType(AllCropsEnums.Artichoke);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 3)));
                 this.setTotalHarvestTime(8);
@@ -379,7 +379,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.BeetSeeds: {
+            case BeetSeeds: {
                 this.setType(AllCropsEnums.Beet);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 1)));
                 this.setTotalHarvestTime(6);
@@ -391,7 +391,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.BokChoySeeds: {
+            case BokChoySeeds: {
                 this.setType(AllCropsEnums.Bokchoy);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2)));
                 this.setTotalHarvestTime(4);
@@ -403,7 +403,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.BroccoliSeeds: {
+            case BroccoliSeeds: {
                 this.setType(AllCropsEnums.Broccoli);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(7);
@@ -415,7 +415,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.CranberrySeeds: {
+            case CranberrySeeds: {
                 this.setType(AllCropsEnums.CramBerries);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(7);
@@ -427,7 +427,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.EggplantSeeds: {
+            case EggplantSeeds: {
                 this.setType(AllCropsEnums.EggPlant);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(5);
@@ -439,7 +439,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.FairySeeds: {
+            case FairySeeds: {
                 this.setType(AllCropsEnums.FairyRose);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(12);
@@ -451,7 +451,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.GrapeStarter: {
+            case GrapeStarter: {
                 this.setType(AllCropsEnums.Grape);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(10);
@@ -463,7 +463,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.PumpkinSeeds: {
+            case PumpkinSeeds: {
                 this.setType(AllCropsEnums.Pumpkin);
                 this.setStages(new ArrayList<>(List.of(2, 3, 3, 4, 3)));
                 this.setTotalHarvestTime(13);
@@ -475,7 +475,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.YamSeeds: {
+            case YamSeeds: {
                 this.setType(AllCropsEnums.Yam);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(10);
@@ -487,7 +487,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.RareSeed: {
+            case RareSeed: {
                 this.setType(AllCropsEnums.SweetGemBerry);
                 this.setStages(new ArrayList<>(List.of(2, 3, 3, 3, 4)));
                 this.setTotalHarvestTime(24);
@@ -499,7 +499,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case ForagingSeedsEnums.PowdermelonSeeds: {
+            case PowdermelonSeeds: {
                 this.setType(AllCropsEnums.PowderMelon);
                 this.setStages(new ArrayList<>(List.of(1, 2, 3, 3, 3)));
                 this.setTotalHarvestTime(12);
@@ -511,7 +511,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.AncientSeeds: {
+            case AncientSeeds: {
                 this.setType(AllCropsEnums.AncientFruit);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(28);
@@ -523,7 +523,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case ForagingSeedsEnums.MixedSeeds: {
+            case MixedSeeds: {
                 // No direct mapping for MixedSeeds
                 break;
             }
@@ -536,7 +536,7 @@ public class AllCrop extends Crop implements Name ,Price{
         this.setFedThisDay(false);
         super.setName(mixedSeedsenums.name());
         switch (mixedSeedsenums) {
-            case MixedSeedsEnums.Artichoke: {
+            case Artichoke: {
                 this.setType(AllCropsEnums.Artichoke);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 3)));
                 this.setTotalHarvestTime(8);
@@ -548,7 +548,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Corn: {
+            case Corn: {
                 this.setType(AllCropsEnums.Corn);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 3)));
                 this.setTotalHarvestTime(14);
@@ -560,7 +560,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Eggplant: {
+            case Eggplant: {
                 this.setType(AllCropsEnums.EggPlant);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 3, 2)));
                 this.setTotalHarvestTime(5);
@@ -572,7 +572,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Pumpkin: {
+            case Pumpkin: {
                 this.setType(AllCropsEnums.Pumpkin);
                 this.setStages(new ArrayList<>(List.of(2, 3, 3, 4, 3)));
                 this.setTotalHarvestTime(13);
@@ -584,7 +584,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Sunflower: {
+            case Sunflower: {
                 this.setType(AllCropsEnums.SunFlower);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(8);
@@ -596,7 +596,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case MixedSeedsEnums.FairyRose: {
+            case FairyRose: {
                 this.setType(AllCropsEnums.FairyRose);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(12);
@@ -608,7 +608,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case MixedSeedsEnums.CauliFlower: {
+            case CauliFlower: {
                 this.setType(AllCropsEnums.CauliFlower);
                 this.setStages(new ArrayList<>(List.of(1, 2, 4, 4, 1)));
                 this.setTotalHarvestTime(12);
@@ -620,7 +620,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Parsnip: {
+            case Parsnip: {
                 this.setType(AllCropsEnums.Parsnip);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 1)));
                 this.setTotalHarvestTime(4);
@@ -632,7 +632,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Potato: {
+            case Potato: {
                 this.setType(AllCropsEnums.Potato);
                 this.setStages(new ArrayList<>(List.of(1, 1, 1, 2, 1)));
                 this.setTotalHarvestTime(6);
@@ -644,7 +644,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.BlueJazz: {
+            case BlueJazz: {
                 this.setType(AllCropsEnums.BlueJazz);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(7);
@@ -656,7 +656,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Tulip: {
+            case Tulip: {
                 this.setType(AllCropsEnums.Tulip);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2)));
                 this.setTotalHarvestTime(6);
@@ -668,7 +668,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.HotPepper: {
+            case HotPepper: {
                 this.setType(AllCropsEnums.HotPepper);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 2)));
                 this.setTotalHarvestTime(10);
@@ -680,7 +680,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Radish: {
+            case Radish: {
                 this.setType(AllCropsEnums.Radish);
                 this.setStages(new ArrayList<>(List.of(1, 1, 2, 2)));
                 this.setTotalHarvestTime(6);
@@ -692,7 +692,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.Wheat: {
+            case Wheat: {
                 this.setType(AllCropsEnums.Wheat);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 1)));
                 this.setTotalHarvestTime(4);
@@ -704,7 +704,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(false);
                 break;
             }
-            case MixedSeedsEnums.Poppy: {
+            case Poppy: {
                 this.setType(AllCropsEnums.Poppy);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2, 1)));
                 this.setTotalHarvestTime(7);
@@ -716,7 +716,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.SummerSpangle: {
+            case SummerSpangle: {
                 this.setType(AllCropsEnums.SummerSpangle);
                 this.setStages(new ArrayList<>(List.of(1, 2, 2, 2)));
                 this.setTotalHarvestTime(8);
@@ -728,7 +728,7 @@ public class AllCrop extends Crop implements Name ,Price{
                 this.setEdible(true);
                 break;
             }
-            case MixedSeedsEnums.PowderMelon: {
+            case PowderMelon: {
                 this.setType(AllCropsEnums.PowderMelon);
                 this.setStages(new ArrayList<>(List.of(1, 2, 3, 3, 3)));
                 this.setTotalHarvestTime(12);

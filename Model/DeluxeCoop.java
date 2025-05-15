@@ -3,23 +3,18 @@ package Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DeluxeCoop
+public class DeluxeCoop implements Name
 {
-    protected static int deluxeCoopAmount = 100;
 
-    public static int getDeluxeCoopAmount() {
-        return deluxeCoopAmount;
-    }
-
-    public static void setDeluxeCoopAmount(int deluxeCoopAmount) {
-        DeluxeCoop.deluxeCoopAmount = deluxeCoopAmount;
-    }
-    
     protected final int MaxCapacity = 12;
     protected boolean Status = false;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals;
     protected ArrayList<Kashi> insideKashis;
+    protected final int goldNeeded = 20000;
+    protected final int woodNeeded =500;
+    protected final int stoneNeeded = 200;
+    protected String Name;
 
     public ArrayList<Kashi> getInsideKashis() {
         return insideKashis;
@@ -51,10 +46,21 @@ public class DeluxeCoop
     public boolean getStatus() {
         return Status;
     }
-
+    public int getStoneNeeded() {
+        return stoneNeeded;
+    }
+    public int getWoodNeeded() {
+        return woodNeeded;
+    }
+    public int getGoldNeeded() {
+        return goldNeeded;
+    }
     public int getMaxCapacity() {
         return MaxCapacity;
     }
+
+
+
     public void adaptMap(ArrayList<Cord> cords)
     {
         this.insideKashis = new ArrayList<>();
@@ -69,5 +75,10 @@ public class DeluxeCoop
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "deluxecoop";
     }
 }

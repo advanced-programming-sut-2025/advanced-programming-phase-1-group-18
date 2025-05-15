@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class AllTree extends Tree
-{
+public class AllTree extends Tree {
     AllTreesEnums type;
     TreeSeedEnums source;
     private int daysGrowCounter;
@@ -127,7 +126,7 @@ public class AllTree extends Tree
         this.setDaysGrowCounter(0);
         this.setFedThisDay(false);
         switch (treeSeedEnums) {
-            case treeSeedEnums.ApricotSapling: {
+            case ApricotSapling: {
                 this.setType(AllTreesEnums.ApricotTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -138,7 +137,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.CherrySapling: {
+            case CherrySapling: {
                 this.setType(AllTreesEnums.CherryTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -149,7 +148,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.BananaSapling: {
+            case BananaSapling: {
                 this.setType(AllTreesEnums.BananaTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -160,7 +159,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.MangoSapling: {
+            case MangoSapling: {
                 this.setType(AllTreesEnums.MangoTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -171,7 +170,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.OrangeSapling: {
+            case OrangeSapling: {
                 this.setType(AllTreesEnums.OrangeTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -182,7 +181,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.PeachSapling: {
+            case PeachSapling: {
                 this.setType(AllTreesEnums.PeachTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -193,7 +192,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.AppleSapling: {
+            case AppleSapling: {
                 this.setType(AllTreesEnums.AppleTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -204,7 +203,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.PomegranateSapling: {
+            case PomegranateSapling: {
                 this.setType(AllTreesEnums.PomegranateTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -215,7 +214,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.Acorns: {
+            case Acorns: {
                 this.setType(AllTreesEnums.OakTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -226,7 +225,7 @@ public class AllTree extends Tree
                 this.setEdible(false);
                 break;
             }
-            case treeSeedEnums.MapleSeeds: {
+            case MapleSeeds: {
                 this.setType(AllTreesEnums.MapleTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -237,7 +236,7 @@ public class AllTree extends Tree
                 this.setEdible(false);
                 break;
             }
-            case treeSeedEnums.PineCones: {
+            case PineCones: {
                 this.setType(AllTreesEnums.PineTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -248,7 +247,7 @@ public class AllTree extends Tree
                 this.setEdible(false);
                 break;
             }
-            case treeSeedEnums.MahoganySeeds: {
+            case MahoganySeeds: {
                 this.setType(AllTreesEnums.MahoganyTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -259,7 +258,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.MushroomTreeSeeds: {
+            case MushroomTreeSeeds: {
                 this.setType(AllTreesEnums.MushroomTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
@@ -270,7 +269,7 @@ public class AllTree extends Tree
                 this.setEdible(true);
                 break;
             }
-            case treeSeedEnums.MysticTreeSeeds: {
+            case MysticTreeSeeds: {
                 this.setType(AllTreesEnums.MysticTree);
                 this.setStages(new ArrayList<>(List.of(7, 7, 7, 7)));
                 this.setTotalHarvestTime(28);
