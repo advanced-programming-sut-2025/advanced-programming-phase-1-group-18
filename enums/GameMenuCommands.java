@@ -70,7 +70,7 @@ public enum GameMenuCommands {
     TalkHistory("\\s*talk\\s+history -u (?<username>.*)\\s*"),
     Gift("\\s*gift -u (?<username>.*) -i (?<item>.*) -a (?<amount>.*)\\s*"),
     GiftList("\\s*gift\\s+list\\s*"),
-    GiftRate("\\s*gift rate -i (?<giftNumber>.*) -r (<rate>.*)\\s*"),
+    GiftRate("\\s*gift\\s*rate\\s*-i\\s*(?<giftNumber>.*)\\s*-r\\s*(?<rate>.*)\\s*"),
     GiftHistory("\\s*gift\\s+history\\s+-u (?<username>.*)\\s*"),
     Hug("\\s*hug\\s+-u\\s+(?<username>.*)\\s*"),
     Flower("\\s*flower -u (?<username>.*)\\s*"),
@@ -89,11 +89,35 @@ public enum GameMenuCommands {
 
 
     //tools commands
-    TOOLEQUIP("\\s*tool\\s+equip\\s+(\\w+)"),
+    TOOLEQUIP("\\s*tools\\s+equip\\s+(\\w+)"),
     TOOLSSHOWCURRENT("\\s*tools\\s+show\\s+current\\s*"),
     TOOLSSHOWAVAILABLE("\\s*tools\\s+show\\s+available\\s*"),
     TOOLSUPGRADE("\\s*tools\\s+upgrade\\s*(\\w+)\\s*"),
-    TOOLSUSE("\\s*tools\\s+use\\s+-d\\s*(.+)\\s*");
+    TOOLSUSE("\\s*tools\\s+use\\s+-d\\s*(\\w+)\\s*"),
+
+    // trade commands
+    ASKMARRIAGE("ask marriage -u (\\w+) -r (\\w+)\\s*"),
+    RESPOND("\\s*respond\\s+(-accept|-reject)\\s*-u\\s*(\\w+)"),
+    SHOWMYMARRIAGEPROPOSALS("\\s*show\\s+my\\s+marriage\\s+proposals\\s*"),
+    STARTTRADE("\\s*start\\s*trade\\s*"),
+    TRADING("^\\s*trade\\s+-u\\s+(.+)\\s+-t\\s+(.+)\\s+-i\\s+(.+)\\s+-a\\s+(\\d+)(?:\\s+-p\\s+(\\d+)|\\s+-ti\\s+(.+)\\s+-ta\\s+(\\d+))$"),
+    TRADELIST("\\s*trade\\s+list"),
+    // In baba taghiir karda
+    TRADERESPONSE("\\s*trade\\s+response\\s*-(accept|reject)\\s*-i (\\d+)"),
+    TRADEHISTORY("\\s*trade\\s*history\\s*"),
+
+    //Animal Commands
+    SHEPHERDOUT("\\s*shepherd\\s+animals\\s+out\\s+-n\\s+(.+)\\s+-l\\s+(\\d+)\\s*,\\s*(\\d+)\\s*"),
+    SHEPHERDIN("\\s*shepherd\\s+animals\\s+in\\s+-n\\s+(.+)"),
+    ANIMALSINFORMATIONS("\\s*animals\\s*"),
+    CHEATSETFRIENSHIPWITHANIMAL("\\s*cheat\\s+set\\s+friendship\\s+-n\\s+(\\w+)\\s*-c\\s*(\\d+)"),
+    FEEDHAY("\\s*feed\\s+hay\\s+-n\\s*(.+)\\s*"),
+    PET("\\s*pet\\s+-n\\s*(.+)\\s*"),
+    SELLANIMAL("\\s*sell\\s+animal\\s*-n\\s*(\\w+)\\s*");
+
+
+
+
     private final String pattern;
 
     GameMenuCommands(String pattern) {

@@ -7,7 +7,16 @@ public enum PoleJensEnums {
     Iridium(1.2);
 
     private final double qualityMultiplier;
-
+    public static boolean isContain(String poleName){
+        poleName = poleName.toLowerCase().replaceAll(" ", "");
+        poleName=poleName.replaceAll("pole", "");
+        for(PoleJensEnums pole : PoleJensEnums.values()){
+            if(pole.name().equalsIgnoreCase(poleName)){
+                return true;
+            }
+        }
+        return false;
+    }
     PoleJensEnums(double qualityMultiplier) {
         this.qualityMultiplier = qualityMultiplier;
     }

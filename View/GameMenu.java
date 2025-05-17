@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import Controller.TradeMenuController;
+
 public class GameMenu extends AppMenu {
     private final GameMenuController controller = new GameMenuController();
+    private final TradeMenuController tradeController = new TradeMenuController();
 
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
@@ -187,6 +190,73 @@ public class GameMenu extends AppMenu {
 
         } else if (GameMenuCommands.WHOAMI.getMather(input) != null) {
             System.out.println(controller.whoAmI());
+        } else if (GameMenuCommands.ASKMARRIAGE.getMather(input) != null) {
+            String username = GameMenuCommands.ASKMARRIAGE.getMather(input).group(1);
+            String ring = GameMenuCommands.ASKMARRIAGE.getMather(input).group(2);
+            System.out.println(controller.askMarriage(username, ring));
+        } else if (GameMenuCommands.RESPOND.getMather(input) != null) {
+            String acceptOrReject = GameMenuCommands.RESPOND.getMather(input).group(1);
+            String username = GameMenuCommands.RESPOND.getMather(input).group(2);
+            System.out.println(controller.response(acceptOrReject, username));
+        } else if (GameMenuCommands.SHOWMYMARRIAGEPROPOSALS.getMather(input) != null) {
+            controller.showMyMarriageProposals();
+        } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
+            controller.showMyMarriageProposals();
+        } else if (GameMenuCommands.STARTTRADE.getMather(input) != null) {
+            tradeController.startTrade();
+        } else if (GameMenuCommands.TRADING.getMather(input) != null) {
+            String username = GameMenuCommands.TRADING.getMather(input).group(1);
+            String type = GameMenuCommands.TRADING.getMather(input).group(2);
+            String item = GameMenuCommands.TRADING.getMather(input).group(3);
+            int amount = Integer.parseInt(GameMenuCommands.TRADING.getMather(input).group(4));
+            String price = (GameMenuCommands.TRADING.getMather(input).group(5));
+            String targetItem = GameMenuCommands.TRADING.getMather(input).group(6);
+            String targetAmount = GameMenuCommands.TRADING.getMather(input).group(7);
+            if (price == null && targetItem != null && targetAmount != null) {
+                int finalAmount = Integer.parseInt(targetAmount);
+                System.out.println(tradeController.tradeWithItem(username, type, item, amount, targetItem, finalAmount));
+            }
+            if (targetItem == null && price != null) {
+                int finalPrice = Integer.parseInt(price);
+                System.out.println(tradeController.tradeWithMoney(username, type, item, amount, finalPrice));
+            } else {
+                System.out.println("You can not put both!");
+            }
+        } else if (GameMenuCommands.TRADERESPONSE.getMather(input) != null) {
+            int id = Integer.parseInt(GameMenuCommands.TRADERESPONSE.getMather(input).group(2));
+            String acceptOrReject = GameMenuCommands.TRADERESPONSE.getMather(input).group(1);
+            System.out.println(tradeController.tradeResponse(acceptOrReject, id));
+        } else if (GameMenuCommands.TRADEHISTORY.getMather(input) != null) {
+            tradeController.tradeHistory();
+        }
+        // new Trade
+        else if (GameMenuCommands.TRADELIST.getMather(input) != null) {
+            tradeController.tradeList();
+        }
+        //animalssssss ..............
+        else if (GameMenuCommands.SHEPHERDOUT.getMather(input) != null) {
+            String nameOfAnimal = GameMenuCommands.SHEPHERDOUT.getMather(input).group(1);
+            int xOfAnimalPlacing = Integer.parseInt(GameMenuCommands.SHEPHERDOUT.getMather(input).group(2));
+            int yOfAnimalPlacing = Integer.parseInt(GameMenuCommands.SHEPHERDOUT.getMather(input).group(3));
+            System.out.println(controller.shepherdOutAnimals(nameOfAnimal, xOfAnimalPlacing, yOfAnimalPlacing));
+        } else if (GameMenuCommands.SHEPHERDIN.getMather(input) != null) {
+            String nameofAnimal = GameMenuCommands.SHEPHERDIN.getMather(input).group(1);
+            System.out.println(controller.shepherdInAnimals(nameofAnimal));
+        } else if (GameMenuCommands.FEEDHAY.getMather(input) != null) {
+            String nameOfAnimal = GameMenuCommands.FEEDHAY.getMather(input).group(1);
+            System.out.println(controller.feedHay(nameOfAnimal));
+        } else if (GameMenuCommands.ANIMALSINFORMATIONS.getMather(input) != null) {
+            System.out.println(controller.animals());
+        } else if (GameMenuCommands.CHEATSETFRIENSHIPWITHANIMAL.getMather(input) != null) {
+            String name = GameMenuCommands.CHEATSETFRIENSHIPWITHANIMAL.getMather(input).group(1);
+            int amount = Integer.parseInt(GameMenuCommands.CHEATSETFRIENSHIPWITHANIMAL.getMather(input).group(2));
+            System.out.println(controller.cheatSetFriendship(name, amount));
+        } else if (GameMenuCommands.PET.getMather(input) != null) {
+            String name = GameMenuCommands.PET.getMather(input).group(1);
+            System.out.println(controller.pet(name));
+        } else if (GameMenuCommands.SELL.getMather(input) != null) {
+            String name = GameMenuCommands.SELL.getMather(input).group(1);
+            System.out.println(controller.sellAnimal(name));
         } else {
             System.out.println("Invalid command");
         }

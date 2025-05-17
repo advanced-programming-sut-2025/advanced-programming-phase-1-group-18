@@ -228,6 +228,7 @@ public enum CraftingRecipesEnums {
     }
 
     public static boolean containsCraft(String itemName) {
+        itemName = itemName.toLowerCase().replace(" ", "");
         for (CraftingRecipesEnums recipe : CraftingRecipesEnums.values()) {
             if(recipe.name().equalsIgnoreCase(itemName)) {
                 return true;

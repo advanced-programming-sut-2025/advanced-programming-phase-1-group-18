@@ -28,7 +28,6 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
 
     private Result handleSeedPurchase(ForagingSeedsEnums seedType, int quantity) {
         for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
-            System.out.println(item.getClass().getName());
             if (item instanceof ForagingSeed && ((ForagingSeed) item).getType() == seedType &&
                     App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
 
@@ -54,6 +53,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
         } else {
             quantity = Integer.parseInt(count);
         }
+        //System.out.println(name.toLowerCase() + "bache haye karaj");
         switch (name.toLowerCase()) {
             // General Items
             case "joja cola":
@@ -65,7 +65,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             currentPlayer.getInventory().addItem((Food)item, quantity);
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - (((Food)item).getCorrectPrice()));
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -84,7 +84,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             currentPlayer.getInventory().addItem((ForagingSeed)item, quantity);
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((ForagingSeed)item).getCorrectPrice());
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -105,7 +105,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe)item).getPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -125,7 +125,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((Food)item).getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -145,7 +145,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((AllCrop)item).getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -165,7 +165,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((AllCrop)item).getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -187,7 +187,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((ForagingSeed)item).getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }

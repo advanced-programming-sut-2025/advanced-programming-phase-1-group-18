@@ -36,7 +36,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                             currentPlayer.getInventory().addItem(item, quantity);
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -61,7 +61,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -82,7 +82,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -104,7 +104,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }
@@ -125,7 +125,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                             App.getCurrentGame().getFishShopMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - item.getCorrectPrice());
 
-                            return new Result(true, "You purchased " + count + " of " + name);
+                            return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
                         }

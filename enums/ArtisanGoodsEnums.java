@@ -8,75 +8,76 @@ public enum ArtisanGoodsEnums {
     Honey(
             CraftingRecipesEnums.BeeHouse,
             75,
-            new DateTime(0,4),
-            new HashMap<>() {{ }},
+            new DateTime(0, 4),
+            new HashMap<>() {{
+            }},
             350
     ),
 
     Cloth(
             CraftingRecipesEnums.Loom,
             0,
-            new DateTime(4,0),
+            new DateTime(4, 0),
             new HashMap<>() {{
                 put("Wool", 1);
             }},
             470
     ),
 
-    Cheese_Normal(
+    CheeseNormal(
             CraftingRecipesEnums.CheesePress,
             100,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("Milk", 1);
             }},
             230
     ),
 
-    Cheese_Large(
+    CheeseLarge(
             CraftingRecipesEnums.CheesePress,
             100,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("LargeMilk", 1);
             }},
             345
     ),
 
-    Mayonnaise_Normal(
+    MayonnaiseNormal(
             CraftingRecipesEnums.MayonnaiseMachine,
             50,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("Egg", 1);
             }},
             190
     ),
 
-    Mayonnaise_Large(
+    MayonnaiseLarge(
             CraftingRecipesEnums.MayonnaiseMachine,
             50,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("LargeEgg", 1);
             }},
             237
     ),
 
-    GoatCheese_Normal(
+    GoatCheeseNormal(
             CraftingRecipesEnums.CheesePress,
             100,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("GoatMilk", 1);
             }},
             400
     ),
 
-    GoatCheese_Large(
+    GoatCheeseLarge(
             CraftingRecipesEnums.CheesePress,
             100,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("LargeGoatMilk", 1);
             }},
@@ -86,7 +87,7 @@ public enum ArtisanGoodsEnums {
     DuckMayonnaise(
             CraftingRecipesEnums.MayonnaiseMachine,
             75,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("DuckEgg", 1);
             }},
@@ -96,7 +97,7 @@ public enum ArtisanGoodsEnums {
     DinosaurMayonnaise(
             CraftingRecipesEnums.MayonnaiseMachine,
             125,
-            new DateTime(3,0),
+            new DateTime(3, 0),
             new HashMap<>() {{
                 put("DinosaurEgg", 1);
             }},
@@ -106,7 +107,7 @@ public enum ArtisanGoodsEnums {
     Beer(
             CraftingRecipesEnums.Keg,
             50,
-            new DateTime(0,1),
+            new DateTime(0, 1),
             new HashMap<>() {{
                 put("Wheat", 1);
             }},
@@ -198,7 +199,7 @@ public enum ArtisanGoodsEnums {
             1065
     ),
 
-    Oil_Corn(
+    OilCorn(
             CraftingRecipesEnums.OilMaker,
             13,
             new DateTime(6, 0),  // تغییر از (0,6) به (6,0)
@@ -208,7 +209,7 @@ public enum ArtisanGoodsEnums {
             100
     ),
 
-    Oil_Seeds(
+    OilSeeds(
             CraftingRecipesEnums.OilMaker,
             13,
             new DateTime(0, 2),  // تغییر از (2,0) به (0,2)
@@ -218,7 +219,7 @@ public enum ArtisanGoodsEnums {
             100
     ),
 
-    Oil_Sunflower(
+    OilSunflower(
             CraftingRecipesEnums.OilMaker,
             13,
             new DateTime(1, 0),  // تغییر از (0,1) به (1,0)
@@ -227,7 +228,6 @@ public enum ArtisanGoodsEnums {
             }},
             100
     ),
-
 
 
     Raisins(
@@ -324,19 +324,18 @@ public enum ArtisanGoodsEnums {
     );
 
 
-
     private final HashMap<String, Integer> ingredients;
     private final CraftingRecipesEnums producer;
     private final int energy;
     private final int price;
     private final DateTime ProcessingTime;
 
-    ArtisanGoodsEnums(CraftingRecipesEnums producer , int energy, DateTime ProcessingTime, HashMap<String, Integer> ingredients, int price) {
+    ArtisanGoodsEnums(CraftingRecipesEnums producer, int energy, DateTime ProcessingTime, HashMap<String, Integer> ingredients, int price) {
         this.energy = energy;
-        this.price=price;
-        this.producer=producer;
+        this.price = price;
+        this.producer = producer;
         this.ingredients = ingredients;
-        this.ProcessingTime=ProcessingTime;
+        this.ProcessingTime = ProcessingTime;
     }
 
     public HashMap<String, Integer> getIngredients() {
@@ -359,17 +358,20 @@ public enum ArtisanGoodsEnums {
         return ProcessingTime;
     }
 
-    public static boolean isContain (String name){
-        for (ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()){
-            if (allTreesEnums.name().equalsIgnoreCase(name)){
+    public static boolean isContain(String name) {
+        name = name.replaceAll(" ", "");
+        for (ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()) {
+            if (allTreesEnums.name().equalsIgnoreCase(name)) {
                 return true;
             }
         }
         return false;
     }
+
     public static ArtisanGoodsEnums getEnum(String name) {
-        for(ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()){
-            if (allTreesEnums.name().equalsIgnoreCase(name)){
+        name = name.replaceAll(" ", "");
+        for (ArtisanGoodsEnums allTreesEnums : ArtisanGoodsEnums.values()) {
+            if (allTreesEnums.name().equalsIgnoreCase(name)) {
                 return allTreesEnums;
             }
         }
