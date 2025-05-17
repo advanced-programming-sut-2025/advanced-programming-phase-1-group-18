@@ -1060,7 +1060,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
                         System.out.printf("You need %d parts of energy to go there.\n", estimatedEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
-
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
@@ -1603,6 +1602,44 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (item == null) {
             return new Result(false, "Item not found");
         } else {
+            Map<Item,Integer> itemmmm = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems();
+            TrashCan trashcan = null;
+            for (Item itemm : itemmmm.keySet())
+            {
+                if (itemm instanceof TrashCan)
+                {
+                    trashcan = (TrashCan) item;
+                    break;
+                }
+            }
+            if( trashcan!=null && trashcan.getJens().equals("initial"))
+            {
+
+            }
+            if(trashcan!=null && trashcan.getJens().equals("copper"))
+            {
+                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+                int price = (int)(item.getCorrectPrice()*0.15);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+            }
+            if(trashcan!=null && trashcan.getJens().equals("iron"))
+            {
+                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+                int price = (int)(item.getCorrectPrice()*0.3);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+            }
+            if(trashcan!=null && trashcan.getJens().equals("gold"))
+            {
+                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+                int price = (int)(item.getCorrectPrice()*0.45);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+            }
+            if(trashcan!=null && trashcan.getJens().equals("iridium"))
+            {
+                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+                int price = (int)(item.getCorrectPrice()*0.6);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+            }
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, number);
             return new Result(true, number + "of Item " + item.getClass().getSimpleName() + " removed");
         }
@@ -1666,18 +1703,242 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, toolsList.toString());
     }
 
-    public Result toolsUpgrade(String toolName) {
+    public Result toolsUpgrade(String jens) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Item item = findItemByName(toolName);
-        if (item == null) {
+        if(!jens.equals("initial") && !jens.equals("copper") && !jens.equals("iron") && !jens.equals("gold") &&!jens.equals("iridium"))
+        {
+            return new Result(false,"Your entered jens is not Okay!");
+        }
+        Tool tool =App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
+        if (tool == null) {
             return new Result(false, "Item not found");
-        } else if (!(item instanceof Tool)) {
+        } else if (!(tool instanceof Tool)) {
             return new Result(false, "You can not upgrade this type of item!");
         }
-        //
-        return null;
+
+        if(jens.equals("copper"))
+        {
+            if(tool instanceof Axe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+                    ((Axe) tool).update("copper");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Pickaxe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+                    ((Pickaxe) tool).update("copper");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Hoe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+                    ((Hoe) tool).update("copper");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof TrashCan)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<1000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-1000);
+                    ((TrashCan) tool).update("copper");
+                    return new Result(true,"tool updated!");
+                }
+            }
+        }
+        if(jens.equals("iron"))
+        {
+            if(tool instanceof Axe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+                    ((Axe) tool).update("iron");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Pickaxe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+                    ((Pickaxe) tool).update("iron");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Hoe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+                    ((Hoe) tool).update("iron");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof TrashCan)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2500)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2500);
+                    ((TrashCan) tool).update("iron");
+                    return new Result(true,"tool updated!");
+                }
+            }
+        }
+        if(jens.equals("gold"))
+        {
+            if(tool instanceof Axe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+                    ((Axe) tool).update("gold");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Pickaxe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+                    ((Pickaxe) tool).update("gold");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Hoe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+                    ((Hoe) tool).update("gold");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof TrashCan)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+                    ((TrashCan) tool).update("gold");
+                    return new Result(true,"tool updated!");
+                }
+            }
+        }
+        if(jens.equals("iridium"))
+        {
+            if(tool instanceof Axe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+                    ((Axe) tool).update("iridium");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Pickaxe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+                    ((Pickaxe) tool).update("iridium");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof Hoe)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+                    ((Hoe) tool).update("iridium");
+                    return new Result(true,"tool updated!");
+                }
+            }
+            if(tool instanceof TrashCan)
+            {
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<12500)
+                {
+                    return new Result(false,"Your golds are not enough!");
+                }
+                else
+                {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-12500);
+                    ((TrashCan) tool).update("iridium");
+                    return new Result(true,"tool updated!");
+                }
+            }
+        }
+        return new Result(true,"!");
     }
 
     public Result toolsUse(String direction) {
@@ -2782,6 +3043,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             boolean isOkay = AreYouNearForNavazesh(x, y, xOfAnimal, yOfAnimal);
             if (isOkay) {
                 animal.setNavazesh(true);
+                animal.setFriendship(animal.getFriendship()+15);
                 return new Result(true, "you navazeshed it successfully!");
             } else {
                 return new Result(false, "You should be more near to " + animal.getName());
@@ -3547,9 +3809,23 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(targetProposal.getRing(), 1);
             targetProposal.getProposer().getInventory().removeItem(targetProposal.getRing(), 1);
             proposals.remove(targetProposal);
+            Friendship friendship = getFriendship(targetProposal.getReceiver(),targetProposal.getProposer());
+            if(friendship!=null)
+            {
+                friendship.setLevel(4);
+            }
+            targetProposal.getReceiver().setPartner(targetProposal.getProposer());
+            targetProposal.getProposer().setPartner(targetProposal.getReceiver());
             return new Result(true, "You have accepted the marriage proposal from " + userName);
-        } else if (acceptOrReject.equalsIgnoreCase("reject")) {
+        } else if (acceptOrReject.equalsIgnoreCase("-reject")) {
+            Friendship friendship = getFriendship(targetProposal.getReceiver(),targetProposal.getProposer());
+            if(friendship!=null)
+            {
+                friendship.setLevel(0);
+            }
+            targetProposal.getProposer().setMaxEnergy((int) (0.75 * targetProposal.getProposer().getMaxEnergy()));
             proposals.remove(targetProposal);
+            targetProposal.getProposer().setDaysAfterJavabeRad(0);
             return new Result(true, "You have rejected the marriage proposal from " + userName);
         } else {
             return new Result(false, "Invalid response. Use 'accept' or 'reject'.");
