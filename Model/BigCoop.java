@@ -8,7 +8,7 @@ public class BigCoop implements Name
     protected boolean Status = false;
     protected final int MaxCapacity= 8;
     protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals;
+    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
     protected final int goldNeeded = 10000;
     protected final int woodNeeded =400;

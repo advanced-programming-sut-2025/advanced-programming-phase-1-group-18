@@ -2,11 +2,11 @@ package Model.Items;
 
 import Model.*;
 
-public class Scythe extends Item implements Name,Price
+public class Scythe extends Tool implements Name,Price
 {
     protected int EnergyUsage;
     protected String usage;
-    public void use(String direction){
+    public String  use(String direction){
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
@@ -53,7 +53,7 @@ public class Scythe extends Item implements Name,Price
                 break;
             }
             default: {
-                return;
+                return "Not a valid direction";
             }
         }
         tileCord.setX(dir_x+tileCord.getX());
@@ -61,16 +61,33 @@ public class Scythe extends Item implements Name,Price
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForScythe(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo get crop
-            }
-            else{
+                Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
+                Object plant =  kashi.getInside();
+                if(plant instanceof AllTree){
+                    if(((AllTree)plant).getTotalHarvestTime() == ((AllTree)plant).getDaysGrowCounter()){
+//                            player.getInventory().addItem(((Tre)),1);
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+                        return "Fruit caught";
+                    } else {
+                        return "Fruit isn't ready";
+                    }
+                } else if(plant instanceof AllCrop){
+                    if(((AllCrop)plant).getTotalHarvestTime() == ((AllCrop)plant).getDaysGrowCounter()){
+                        player.getInventory().addItem(((AllCrop)plant), 1);
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+                        return "Crop caught";
+                    }else{
+                        return "Crop isn't ready";
+                    }
+                }else {
+                    return "Not crop found";
+                }
+            } else{
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo just decrease energy
-                return;
+                return "Not Crop found";
             }
-        }
-        else {
-            return;
+        } else {
+            return "not Enough energy";
         }
     }
 
@@ -89,6 +106,20 @@ public class Scythe extends Item implements Name,Price
         this.usage = usage;
     }
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 

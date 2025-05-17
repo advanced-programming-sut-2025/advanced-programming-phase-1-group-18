@@ -108,6 +108,6 @@ public class CarpentersShopMarket implements adaptMapMarket {
         ShippingBin shippingBin = new ShippingBin();
         Stock.put(shippingBin, Integer.MAX_VALUE);
         Well well = new Well();
-        Stock.put(well, 1);
+        Stock.put(well, Integer.MAX_VALUE);
     }
 }

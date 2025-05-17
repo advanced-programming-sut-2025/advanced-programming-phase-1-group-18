@@ -8,6 +8,7 @@ import Model.Items.Gift;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 public class Game {
     protected static int player1TopLeftx = 0;
@@ -147,6 +148,8 @@ public class Game {
     protected TheStardropSaloonMarket theStardropSaloonMarket;
     protected ArrayList<Friendship> friendships = new ArrayList<>();
     protected ArrayList<Gift> gifts = new ArrayList<>();
+    protected ArrayList<Trade> trades = new ArrayList<>();
+    private final List<MarriageProposal> marriageProposals = new ArrayList<>();
     protected NPC NPCSEBASTIAN;
     protected NPC NPCABIGAIL;
     protected NPC NPCHARVEY;
@@ -172,7 +175,7 @@ public class Game {
 
     public Player getPlayerByUsername(String username) {
         for (Player p : this.Players)
-            if (p.getUsername().equals(username))
+            if (p.getOwner().getUsername().equals(username))
                 return p;
         return null;
     }
@@ -978,7 +981,7 @@ public class Game {
 
 
     public Seasons getCurrentSeason() {
-        return CurrentSeason;
+        return Seasons.valueOf(App.getCurrentGame().getCurrentDateTime().getSeason());
     }
 
     public void setCurrentSeason(Seasons currentSeason) {
@@ -991,5 +994,25 @@ public class Game {
 
     public void setCurrentDateTime(DateTime currentDateTime) {
         this.currentDateTime = currentDateTime;
+    }
+
+    public List<MarriageProposal> getMarriageProposals() {
+        return marriageProposals;
+    }
+
+    public void addMarriageProposal(MarriageProposal proposal) {
+        marriageProposals.add(proposal);
+    }
+
+    public void removeMarriageProposal(MarriageProposal proposal) {
+        marriageProposals.remove(proposal);
+    }
+
+    public ArrayList<Trade> getTrades() {
+        return trades;
+    }
+
+    public void setTrades(ArrayList<Trade> trades) {
+        this.trades = trades;
     }
 }

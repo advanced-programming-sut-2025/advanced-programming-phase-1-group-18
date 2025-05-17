@@ -15,8 +15,8 @@ public class Friendship
         this.player1 = player1;
         this.player2 = player2;
         this.xp = 0;
-        this.level = 1;
-        this.lastInteractionDate = App.getCurrentGame().getCurrentDateTime();
+        this.level = 0;
+        this.lastInteractionDate = new DateTime(0,0);
     }
 
     public boolean isBetween(Player a, Player b) {

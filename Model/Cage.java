@@ -10,7 +10,7 @@ public class Cage implements Name
     protected boolean Status = false;
     protected final int MaxCapacity =4;
     protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals;
+    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
     protected  int goldNeeded = 4000;
     protected  int woodNeeded =300;

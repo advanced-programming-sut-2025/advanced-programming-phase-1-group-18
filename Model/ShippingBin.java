@@ -1,21 +1,21 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ShippingBin
+public class ShippingBin implements Name
 {
     protected ArrayList<Kashi> insideKashis;
 
     protected final int goldNeeded =250;
     protected final int woodNeeded = 150;
-
+    public int getWoodNeeded()
+    {
+        return woodNeeded;
+    }
 
     public int getGoldNeeded() {
         return goldNeeded;
-    }
-
-    public int getWoodNeeded() {
-        return woodNeeded;
     }
     public void adaptMap(ArrayList<Cord> cords)
     {
@@ -33,4 +33,9 @@ public class ShippingBin
         }
         this.insideKashis.addAll(kashis);
      }
+
+    @Override
+    public String getCorrectName() {
+        return "shippingbin";
+    }
 }

@@ -2,7 +2,7 @@ package Model.Items;
 
 import Model.*;
 
-public class WateringCan extends Item implements Name, Price {
+public class WateringCan extends Tool implements Name, Price {
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
@@ -17,7 +17,7 @@ public class WateringCan extends Item implements Name, Price {
         this.max_Capacity = max_Capacity;
     }
 
-    public void use(String direction) {
+    public String use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
@@ -64,7 +64,7 @@ public class WateringCan extends Item implements Name, Price {
                 break;
             }
             default: {
-                return;
+                return "Not a valid direction!";
             }
         }
         tileCord.setX(dir_x + tileCord.getX());
@@ -74,32 +74,65 @@ public class WateringCan extends Item implements Name, Price {
                 if (isValidForFilling(tileCord)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getMax_Capacity());
+                    return "Watering Can filled";
                 } else if (isValidForWatering(tileCord)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
-                    //todo change stage of plant
+                    Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
+                    if(plant instanceof AllCrop){
+                        if(!((AllCrop)plant).isFedThisDay()){
+                            ((AllCrop)plant).setFedThisDay(true);
+                            return "Plant watered";
+                        }else {
+                            return "Plant doesn't need water";
+                        }
+                    } else if(plant instanceof AllTree){
+                        if(!((AllTree)plant).isFedThisDay()){
+                            ((AllTree)plant).setFedThisDay(true);
+                            return "Plant watered";
+                        }else {
+                            return "Plant doesn't need water";
+                        }
+                    }
                 } else {
-                    return;
+                    return "No plant found";
                 }
             } else {
-                return;
+                return "Not enough energy";
             }
         } else {
             if (player.getEnergy() >= getEnergyUsage()) {
                 if (isValidForFilling(tileCord)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getMax_Capacity());
+                    return "Watering Can filled";
                 } else if (isValidForWatering(tileCord)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
-                    //todo change stage of plant
+                    Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
+                    if(plant instanceof AllCrop){
+                        if(!((AllCrop)plant).isFedThisDay()){
+                            ((AllCrop)plant).setFedThisDay(true);
+                            return "Plant watered";
+                        }else {
+                            return "Plant doesn't need water";
+                        }
+                    } else if(plant instanceof AllTree){
+                        if(!((AllTree)plant).isFedThisDay()){
+                            ((AllTree)plant).setFedThisDay(true);
+                            return "Plant watered";
+                        }else {
+                            return "Plant doesn't need water";
+                        }
+                    }
                 } else {
-                    return;
+                    return "No plant found";
                 }
             } else {
-                return;
+                return "Not enough energy";
             }
         }
+        return "OMG";
     }
 
     public void update() {
@@ -168,6 +201,20 @@ public class WateringCan extends Item implements Name, Price {
     }
 
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 

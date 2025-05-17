@@ -4,6 +4,7 @@ import Model.*;
 import enums.CommonFishesEnums;
 import enums.LegendaryFishesEnums;
 import enums.Quality;
+import enums.SkillEnum;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -33,6 +34,7 @@ public class FishingPole extends Item implements Name, Price {
         }
         if (!isFound) {
             int skill = player.getFishingSkill().getLevel();
+            skill = (skill - 50) / 100;
             if (skill == MAX_LEVEL) {
                 if (player.getEnergy() >= getEnergyUsage() - 1) {
                     player.setEnergy(getEnergyUsage() - this.EnergyUsage);
@@ -62,15 +64,16 @@ public class FishingPole extends Item implements Name, Price {
         //pole jens effect in fish quality
         double pole = 1;
         switch (getJens()) {
-            case "Training" -> pole = 0.1;
-            case "Bamboo" -> pole = 0.5;
-            case "Iridium" -> pole = 1.2;
-            case "Fiberglass" -> pole = 0.9;
+            case "training" -> pole = 0.1;
+            case "bamboo" -> pole = 0.5;
+            case "iridium" -> pole = 1.2;
+            case "fiberglass" -> pole = 0.9;
         }
         ;
         Random rand = new Random();
         double R = rand.nextDouble();
         int skill = player.getFishingSkill().getLevel();
+        skill = (skill - 50) / 100;
         int fishCount = (int) Math.ceil((2 + skill) * (M * R));
         fishCount = Math.min(fishCount, 6);
 
@@ -80,7 +83,7 @@ public class FishingPole extends Item implements Name, Price {
                 availableFish.add(new Fish(fish.name()));
             }
         }
-        if (!this.getJens().equals("Training") && skill == MAX_LEVEL) {
+        if (!this.getJens().equals("training") && skill == MAX_LEVEL) {
             for (LegendaryFishesEnums fish : LegendaryFishesEnums.values()) {
                 if (fish.getSeason().equals(App.getCurrentGame().getCurrentSeason())) {
                     availableFish.add(new Fish(fish.name()));
@@ -123,7 +126,7 @@ public class FishingPole extends Item implements Name, Price {
             double qualityScore = (r * (skill + 2) * pole) / (7 - m);
 
             Quality quality;
-            if (qualityScore > 0.5) {
+            if (qualityScore < 0.5) {
                 quality = Quality.Normal;
                 caught.setQuality(Quality.Normal);
                 caught.setBasePrice(caught.getBasePrice() * 1);
@@ -147,15 +150,16 @@ public class FishingPole extends Item implements Name, Price {
 
         }
         result.deleteCharAt(result.length() - 1);
+        player.getFishingSkill().setLevel(player.getFishingSkill().getLevel() + 5);
         return result.toString();
     }
 
     public int getPrice() {
         return switch (getJens()) {
-            case "Training" -> 25;
-            case "Bamboo" -> 500;
-            case "Iridium" -> 1800;
-            case "Fiberglass" -> 7500;
+            case "training" -> 25;
+            case "bamboo" -> 500;
+            case "iridium" -> 7500;
+            case "fiberglass" -> 1800;
             default -> 0;
         };
     }
@@ -185,6 +189,25 @@ public class FishingPole extends Item implements Name, Price {
     }
 
     public int getEnergyUsage() {
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (player.getFoodBuff().getBuffSkillType() == SkillEnum.FishingSkill) {
+
+        }
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage * 1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage * 1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage * 2);
+            }
+        }
+
         return EnergyUsage;
     }
 

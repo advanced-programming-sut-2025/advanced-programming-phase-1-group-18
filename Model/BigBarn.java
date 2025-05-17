@@ -9,7 +9,7 @@ public class BigBarn implements Name
     protected final int MaxCapacity = 8;
     protected boolean Status = false ;
     protected String Level;
-    protected ArrayList<TavilehAnimal> TavilehAnimals;
+    protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
     protected  int goldNeeded = 12000;
     protected  int woodNeeded =450;

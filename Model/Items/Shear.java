@@ -2,12 +2,12 @@ package Model.Items;
 
 import Model.*;
 
-public class Shear extends Item implements Name,Price
+public class Shear extends Tool implements Name,Price
 {
     protected int EnergyUsage = 4;
     protected String usage;
     protected int price;
-    public void use(String direction){
+    public String use(String direction){
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
@@ -54,7 +54,7 @@ public class Shear extends Item implements Name,Price
                 break;
             }
             default: {
-                return;
+                return "Not a valid direction";
             }
         }
         tileCord.setX(dir_x+tileCord.getX());
@@ -63,16 +63,18 @@ public class Shear extends Item implements Name,Price
             if (isValidForShear(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 //todo cutting wool
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+                return "Wool caught";
             }
             else{
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 //todo just decrease energy
-                return;
+                return "Not Animal found";
             }
         }
         else {
             //todo return error for not enough energy
-            return;
+            return "Not enough energy";
         }
     }
 
@@ -91,6 +93,20 @@ public class Shear extends Item implements Name,Price
         this.usage = usage;
     }
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 

@@ -9,7 +9,7 @@ public class DeluxeCoop implements Name
     protected final int MaxCapacity = 12;
     protected boolean Status = false;
     protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals;
+    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
     protected final int goldNeeded = 20000;
     protected final int woodNeeded =500;

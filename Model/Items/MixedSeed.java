@@ -4,21 +4,20 @@ import Model.Name;
 import enums.ForagingSeedsEnums;
 import enums.MixedSeedsEnums;
 
-public class MixedSeed extends Seed implements Name,Price
-{
-    MixedSeedsEnums type;
-
-    public MixedSeedsEnums getType() {
-        return type;
-    }
-
-    public void setType(MixedSeedsEnums type) {
-        this.type = type;
-    }
+public class MixedSeed extends Seed implements Name, Price {
+//    MixedSeedsEnums type;
+//
+//    public MixedSeedsEnums getType() {
+//        return type;
+//    }
+//
+//    public void setType(MixedSeedsEnums type) {
+//        this.type = type;
+//    }
 
     @Override
     public String getCorrectName() {
-        return type.toString().toLowerCase().replace(" ","");
+        return "mixedseeds";
     }
 
     @Override

@@ -2,25 +2,17 @@ package Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Tavileh
+public class Tavileh implements Name
 {
-    protected static int Tavilehamounts = 100;
-
-    public static int getTavilehamounts()
-    {
-        return Tavilehamounts;
-    }
-
-    public static void setTavilehamounts(int tavilehamounts) {
-        Tavilehamounts = tavilehamounts;
-    }
-
-
     protected final int MaxCapacity = 4;
     protected boolean Status = false;
     protected String Level;
-    protected ArrayList<TavilehAnimal> TavilehAnimals;
+    protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
+    protected  int goldNeeded = 6000;
+    protected  int woodNeeded =350;
+    protected  int stoneNeeded = 150;
+    protected String Name;
 
 
     public int getMaxCapacity() {
@@ -34,6 +26,37 @@ public class Tavileh
         return Status;
     }
 
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public int getStoneNeeded() {
+        return stoneNeeded;
+    }
+
+    public void setStoneNeeded(int stoneNeeded) {
+        this.stoneNeeded = stoneNeeded;
+    }
+
+    public int getWoodNeeded() {
+        return woodNeeded;
+    }
+
+    public void setWoodNeeded(int woodNeeded) {
+        this.woodNeeded = woodNeeded;
+    }
+
+    public int getGoldNeeded() {
+        return goldNeeded;
+    }
+
+    public void setGoldNeeded(int goldNeeded) {
+        this.goldNeeded = goldNeeded;
+    }
 
     public String getLevel() {
         return Level;
@@ -65,5 +88,10 @@ public class Tavileh
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
+    }
+
+    @Override
+    public String getCorrectName() {
+        return "barn";
     }
 }

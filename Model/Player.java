@@ -1,15 +1,22 @@
 package Model;
 
-import Model.Items.ArtisanGoods;
-import Model.Items.WateringCan;
+import Model.Items.*;
 import enums.CraftingRecipesEnums;
-
+import Model.Items.ArtisanGoods;
+import Model.Items.Tool;
+import Model.Items.WateringCan;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player extends User {
+    private int daysAfterGash = 0;
+    private int daysAfterJavabeRad=0;
+
     protected User Owner;
     protected int Energy;
+    protected int maxEnergy = 200;
+    protected int maxEnergyforMarriage=200;
+
     protected int x;
     protected int y;
     protected Farm myFarm;
@@ -18,14 +25,19 @@ public class Player extends User {
     protected Skill ExtractionSkill;
     protected Skill ForagingSkill;
     protected Skill FishingSkill;
+    protected Skill MiningSkill;
+
     protected Buff FoodBuff;
     protected int wood;
     protected int gold;
-    protected int money;
     protected ArrayList<Cookingrecipe> CookingRecipes;
     protected ArrayList<CraftingRecipesEnums> CraftingRecipes;
     protected Inventory inventory;
     protected ArrayList<ArtisanGoods> artisansInProduce;
+    //
+    protected Tool inMyHandTool = null;
+    //
+    protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -38,23 +50,28 @@ public class Player extends User {
         this.ExtractionSkill = new Skill();
         this.ForagingSkill = new Skill();
         this.FishingSkill = new Skill();
+        this.MiningSkill = new Skill();
         this.FoodBuff = new Buff();
         this.wood = 0;
         this.gold = 0;
-        this.money = 0;
         this.CookingRecipes = new ArrayList<>();
         this.CraftingRecipes = new ArrayList<>();
+        this.artisansInProduce = new ArrayList<>();
         this.inventory = new Inventory(12, "initial");
         WateringCan wateringCan = new WateringCan("initial", 5, 40, 40);
         this.inventory.addItem(wateringCan, 1);
-    }
 
-    public int getMoney() {
-        return money;
-    }
 
-    public void setMoney(int money) {
-        this.money = money;
+        Pickaxe pickaxe  = new Pickaxe("initial",5);
+        this.inventory.addItem(pickaxe, 1);
+
+        Axe axe = new Axe("initial",5);
+        this.inventory.addItem(axe, 1);
+
+        Hoe hoe =  new Hoe("initial",5);
+        this.inventory.addItem(hoe, 1);
+
+
     }
 
     public int getWood() {
@@ -165,6 +182,13 @@ public class Player extends User {
         FishingSkill = fishingSkill;
     }
 
+    public Skill getMiningSkill() {
+        return MiningSkill;
+    }
+
+    public void setMiningSkill(Skill miningSkill) {
+        MiningSkill = miningSkill;
+    }
     public Buff getFoodBuff() {
         return FoodBuff;
     }
@@ -197,8 +221,51 @@ public class Player extends User {
         this.artisansInProduce = artisansInProduce;
     }
 
-    //    public void adaptMap(HashMap<Integer ,Integer> LakeMap)
-//    {
-//
-//    }
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public void setMaxEnergy(int maxEnergy) {
+        this.maxEnergy = maxEnergy;
+    }
+
+    public int getMaxEnergyforMarriage() {
+        return maxEnergyforMarriage;
+    }
+
+    public void setMaxEnergyforMarriage(int maxEnergyforMarriage) {
+        this.maxEnergyforMarriage = maxEnergyforMarriage;
+    }
+
+    public Tool getInMyHandTool() {
+        return inMyHandTool;
+    }
+
+    public void setInMyHandTool(Tool inMyHandTool) {
+        this.inMyHandTool = inMyHandTool;
+    }
+    //bought animals
+    public ArrayList<Animal> getMyBoughtAnimals() {
+        return myBoughtAnimals;
+    }
+
+    public void setMyBoughtAnimals(ArrayList<Animal> myBoughtAnimals) {
+        this.myBoughtAnimals = myBoughtAnimals;
+    }
+    //
+    public int getDaysAfterGash() {
+        return daysAfterGash;
+    }
+
+    public void setDaysAfterGash(int daysAfterGash) {
+        this.daysAfterGash = daysAfterGash;
+    }
+
+    public int getDaysAfterJavabeRad() {
+        return daysAfterJavabeRad;
+    }
+
+    public void setDaysAfterJavabeRad(int daysAfterJavabeRad) {
+        this.daysAfterJavabeRad = daysAfterJavabeRad;
+    }
 }

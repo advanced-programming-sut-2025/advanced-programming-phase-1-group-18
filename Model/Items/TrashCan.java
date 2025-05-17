@@ -8,7 +8,7 @@ import Model.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TrashCan extends Item implements Name,Price
+public class TrashCan extends Tool implements Name,Price
 {
     protected String Jens;
     protected int EnergyUsage;

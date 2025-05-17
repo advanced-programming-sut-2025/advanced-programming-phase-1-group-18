@@ -10,7 +10,7 @@ public class DeluxeBarn implements Name
     protected boolean Status = false;
     protected ArrayList<Kashi> insideKashis;
     protected String Level;
-    protected ArrayList<TavilehAnimal> TavilehAnimals;
+    protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
     protected  int goldNeeded = 25000;
     protected  int woodNeeded =550;
     protected  int stoneNeeded = 300;

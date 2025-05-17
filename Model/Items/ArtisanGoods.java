@@ -19,8 +19,9 @@ public class ArtisanGoods extends Item implements Name, Price {
     protected int price;
 
     public ArtisanGoods(String artisanName) {
+        artisanName=artisanName.replaceAll(" ", "");
         for (ArtisanGoodsEnums good : ArtisanGoodsEnums.values()) {
-            if (good.name().equals(artisanName)) {
+            if (good.name().equalsIgnoreCase(artisanName)) {
                 this.artisanGoods = good;
                 this.producer = good.getProducer();
                 this.energyUsage = good.getEnergy();
@@ -89,7 +90,7 @@ public class ArtisanGoods extends Item implements Name, Price {
 
     @Override
     public String getCorrectName() {
-        return artisanGoods.toString().toLowerCase().replace(" ", "");
+        return artisanGoods.toString().toLowerCase().replaceAll(" ", "");
     }
 
 

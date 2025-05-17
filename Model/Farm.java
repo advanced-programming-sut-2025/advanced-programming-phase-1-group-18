@@ -326,7 +326,7 @@ public class Farm {
             }
         }
         App.getCurrentGame().setJojoMartMarket(new JojoMartMarket());
-        App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentSeason());
+        App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
         App.getCurrentGame().getJojoMartMarket().adaptMap(
                 cords,
                 topleftx + App.getCurrentGame().getJojoMartEnterancex(),
@@ -595,6 +595,9 @@ public class Farm {
         for (int i = 0; i < 10; i++) {
             int quarryX = topleftx + (i * 3) % 35;
             int quarryY = toplefty + (i * 2) % 20;
+            if (quarryX <= 2 || quarryY <= 2) {
+                continue;
+            }
             Quarry quarry = new Quarry();
             ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
                     new Cord(quarryX, quarryY),
@@ -610,6 +613,9 @@ public class Farm {
         for (int i = 0; i < 4; i++) {
             int lakeX = topleftx + (i * 5) % 40;
             int lakeY = toplefty + (i * 6) % 25;
+            if (lakeX <= 2 || lakeY <= 2) {
+                continue;
+            }
             Lake lake = new Lake();
             ArrayList<Cord> lakeCords = new ArrayList<>(List.of(
                     new Cord(lakeX, lakeY),
@@ -721,6 +727,9 @@ public class Farm {
         for (int i = 0; i < 6; i++) {
             int lakeX = topleftx + (i * 4) % 35;
             int lakeY = toplefty + (i * 5) % 20;
+            if (lakeX <= 2 || lakeY <= 2) {
+                continue;
+            }
             Lake lake = new Lake();
             ArrayList<Cord> lakeCords = new ArrayList<>(List.of(
                     new Cord(lakeX, lakeY),
@@ -735,6 +744,9 @@ public class Farm {
         for (int i = 0; i < 6; i++) {
             int quarryX = topleftx + (i * 3) % 40;
             int quarryY = toplefty + (i * 2) % 25;
+            if (quarryX <= 2 || quarryY <= 2) {
+                continue;
+            }
             Quarry quarry = new Quarry();
             ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
                     new Cord(quarryX, quarryY),
@@ -788,8 +800,8 @@ public class Farm {
         // Satl placement remains the same
         satl = new Satl();
         satl.setItems(new HashMap<>());
-        App.getCurrentGame().getMap().get(topleftx + 20).get(toplefty + 5).setInside(satl);
-        occupiedPositions.add(new Cord(topleftx + 20, toplefty + 5));
+        App.getCurrentGame().getMap().get(topleftx + 20).get(toplefty + 4).setInside(satl);
+        occupiedPositions.add(new Cord(topleftx + 20, toplefty + 4));
 
         // Generating random ForagingTrees (30 trees, much denser than previous maps)
         Random random = new Random();
@@ -846,12 +858,15 @@ public class Farm {
         for (int i = 0; i < 7; i++) {
             int lakeX = topleftx + (i * 5) % 40;
             int lakeY = toplefty + (i * 3) % 22;
+            if (lakeX <= 2 || lakeY <= 2) {
+                continue;
+            }
             Lake lake = new Lake();
             ArrayList<Cord> lakeCords = new ArrayList<>(List.of(
-                    new Cord(lakeX, lakeY),
                     new Cord(lakeX, lakeY + 1),
-                    new Cord(lakeX + 1, lakeY),
-                    new Cord(lakeX + 1, lakeY + 1)
+                    new Cord(lakeX, lakeY + 2),
+                    new Cord(lakeX + 1, lakeY + 1),
+                    new Cord(lakeX + 1, lakeY + 2)
             ));
             lake.adaptMap(lakeCords);
             occupiedPositions.addAll(lakeCords);
@@ -860,6 +875,9 @@ public class Farm {
         for (int i = 0; i < 8; i++) {
             int quarryX = topleftx + (i * 4) % 38;
             int quarryY = toplefty + (i * 2) % 18;
+            if (quarryX <= 2 || quarryY <= 2) {
+                continue;
+            }
             Quarry quarry = new Quarry();
             ArrayList<Cord> quarryCords = new ArrayList<>(List.of(
                     new Cord(quarryX, quarryY),

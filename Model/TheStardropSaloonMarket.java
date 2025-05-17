@@ -1,9 +1,6 @@
 package Model;
 
-import Model.Items.Food;
-import Model.Items.FoodCooking;
-import Model.Items.Hay;
-import Model.Items.Item;
+import Model.Items.*;
 import enums.FoodCookingEnums;
 
 import java.util.HashMap;
@@ -40,10 +37,9 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         }
         Stock = new HashMap<>();
 
-        Food food = new Food();
-        food.setName("Beer");
-        food.setPrice(400);
-        Stock.put(food, Integer.MAX_VALUE);
+        ArtisanGoods artisanGoods = new ArtisanGoods("Beer");
+        artisanGoods.setPrice(400);
+        Stock.put(artisanGoods, Integer.MAX_VALUE);
 
         FoodCooking foodCooking = new FoodCooking();
         foodCooking.setName(FoodCookingEnums.Salad);
@@ -51,27 +47,27 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         Stock.put(foodCooking, Integer.MAX_VALUE);
 
         FoodCooking bread = new FoodCooking();
-        bread.setName(FoodCookingEnums.bread);
+        bread.setName(FoodCookingEnums.Bread);
         bread.setSellPrice(120);
         Stock.put(bread, Integer.MAX_VALUE);
 
         FoodCooking spaghetti = new FoodCooking();
-        spaghetti.setName(FoodCookingEnums.spaghetti);
+        spaghetti.setName(FoodCookingEnums.Spaghetti);
         spaghetti.setSellPrice(240);
         Stock.put(spaghetti, Integer.MAX_VALUE);
 
         FoodCooking pizza = new FoodCooking();
-        pizza.setName(FoodCookingEnums.pizza);
+        pizza.setName(FoodCookingEnums.Pizza);
         pizza.setSellPrice(600);
         Stock.put(pizza, Integer.MAX_VALUE);
 
-        Food food1 = new Food();
-        food1.setName("coffee");
-        food1.setPrice(300);
-        Stock.put(food1, Integer.MAX_VALUE);
+
+        ArtisanGoods coffee = new ArtisanGoods("Coffee");
+        coffee.setPrice(300);
+        Stock.put(coffee, Integer.MAX_VALUE);
 
         Cookingrecipe hashbrowns = new Cookingrecipe();
-        hashbrowns.setFood(FoodCookingEnums.hashbrowns);
+        hashbrowns.setFood(FoodCookingEnums.HashBrowns);
         hashbrowns.setPrice(50);
         Stock.put(hashbrowns,1);
 
@@ -81,12 +77,12 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         Stock.put(omelet, 1);
 
         Cookingrecipe pancakes = new Cookingrecipe();
-        pancakes.setFood(FoodCookingEnums.pancakes);
+        pancakes.setFood(FoodCookingEnums.Pancakes);
         pancakes.setPrice(100);
         Stock.put(pancakes, 1);
 
         Cookingrecipe bread1 = new Cookingrecipe();
-        bread1.setFood(FoodCookingEnums.bread);
+        bread1.setFood(FoodCookingEnums.Bread);
         bread1.setPrice(100);
         Stock.put(bread1, 1);
 
@@ -96,7 +92,7 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         Stock.put(tortilla, 1);
 
         Cookingrecipe pizza1 = new Cookingrecipe();
-        pizza1.setFood(FoodCookingEnums.pizza);
+        pizza1.setFood(FoodCookingEnums.Pizza);
         pizza1.setPrice(150);
         Stock.put(pizza1, 1);
 

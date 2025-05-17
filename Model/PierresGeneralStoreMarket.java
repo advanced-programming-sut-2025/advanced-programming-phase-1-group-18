@@ -9,21 +9,39 @@ import java.util.HashMap;
 
 public class PierresGeneralStoreMarket  implements adaptMapMarket{
 
-    HashMap<Item, Integer> Stock = new HashMap<>();
+    HashMap<Object, Integer> Stock = new HashMap<>();
+    private boolean largePackBougth = false;
+    private boolean deluxePackBought = false;
 
-    public HashMap<Item, Integer> getStock() {
+    public boolean isLargePackBougth() {
+        return largePackBougth;
+    }
+
+    public void setLargePackBougth(boolean largePackBougth) {
+        this.largePackBougth = largePackBougth;
+    }
+
+    public boolean isDeluxePackBought() {
+        return deluxePackBought;
+    }
+
+    public void setDeluxePackBought(boolean deluxePackBought) {
+        this.deluxePackBought = deluxePackBought;
+    }
+
+    public HashMap<Object, Integer> getStock() {
         return Stock;
     }
 
-    public void setStock(HashMap<Item, Integer> stock) {
+    public void setStock(HashMap<Object, Integer> stock) {
         Stock = stock;
     }
 
-    public void addItem(Item item, int quantity) {
+    public void addItem(Object item, int quantity) {
         Stock.put(item, Stock.getOrDefault(item, 0) + quantity);
     }
 
-    public void removeItem(Item item, int quantity) {
+    public void removeItem(Object item, int quantity) {
         if (Stock.containsKey(item)) {
             int currentQuantity = Stock.get(item);
             if (currentQuantity > quantity) {
@@ -40,15 +58,13 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         }
         Stock = new HashMap<>();
 
-        Food food = new Food();
-        food.setName("rice");
-        food.setPrice(200);
-        Stock.put(food, Integer.MAX_VALUE);
+        AllCrop allCrop1 = new AllCrop();
+        allCrop1.initilizeCrop(ForagingSeedsEnums.RiceShoot);
+        Stock.put(allCrop1, Integer.MAX_VALUE);
 
-        Food food1 = new Food();
-        food1.setName("wheat flour");
-        food1.setPrice(100);
-        Stock.put(food1, Integer.MAX_VALUE);
+        AllCrop allCrop = new AllCrop();
+        allCrop.initilizeCrop(ForagingSeedsEnums.WheatSeeds);
+        Stock.put(allCrop, Integer.MAX_VALUE);
 
         MarketProducts products = new MarketProducts();
         products.setName("Bouquet");
@@ -60,28 +76,28 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         products1.setPrice(10000);
         Stock.put(products1, 2);
 
-        Craftingrecipe recipe = new Craftingrecipe();
-        //TODO
+        Craftingrecipe craftingrecipe1 = new Craftingrecipe();
+        craftingrecipe1.setName("Dehydrator");
+        craftingrecipe1.setPrice(10000);
+        Stock.put(craftingrecipe1, 1);
 
-        MarketProducts products2 = new MarketProducts();
-        products2.setName("Grass Starter");
-        products2.setPrice(1000);
-        Stock.put(products2, 1);
+        Craftingrecipe craftingrecipe = new Craftingrecipe();
+        craftingrecipe.setName("GrassStarter");
+        craftingrecipe.setPrice(1000);
+        Stock.put(craftingrecipe, 1);
 
         Food food2 = new Food();
         food2.setName("sugar");
         food2.setPrice(100);
         Stock.put(food2, Integer.MAX_VALUE);
 
-        Food food3 = new Food();
-        food3.setName("oil");
-        food3.setPrice(200);
-        Stock.put(food3, Integer.MAX_VALUE);
+        ArtisanGoods artisanGoods = new ArtisanGoods("Oil_Corn");
+        artisanGoods.setPrice(200);
+        Stock.put(artisanGoods, Integer.MAX_VALUE);
 
-        MarketProducts products3 = new MarketProducts();
-        products3.setName("Vinegar");
-        products3.setPrice(200);
-        Stock.put(products3, Integer.MAX_VALUE);
+        ArtisanGoods artisanGoods1 = new ArtisanGoods("Vinegar");
+        artisanGoods1.setPrice(200);
+        Stock.put(artisanGoods1, Integer.MAX_VALUE);
 
         Fertilizer fertilizer = new Fertilizer();
         fertilizer.setName("Deluxe Retaining Soil");
@@ -136,8 +152,6 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         fertilizer3.setPrice(150);
         Stock.put(fertilizer3, Integer.MAX_VALUE);
 
-        //backback
-        //TODO
 
         ForagingSeed parsnipSeeds = new ForagingSeed();
         parsnipSeeds.setType(ForagingSeedsEnums.ParsnipSeeds);

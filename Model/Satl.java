@@ -77,4 +77,7 @@ public class Satl
         Items.clear();
     }
 
+    public void setItems(HashMap<Item, Integer> items) {
+        Items = items;
+    }
 }
