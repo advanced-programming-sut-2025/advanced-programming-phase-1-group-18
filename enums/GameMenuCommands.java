@@ -92,7 +92,7 @@ public enum GameMenuCommands {
     TOOLEQUIP("\\s*tools\\s+equip\\s+(\\w+)"),
     TOOLSSHOWCURRENT("\\s*tools\\s+show\\s+current\\s*"),
     TOOLSSHOWAVAILABLE("\\s*tools\\s+show\\s+available\\s*"),
-    TOOLSUPGRADE("\\s*tools\\s+upgrade\\s*(\\w+)\\s*"),
+    TOOLSUPGRADE("\\s*tools\\s+upgrade\\s*-j\\s+(\\w+)\\s*"),
     TOOLSUSE("\\s*tools\\s+use\\s+-d\\s*(\\w+)\\s*"),
 
     // trade commands
