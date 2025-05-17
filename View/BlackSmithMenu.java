@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class BlackSmithMenu extends AppMenu {
     private final BlackSmithController controller = new BlackSmithController();
-
+    private final GameMenuController gameController = new GameMenuController();
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         if (MarketMenuEnums.SHOWALLPRODUCTS.getMather(input) != null) {
@@ -23,7 +23,14 @@ public class BlackSmithMenu extends AppMenu {
             controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
         } else if (MarketMenuEnums.MenuEnter.getMather(input) != null) {
             controller.menuEnter(MarketMenuEnums.MenuEnter.getMather(input).group(1));
-        } else {
+        }
+        else if(GameMenuCommands.TOOLSUSE.getMather(input) != null)
+        {
+            String name = GameMenuCommands.TOOLSUSE.getMather(input).group(1);
+            String type = GameMenuCommands.TOOLSUSE.getMather(input).group(2);
+            gameController.toolsUpgrade(name,type);
+        }
+        else {
             System.out.println("Invalid command");
         }
     }
