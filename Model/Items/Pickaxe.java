@@ -80,117 +80,117 @@ public class Pickaxe extends Tool implements Name, Price {
 
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() >= 350)) {
                 //System.out.println("khar3.5");
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                     return new Result(false, "You used it unsuccessfully!(With Max Mining Level)(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                     return new Result(false, "You used it unsuccessfully!(With Max Mining Skill)(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage()  + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                     return new Result(false, "You used it unsuccessfully!(With Max Mining Skill)(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                     return new Result(false, "You used it unsuccessfully!(With Max Mining Skill)(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                     return new Result(false, "You used it unsuccessfully!(With Max Mining Skill)(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 if (HaveBuffMiningSkill()) {
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
         }
@@ -198,80 +198,80 @@ public class Pickaxe extends Tool implements Name, Price {
         if (kashi.getInside() instanceof Quarry) {
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && ((Quarry) (kashi.getInside())).getStone() != null && (((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.IRON) || ((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.GOLD) || ((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.IRIDIUM))) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                         return new Result(false, "You type of pickaxe is uncomfortable!(With Mining Buff)");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                         return new Result(false, "You type of pickaxe is uncomfortable!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
             }
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && ((Quarry) (kashi.getInside())).getStone() != null && (((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.GOLD) || ((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.IRIDIUM))) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 3);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 3);
                         return new Result(false, "You type of pickaxe is uncomfortable!(With Mining Buff)");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                         return new Result(false, "You type of pickaxe is uncomfortable!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && ((Quarry) (kashi.getInside())).getStone() != null && (((Quarry) (kashi.getInside())).getStone().getType().equals(StoneTypes.IRIDIUM))) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                         return new Result(false, "You type of pickaxe is uncomfortable!(With Mining Buff)");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     if (HaveBuffMiningSkill()) {
-                        player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                        player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                         return new Result(false, "You type of pickaxe is uncomfortable!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
 
             } else {
 
                 if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -281,10 +281,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -294,10 +294,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -306,10 +306,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -319,10 +319,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -331,10 +331,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -344,10 +344,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -356,10 +356,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -369,10 +369,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -381,11 +381,11 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
 
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -400,57 +400,57 @@ public class Pickaxe extends Tool implements Name, Price {
         if (kashi.getInside() instanceof Stone) {
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && (((Stone) (kashi.getInside())).getType().equals(StoneTypes.IRON) || ((Stone) (kashi.getInside())).getType().equals(StoneTypes.GOLD) || ((Stone) (kashi.getInside())).getType().equals(StoneTypes.IRIDIUM))) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
             }
 
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && (((Stone) (kashi.getInside())).getType().equals(StoneTypes.GOLD) || ((Stone) (kashi.getInside())).getType().equals(StoneTypes.IRIDIUM))) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && ((Stone) (kashi.getInside())).getType().equals(StoneTypes.IRIDIUM)) {
                 if (player.getMiningSkill().getLevel() > 350) {
-                    if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 } else {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     return new Result(false, "You type of pickaxe is uncomfortable!");
                 }
 
             } else {
 
                 if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -459,10 +459,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -472,10 +472,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -484,10 +484,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -497,10 +497,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -509,10 +509,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -522,10 +522,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -534,10 +534,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -547,10 +547,10 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -559,10 +559,10 @@ public class Pickaxe extends Tool implements Name, Price {
                     return new Result(false, "You used it successfully!(With Max Mining Level)");
                 }
                 if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() < 350)) {
-                    if (player.getEnergy() - EnergyUsage < 0) {
+                    if (player.getEnergy() - getEnergyUsage() < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
-                    player.setEnergy(player.getEnergy() - EnergyUsage);
+                    player.setEnergy(player.getEnergy() - getEnergyUsage());
                     player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                     GameMenuController.checkSkilRecipe();
                     StoneItem stoneItem = new StoneItem();
@@ -575,16 +575,18 @@ public class Pickaxe extends Tool implements Name, Price {
         if ((kashi.getItemInside() instanceof Axe) || (kashi.getItemInside() instanceof Pickaxe) || (kashi.getItemInside() instanceof Hoe) || (kashi.getItemInside() instanceof WateringCan) || (kashi.getItemInside() instanceof FishingPole) || (kashi.getItemInside() instanceof Scythe) || (kashi.getItemInside() instanceof MilkPail) || (kashi.getItemInside() instanceof Shear)) {
 
             if (player.getMiningSkill().getLevel() >= 350) {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(),1);
                 kashi.setItemInside(null);
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                return new Result(false, "You used it successfully and the item successfully destroyed!(With Max Mining Level)");
+                return new Result(false, "You used it successfully and the item successfully added to your inventory!(With Max Mining Level)");
 
             } else {
 
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(),1);
                 kashi.setItemInside(null);
-                player.setEnergy(player.getEnergy() - EnergyUsage);
+                player.setEnergy(player.getEnergy() - getEnergyUsage());
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 return new Result(false, "You used it successfully and the item successfully destroyed!");
@@ -594,20 +596,20 @@ public class Pickaxe extends Tool implements Name, Price {
         if (kashi.isShokhmZadeh()) {
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() >= 350)) {
                 //System.out.println("khar3.5");
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
                 return new Result(false, "You used it successfully and made there unshozmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("initial") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
@@ -615,20 +617,20 @@ public class Pickaxe extends Tool implements Name, Price {
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
                 return new Result(false, "You used it successfully and made there unshokmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("copper") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
@@ -636,20 +638,20 @@ public class Pickaxe extends Tool implements Name, Price {
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
                 return new Result(false, "You used it successfully and made there unshokmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
@@ -657,20 +659,20 @@ public class Pickaxe extends Tool implements Name, Price {
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
                 return new Result(false, "You used it successfully and made there unshokmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
@@ -678,21 +680,21 @@ public class Pickaxe extends Tool implements Name, Price {
             }
             //
             if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() >= 350)) {
-                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 2 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
                 return new Result(false, "You used it successfully and made there unshokmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iridium") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
 
-                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
                 kashi.setShokhmZadeh(false);
@@ -750,6 +752,20 @@ public class Pickaxe extends Tool implements Name, Price {
     }
 
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 

@@ -136,32 +136,30 @@ public class WateringCan extends Tool implements Name, Price {
     }
 
     public void update() {
-        switch (this.getJens()) {
-            case "initial":
+        switch (Jens) {
+            case "copper":
                 this.setJens("copper");
                 this.setCapacity(55);
                 this.setMax_Capacity(55);
                 this.setEnergyUsage(4);
                 break;
-            case "copper":
+            case "iron":
                 this.setJens("iron");
                 this.setCapacity(70);
                 this.setMax_Capacity(70);
                 this.setEnergyUsage(3);
                 break;
-            case "iron":
+            case "gold":
                 this.setJens("gold");
                 this.setCapacity(85);
                 this.setMax_Capacity(85);
                 this.setEnergyUsage(2);
                 break;
-            case "gold":
+            case "iridium":
                 this.setJens("iridium");
                 this.setCapacity(100);
                 this.setMax_Capacity(100);
                 this.setEnergyUsage(1);
-                break;
-            case "iridium":
                 break;
             default:
                 break;

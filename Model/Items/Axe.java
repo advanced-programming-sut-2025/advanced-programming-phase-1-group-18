@@ -314,6 +314,30 @@ public class Axe extends Tool implements Name,Price
         }
         return new Result(false,"what?");
     }
+
+    public void update(String Jens) {
+        switch (Jens) {
+            case "copper":
+                this.setJens("copper");
+                this.setEnergyUsage(4);
+                break;
+            case "iron":
+                this.setJens("iron");
+                this.setEnergyUsage(3);
+                break;
+            case "gold":
+                this.setJens("gold");
+                this.setEnergyUsage(2);
+                break;
+            case "iridium":
+                this.setJens("iridium");
+                this.setEnergyUsage(1);
+                break;
+            default:
+                break;
+        }
+    }
+
     public String getUsage() {
         return usage;
     }
@@ -322,7 +346,22 @@ public class Axe extends Tool implements Name,Price
         this.usage = usage;
     }
 
+
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return (int) (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 

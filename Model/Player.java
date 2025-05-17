@@ -38,6 +38,8 @@ public class Player extends User {
     protected Tool inMyHandTool = null;
     //
     protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
+    //
+    protected Player partner;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -71,6 +73,8 @@ public class Player extends User {
         Hoe hoe =  new Hoe("initial",5);
         this.inventory.addItem(hoe, 1);
 
+        TrashCan trashCan =  new TrashCan("initial");
+        this.inventory.addItem(trashCan, 1);
 
     }
 
@@ -267,5 +271,13 @@ public class Player extends User {
 
     public void setDaysAfterJavabeRad(int daysAfterJavabeRad) {
         this.daysAfterJavabeRad = daysAfterJavabeRad;
+    }
+
+    public Player getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Player partner) {
+        this.partner = partner;
     }
 }
