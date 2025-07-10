@@ -32,7 +32,15 @@ public enum CraftingRecipesEnums {
             3,
             50
     ),
-
+    Sprinkler(
+            new HashMap<>() {{
+                put("iron bar", 1);
+                put("copper bar", 1);
+            }},
+            SkillEnum.FarmingSkill,
+            1,
+            0
+    ),
     QualitySprinkler(
             new HashMap<>() {{
                 put("iron bar", 1);

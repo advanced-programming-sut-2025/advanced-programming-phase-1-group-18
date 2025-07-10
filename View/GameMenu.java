@@ -200,8 +200,6 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.response(acceptOrReject, username));
         } else if (GameMenuCommands.SHOWMYMARRIAGEPROPOSALS.getMather(input) != null) {
             controller.showMyMarriageProposals();
-        } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
-            controller.showMyMarriageProposals();
         } else if (GameMenuCommands.STARTTRADE.getMather(input) != null) {
             tradeController.startTrade();
         } else if (GameMenuCommands.TRADING.getMather(input) != null) {
@@ -260,5 +258,9 @@ public class GameMenu extends AppMenu {
         } else {
             System.out.println("Invalid command");
         }
+
+//         else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
+//            controller.showMyMarriageProposals();
+//        }
     }
 }

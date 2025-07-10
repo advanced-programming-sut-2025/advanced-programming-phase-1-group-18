@@ -116,8 +116,6 @@ public enum GameMenuCommands {
     SELLANIMAL("\\s*sell\\s+animal\\s*-n\\s*(\\w+)\\s*");
 
 
-
-
     private final String pattern;
 
     GameMenuCommands(String pattern) {

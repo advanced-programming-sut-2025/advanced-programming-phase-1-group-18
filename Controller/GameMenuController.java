@@ -3,9 +3,12 @@ package Controller;
 import Model.*;
 import Model.Cookingrecipe;
 import Model.Items.*;
+import com.google.gson.Gson;
 import enums.*;
 import Controller.MarniesRanchController;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 
 import java.lang.reflect.Field;
@@ -20,6 +23,18 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static void checkSkilRecipe() {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (currentPlayer.getForagingSkill().getLevel() >= 150) {
+            boolean cr1 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.CharcoalKiln) {
+                    cr1 = true;
+                    break;
+                }
+            }
+            if (!cr1) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.CharcoalKiln);
+            }
+        }
         //VegetableMedley
         if (currentPlayer.getForagingSkill().getLevel() >= 250) {
             boolean cr1 = false;
@@ -52,6 +67,18 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 currentPlayer.getCookingRecipes().add(cookingrecipe);
             }
         }
+        if (currentPlayer.getForagingSkill().getLevel() >= 450) {
+            boolean cr1 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.MysticTreeSeed) {
+                    cr1 = true;
+                    break;
+                }
+            }
+            if (!cr1) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.MysticTreeSeed);
+            }
+        }
         //FarmersLunch
         if (currentPlayer.getFarmingSkill().getLevel() >= 150) {
             boolean cr1 = false;
@@ -82,6 +109,117 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 cookingrecipe.setFood(FoodCookingEnums.FarmersLunch);
                 cookingrecipe.setPrice(150);
                 currentPlayer.getCookingRecipes().add(cookingrecipe);
+            }
+
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.Sprinkler) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.BeeHouse);
+            }
+            boolean cr3 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.BeeHouse) {
+                    cr3 = true;
+                    break;
+                }
+            }
+            if (!cr3) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.BeeHouse);
+            }
+        }
+        if (currentPlayer.getFarmingSkill().getLevel() >= 250) {
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.QualitySprinkler) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.QualitySprinkler);
+            }
+
+            boolean cr3 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.DeluxeScarecrow) {
+                    cr3 = true;
+                    break;
+                }
+            }
+            if (!cr3) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.DeluxeScarecrow);
+            }
+
+            boolean cr4 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.CheesePress) {
+                    cr4 = true;
+                    break;
+                }
+            }
+            if (!cr4) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.CheesePress);
+            }
+
+            boolean cr5 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.PreservesJar) {
+                    cr5 = true;
+                    break;
+                }
+            }
+            if (!cr5) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.PreservesJar);
+            }
+        }
+        if (currentPlayer.getFarmingSkill().getLevel() >= 350) {
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.IridiumSprinkler) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.IridiumSprinkler);
+            }
+
+            boolean cr3 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.Keg) {
+                    cr3 = true;
+                    break;
+                }
+            }
+            if (!cr3) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.Keg);
+            }
+
+            boolean cr4 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.Loom) {
+                    cr4 = true;
+                    break;
+                }
+            }
+            if (!cr4) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.Loom);
+            }
+
+            boolean cr5 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.OilMaker) {
+                    cr5 = true;
+                    break;
+                }
+            }
+            if (!cr5) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.OilMaker);
             }
         }
         //DishOTheSea
@@ -131,8 +269,43 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 cookingrecipe.setPrice(200);
                 currentPlayer.getCookingRecipes().add(cookingrecipe);
             }
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.CherryBomb) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.CherryBomb);
+            }
+        }
+        if (currentPlayer.getMiningSkill().getLevel() >= 250) {
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.Bomb) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.Bomb);
+            }
+        }
+        if (currentPlayer.getMiningSkill().getLevel() >= 350) {
+            boolean cr2 = false;
+            for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
+                if (recipe == CraftingRecipesEnums.MegaBomb) {
+                    cr2 = true;
+                    break;
+                }
+            }
+            if (!cr2) {
+                currentPlayer.getCraftingRecipes().add(CraftingRecipesEnums.MegaBomb);
+            }
         }
     }
+
 
     public Result whoAmI() {
         int Playerindex = App.getCurrentGame().getIndexPlayerinControl();
@@ -173,6 +346,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             for (int j = 0; j < columns; j++) {
                 Map.get(i).get(j).setWalkable(true);
                 Map.get(i).get(j).setEnterance(false);
+                Map.get(i).get(j).setShokhmZadeh(false);
             }
         }
     }
@@ -251,6 +425,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         weather.addLast(getRandomWeather(Seasons.Spring));
         NewGame.setCurrentWeather(getRandomWeather(Seasons.Spring));
         NewGame.setWeather(weather);
+
+        for (int i = 0; i < NewGame.getPlayers().size(); i++) {
+            NewGame.getPlayers().get(i).getOwner().setTimesPlayed(NewGame.getPlayers().get(i).getOwner().getTimesPlayed() + 1);
+            //System.out.println(NewGame.getPlayers().get(i).getOwner().getUsername() + " " + NewGame.getPlayers().get(i).getOwner().getTimesPlayed());
+        }
+
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
             Player player;
             if (i != 0) {
@@ -340,6 +520,22 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         if (App.getCurrentGame().getCreator().getUsername().equals(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername())) {
             //save game
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                if (player.getOwner().getHighestGold() < player.getGold()) {
+                    player.getOwner().setHighestGold(player.getGold());
+                }
+            }
+//            for (User user : App.getUsers_List()) {
+//                System.out.println(user.getUsername() + " " + user.getHighestGold());
+//            }
+
+            Gson gson = new Gson();
+            try (FileWriter writer = new FileWriter("users.json")) {
+                gson.toJson(App.getUsers_List(), writer);
+                System.out.println("Users saved to users.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             App.setCurrentGame(null);
             App.setCurrentMenu(Menu.GameMenu);
             System.exit(0);
@@ -364,6 +560,21 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Looks like someone want to still play!");
         } else {
             //delete game
+            for (Player player : App.getCurrentGame().getPlayers()) {
+//                System.out.println(player.getOwner().getHighestGold() + " " + player.getGold());
+                if (player.getOwner().getHighestGold() < player.getGold()) {
+//                    System.out.println("upgraded gold");
+                    player.getOwner().setHighestGold(player.getGold());
+                }
+//                System.out.println("new gold: " + player.getOwner().getHighestGold());
+            }
+            Gson gson = new Gson();
+            try (FileWriter writer = new FileWriter("users.json")) {
+                gson.toJson(App.getUsers_List(), writer);
+                System.out.println("Users saved to users.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             App.setCurrentGame(null);
             App.setCurrentMenu(Menu.GameMenu);
             System.exit(0);
@@ -706,19 +917,19 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         //foraging tree
                         //foraging mineral
                         int whichForaging = rand.nextInt(0, 4);
-                        if (whichForaging == 0) {
+                        if (foragingChance && whichForaging == 0) {
                             ForagingCropsEnums[] foragingCropsTypes = ForagingCropsEnums.values();
                             ForagingCrop foragingCrop = new ForagingCrop();
                             foragingCrop.setType(foragingCropsTypes[random.nextInt(foragingCropsTypes.length)]);
                             App.getCurrentGame().getMap().get(i).get(j).setInside(foragingCrop);
                         } else {
-                            if (whichForaging == 1) {
+                            if (foragingChance && whichForaging == 1) {
                                 ForagingTreesEnums[] foragingTreesTypes = ForagingTreesEnums.values();
                                 ForagingTree foragingTree = new ForagingTree();
                                 foragingTree.setType(foragingTreesTypes[random.nextInt(foragingTreesTypes.length)]);
                                 App.getCurrentGame().getMap().get(i).get(j).setInside(foragingTree);
                             } else {
-                                if (whichForaging == 2) {
+                                if (foragingChance && whichForaging == 2) {
                                     ForagingMineralsEnums[] foragingMineralsTypes = ForagingMineralsEnums.values();
                                     Mineral mineral = new Mineral();
                                     mineral.setType(foragingMineralsTypes[random.nextInt(foragingMineralsTypes.length)]);
@@ -767,25 +978,24 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
 
         if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
-            Thor thor = new Thor();
+            //Thor thor = new Thor();
             int farmWide = 50;
             int farmHeight = 50;
             int[][] strikePosition = new int[3][2];
             strikePosition = getRandomPlaces(3, farmWide, farmHeight);
-//                                        ArrayList<ArrayList<Kashi>> map= App.getCurrentGame().getMap();
-//                    Kashi kashi1 = new Kashi();
-//                    kashi1.setX(strikePosition[0][0]);
-//                    kashi1.setY(strikePosition[0][1]);
-//                    Kashi kashi2 = new Kashi();
-//                    kashi2.setX(strikePosition[1][0]);
-//                    kashi2.setY(strikePosition[1][1]);
-//                    Kashi kashi3 = new Kashi();
-//                    kashi3.setX(strikePosition[2][0]);
-//                    kashi3.setY(strikePosition[2][1]);
-//                    ArrayList<Kashi> kashiList = new ArrayList<>();
-//                    kashiList.add(kashi1);
-//                    kashiList.add(kashi2);
-//                    kashiList.add(kashi3);
+            //ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
+            Kashi[] kashis = new Kashi[3];
+            for (int i = 0; i < 3; i++) {
+                kashis[i] = new Kashi();
+
+                if (App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof AllTree ||
+                        App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof ForagingTree) {
+
+                    Mineral coal = new Mineral();
+                    coal.setType(ForagingMineralsEnums.Coal);
+                    App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
+                }
+            }
 //                    thor.setKhordeh(kashiList);
         }
 
@@ -963,12 +1173,17 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public Result cheatThor(int x, int y) {
+
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Thor thor = new Thor();
-        Cord cord = new Cord(x, y);
-        //        thor.setKhordeh();
+
+        if (App.getCurrentGame().getMap().get(x).get(y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get(x).get(y).getInside() instanceof ForagingTree) {
+            Mineral coal = new Mineral();
+            coal.setType(ForagingMineralsEnums.Coal);
+            App.getCurrentGame().getMap().get(x).get(y).setInside(coal);
+        }
+
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 
@@ -1060,6 +1275,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
                         System.out.printf("You need %d parts of energy to go there.\n", estimatedEnergy);
                         System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
+
                         Scanner sc = new Scanner(System.in);
                         while (true) {
                             String input = sc.nextLine();
@@ -1602,43 +1818,36 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (item == null) {
             return new Result(false, "Item not found");
         } else {
-            Map<Item,Integer> itemmmm = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems();
+            Map<Item, Integer> itemmmm = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems();
             TrashCan trashcan = null;
-            for (Item itemm : itemmmm.keySet())
-            {
-                if (itemm instanceof TrashCan)
-                {
+            for (Item itemm : itemmmm.keySet()) {
+                if (itemm instanceof TrashCan) {
                     trashcan = (TrashCan) item;
                     break;
                 }
             }
-            if( trashcan!=null && trashcan.getJens().equals("initial"))
-            {
+            if (trashcan != null && trashcan.getJens().equals("initial")) {
 
             }
-            if(trashcan!=null && trashcan.getJens().equals("copper"))
-            {
+            if (trashcan != null && trashcan.getJens().equals("copper")) {
                 int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
-                int price = (int)(item.getCorrectPrice()*0.15);
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+                int price = (int) (item.getCorrectPrice() * 0.15);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
             }
-            if(trashcan!=null && trashcan.getJens().equals("iron"))
-            {
+            if (trashcan != null && trashcan.getJens().equals("iron")) {
                 int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
-                int price = (int)(item.getCorrectPrice()*0.3);
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+                int price = (int) (item.getCorrectPrice() * 0.3);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
             }
-            if(trashcan!=null && trashcan.getJens().equals("gold"))
-            {
+            if (trashcan != null && trashcan.getJens().equals("gold")) {
                 int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
-                int price = (int)(item.getCorrectPrice()*0.45);
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+                int price = (int) (item.getCorrectPrice() * 0.45);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
             }
-            if(trashcan!=null && trashcan.getJens().equals("iridium"))
-            {
+            if (trashcan != null && trashcan.getJens().equals("iridium")) {
                 int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
-                int price = (int)(item.getCorrectPrice()*0.6);
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold+price);
+                int price = (int) (item.getCorrectPrice() * 0.6);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
             }
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, number);
             return new Result(true, number + "of Item " + item.getClass().getSimpleName() + " removed");
@@ -1707,238 +1916,169 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        if(!jens.equals("initial") && !jens.equals("copper") && !jens.equals("iron") && !jens.equals("gold") &&!jens.equals("iridium"))
-        {
-            return new Result(false,"Your entered jens is not Okay!");
+        if (!jens.equals("initial") && !jens.equals("copper") && !jens.equals("iron") && !jens.equals("gold") && !jens.equals("iridium")) {
+            return new Result(false, "Your entered jens is not Okay!");
         }
-        Tool tool =App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
+        Tool tool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
         if (tool == null) {
             return new Result(false, "Item not found");
         } else if (!(tool instanceof Tool)) {
             return new Result(false, "You can not upgrade this type of item!");
         }
 
-        if(jens.equals("copper"))
-        {
-            if(tool instanceof Axe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+        if (jens.equals("copper")) {
+            if (tool instanceof Axe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
                     ((Axe) tool).update("copper");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Pickaxe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+            if (tool instanceof Pickaxe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
                     ((Pickaxe) tool).update("copper");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Hoe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2000);
+            if (tool instanceof Hoe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
                     ((Hoe) tool).update("copper");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof TrashCan)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<1000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-1000);
+            if (tool instanceof TrashCan) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 1000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1000);
                     ((TrashCan) tool).update("copper");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
         }
-        if(jens.equals("iron"))
-        {
-            if(tool instanceof Axe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+        if (jens.equals("iron")) {
+            if (tool instanceof Axe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
                     ((Axe) tool).update("iron");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Pickaxe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+            if (tool instanceof Pickaxe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
                     ((Pickaxe) tool).update("iron");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Hoe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+            if (tool instanceof Hoe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
                     ((Hoe) tool).update("iron");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof TrashCan)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<2500)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-2500);
+            if (tool instanceof TrashCan) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2500) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2500);
                     ((TrashCan) tool).update("iron");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
         }
-        if(jens.equals("gold"))
-        {
-            if(tool instanceof Axe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+        if (jens.equals("gold")) {
+            if (tool instanceof Axe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
                     ((Axe) tool).update("gold");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Pickaxe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+            if (tool instanceof Pickaxe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
                     ((Pickaxe) tool).update("gold");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Hoe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<10000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-10000);
+            if (tool instanceof Hoe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
                     ((Hoe) tool).update("gold");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof TrashCan)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<5000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-5000);
+            if (tool instanceof TrashCan) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
                     ((TrashCan) tool).update("gold");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
         }
-        if(jens.equals("iridium"))
-        {
-            if(tool instanceof Axe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+        if (jens.equals("iridium")) {
+            if (tool instanceof Axe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
                     ((Axe) tool).update("iridium");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Pickaxe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+            if (tool instanceof Pickaxe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
                     ((Pickaxe) tool).update("iridium");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof Hoe)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<25000)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-25000);
+            if (tool instanceof Hoe) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
                     ((Hoe) tool).update("iridium");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
-            if(tool instanceof TrashCan)
-            {
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<12500)
-                {
-                    return new Result(false,"Your golds are not enough!");
-                }
-                else
-                {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()-12500);
+            if (tool instanceof TrashCan) {
+                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12500) {
+                    return new Result(false, "Your golds are not enough!");
+                } else {
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 12500);
                     ((TrashCan) tool).update("iridium");
-                    return new Result(true,"tool updated!");
+                    return new Result(true, "tool updated!");
                 }
             }
         }
-        return new Result(true,"!");
+        return new Result(true, "!");
     }
 
     public Result toolsUse(String direction) {
@@ -1948,26 +2088,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         Tool tool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
         if (tool instanceof Axe) {
-
+            System.out.println(((Axe) tool).use(direction));
+            return new Result(true, "You used your tool");
         } else if (tool instanceof Pickaxe) {
             System.out.println(((Pickaxe) tool).use(direction));
+            return new Result(true, "You used your tool");
         } else if (tool instanceof WateringCan) {
-            ((WateringCan) tool).use(direction);
-
+            System.out.println(((WateringCan) tool).use(direction));
+            return new Result(true, "You used your tool");
         } else if (tool instanceof Hoe) {
-            ((Hoe) tool).use(direction);
+            System.out.println(((Hoe) tool).use(direction));
+            return new Result(true, "You used your tool");
+
         } else if (tool instanceof MilkPail) {
-            ((MilkPail) tool).use(direction);
+            System.out.println(((MilkPail) tool).use(direction));
+            return new Result(true, "You used your tool");
+
         } else if (tool instanceof Shear) {
-            ((Shear) tool).use(direction);
+            System.out.println(((Shear) tool).use(direction));
+            return new Result(true, "You used your tool");
+
         } else if (tool instanceof TrashCan) {
+            System.out.println();
+            return new Result(true, "You used your tool");
 
         } else if (tool instanceof Scythe) {
+            System.out.println(((Scythe) tool).use(direction));
+            return new Result(true, "You used your tool");
 
         } else {
             return new Result(false, "Invalid situation");
         }
-        return null;
     }
 
     public Result craftInfo(String craftName) {
@@ -2085,7 +2236,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
             }
         }
-
+        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (App.getCurrentGame().getMap().get(currentplayer.getX() + dir_x).get(currentplayer.getY() + dir_y).isShokhmZadeh() == false) {
+            return new Result(false, "You have to shokhm it first");
+        }
         if (source.equalsIgnoreCase("mixedseeds") || source.equalsIgnoreCase("mixedseed")) {
             try {
                 // 1. Validate the player has the mixed seed in inventory
@@ -2817,7 +2971,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     player.getInventory().addItem(pumpkinPie, count);
                     addItem = true;
                 case "flower":
-                    player.getInventory().addItem(new Flower(),count);
+                    player.getInventory().addItem(new Flower(), count);
                     addItem = true;
                     break;
             }
@@ -2994,15 +3148,17 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
         Set<String> FOOD_ENUMS = new HashSet<>();
+        FoodCookingEnums foodCookingEnums = null;
         for (FoodCookingEnums food : FoodCookingEnums.values()) {
             FOOD_ENUMS.add(food.name().toLowerCase());
+            if (food.name().equalsIgnoreCase(foodName)) {
+                foodCookingEnums = FoodCookingEnums.valueOf(foodName);
+            }
         }
-        FoodCookingEnums foodCookingEnums;
-        try {
-            foodCookingEnums = FoodCookingEnums.valueOf(foodName);
-        } catch (Exception e) {
-            return new Result(false, "Invalid food");
-        }
+//        try {
+//        } catch (Exception e) {
+//            return new Result(false, "Invalid food");
+//        }
         if (isValidFood(foodName, FOOD_ENUMS)) {
             for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                 if (item instanceof FoodCooking) {
@@ -3012,6 +3168,35 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
                         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
                         return new Result(true, "You ate " + foodName);
+                    }
+                }
+            }
+        } else if (AllCropsEnums.isContain(foodName)) {
+            AllCropsEnums allCropsEnums = AllCropsEnums.valueOf(foodName);
+            ForagingSeedsEnums cropSeed = allCropsEnums.getSeedSet();
+            AllCrop crop = new AllCrop();
+            crop.initilizeCrop(cropSeed);
+            if (crop.isEdible()) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof AllCrop) {
+                        if (crop.getCorrectName().equalsIgnoreCase(foodName)) {
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + crop.getEnergy()));
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            return new Result(true, "You ate " + foodName);
+                        }
+                    }
+                }
+            }
+        } else if (ArtisanGoodsEnums.isContain(foodName)) {
+            ArtisanGoods artisanGoods = new ArtisanGoods(foodName);
+            if (artisanGoods.getEnergyUsage() != 0) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof ArtisanGoods) {
+                        if (artisanGoods.getCorrectName().equalsIgnoreCase(foodName)) {
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + artisanGoods.getEnergyUsage()));
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            return new Result(true, "You ate " + foodName);
+                        }
                     }
                 }
             }
@@ -3043,7 +3228,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             boolean isOkay = AreYouNearForNavazesh(x, y, xOfAnimal, yOfAnimal);
             if (isOkay) {
                 animal.setNavazesh(true);
-                animal.setFriendship(animal.getFriendship()+15);
+                animal.setFriendship(animal.getFriendship() + 15);
                 return new Result(true, "you navazeshed it successfully!");
             } else {
                 return new Result(false, "You should be more near to " + animal.getName());
@@ -3507,7 +3692,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        item = item.replaceAll(" ","");
+        item = item.replaceAll(" ", "");
         Item gift = null;
         Gift newGift = null;
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
@@ -3564,10 +3749,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    private static Friendship getFriendship(Player targetPlayer , Player currentPlayer) {
+    private static Friendship getFriendship(Player targetPlayer, Player currentPlayer) {
         Game currentGame = App.getCurrentGame();
         for (Friendship friendships : currentGame.getFriendships()) {
-            if(friendships.isBetween(currentPlayer, targetPlayer)) {
+            if (friendships.isBetween(currentPlayer, targetPlayer)) {
                 return friendships;
             }
         }
@@ -3682,7 +3867,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
         assert friendship != null;
-        if (friendship.getLevel()<2){
+        if (friendship.getLevel() < 2) {
             return new Result(false, "your friendship should be at least 2");
         }
         friendship.interact(60);
@@ -3712,8 +3897,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
         assert friendship != null;
-        if(friendship.getLevel() != 2){
-            return new Result(false,"You can send flower in level 2");
+        if (friendship.getLevel() != 2) {
+            return new Result(false, "You can send flower in level 2");
         }
         boolean found5 = false;
         for (Item items : itemInventory.keySet()) {
@@ -3722,9 +3907,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getTotalItemCount() < 1) {
                         return new Result(false, "target player does not have enough space in inventory");
                     }
-                    if(itemInventory.get(items) - 1 ==0){
+                    if (itemInventory.get(items) - 1 == 0) {
                         itemInventory.remove(items);
-                    }else{
+                    } else {
                         itemInventory.put(items, itemInventory.get(items) - 1);
                     }
                     found5 = true;
@@ -3737,7 +3922,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "No such flower is in your inventory");
         } else {
             boolean found6 = false;
-            targetPlayer.getInventory().addItem(new Flower(),  1);
+            targetPlayer.getInventory().addItem(new Flower(), 1);
 
             if (friendship.getLevel() < 3) {
                 friendship.setLevel(3);
@@ -3809,18 +3994,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(targetProposal.getRing(), 1);
             targetProposal.getProposer().getInventory().removeItem(targetProposal.getRing(), 1);
             proposals.remove(targetProposal);
-            Friendship friendship = getFriendship(targetProposal.getReceiver(),targetProposal.getProposer());
-            if(friendship!=null)
-            {
+            Friendship friendship = getFriendship(targetProposal.getReceiver(), targetProposal.getProposer());
+            if (friendship != null) {
                 friendship.setLevel(4);
             }
             targetProposal.getReceiver().setPartner(targetProposal.getProposer());
             targetProposal.getProposer().setPartner(targetProposal.getReceiver());
             return new Result(true, "You have accepted the marriage proposal from " + userName);
         } else if (acceptOrReject.equalsIgnoreCase("-reject")) {
-            Friendship friendship = getFriendship(targetProposal.getReceiver(),targetProposal.getProposer());
-            if(friendship!=null)
-            {
+            Friendship friendship = getFriendship(targetProposal.getReceiver(), targetProposal.getProposer());
+            if (friendship != null) {
                 friendship.setLevel(0);
             }
             targetProposal.getProposer().setMaxEnergy((int) (0.75 * targetProposal.getProposer().getMaxEnergy()));
@@ -5075,7 +5258,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                             App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
                                             return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
                                         case "wheat":
-                                            //TODO abpash automat iridium
+                                            CraftingItem abpash = new CraftingItem((CraftingRecipesEnums.IridiumSprinkler).toString());
+                                            currentPlayer.getInventory().addItem(abpash, 1);
                                             App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
                                             return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
                                     }
@@ -5200,7 +5384,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                         }
                                                         return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
                                                     } else {
-                                                        //TODO matarsak delux
+                                                        CraftingItem matarsak = new CraftingItem(CraftingRecipesEnums.DeluxeScarecrow.toString());
+                                                        currentPlayer.getInventory().addItem(matarsak, 3);
                                                         App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
                                                         return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
                                                     }
@@ -5274,7 +5459,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                             return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
                                                         }
                                                     case "ironbar":
-                                                        //TODO khoone zanboor
+                                                        CraftingItem zanboor = new CraftingItem(CraftingRecipesEnums.BeeHouse.toString());
+                                                        currentPlayer.getInventory().addItem(zanboor, 3);
                                                         App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
                                                         return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
                                                 }

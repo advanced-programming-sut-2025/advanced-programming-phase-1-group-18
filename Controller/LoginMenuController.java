@@ -36,14 +36,15 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         App.setCurrentUser(user);
         App.setCurrentMenu(Menu.MainMenu);
 
-
-        Gson gson = new Gson();
-        try (FileWriter writer = new FileWriter("loggedInUser.json")) {
-            gson.toJson(user, writer);
-            System.out.println("User info saved to loggedInUser.json");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, "Login successful but failed to save user data.");
+        if (user.isStayLoggedIn()) {
+            Gson gson = new Gson();
+            try (FileWriter writer = new FileWriter("loggedInUser.json")) {
+                gson.toJson(user, writer);
+                System.out.println("User info saved to loggedInUser.json");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new Result(false, "Login successful but failed to save user data.");
+            }
         }
         return new Result(true, "user logged successfully");
     }

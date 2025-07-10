@@ -4,10 +4,10 @@ import Model.App;
 import Model.Result;
 import enums.Menu;
 
-public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
+public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
 
     public Result changeUsername(String newUsername) {
-        if (newUsername.isEmpty()){
+        if (newUsername.isEmpty()) {
             return new Result(false, "Username cannot be empty");
         }
         if (App.getCurrentUser().getUsername().equals(newUsername)) {
@@ -28,7 +28,7 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
     }
 
     public Result changeNickname(String newNickname) {
-        if (newNickname.isEmpty()){
+        if (newNickname.isEmpty()) {
             return new Result(false, "Nickname is empty");
         }
         if (App.getCurrentUser().getUsername().equals(newNickname)) {
@@ -39,7 +39,7 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
     }
 
     public Result changeEmail(String newEmail) {
-        if (newEmail.isEmpty()){
+        if (newEmail.isEmpty()) {
             return new Result(false, "Email is empty");
         }
         if (App.getCurrentUser().getEmail().equals(newEmail)) {
@@ -76,8 +76,8 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
         return new Result(true, "Email changed successfully");
     }
 
-    public Result changePassword(String newPassword,String oldPassword ) {
-        if (oldPassword.isEmpty() || newPassword.isEmpty()){
+    public Result changePassword(String newPassword, String oldPassword) {
+        if (oldPassword.isEmpty() || newPassword.isEmpty()) {
             return new Result(false, "Passwords cannot be empty");
         }
         if (!App.getCurrentUser().getPassword().equals(oldPassword)) {
@@ -119,15 +119,14 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu{
     public void userInfo() {
         System.out.println(App.getCurrentUser().getUsername());
         System.out.println(App.getCurrentUser().getNickName());
-        //        System.out.println(App.getCurrentUser().getMostEarnedMoney());
-        //        System.out.println(App.getCurrentUser().getTimePlayed)
+        System.out.println(App.getCurrentUser().getHighestGold());
+        System.out.println(App.getCurrentUser().getTimesPlayed());
     }
 
     public void menuEnter(String menuName) {
         //from profilemenu we can move to mainmenu
         menuName = menuName.toLowerCase();
-        switch(menuName)
-        {
+        switch (menuName) {
             case "mainmenu":
                 App.setCurrentMenu(Menu.MainMenu);
                 System.out.println("You are now in MainMenu!");
