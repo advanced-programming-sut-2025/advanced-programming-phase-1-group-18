@@ -1,5 +1,6 @@
 package Model.Items;
 
+import Controller.GameMenuController;
 import Model.*;
 
 public class Hoe extends Tool implements Name,Price
@@ -68,15 +69,18 @@ public class Hoe extends Tool implements Name,Price
         boolean IsOkayOrNot = IsValidForUsing(tileCord);
         if(IsOkayOrNot)
         {
-            player.setEnergy(player.getEnergy()-EnergyUsage);
+            player.setEnergy(player.getEnergy()-getEnergyUsage());
             Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
             kashi.setShokhmZadeh(true);
+            player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+            GameMenuController.checkSkilRecipe();
+            System.out.println(tileCord.getX() + " " + tileCord.getY());
             return new Result(true,"You successfully made there shokm zadeh!");
         }
         else
         {
-            player.setEnergy(player.getEnergy()-EnergyUsage);
-            return new Result(true,"You unsuccessfully made there shokm zadeh!");
+            player.setEnergy(player.getEnergy()-getEnergyUsage());
+            return new Result(false,"You unsuccessfully made there shokm zadeh!");
         }
     }
 
@@ -123,6 +127,20 @@ public class Hoe extends Tool implements Name,Price
     }
 
     public int getEnergyUsage() {
+        switch (App.getCurrentGame().getCurrentWeather()) {
+            case SUNNY -> {
+                return EnergyUsage;
+            }
+            case STORM -> {
+                return (int) (EnergyUsage*1.5);
+            }
+            case RAIN -> {
+                return (int) (EnergyUsage *1.5);
+            }
+            case SNOW -> {
+                return  (EnergyUsage *2);
+            }
+        }
         return EnergyUsage;
     }
 
@@ -150,6 +168,18 @@ public class Hoe extends Tool implements Name,Price
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        switch (Jens.toLowerCase()) {
+            case "initial":
+                return 200;
+            case "iron":
+            case "copper":
+                return 250;
+            case "gold":
+                return 300;
+            case "iridium":
+                return 400;
+            default:
+                return 200;
+        }
     }
 }

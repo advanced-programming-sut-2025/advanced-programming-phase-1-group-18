@@ -8,6 +8,8 @@ public class User {
     protected String Gender;
     protected String NickName;
     protected boolean stayLoggedIn;
+    protected int timesPlayed;
+    protected int highestGold;
 
     public String getUsername() {
         return Username;
@@ -68,5 +70,22 @@ public class User {
 
     public User() {
 
+    }
+
+
+    public int getTimesPlayed() {
+        return timesPlayed;
+    }
+
+    public void setTimesPlayed(int timesPlayed) {
+        this.timesPlayed = timesPlayed;
+    }
+
+    public int getHighestGold() {
+        return highestGold;
+    }
+
+    public void setHighestGold(int highestGold) {
+        this.highestGold = highestGold;
     }
 }

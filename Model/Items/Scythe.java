@@ -1,12 +1,14 @@
 package Model.Items;
 
+import Controller.GameMenuController;
 import Model.*;
+import enums.ForagingMineralsEnums;
 
-public class Scythe extends Tool implements Name,Price
-{
+public class Scythe extends Tool implements Name, Price {
     protected int EnergyUsage;
     protected String usage;
-    public String  use(String direction){
+
+    public String use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
@@ -56,33 +58,66 @@ public class Scythe extends Tool implements Name,Price
                 return "Not a valid direction";
             }
         }
-        tileCord.setX(dir_x+tileCord.getX());
-        tileCord.setY(dir_y+tileCord.getY());
+        tileCord.setX(dir_x + tileCord.getX());
+        tileCord.setY(dir_y + tileCord.getY());
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForScythe(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
-                Object plant =  kashi.getInside();
-                if(plant instanceof AllTree){
-                    if(((AllTree)plant).getTotalHarvestTime() == ((AllTree)plant).getDaysGrowCounter()){
+                Object plant = kashi.getInside();
+                if (plant instanceof AllTree) {
+                    if (((AllTree) plant).getTotalHarvestTime() == ((AllTree) plant).getDaysGrowCounter()) {
 //                            player.getInventory().addItem(((Tre)),1);
-                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+                        ((AllTree) plant).setDaysGrowCounter(0);
+                        GameMenuController.checkSkilRecipe();
+
                         return "Fruit caught";
                     } else {
                         return "Fruit isn't ready";
                     }
-                } else if(plant instanceof AllCrop){
-                    if(((AllCrop)plant).getTotalHarvestTime() == ((AllCrop)plant).getDaysGrowCounter()){
-                        player.getInventory().addItem(((AllCrop)plant), 1);
-                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+                } else if (plant instanceof AllCrop) {
+                    if (((AllCrop) plant).getTotalHarvestTime() == ((AllCrop) plant).getDaysGrowCounter()) {
+                        player.getInventory().addItem(((AllCrop) plant), 1);
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+                        if (((AllCrop) plant).isOneTime()) {
+                            kashi.setInside(null);
+                        } else {
+                            ((AllCrop) plant).setDaysGrowCounter(0);
+                        }
+                        GameMenuController.checkSkilRecipe();
+
                         return "Crop caught";
-                    }else{
+                    } else {
                         return "Crop isn't ready";
                     }
-                }else {
-                    return "Not crop found";
+                } else {
+                    if (plant instanceof ForagingSeed) {
+                        player.getInventory().addItem(((ForagingSeed) plant), 1);
+                        kashi.setInside(null);
+                        GameMenuController.checkSkilRecipe();
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+
+                        return "Picked up ForagingSeed";
+                    } else if (plant instanceof ForagingCrop) {
+                        player.getInventory().addItem(((ForagingCrop) plant), 1);
+                        kashi.setInside(null);
+                        GameMenuController.checkSkilRecipe();
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+
+                        return "Picked up ForagingCrop";
+                    } else if (plant instanceof Mineral) {
+                        player.getInventory().addItem(((Mineral) plant), 1);
+                        kashi.setInside(null);
+                        GameMenuController.checkSkilRecipe();
+                        player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+
+                        return "Picked up ForagingMineral";
+                    } else {
+                        return "Not a valid plant type";
+                    }
                 }
-            } else{
+            } else {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 return "Not Crop found";
             }
@@ -91,13 +126,14 @@ public class Scythe extends Tool implements Name,Price
         }
     }
 
-    public static boolean isValidForScythe(Cord cord){
+    public static boolean isValidForScythe(Cord cord) {
         Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
-        if(kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+        if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop || kashi.getInside() instanceof ForagingSeed || kashi.getInside() instanceof ForagingCrop || kashi.getInside() instanceof Mineral) {
             return true;
         }
         return false;
     }
+
     public String getUsage() {
         return usage;
     }
@@ -105,19 +141,20 @@ public class Scythe extends Tool implements Name,Price
     public void setUsage(String usage) {
         this.usage = usage;
     }
+
     public int getEnergyUsage() {
         switch (App.getCurrentGame().getCurrentWeather()) {
             case SUNNY -> {
                 return EnergyUsage;
             }
             case STORM -> {
-                return (int) (EnergyUsage*1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case RAIN -> {
-                return (int) (EnergyUsage *1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case SNOW -> {
-                return (int) (EnergyUsage *2);
+                return (int) (EnergyUsage * 2);
             }
         }
         return EnergyUsage;
@@ -126,6 +163,7 @@ public class Scythe extends Tool implements Name,Price
     public void setEnergyUsage(int energyUsage) {
         this.EnergyUsage = energyUsage;
     }
+
     @Override
     public String getCorrectName() {
         return "scythe";
@@ -134,6 +172,6 @@ public class Scythe extends Tool implements Name,Price
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        return 200;
     }
 }

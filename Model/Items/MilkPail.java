@@ -1,5 +1,6 @@
 package Model.Items;
 
+import Controller.GameMenuController;
 import Model.*;
 
 public class MilkPail extends Tool implements Name, Price {
@@ -64,6 +65,7 @@ public class MilkPail extends Tool implements Name, Price {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 //todo get crop
                 player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+                GameMenuController.checkSkilRecipe();
                 return "Milk achived";
             } else {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());

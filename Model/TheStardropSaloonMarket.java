@@ -37,9 +37,9 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         }
         Stock = new HashMap<>();
 
-        ArtisanGoods artisanGoods = new ArtisanGoods("Beer");
-        artisanGoods.setPrice(400);
-        Stock.put(artisanGoods, Integer.MAX_VALUE);
+//        ArtisanGoods artisanGoods = new ArtisanGoods("Beer");
+//        artisanGoods.setPrice(400);
+//        Stock.put(artisanGoods, Integer.MAX_VALUE);
 
         FoodCooking foodCooking = new FoodCooking();
         foodCooking.setName(FoodCookingEnums.Salad);
@@ -62,9 +62,9 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         Stock.put(pizza, Integer.MAX_VALUE);
 
 
-        ArtisanGoods coffee = new ArtisanGoods("Coffee");
-        coffee.setPrice(300);
-        Stock.put(coffee, Integer.MAX_VALUE);
+//        ArtisanGoods coffee = new ArtisanGoods("Coffee");
+//        coffee.setPrice(300);
+//        Stock.put(coffee, Integer.MAX_VALUE);
 
         Cookingrecipe hashbrowns = new Cookingrecipe();
         hashbrowns.setFood(FoodCookingEnums.HashBrowns);

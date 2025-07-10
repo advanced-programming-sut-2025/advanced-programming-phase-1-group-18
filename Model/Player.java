@@ -5,17 +5,18 @@ import enums.CraftingRecipesEnums;
 import Model.Items.ArtisanGoods;
 import Model.Items.Tool;
 import Model.Items.WateringCan;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player extends User {
     private int daysAfterGash = 0;
-    private int daysAfterJavabeRad=0;
+    private int daysAfterJavabeRad = 0;
 
     protected User Owner;
     protected int Energy;
     protected int maxEnergy = 200;
-    protected int maxEnergyforMarriage=200;
+    protected int maxEnergyforMarriage = 200;
 
     protected int x;
     protected int y;
@@ -26,7 +27,7 @@ public class Player extends User {
     protected Skill ForagingSkill;
     protected Skill FishingSkill;
     protected Skill MiningSkill;
-
+    protected Player partner;
     protected Buff FoodBuff;
     protected int wood;
     protected int gold;
@@ -38,8 +39,6 @@ public class Player extends User {
     protected Tool inMyHandTool = null;
     //
     protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
-    //
-    protected Player partner;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -60,22 +59,24 @@ public class Player extends User {
         this.CraftingRecipes = new ArrayList<>();
         this.artisansInProduce = new ArrayList<>();
         this.inventory = new Inventory(12, "initial");
+
         WateringCan wateringCan = new WateringCan("initial", 5, 40, 40);
         this.inventory.addItem(wateringCan, 1);
 
-
-        Pickaxe pickaxe  = new Pickaxe("initial",5);
+        Pickaxe pickaxe = new Pickaxe("initial", 5);
         this.inventory.addItem(pickaxe, 1);
 
-        Axe axe = new Axe("initial",5);
+        Axe axe = new Axe("initial", 5);
         this.inventory.addItem(axe, 1);
 
-        Hoe hoe =  new Hoe("initial",5);
+        Hoe hoe = new Hoe("initial", 5);
         this.inventory.addItem(hoe, 1);
+
+        Scythe scythe = new Scythe();
+        this.inventory.addItem(scythe, 1);
 
         TrashCan trashCan =  new TrashCan("initial");
         this.inventory.addItem(trashCan, 1);
-
     }
 
     public int getWood() {
@@ -193,6 +194,7 @@ public class Player extends User {
     public void setMiningSkill(Skill miningSkill) {
         MiningSkill = miningSkill;
     }
+
     public Buff getFoodBuff() {
         return FoodBuff;
     }
@@ -248,6 +250,7 @@ public class Player extends User {
     public void setInMyHandTool(Tool inMyHandTool) {
         this.inMyHandTool = inMyHandTool;
     }
+
     //bought animals
     public ArrayList<Animal> getMyBoughtAnimals() {
         return myBoughtAnimals;
@@ -256,6 +259,7 @@ public class Player extends User {
     public void setMyBoughtAnimals(ArrayList<Animal> myBoughtAnimals) {
         this.myBoughtAnimals = myBoughtAnimals;
     }
+
     //
     public int getDaysAfterGash() {
         return daysAfterGash;

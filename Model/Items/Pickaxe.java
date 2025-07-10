@@ -1,3 +1,4 @@
+
 package Model.Items;
 
 import Controller.GameMenuController;
@@ -121,7 +122,7 @@ public class Pickaxe extends Tool implements Name, Price {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 2);
                     return new Result(false, "You used it unsuccessfully!(With Mining Buff)");
                 }
-                player.setEnergy(player.getEnergy() - getEnergyUsage()  + 1);
+                player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 return new Result(false, "You used it unsuccessfully!");
             }
             //
@@ -319,7 +320,7 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
@@ -344,7 +345,7 @@ public class Pickaxe extends Tool implements Name, Price {
                 }
                 //
                 if (mypickaxe.getJens().equalsIgnoreCase("gold") && (player.getMiningSkill().getLevel() >= 350)) {
-                    if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
+                    if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                         return new Result(false, "Your energy is not enough!");
                     }
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
@@ -575,7 +576,7 @@ public class Pickaxe extends Tool implements Name, Price {
         if ((kashi.getItemInside() instanceof Axe) || (kashi.getItemInside() instanceof Pickaxe) || (kashi.getItemInside() instanceof Hoe) || (kashi.getItemInside() instanceof WateringCan) || (kashi.getItemInside() instanceof FishingPole) || (kashi.getItemInside() instanceof Scythe) || (kashi.getItemInside() instanceof MilkPail) || (kashi.getItemInside() instanceof Shear)) {
 
             if (player.getMiningSkill().getLevel() >= 350) {
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(),1);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(), 1);
                 kashi.setItemInside(null);
                 player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
@@ -584,7 +585,7 @@ public class Pickaxe extends Tool implements Name, Price {
 
             } else {
 
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(),1);
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(kashi.getItemInside(), 1);
                 kashi.setItemInside(null);
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 player.getMiningSkill().setLevel(player.getMiningSkill().getLevel() + 10);
@@ -648,7 +649,7 @@ public class Pickaxe extends Tool implements Name, Price {
                 return new Result(false, "You used it successfully and made there unshokmzadeh!(With Max Mining Level)");
             }
             if (mypickaxe.getJens().equalsIgnoreCase("iron") && (player.getMiningSkill().getLevel() < 350)) {
-                if (player.getEnergy() - getEnergyUsage()+ 1 < 0) {
+                if (player.getEnergy() - getEnergyUsage() + 1 < 0) {
                     return new Result(false, "Your energy is not enough!");
                 }
                 player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
@@ -757,13 +758,13 @@ public class Pickaxe extends Tool implements Name, Price {
                 return EnergyUsage;
             }
             case STORM -> {
-                return (int) (EnergyUsage*1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case RAIN -> {
-                return (int) (EnergyUsage *1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case SNOW -> {
-                return (int) (EnergyUsage *2);
+                return (int) (EnergyUsage * 2);
             }
         }
         return EnergyUsage;
@@ -781,6 +782,18 @@ public class Pickaxe extends Tool implements Name, Price {
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        switch (Jens.toLowerCase()) {
+            case "initial":
+                return 200;
+            case "iron":
+            case "copper":
+                return 250;
+            case "gold":
+                return 300;
+            case "iridium":
+                return 400;
+            default:
+                return 200;
+        }
     }
 }

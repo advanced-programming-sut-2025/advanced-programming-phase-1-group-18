@@ -11,11 +11,33 @@ import java.util.Map;
 public class TrashCan extends Tool implements Name,Price
 {
     protected String Jens;
+    protected int EnergyUsage;
     protected String usage;
+
+
 
     public TrashCan(String jens)
     {
         Jens = jens;
+    }
+
+    public void update(String Jens) {
+        switch (Jens) {
+            case "copper":
+                this.setJens("copper");
+                break;
+            case "iron":
+                this.setJens("iron");
+                break;
+            case "gold":
+                this.setJens("gold");
+                break;
+            case "iridium":
+                this.setJens("iridium");
+                break;
+            default:
+                break;
+        }
     }
 
     public void trash(String objectName, int number){
@@ -38,24 +60,6 @@ public class TrashCan extends Tool implements Name,Price
         }
     }
 
-    public void update(String Jens) {
-        switch (Jens) {
-            case "copper":
-                this.setJens("copper");
-                break;
-            case "iron":
-                this.setJens("iron");
-                break;
-            case "gold":
-                this.setJens("gold");
-                break;
-            case "iridium":
-                this.setJens("iridium");
-                break;
-            default:
-                break;
-        }
-    }
     public String getUsage() {
         return usage;
     }
@@ -71,6 +75,13 @@ public class TrashCan extends Tool implements Name,Price
         this.Jens = jens;
     }
 
+    public int getEnergyUsage() {
+        return EnergyUsage;
+    }
+
+    public void setEnergyUsage(int energyUsage) {
+        this.EnergyUsage = energyUsage;
+    }
     @Override
     public String getCorrectName() {
         return "trashcan";
@@ -79,6 +90,18 @@ public class TrashCan extends Tool implements Name,Price
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        switch (Jens.toLowerCase()) {
+            case "initial":
+                return 200;
+            case "iron":
+            case "copper":
+                return 250;
+            case "gold":
+                return 300;
+            case "iridium":
+                return 400;
+            default:
+                return 200;
+        }
     }
 }

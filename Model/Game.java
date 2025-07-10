@@ -168,6 +168,7 @@ public class Game {
                 Player p1 = Players.get(i);
                 Player p2 = Players.get(j);
                 Friendship f = new Friendship(p1, p2);
+                f.setLevel(4);
                 friendships.add(f);
             }
         }

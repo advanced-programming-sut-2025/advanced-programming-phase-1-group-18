@@ -46,9 +46,9 @@ public class Inventory {
         int currentQuantity = Items.getOrDefault(item, 0);
         int newQuantity = currentQuantity + quantity;
 
-//        if (newQuantity > MaxQuantity) {
-//            return false;
-//        }
+        if (Items.size() > MaxQuantity) {
+            return false;
+        }
         for (Item entry : Items.keySet()) {
             if (entry.getCorrectName().equals(item.getCorrectName())) {
                 newQuantity = Items.getOrDefault(entry, 0) + quantity;

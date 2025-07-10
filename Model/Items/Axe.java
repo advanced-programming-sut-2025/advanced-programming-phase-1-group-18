@@ -3,8 +3,7 @@ package Model.Items;
 import Controller.GameMenuController;
 import Model.*;
 
-public class Axe extends Tool implements Name,Price
-{
+public class Axe extends Tool implements Name, Price {
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
@@ -13,15 +12,37 @@ public class Axe extends Tool implements Name,Price
         Jens = jens;
         EnergyUsage = energyUsage;
     }
-    public Result use(String direction)
-    {
+
+    public void update(String Jens) {
+        switch (Jens) {
+            case "copper":
+                this.setJens("copper");
+                this.setEnergyUsage(4);
+                break;
+            case "iron":
+                this.setJens("iron");
+                this.setEnergyUsage(3);
+                break;
+            case "gold":
+                this.setJens("gold");
+                this.setEnergyUsage(2);
+                break;
+            case "iridium":
+                this.setJens("iridium");
+                this.setEnergyUsage(1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public Result use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Cord tileCord = new Cord(player.getX(), player.getY());
         int dir_x = -1;
         int dir_y = -1;
         System.out.println(direction);
-        switch (direction.toLowerCase())
-        {
+        switch (direction.toLowerCase()) {
             case "n":
                 dir_x = 0;
                 dir_y = -1;
@@ -66,276 +87,211 @@ public class Axe extends Tool implements Name,Price
                 return null;
 
         }
-        tileCord.setX(dir_x+tileCord.getX());
-        tileCord.setY(dir_y+tileCord.getY());
+        tileCord.setX(dir_x + tileCord.getX());
+        tileCord.setY(dir_y + tileCord.getY());
         //System.out.println("khar1");
         Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
 
         //System.out.println("khar2");
-        Tool mytool=  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
+        Tool mytool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
         Axe myaxe = (Axe) mytool;
-        if(!(kashi.getInside() instanceof AllTree))
-        {
+        if (!(kashi.getInside() instanceof AllTree)) {
 
-            if(myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel()>=350))
-            {
+            if (myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel() >= 350)) {
                 //System.out.println("khar3.5");
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                return new Result(false,"You used it unsuccessfully!(With Max Mining Level)");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                return new Result(false,"You used it unsuccessfully!");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                return new Result(false, "You used it unsuccessfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                return new Result(false,"You used it unsuccessfully!(With Max Mining Level)");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                return new Result(false,"You used it unsuccessfully!");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                return new Result(false, "You used it unsuccessfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                return new Result(false,"You used it unsuccessfully!(With Max Mining Level)");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                return new Result(false,"You used it unsuccessfully!");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                return new Result(false, "You used it unsuccessfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                return new Result(false,"You used it unsuccessfully!(With Max Mining Level)");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                return new Result(false,"You used it unsuccessfully!");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                return new Result(false, "You used it unsuccessfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                return new Result(false,"You used it unsuccessfully!(With Max Mining Level)");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                return new Result(false, "You used it unsuccessfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                return new Result(false,"You used it unsuccessfully!");
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                return new Result(false, "You used it unsuccessfully!");
             }
         }
-        if(kashi.getInside() instanceof AllTree)
-        {
-            if(myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+        if (kashi.getInside() instanceof AllTree) {
+            if (myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!(With Max Mining Level)");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iridium") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!(With Max Mining Level)");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("gold") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!(With Max Mining Level)");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("iron") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                player.setWood(player.getWood()+10);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.setWood(player.getWood() + 10);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                return new Result(false,"You used it successfully!");
+                return new Result(false, "You used it successfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel()>=350))
-            {
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel() >= 350)) {
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!(With Max Mining Level)");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("copper") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!");
             }
             //
-            if(myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel()>=350))
-            {
+            if (myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel() >= 350)) {
                 //System.out.println("khar3.5");
-                if(player.getEnergy()-EnergyUsage+2<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+                if (player.getEnergy() - EnergyUsage + 2 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+2);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 2);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!(With Max Mining Level)");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!(With Max Mining Level)");
             }
-            if(myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel()<350))
-            {
-                if(player.getEnergy()-EnergyUsage+1<0)
-                {
-                    return new Result(false,"Your energy is not enough!");
+            if (myaxe.getJens().equalsIgnoreCase("initial") && (player.getFarmingSkill().getLevel() < 350)) {
+                if (player.getEnergy() - EnergyUsage + 1 < 0) {
+                    return new Result(false, "Your energy is not enough!");
                 }
                 kashi.setInside(null);
-                player.setEnergy(player.getEnergy()-EnergyUsage+1);
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+10);
+                player.setEnergy(player.getEnergy() - EnergyUsage + 1);
+                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 10);
                 GameMenuController.checkSkilRecipe();
-                player.setWood(player.getWood()+10);
-                return new Result(false,"You used it successfully!");
+                player.setWood(player.getWood() + 10);
+                return new Result(false, "You used it successfully!");
             }
 
         }
-        return new Result(false,"what?");
-    }
-
-    public void update(String Jens) {
-        switch (Jens) {
-            case "copper":
-                this.setJens("copper");
-                this.setEnergyUsage(4);
-                break;
-            case "iron":
-                this.setJens("iron");
-                this.setEnergyUsage(3);
-                break;
-            case "gold":
-                this.setJens("gold");
-                this.setEnergyUsage(2);
-                break;
-            case "iridium":
-                this.setJens("iridium");
-                this.setEnergyUsage(1);
-                break;
-            default:
-                break;
-        }
+        return new Result(false, "what?");
     }
 
     public String getUsage() {
@@ -345,7 +301,6 @@ public class Axe extends Tool implements Name,Price
     public void setUsage(String usage) {
         this.usage = usage;
     }
-
 
     public int getEnergyUsage() {
         switch (App.getCurrentGame().getCurrentWeather()) {
@@ -379,11 +334,29 @@ public class Axe extends Tool implements Name,Price
 
     @Override
     public String getCorrectName() {
+
         return "axe";
     }
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        //initial
+        //copper
+        //iron
+        //gold
+        //iridium
+        switch (Jens.toLowerCase()) {
+            case "initial":
+                return 200;
+            case "iron":
+            case "copper":
+                return 250;
+            case "gold":
+                return 300;
+            case "iridium":
+                return 400;
+            default:
+                return 200;
+        }
     }
 }

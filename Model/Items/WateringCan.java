@@ -79,18 +79,18 @@ public class WateringCan extends Tool implements Name, Price {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
                     Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
-                    if(plant instanceof AllCrop){
-                        if(!((AllCrop)plant).isFedThisDay()){
-                            ((AllCrop)plant).setFedThisDay(true);
+                    if (plant instanceof AllCrop) {
+                        if (!((AllCrop) plant).isFedThisDay()) {
+                            ((AllCrop) plant).setFedThisDay(true);
                             return "Plant watered";
-                        }else {
+                        } else {
                             return "Plant doesn't need water";
                         }
-                    } else if(plant instanceof AllTree){
-                        if(!((AllTree)plant).isFedThisDay()){
-                            ((AllTree)plant).setFedThisDay(true);
+                    } else if (plant instanceof AllTree) {
+                        if (!((AllTree) plant).isFedThisDay()) {
+                            ((AllTree) plant).setFedThisDay(true);
                             return "Plant watered";
-                        }else {
+                        } else {
                             return "Plant doesn't need water";
                         }
                     }
@@ -110,18 +110,18 @@ public class WateringCan extends Tool implements Name, Price {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
                     Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
-                    if(plant instanceof AllCrop){
-                        if(!((AllCrop)plant).isFedThisDay()){
-                            ((AllCrop)plant).setFedThisDay(true);
+                    if (plant instanceof AllCrop) {
+                        if (!((AllCrop) plant).isFedThisDay()) {
+                            ((AllCrop) plant).setFedThisDay(true);
                             return "Plant watered";
-                        }else {
+                        } else {
                             return "Plant doesn't need water";
                         }
-                    } else if(plant instanceof AllTree){
-                        if(!((AllTree)plant).isFedThisDay()){
-                            ((AllTree)plant).setFedThisDay(true);
+                    } else if (plant instanceof AllTree) {
+                        if (!((AllTree) plant).isFedThisDay()) {
+                            ((AllTree) plant).setFedThisDay(true);
                             return "Plant watered";
-                        }else {
+                        } else {
                             return "Plant doesn't need water";
                         }
                     }
@@ -135,36 +135,6 @@ public class WateringCan extends Tool implements Name, Price {
         return "OMG";
     }
 
-    public void update() {
-        switch (Jens) {
-            case "copper":
-                this.setJens("copper");
-                this.setCapacity(55);
-                this.setMax_Capacity(55);
-                this.setEnergyUsage(4);
-                break;
-            case "iron":
-                this.setJens("iron");
-                this.setCapacity(70);
-                this.setMax_Capacity(70);
-                this.setEnergyUsage(3);
-                break;
-            case "gold":
-                this.setJens("gold");
-                this.setCapacity(85);
-                this.setMax_Capacity(85);
-                this.setEnergyUsage(2);
-                break;
-            case "iridium":
-                this.setJens("iridium");
-                this.setCapacity(100);
-                this.setMax_Capacity(100);
-                this.setEnergyUsage(1);
-                break;
-            default:
-                break;
-        }
-    }
 
     public static boolean isValidForFilling(Cord cord) {
         Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
@@ -204,13 +174,13 @@ public class WateringCan extends Tool implements Name, Price {
                 return EnergyUsage;
             }
             case STORM -> {
-                return (int) (EnergyUsage*1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case RAIN -> {
-                return (int) (EnergyUsage *1.5);
+                return (int) (EnergyUsage * 1.5);
             }
             case SNOW -> {
-                return (int) (EnergyUsage *2);
+                return (int) (EnergyUsage * 2);
             }
         }
         return EnergyUsage;
@@ -243,7 +213,51 @@ public class WateringCan extends Tool implements Name, Price {
 
     @Override
     public int getCorrectPrice() {
-        return 0;
+        switch (Jens.toLowerCase()) {
+            case "initial":
+                return 200;
+            case "iron":
+            case "copper":
+                return 250;
+            case "gold":
+                return 300;
+            case "iridium":
+                return 400;
+            default:
+                return 200;
+        }
+    }
+
+
+    public void update() {
+        switch (Jens) {
+            case "copper":
+                this.setJens("copper");
+                this.setCapacity(55);
+                this.setMax_Capacity(55);
+                this.setEnergyUsage(4);
+                break;
+            case "iron":
+                this.setJens("iron");
+                this.setCapacity(70);
+                this.setMax_Capacity(70);
+                this.setEnergyUsage(3);
+                break;
+            case "gold":
+                this.setJens("gold");
+                this.setCapacity(85);
+                this.setMax_Capacity(85);
+                this.setEnergyUsage(2);
+                break;
+            case "iridium":
+                this.setJens("iridium");
+                this.setCapacity(100);
+                this.setMax_Capacity(100);
+                this.setEnergyUsage(1);
+                break;
+            default:
+                break;
+        }
     }
 }
 

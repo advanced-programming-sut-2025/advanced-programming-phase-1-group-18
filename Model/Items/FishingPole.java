@@ -1,5 +1,6 @@
 package Model.Items;
 
+import Controller.GameMenuController;
 import Model.*;
 import enums.CommonFishesEnums;
 import enums.LegendaryFishesEnums;
@@ -151,6 +152,7 @@ public class FishingPole extends Item implements Name, Price {
         }
         result.deleteCharAt(result.length() - 1);
         player.getFishingSkill().setLevel(player.getFishingSkill().getLevel() + 5);
+        GameMenuController.checkSkilRecipe();
         return result.toString();
     }
 
