@@ -1,10 +1,9 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
-import io.githubgroup18.Controller.JojaMartController;
-import io.githubgroup18.Controller.MarniesRanchController;
-import io.githubgroup18.Controller.MarniesRanchController;
-import io.githubgroup18.enums.MarketMenuEnums;
-import io.githubgroup18.enums.MarniesRanchCommands;
+//import io.github.group18.Controller.MarniesRanchController;
+import io.github.group18.Controller.MarniesRanchController;
+import io.github.group18.enums.MarketMenuEnums;
+import io.github.group18.enums.MarniesRanchCommands;
 
 import java.util.Scanner;
 

@@ -1,11 +1,8 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
-import io.githubgroup18.Controller.RegisterMenuController;
-import io.githubgroup18.enums.LoginMenuCommands;
-import io.githubgroup18.Controller.LoginMenuController;
-import io.githubgroup18.enums.RegisterMenuCommands;
+import io.github.group18.Controller.RegisterMenuController;
+import io.github.group18.enums.RegisterMenuCommands;
 
-import java.util.Scanner;
 import java.util.Scanner;
 
 public class RegisterMenu extends AppMenu {

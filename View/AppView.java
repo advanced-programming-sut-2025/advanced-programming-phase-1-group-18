@@ -1,5 +1,5 @@
-package io.githubgroup18.View;
-import io.githubgroup18.Model.*;
+package io.github.group18.View;
+
 
 import java.io.File;
 import java.io.FileReader;
@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
-import io.githubgroup18.Model.App;
-import io.githubgroup18.enums.Menu;
+import io.github.group18.Model.App;
+import io.github.group18.Model.User;
+import io.github.group18.enums.Menu;
 
 public class AppView {
 
@@ -24,7 +25,7 @@ public class AppView {
                 User user = new Gson().fromJson(reader, User.class);
                 if (user != null) {
                     App.setCurrentUser(user);
-                    //App.setCurrentMenu(Menu.MainMenu);
+                    App.setCurrentMenu(Menu.MainMenu);
                     System.out.println("Welcome back, " + user.getUsername());
                 }
             } catch (IOException e) {

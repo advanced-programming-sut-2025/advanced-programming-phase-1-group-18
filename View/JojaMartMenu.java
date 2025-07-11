@@ -1,9 +1,7 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
-import io.githubgroup18.Controller.FishShopController;
-import io.githubgroup18.Controller.JojaMartController;
-import io.githubgroup18.Model.App;
-import io.githubgroup18.enums.MarketMenuEnums;
+import io.github.group18.Controller.JojaMartController;
+import io.github.group18.enums.MarketMenuEnums;
 
 import java.util.Scanner;
 

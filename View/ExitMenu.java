@@ -1,4 +1,4 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
 import java.util.Scanner;
 
