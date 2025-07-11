@@ -1,4 +1,4 @@
-package io.githubgroup18.enums;
+package io.github.group18.enums;
 
 public enum FallWeatherEnums
 {
