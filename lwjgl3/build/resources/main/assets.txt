@@ -1,7 +1,8 @@
-Skin/font-export.fnt
-Skin/font-subtitle-export.fnt
-Skin/font-title-export.fnt
-Skin/pixthulhu-ui.atlas
-Skin/pixthulhu-ui.json
-Skin/pixthulhu-ui.png
 libgdx.png
+menu_bg.png
+skin/font-export.fnt
+skin/font-subtitle-export.fnt
+skin/font-title-export.fnt
+skin/pixthulhu-ui.atlas
+skin/pixthulhu-ui.json
+skin/pixthulhu-ui.png
