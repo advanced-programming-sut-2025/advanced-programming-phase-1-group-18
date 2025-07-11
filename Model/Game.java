@@ -1,8 +1,8 @@
-package io.githubgroup18.Model;
-import io.githubgroup18.enums.NPCEnums;
-import io.githubgroup18.enums.Seasons;
-import io.githubgroup18.enums.WeatherEnum;
-import io.githubgroup18.Model.Items.Gift;
+package io.github.group18.Model;
+
+import io.github.group18.enums.Seasons;
+import io.github.group18.enums.WeatherEnum;
+import io.github.group18.Model.Items.Gift;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

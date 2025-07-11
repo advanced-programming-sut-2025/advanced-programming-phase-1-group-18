@@ -1,8 +1,8 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
-//import Controller.CarpentersShopController;
-import io.githubgroup18.Controller.FishShopController;
-import io.githubgroup18.enums.MarketMenuEnums;
+//import io.github.group18.Controller.CarpentersShopController;
+import io.github.group18.Controller.FishShopController;
+import io.github.group18.enums.MarketMenuEnums;
 
 import java.util.Scanner;
 

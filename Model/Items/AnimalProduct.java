@@ -1,10 +1,8 @@
-package io.githubgroup18.Model.Items;
+package io.github.group18.Model.Items;
 
-import io.githubgroup18.Model.Items.Item;
-import io.githubgroup18.Model.Items.Price;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.AnimalProductType;
-import io.githubgroup18.enums.ProductQuality;
+import io.github.group18.Model.Name;
+import io.github.group18.enums.AnimalProductType;
+import io.github.group18.enums.ProductQuality;
 
 public class AnimalProduct extends Item implements Name, Price {
     private String name;

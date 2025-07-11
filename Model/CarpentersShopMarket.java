@@ -1,8 +1,7 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.Model.Items.Mineral;
-import io.githubgroup18.Model.Items.StoneItem;
-import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.github.group18.Model.Items.Mineral;
+import io.github.group18.Model.Items.StoneItem;
 
 import java.util.HashMap;
 

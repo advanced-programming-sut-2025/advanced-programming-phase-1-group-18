@@ -1,6 +1,6 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.enums.Seasons;
+import io.github.group18.enums.Seasons;
 
 public class DateTime
 {

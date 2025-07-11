@@ -1,8 +1,12 @@
-package io.githubgroup18.Model;
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.CageAnimalsEnums;
-import io.githubgroup18.enums.ForagingMineralsEnums;
-import io.githubgroup18.enums.TavilehAnimalEnums;
+package io.github.group18.Model;
+
+
+import io.github.group18.Model.Items.Hay;
+import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Items.MilkPail;
+import io.github.group18.Model.Items.Shear;
+import io.github.group18.enums.CageAnimalsEnums;
+import io.github.group18.enums.TavilehAnimalEnums;
 
 import java.util.HashMap;
 

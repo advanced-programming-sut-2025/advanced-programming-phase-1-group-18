@@ -1,13 +1,12 @@
-package io.githubgroup18.Model.Items;
+package io.github.group18.Model.Items;
 
-import io.githubgroup18.Model.App;
-import io.githubgroup18.Model.Cord;
-import io.githubgroup18.Model.Kashi;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.AllCropsEnums;
-import io.githubgroup18.enums.ForagingSeedsEnums;
-import io.githubgroup18.enums.ForagingTreesEnums;
-import io.githubgroup18.enums.MixedSeedsEnums;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Cord;
+import io.github.group18.Model.Kashi;
+import io.github.group18.Model.Name;
+import io.github.group18.enums.AllCropsEnums;
+import io.github.group18.enums.ForagingSeedsEnums;
+import io.github.group18.enums.MixedSeedsEnums;
 
 import java.util.ArrayList;
 import java.util.List;

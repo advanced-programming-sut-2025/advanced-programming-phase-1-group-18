@@ -1,7 +1,9 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Controller.GameMenuController;
-import io.githubgroup18.Model.*;
-import io.githubgroup18.enums.StoneTypes;
+
+package io.github.group18.Model.Items;
+
+import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Model.*;
+import io.github.group18.enums.StoneTypes;
 
 public class Pickaxe extends Tool implements Name, Price {
     protected String Jens;

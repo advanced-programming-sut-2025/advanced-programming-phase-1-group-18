@@ -1,9 +1,10 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.CommonFishesEnums;
-import io.githubgroup18.enums.LegendaryFishesEnums;
-import io.githubgroup18.enums.Quality;
-import io.githubgroup18.enums.Seasons;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Model.Name;
+import io.github.group18.enums.CommonFishesEnums;
+import io.github.group18.enums.LegendaryFishesEnums;
+import io.github.group18.enums.Quality;
+import io.github.group18.enums.Seasons;
 
 public class Fish extends Item implements Name,Price
 {

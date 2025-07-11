@@ -1,13 +1,8 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.enums.AllTreesEnums;
-import io.githubgroup18.enums.ForagingCropsEnums;
-import io.githubgroup18.enums.ForagingTreesEnums;
-import io.githubgroup18.enums.TreeSeedEnums;
+import io.github.group18.enums.ForagingTreesEnums;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ForagingTree extends Tree {
     ForagingTreesEnums type;

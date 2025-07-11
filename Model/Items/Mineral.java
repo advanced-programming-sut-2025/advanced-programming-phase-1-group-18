@@ -1,6 +1,7 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.ForagingMineralsEnums;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Model.Name;
+import io.github.group18.enums.ForagingMineralsEnums;
 
 public class Mineral extends Item implements Name ,Price{
     private ForagingMineralsEnums type;

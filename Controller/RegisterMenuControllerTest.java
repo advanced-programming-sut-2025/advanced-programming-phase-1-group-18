@@ -1,9 +1,9 @@
 //package Controller;
 //
-//import Model.App;
-//import Model.Result;
-//import Model.User;
-//import enums.Menu;
+//import io.github.group18.Model.App;
+//import io.github.group18.Model.Result;
+//import io.github.group18.Model.User;
+//import io.github.group18.enums.Menu;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import java.util.ArrayList;

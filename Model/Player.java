@@ -1,13 +1,9 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.CraftingRecipesEnums;
-import io.githubgroup18.Model.Items.ArtisanGoods;
-import io.githubgroup18.Model.Items.Tool;
-import io.githubgroup18.Model.Items.WateringCan;
+import io.github.group18.Model.Items.*;
+import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player extends User {
     private int daysAfterGash = 0;

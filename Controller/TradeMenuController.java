@@ -1,9 +1,10 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.*;
-import io.githubgroup18.Model.Items.Item;
-import io.githubgroup18.enums.Menu;
-import io.githubgroup18.enums.TradeStatus;
+
+import io.github.group18.Model.*;
+import io.github.group18.Model.Items.Item;
+import io.github.group18.enums.Menu;
+import io.github.group18.enums.TradeStatus;
 
 import java.util.ArrayList;
 import java.util.List;

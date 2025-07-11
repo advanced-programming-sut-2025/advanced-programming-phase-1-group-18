@@ -1,7 +1,9 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.*;
-import io.githubgroup18.enums.Menu;
+
+import io.github.group18.Model.App;
+import io.github.group18.Model.Result;
+import io.github.group18.enums.Menu;
 
 import java.util.Scanner;
 import java.security.SecureRandom;
@@ -10,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import io.githubgroup18.Model.User;
+import io.github.group18.Model.User;
 import com.google.gson.Gson;
 
 import java.io.FileWriter;
@@ -117,15 +119,15 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                     (username.charAt(i) == '-')) {
 
             } else {
-                return new Result(false, "invalid uesrname letters.");
+                return new Result(false, "invalid userrname letters.");
             }
         }
-// Check local part
+        // Check local part
         if (!local.matches("^[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]*[a-zA-Z0-9]$")) {
             return new Result(false, "Invalid local part in email");
         }
 
-// Check domain part
+        // Check domain part
         if (!domain.matches("^[a-zA-Z0-9]([a-zA-Z0-9-]*\\.)+[a-zA-Z]{2,}$")) {
             return new Result(false, "Invalid domain part in email");
         }
@@ -137,7 +139,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         User newUser = new User(username, hashedPassword, nickname, email, gender);
         App.getUsers_List().add(newUser);
         App.setCurrentUser(newUser);
-        //App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentMenu(Menu.MainMenu);
         saveUsersToFile();
         return new Result(true, "You Registered Successfully");
     }
@@ -228,7 +230,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                         User newUser = new User(username, generatedpassword, nickname, email, gender);
                         App.getUsers_List().add(newUser);
                         App.setCurrentUser(newUser);
-                        //App.setCurrentMenu(Menu.MainMenu);
+                        App.setCurrentMenu(Menu.MainMenu);
                         return new Result(true, "You Registered Successfully");
                     } else {
                         return new Result(false, "Your answer is incorrect!");
@@ -238,7 +240,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                         User newUser = new User(username, generatedpassword, nickname, email, gender);
                         App.getUsers_List().add(newUser);
                         App.setCurrentUser(newUser);
-                        //App.setCurrentMenu(Menu.MainMenu);
+                        App.setCurrentMenu(Menu.MainMenu);
                         return new Result(true, "You Registered Successfully");
                     } else {
                         return new Result(false, "Your answer is incorrect!");
@@ -249,7 +251,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                         User newUser = new User(username, hashedPassword, nickname, email, gender);
                         App.getUsers_List().add(newUser);
                         App.setCurrentUser(newUser);
-                        //App.setCurrentMenu(Menu.MainMenu);
+                        App.setCurrentMenu(Menu.MainMenu);
                         saveUsersToFile();
                         return new Result(true, "You Registered Successfully");
                     } else {
@@ -268,7 +270,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         System.exit(0);
     }
 
-    public static void saveUsersToFile() {
+    protected static void saveUsersToFile() {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter("users.json")) {
             gson.toJson(App.getUsers_List(), writer);
@@ -298,7 +300,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
     }
 
     //check the username is Unique
-    public boolean isUsernameUnique(String username) {
+    public static boolean isUsernameUnique(String username) {
         for (User user : App.getUsers_List()) {
             if (user.getUsername().equals(username)) {
                 return true;

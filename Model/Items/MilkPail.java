@@ -1,6 +1,8 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Controller.GameMenuController;
-import io.githubgroup18.Model.*;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Controller.GameMenuController;
+
+import io.github.group18.Model.*;
 
 public class MilkPail extends Tool implements Name, Price {
     protected int EnergyUsage = 4;
@@ -62,14 +64,17 @@ public class MilkPail extends Tool implements Name, Price {
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForMilking(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo get crop
                 player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
                 GameMenuController.checkSkilRecipe();
                 return "Milk achived";
             } else {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo just decrease energy
                 return "Not animal found. Energy: " + getEnergyUsage();
             }
         } else {
+            //todo return error for not enough energy
             return "Not Enough energy";
         }
     }

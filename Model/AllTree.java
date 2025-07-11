@@ -1,11 +1,9 @@
-package io.githubgroup18.Model;
-import io.githubgroup18.enums.AllCropsEnums;
-import io.githubgroup18.enums.AllTreesEnums;
-import io.githubgroup18.enums.MixedSeedsEnums;
-import io.githubgroup18.enums.TreeSeedEnums;
+package io.github.group18.Model;
+
+import io.github.group18.enums.AllTreesEnums;
+import io.github.group18.enums.TreeSeedEnums;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AllTree extends Tree {

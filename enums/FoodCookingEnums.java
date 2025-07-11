@@ -1,9 +1,8 @@
-package io.githubgroup18.enums;
+package io.github.group18.enums;
 
-import io.githubgroup18.Model.Items.Food;
+import io.github.group18.Model.Items.Food;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public enum FoodCookingEnums {
 

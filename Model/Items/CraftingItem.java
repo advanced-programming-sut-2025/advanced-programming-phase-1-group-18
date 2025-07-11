@@ -1,10 +1,9 @@
-package io.githubgroup18.Model.Items;
+package io.github.group18.Model.Items;
 
-import io.githubgroup18.enums.CraftingRecipesEnums;
+import io.github.group18.enums.CraftingRecipesEnums;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import io.githubgroup18.Model.Name;
+import io.github.group18.Model.Name;
 
 public class CraftingItem extends Item implements Name,Price
 {

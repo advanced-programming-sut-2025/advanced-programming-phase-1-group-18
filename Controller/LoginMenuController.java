@@ -1,15 +1,14 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
 
-import io.githubgroup18.Model.App;
-import io.githubgroup18.Model.Result;
-import io.githubgroup18.Model.User;
 import com.google.gson.Gson;
-import io.githubgroup18.enums.LoginMenuCommands;
-import io.githubgroup18.enums.Menu;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Result;
+import io.github.group18.Model.User;
+
+import io.github.group18.enums.Menu;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -23,9 +22,9 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         if (password.isEmpty()) {
             return new Result(false, "you should enter password");
         }
-//        if (findUserByUsername(username) != null) {
-//            return new Result(false, "user already exist");
-//        }
+        if (findUserByUsername(username) != null) {
+           return new Result(false, "user already exist");
+        }
         User user = findUserByUsername(username);
         String hashedInput = RegisterMenuController.hashPasswordSHA256(password);
         if (!user.getPassword().equals(hashedInput)) {
@@ -34,7 +33,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
 
         user.setStayLoggedIn(!(stayLoggedIn == null));
         App.setCurrentUser(user);
-        //App.setCurrentMenu(Menu.MainMenu);
+        App.setCurrentMenu(Menu.MainMenu);
 
         if (user.isStayLoggedIn()) {
             Gson gson = new Gson();
@@ -115,11 +114,11 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
                 System.out.println("You are now in RegisterMenu!");
                 break;
             case "profilemenu":
-                //App.setCurrentMenu(Menu.ProfileMenu);
+                App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "mainmenu":
-                //App.setCurrentMenu(Menu.MainMenu);
+                App.setCurrentMenu(Menu.MainMenu);
                 System.out.println("You are now in MainMenu!");
                 break;
             default:
@@ -128,7 +127,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         }
     }
 
-    public User findUserByUsername(String username) {
+    public static User findUserByUsername(String username) {
         for (User user : App.getUsers_List()) {
             if (user.getUsername().equals(username)) {
                 return user;

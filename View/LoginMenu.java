@@ -1,7 +1,7 @@
-package io.githubgroup18.View;
+package io.github.group18.View;
 
-import io.githubgroup18.Controller.LoginMenuController;
-import io.githubgroup18.enums.LoginMenuCommands;
+import io.github.group18.Controller.LoginMenuController;
+import io.github.group18.enums.LoginMenuCommands;
 
 import java.util.Scanner;
 

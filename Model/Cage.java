@@ -1,7 +1,5 @@
-package io.githubgroup18.Model;
-import java.io.Serializable;
+package io.github.group18.Model;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Cage implements Name
 {

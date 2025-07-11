@@ -1,7 +1,6 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BigCoop implements Name
 {

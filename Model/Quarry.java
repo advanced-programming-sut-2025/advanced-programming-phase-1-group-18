@@ -1,9 +1,8 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.enums.StoneTypes;
+import io.github.group18.enums.StoneTypes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Quarry {

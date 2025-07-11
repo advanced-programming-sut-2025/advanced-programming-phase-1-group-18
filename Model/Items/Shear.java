@@ -1,6 +1,7 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Controller.GameMenuController;
-import io.githubgroup18.Model.*;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Model.*;
 
 public class Shear extends Tool implements Name,Price
 {
@@ -62,16 +63,19 @@ public class Shear extends Tool implements Name,Price
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForShear(tileCord)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo cutting wool
                 player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
                 GameMenuController.checkSkilRecipe();
                 return "Wool caught";
             }
             else{
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
+                //todo just decrease energy
                 return "Not Animal found";
             }
         }
         else {
+            //todo return error for not enough energy
             return "Not enough energy";
         }
     }
