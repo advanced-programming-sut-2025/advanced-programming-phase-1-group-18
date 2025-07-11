@@ -1,8 +1,8 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.App;
-import Model.Items.Item;
-import Model.Result;
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Items.Item;
+import io.githubgroup18.Model.Result;
 
 import java.util.HashMap;
 import java.util.Map;

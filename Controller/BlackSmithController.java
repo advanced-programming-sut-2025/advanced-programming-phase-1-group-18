@@ -1,12 +1,13 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.App;
-import Model.Items.Item;
-import Model.Items.Mineral;
-import Model.Player;
-import Model.Result;
-import enums.ForagingMineralsEnums;
-import enums.Menu;
+
+
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Items.Mineral;
+import io.githubgroup18.Model.Player;
+import io.githubgroup18.Model.Result;
+import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.githubgroup18.enums.Menu;
 
 import java.util.HashMap;
 

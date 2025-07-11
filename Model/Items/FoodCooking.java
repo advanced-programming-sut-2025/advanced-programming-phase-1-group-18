@@ -1,8 +1,7 @@
-package Model.Items;
-
-import Model.Buff;
-import Model.Name;
-import enums.FoodCookingEnums;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.Buff;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.enums.FoodCookingEnums;
 
 import java.util.ArrayList;
 

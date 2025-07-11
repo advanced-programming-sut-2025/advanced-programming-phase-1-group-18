@@ -1,15 +1,15 @@
-package View;
+package io.githubgroup18.View;
 
-import Controller.GameMenuController;
-import enums.GameMenuCommands;
-import enums.LoginMenuCommands;
+import io.githubgroup18.Controller.GameMenuController;
+import io.githubgroup18.enums.GameMenuCommands;
+import io.githubgroup18.enums.LoginMenuCommands;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-import Controller.TradeMenuController;
+import io.githubgroup18.Controller.TradeMenuController;
 
 public class GameMenu extends AppMenu {
     private final GameMenuController controller = new GameMenuController();

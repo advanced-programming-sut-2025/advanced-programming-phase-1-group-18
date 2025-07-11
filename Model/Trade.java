@@ -1,8 +1,8 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.Item;
-import Model.Player;
-import enums.TradeStatus;
+import io.githubgroup18.Model.Items.Item;
+import io.githubgroup18.Model.Player;
+import io.githubgroup18.enums.TradeStatus;
 
 public class Trade {
     private static int nextId = 1;

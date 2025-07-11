@@ -1,9 +1,9 @@
-package Model;
+package io.githubgroup18.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import Model.Items.*;
+import io.githubgroup18.Model.Items.*;
 public class Refrigerator
 {
     protected HashMap<Item, Integer> Items = new HashMap<>();

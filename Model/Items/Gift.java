@@ -1,7 +1,6 @@
-package Model.Items;
-
-import Model.Name;
-import Model.Player;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.Model.Player;
 
 public class Gift extends Item implements Name, Price{
     protected Item giftItem;

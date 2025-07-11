@@ -1,8 +1,8 @@
-package View;
+package io.githubgroup18.View;
 
-import Controller.MarniesRanchController;
-import Controller.PierresGeneralStoreController;
-import enums.MarketMenuEnums;
+import io.githubgroup18.Controller.MarniesRanchController;
+import io.githubgroup18.Controller.PierresGeneralStoreController;
+import io.githubgroup18.enums.MarketMenuEnums;
 
 import java.util.Scanner;
 

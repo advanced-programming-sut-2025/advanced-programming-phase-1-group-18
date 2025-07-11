@@ -1,13 +1,13 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.*;
-import Model.Items.Hay;
-import Model.Items.Item;
-import Model.Items.MilkPail;
-import Model.Items.Shear;
-import enums.CageAnimalsEnums;
-import enums.Menu;
-import enums.TavilehAnimalEnums;
+import io.githubgroup18.Model.*;
+import io.githubgroup18.Model.Items.Hay;
+import io.githubgroup18.Model.Items.Item;
+import io.githubgroup18.Model.Items.MilkPail;
+import io.githubgroup18.Model.Items.Shear;
+import io.githubgroup18.enums.CageAnimalsEnums;
+import io.githubgroup18.enums.Menu;
+import io.githubgroup18.enums.TavilehAnimalEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;

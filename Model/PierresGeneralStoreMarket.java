@@ -1,9 +1,9 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.*;
-import enums.ForagingSeedsEnums;
-import enums.Seasons;
-import enums.TreeSeedEnums;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.ForagingSeedsEnums;
+import io.githubgroup18.enums.Seasons;
+import io.githubgroup18.enums.TreeSeedEnums;
 
 import java.util.HashMap;
 
@@ -105,7 +105,6 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         Stock.put(fertilizer, Integer.MAX_VALUE);
 
         //grass starter again wtf
-        //TODO
 
         Fertilizer fertilizer1 = new Fertilizer();
         fertilizer1.setName("Speed-Gro");

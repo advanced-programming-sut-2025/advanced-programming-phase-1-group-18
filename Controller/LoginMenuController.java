@@ -1,12 +1,12 @@
-package Controller;
+package io.githubgroup18.Controller;
 
 
-import Model.App;
-import Model.Result;
-import Model.User;
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Result;
+import io.githubgroup18.Model.User;
 import com.google.gson.Gson;
-import enums.LoginMenuCommands;
-import enums.Menu;
+import io.githubgroup18.enums.LoginMenuCommands;
+import io.githubgroup18.enums.Menu;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
 
         user.setStayLoggedIn(!(stayLoggedIn == null));
         App.setCurrentUser(user);
-        App.setCurrentMenu(Menu.MainMenu);
+        //App.setCurrentMenu(Menu.MainMenu);
 
         if (user.isStayLoggedIn()) {
             Gson gson = new Gson();
@@ -115,11 +115,11 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
                 System.out.println("You are now in RegisterMenu!");
                 break;
             case "profilemenu":
-                App.setCurrentMenu(Menu.ProfileMenu);
+                //App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "mainmenu":
-                App.setCurrentMenu(Menu.MainMenu);
+                //App.setCurrentMenu(Menu.MainMenu);
                 System.out.println("You are now in MainMenu!");
                 break;
             default:

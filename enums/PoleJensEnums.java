@@ -1,4 +1,4 @@
-package enums;
+package io.githubgroup18.enums;
 
 public enum PoleJensEnums {
     Training(0.1),

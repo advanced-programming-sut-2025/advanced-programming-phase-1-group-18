@@ -1,10 +1,9 @@
-package Model.Items;
-
-import Model.App;
-import Model.Cord;
-import Model.Kashi;
-import Model.Name;
-import enums.ForagingCropsEnums;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Cord;
+import io.githubgroup18.Model.Kashi;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.enums.ForagingCropsEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;

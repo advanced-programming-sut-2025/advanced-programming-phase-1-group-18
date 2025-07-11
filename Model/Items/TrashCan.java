@@ -1,9 +1,8 @@
-package Model.Items;
-
-import Model.App;
-import Model.Inventory;
-import Model.Name;
-import Model.Player;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Inventory;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.Model.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,11 +49,9 @@ public class TrashCan extends Tool implements Name,Price
                     inventoryMap.put(item, newNumber);
                     break;
                 } else{
-                    //todo return number > itemCount
                     return;
                 }
             } else {
-                //todo return not found
                 return;
             }
         }

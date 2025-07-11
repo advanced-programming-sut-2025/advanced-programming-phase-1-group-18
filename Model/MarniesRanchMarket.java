@@ -1,9 +1,8 @@
-package Model;
-
-import Model.Items.*;
-import enums.CageAnimalsEnums;
-import enums.ForagingMineralsEnums;
-import enums.TavilehAnimalEnums;
+package io.githubgroup18.Model;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.CageAnimalsEnums;
+import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.githubgroup18.enums.TavilehAnimalEnums;
 
 import java.util.HashMap;
 

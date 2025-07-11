@@ -1,6 +1,5 @@
-package Model;
-
-import Model.Items.Item;
+package io.githubgroup18.Model;
+import io.githubgroup18.Model.Items.Item;
 
 import java.util.HashMap;
 import java.util.Map;

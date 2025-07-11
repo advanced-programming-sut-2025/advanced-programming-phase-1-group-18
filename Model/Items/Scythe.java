@@ -1,8 +1,7 @@
-package Model.Items;
-
-import Controller.GameMenuController;
-import Model.*;
-import enums.ForagingMineralsEnums;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Controller.GameMenuController;
+import io.githubgroup18.Model.*;
+import io.githubgroup18.enums.ForagingMineralsEnums;
 
 public class Scythe extends Tool implements Name, Price {
     protected int EnergyUsage;

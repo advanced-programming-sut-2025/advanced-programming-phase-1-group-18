@@ -1,10 +1,10 @@
-package View;
+package io.githubgroup18.View;
 
-import Controller.BlackSmithController;
-import Controller.GameMenuController;
-import enums.CarpentersShopCommands;
-import enums.GameMenuCommands;
-import enums.MarketMenuEnums;
+import io.githubgroup18.Controller.BlackSmithController;
+import io.githubgroup18.Controller.GameMenuController;
+import io.githubgroup18.enums.CarpentersShopCommands;
+import io.githubgroup18.enums.GameMenuCommands;
+import io.githubgroup18.enums.MarketMenuEnums;
 
 import java.util.Scanner;
 

@@ -1,5 +1,4 @@
-package Model;
-
+package io.githubgroup18.Model;
 public class Friendshipali {
     private Player player;
     private int friendshipLevel;

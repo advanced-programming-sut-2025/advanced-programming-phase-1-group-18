@@ -1,9 +1,8 @@
-package Model;
-
+package io.githubgroup18.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Model.Items.AnimalProduct;
+import io.githubgroup18.Model.Items.AnimalProduct;
 
 public class Animal {
     protected String Name;

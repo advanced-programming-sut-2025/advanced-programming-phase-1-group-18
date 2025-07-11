@@ -1,6 +1,5 @@
-package Model.Items;
-
-import Model.Name;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.Name;
 
 public class Item implements Name, Price {
     protected String name;  // یا public

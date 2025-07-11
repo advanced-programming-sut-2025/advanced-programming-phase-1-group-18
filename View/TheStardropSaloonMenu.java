@@ -1,8 +1,8 @@
-package View;
+package io.githubgroup18.View;
 
-import Controller.PierresGeneralStoreController;
-import Controller.TheStardropSaloonController;
-import enums.MarketMenuEnums;
+import io.githubgroup18.Controller.PierresGeneralStoreController;
+import io.githubgroup18.Controller.TheStardropSaloonController;
+import io.githubgroup18.enums.MarketMenuEnums;
 
 import java.util.Scanner;
 

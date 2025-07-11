@@ -1,7 +1,6 @@
-package Model.Items;
-
-import Model.Name;
-import enums.TreeSeedEnums;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.enums.TreeSeedEnums;
 
 public class TreeSeed extends Seed implements Name, Price {
 

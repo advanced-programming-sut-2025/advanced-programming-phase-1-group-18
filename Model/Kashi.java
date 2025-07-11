@@ -1,6 +1,5 @@
-package Model;
-
-import Model.Items.Item;
+package io.githubgroup18.Model;
+import io.githubgroup18.Model.Items.Item;
 
 public class Kashi
 {

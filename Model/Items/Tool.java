@@ -1,5 +1,4 @@
-package Model.Items;
-
+package io.githubgroup18.Model.Items;
 public class Tool extends Item {
     protected int energyUsage;
     protected String usage;

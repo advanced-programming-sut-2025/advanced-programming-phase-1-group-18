@@ -1,9 +1,9 @@
-package Model.Items;
+package io.githubgroup18.Model.Items;
 
-import Model.DateTime;
-import Model.Name;
-import enums.ArtisanGoodsEnums;
-import enums.CraftingRecipesEnums;
+import io.githubgroup18.Model.DateTime;
+import io.githubgroup18.Model.Name;
+import io.githubgroup18.enums.ArtisanGoodsEnums;
+import io.githubgroup18.enums.CraftingRecipesEnums;
 
 import java.util.HashMap;
 
