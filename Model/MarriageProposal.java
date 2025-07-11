@@ -1,6 +1,7 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.Model.Items.Item;
+
+import io.github.group18.Model.Items.Item;
 
 public class MarriageProposal {
     private final Player proposer;

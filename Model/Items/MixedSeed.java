@@ -1,7 +1,6 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.ForagingSeedsEnums;
-import io.githubgroup18.enums.MixedSeedsEnums;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Model.Name;
 
 public class MixedSeed extends Seed implements Name, Price {
 //    MixedSeedsEnums type;

@@ -1,9 +1,11 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.*;
+
+import io.github.group18.Model.Items.*;
+import io.github.group18.enums.*;
 
 public class NPC implements adaptMapMarket {
     private NPCEnums name;

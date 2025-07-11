@@ -1,10 +1,11 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Controller.GameMenuController;
-import io.githubgroup18.Model.*;
-import io.githubgroup18.enums.CommonFishesEnums;
-import io.githubgroup18.enums.LegendaryFishesEnums;
-import io.githubgroup18.enums.Quality;
-import io.githubgroup18.enums.SkillEnum;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Model.*;
+import io.github.group18.enums.CommonFishesEnums;
+import io.github.group18.enums.LegendaryFishesEnums;
+import io.github.group18.enums.Quality;
+import io.github.group18.enums.SkillEnum;
 
 import java.util.ArrayList;
 import java.util.Random;

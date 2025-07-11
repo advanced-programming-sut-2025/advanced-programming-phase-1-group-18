@@ -1,10 +1,17 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
 import java.util.*;
 
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.*;
+import io.github.group18.Model.Items.AllCrop;
+import io.github.group18.Model.Items.ForagingCrop;
+import io.github.group18.Model.Items.ForagingSeed;
+import io.github.group18.Model.Items.MixedSeed;
+import io.github.group18.enums.ForagingCropsEnums;
+import io.github.group18.enums.ForagingSeedsEnums;
+import io.github.group18.enums.ForagingTreesEnums;
+import io.github.group18.enums.NPCEnums;
 
+//TODO SATL SPAWN AND MAP 2 3 4
 public class Farm {
 
     protected ArrayList<Lake> Lakes = new ArrayList<>();

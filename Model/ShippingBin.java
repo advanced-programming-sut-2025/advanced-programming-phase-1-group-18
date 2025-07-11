@@ -1,6 +1,5 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ShippingBin implements Name

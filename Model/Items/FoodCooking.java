@@ -1,9 +1,8 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Model.Buff;
-import io.githubgroup18.Model.Name;
-import io.githubgroup18.enums.FoodCookingEnums;
+package io.github.group18.Model.Items;
 
-import java.util.ArrayList;
+import io.github.group18.Model.Buff;
+import io.github.group18.Model.Name;
+import io.github.group18.enums.FoodCookingEnums;
 
 public class FoodCooking extends Item implements Name, Price {
 

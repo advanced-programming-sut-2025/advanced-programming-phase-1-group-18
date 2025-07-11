@@ -1,5 +1,6 @@
-package io.githubgroup18.Model.Items;
-import io.githubgroup18.Model.*;
+package io.github.group18.Model.Items;
+
+import io.github.group18.Model.*;
 
 public class WateringCan extends Tool implements Name, Price {
     protected String Jens;

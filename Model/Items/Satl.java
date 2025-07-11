@@ -1,10 +1,9 @@
-package Model.Items;
+package io.github.group18.Model.Items;
 
-import Model.App;
-import Model.Cord;
-import Model.Kashi;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Cord;
+import io.github.group18.Model.Kashi;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

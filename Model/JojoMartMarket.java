@@ -1,11 +1,11 @@
-package io.githubgroup18.Model;
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.ForagingMineralsEnums;
-import io.githubgroup18.enums.ForagingSeedsEnums;
-import io.githubgroup18.enums.Seasons;
+package io.github.group18.Model;
+
+import io.github.group18.Model.Items.AllCrop;
+import io.github.group18.Model.Items.Food;
+import io.github.group18.Model.Items.ForagingSeed;
+import io.github.group18.enums.ForagingSeedsEnums;
 
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 public class JojoMartMarket implements adaptMapMarket {
     HashMap<Object, Integer> Stock = new HashMap<>();

@@ -1,4 +1,5 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
+
 public interface Name {
     public String getCorrectName();
 }

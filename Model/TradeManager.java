@@ -1,6 +1,6 @@
-package io.githubgroup18.Model;
+package io.github.group18.Model;
 
-import io.githubgroup18.enums.TradeStatus;
+import io.github.group18.enums.TradeStatus;
 
 import java.util.ArrayList;
 import java.util.List;
