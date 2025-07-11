@@ -1,6 +1,6 @@
-package Model;
+package io.githubgroup18.Model;
 
-import enums.TavilehAnimalEnums;
+import io.githubgroup18.enums.TavilehAnimalEnums;
 
 import java.util.HashMap;
 

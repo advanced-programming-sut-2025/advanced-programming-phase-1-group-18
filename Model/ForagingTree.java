@@ -1,9 +1,9 @@
-package Model;
+package io.githubgroup18.Model;
 
-import enums.AllTreesEnums;
-import enums.ForagingCropsEnums;
-import enums.ForagingTreesEnums;
-import enums.TreeSeedEnums;
+import io.githubgroup18.enums.AllTreesEnums;
+import io.githubgroup18.enums.ForagingCropsEnums;
+import io.githubgroup18.enums.ForagingTreesEnums;
+import io.githubgroup18.enums.TreeSeedEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;

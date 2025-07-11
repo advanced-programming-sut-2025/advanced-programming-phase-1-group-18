@@ -1,4 +1,4 @@
-package Model;
+package io.githubgroup18.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package Model;
+package io.githubgroup18.Model;
 
-import enums.SkillEnum;
+import io.githubgroup18.enums.SkillEnum;
 
 public class Buff
 {

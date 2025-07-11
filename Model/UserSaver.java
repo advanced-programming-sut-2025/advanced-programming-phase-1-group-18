@@ -1,9 +1,9 @@
-package Model;
+package io.githubgroup18.Model;
 
 import com.google.gson.Gson;
 import java.io.FileWriter;
 import java.io.IOException;
-import Model.User;
+import io.githubgroup18.Model.User;
 
 public class UserSaver {
     public static void main(String[] args) {

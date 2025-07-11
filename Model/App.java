@@ -1,8 +1,8 @@
-package Model;
+package io.githubgroup18.Model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import enums.*;
+import io.githubgroup18.enums.*;
 
 import java.io.*;
 import java.lang.reflect.Type;

@@ -1,8 +1,8 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.*;
-import enums.ForagingMineralsEnums;
-import enums.Seasons;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.githubgroup18.enums.Seasons;
 
 import java.util.HashMap;
 
@@ -40,9 +40,6 @@ public class FishShopMarket implements adaptMapMarket {
 
         CraftingItem craftingItem = new CraftingItem("FishSmoker");
         Stock.put(craftingItem, 1);
-
-
-        //TODO trout soup
 
 
         FishingPole f1 = new FishingPole();

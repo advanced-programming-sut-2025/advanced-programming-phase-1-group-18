@@ -1,7 +1,6 @@
-package Model.Items;
-
-import Controller.GameMenuController;
-import Model.*;
+package io.githubgroup18.Model.Items;
+import io.githubgroup18.Controller.GameMenuController;
+import io.githubgroup18.Model.*;
 
 public class Hoe extends Tool implements Name,Price
 {

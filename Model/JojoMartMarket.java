@@ -1,9 +1,8 @@
-package Model;
-
-import Model.Items.*;
-import enums.ForagingMineralsEnums;
-import enums.ForagingSeedsEnums;
-import enums.Seasons;
+package io.githubgroup18.Model;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.githubgroup18.enums.ForagingSeedsEnums;
+import io.githubgroup18.enums.Seasons;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;

@@ -1,9 +1,9 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.FoodCooking;
-import Model.Buff;
-import enums.FoodCookingEnums;
-import enums.SkillEnum;
+import io.githubgroup18.Model.Items.FoodCooking;
+import io.githubgroup18.Model.Buff;
+import io.githubgroup18.enums.FoodCookingEnums;
+import io.githubgroup18.enums.SkillEnum;
 
 public class Cookingrecipe {
 

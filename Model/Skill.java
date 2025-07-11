@@ -1,4 +1,4 @@
-package Model;
+package io.githubgroup18.Model;
 public class Skill
 {
     protected String Type;

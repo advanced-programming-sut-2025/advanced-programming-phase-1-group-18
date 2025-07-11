@@ -1,11 +1,10 @@
-package Model;
+package io.githubgroup18.Model;
 
 import java.util.*;
 
-import Model.Items.*;
-import enums.*;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.*;
 
-//TODO SATL SPAWN AND MAP 2 3 4
 public class Farm {
 
     protected ArrayList<Lake> Lakes = new ArrayList<>();

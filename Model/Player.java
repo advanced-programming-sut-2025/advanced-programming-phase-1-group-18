@@ -1,10 +1,10 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.*;
-import enums.CraftingRecipesEnums;
-import Model.Items.ArtisanGoods;
-import Model.Items.Tool;
-import Model.Items.WateringCan;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.CraftingRecipesEnums;
+import io.githubgroup18.Model.Items.ArtisanGoods;
+import io.githubgroup18.Model.Items.Tool;
+import io.githubgroup18.Model.Items.WateringCan;
 
 import java.util.ArrayList;
 import java.util.HashMap;

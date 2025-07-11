@@ -1,7 +1,7 @@
-package Model.Items;
+package io.githubgroup18.Model.Items;
 
-import Controller.GameMenuController;
-import Model.*;
+import io.githubgroup18.Controller.GameMenuController;
+import io.githubgroup18.Model.*;
 
 public class Axe extends Tool implements Name, Price {
     protected String Jens;

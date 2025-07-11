@@ -1,5 +1,5 @@
-package Model;
-import Model.Items.*;
+package io.githubgroup18.Model;
+import io.githubgroup18.Model.Items.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
-package Model;
+package io.githubgroup18.Model;
 
-import enums.StoneTypes;
+import io.githubgroup18.enums.StoneTypes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

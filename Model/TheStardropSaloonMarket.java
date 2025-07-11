@@ -1,7 +1,7 @@
-package Model;
+package io.githubgroup18.Model;
 
-import Model.Items.*;
-import enums.FoodCookingEnums;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.FoodCookingEnums;
 
 import java.util.HashMap;
 

@@ -1,6 +1,6 @@
-package Model;
+package io.githubgroup18.Model;
 
-import enums.CageAnimalsEnums;
+import io.githubgroup18.enums.CageAnimalsEnums;
 
 import java.util.HashMap;
 
