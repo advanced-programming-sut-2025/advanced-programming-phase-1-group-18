@@ -1,8 +1,8 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.*;
-import Model.Items.*;
-import enums.*;
+import io.githubgroup18.Model.*;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.enums.*;
 
 import java.util.HashMap;
 import java.util.Objects;

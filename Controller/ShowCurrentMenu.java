@@ -1,6 +1,6 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.App;
+import io.githubgroup18.Model.App;
 
 public interface ShowCurrentMenu {
     default void showCurrentMenu()

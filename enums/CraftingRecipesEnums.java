@@ -1,4 +1,4 @@
-package enums;
+package io.githubgroup18.enums;
 
 import java.util.HashMap;
 

@@ -1,5 +1,5 @@
-package enums;
-import Model.*;
+package io.githubgroup18.enums;
+import io.githubgroup18.Model.*;
 public enum ForagingTreesEnums
 {
     Acorns,

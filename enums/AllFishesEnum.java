@@ -1,4 +1,4 @@
-package enums;
+package io.githubgroup18.enums;
 
 public enum AllFishesEnum {
     Salmon(75, Seasons.Fall),

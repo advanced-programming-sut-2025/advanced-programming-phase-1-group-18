@@ -1,6 +1,6 @@
-package enums;
+package io.githubgroup18.enums;
 
-import Model.Items.Food;
+import io.githubgroup18.Model.Items.Food;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package enums;
+package io.githubgroup18.enums;
 
-import Model.DateTime;
+import io.githubgroup18.Model.DateTime;
 
 import java.util.HashMap;
 

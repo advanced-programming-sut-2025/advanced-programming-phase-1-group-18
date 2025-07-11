@@ -1,7 +1,7 @@
-package enums;
+package io.githubgroup18.enums;
 
-import Model.AllTree;
-import Model.ForagingTree;
+import io.githubgroup18.Model.AllTree;
+import io.githubgroup18.Model.ForagingTree;
 
 public enum AllTreesEnums {
     ApricotTree,

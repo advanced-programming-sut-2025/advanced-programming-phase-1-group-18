@@ -1,15 +1,15 @@
-package Controller;
+package io.githubgroup18.Controller;
 
-import Model.App;
-import Model.Craftingrecipe;
-import Model.Items.*;
-import Model.Player;
-import Model.Result;
+import io.githubgroup18.Model.App;
+import io.githubgroup18.Model.Craftingrecipe;
+import io.githubgroup18.Model.Items.*;
+import io.githubgroup18.Model.Player;
+import io.githubgroup18.Model.Result;
 import com.sun.source.tree.Tree;
-import enums.ForagingMineralsEnums;
-import enums.ForagingSeedsEnums;
-import enums.Menu;
-import enums.TreeSeedEnums;
+import io.githubgroup18.enums.ForagingMineralsEnums;
+import io.githubgroup18.enums.ForagingSeedsEnums;
+import io.githubgroup18.enums.Menu;
+import io.githubgroup18.enums.TreeSeedEnums;
 
 import java.awt.event.FocusAdapter;
 import java.util.HashMap;
@@ -170,7 +170,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         validquantity40 = true;
                         if (currentPlayer.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
-                            //TODO
+
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe) item).getPrice());
@@ -192,7 +192,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         validquantity4 = true;
                         if (currentPlayer.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
-                            //TODO
+
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe) item).getPrice());
