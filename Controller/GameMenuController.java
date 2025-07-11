@@ -1,18 +1,15 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.*;
-import io.githubgroup18.Model.Cookingrecipe;
-import io.githubgroup18.Model.Items.*;
 import com.google.gson.Gson;
-import io.githubgroup18.enums.*;
-import io.githubgroup18.Controller.MarniesRanchController;
+import io.github.group18.Model.*;
+import io.github.group18.Model.Items.*;
+import io.github.group18.Model.Satl;
+import io.github.group18.enums.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -2632,7 +2629,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-
+        //todo if player not in home return error
         StringBuilder resultBuilder = new StringBuilder();
         ArrayList<CraftingRecipesEnums> craftingRecipes = App.getCurrentGame().getPlayers()
                 .get(App.getCurrentGame().getIndexPlayerinControl())
@@ -2865,7 +2862,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 } else {
                     iterator.remove(); // اگر فقط یکی بود، کل آیتم رو حذف کن
                 }
-
+                //todo place in map ObjectInside?
                 tileCord.setX(dir_x + tileCord.getX());
                 tileCord.setY(dir_y + tileCord.getY());
                 if (App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside() == null) {
@@ -2978,7 +2975,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         }
 
-
+        //todo if name is Item
 //        for (Item item : AllGameItems.getAllItems()) {
 //            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
 //                foundItem = item;
@@ -3744,7 +3741,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             if (!found6) {
                 targetPlayer.getInventory().getItems().put(gift, amount);
             }
-
+            //todo if gift is flower increase leve
             return new Result(true, "gift sent successfully");
         }
     }

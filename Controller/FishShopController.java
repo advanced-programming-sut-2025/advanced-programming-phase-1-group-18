@@ -1,14 +1,11 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.App;
-import io.githubgroup18.Model.Items.CraftingItem;
-import io.githubgroup18.Model.Items.FishingPole;
-import io.githubgroup18.Model.Items.Item;
-import io.githubgroup18.Model.Items.Mineral;
-import io.githubgroup18.Model.Player;
-import io.githubgroup18.Model.Result;
-import io.githubgroup18.enums.ForagingMineralsEnums;
-import io.githubgroup18.enums.Menu;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Items.FishingPole;
+import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Player;
+import io.github.group18.Model.Result;
+import io.github.group18.enums.Menu;
 
 import java.util.HashMap;
 

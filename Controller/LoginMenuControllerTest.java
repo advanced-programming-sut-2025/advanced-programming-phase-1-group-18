@@ -2,10 +2,10 @@
 //
 //import static org.junit.jupiter.api.Assertions.*;
 //
-//import Controller.LoginMenuController;
-//import Model.App;
-//import Model.Result;
-//import Model.User;
+//import io.github.group18.Controller.LoginMenuController;
+//import io.github.group18.Model.App;
+//import io.github.group18.Model.Result;
+//import io.github.group18.Model.User;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //

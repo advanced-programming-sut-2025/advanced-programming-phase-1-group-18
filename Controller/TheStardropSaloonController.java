@@ -1,11 +1,15 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.*;
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.enums.*;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Cookingrecipe;
+import io.github.group18.Model.Items.Food;
+import io.github.group18.Model.Items.FoodCooking;
+import io.github.group18.Model.Player;
+import io.github.group18.Model.Result;
+import io.github.group18.enums.FoodCookingEnums;
+import io.github.group18.enums.Menu;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, MarketController<Object> {
 

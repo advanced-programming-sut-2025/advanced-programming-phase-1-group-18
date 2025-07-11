@@ -1,4 +1,4 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
 public interface MenuEnter {
     void menuEnter(String menuName);

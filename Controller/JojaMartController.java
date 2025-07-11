@@ -1,13 +1,14 @@
-package io.githubgroup18.Controller;
+package io.github.group18.Controller;
 
-import io.githubgroup18.Model.App;
-import io.githubgroup18.Model.Craftingrecipe;
-import io.githubgroup18.Model.Items.*;
-import io.githubgroup18.Model.Player;
-import io.githubgroup18.Model.Result;
-import io.githubgroup18.enums.ForagingMineralsEnums;
-import io.githubgroup18.enums.ForagingSeedsEnums;
-import io.githubgroup18.enums.Menu;
+import io.github.group18.Model.App;
+import io.github.group18.Model.Craftingrecipe;
+import io.github.group18.Model.Items.AllCrop;
+import io.github.group18.Model.Items.Food;
+import io.github.group18.Model.Items.ForagingSeed;
+import io.github.group18.Model.Player;
+import io.github.group18.Model.Result;
+import io.github.group18.enums.ForagingSeedsEnums;
+import io.github.group18.enums.Menu;
 
 import java.util.HashMap;
 
@@ -101,7 +102,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                         validquantity2 = true;
                         if (currentPlayer.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem((Craftingrecipe)item, quantity);
-
+                            //TODO ADD CRAFTINGRECIPE TO PLAYER
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe)item).getPrice());
 
