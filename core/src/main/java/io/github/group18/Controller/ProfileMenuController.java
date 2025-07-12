@@ -1,10 +1,19 @@
 package io.github.group18.Controller;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.group18.Main;
 import io.github.group18.Model.App;
+import io.github.group18.Model.GameAssetMannager;
 import io.github.group18.Model.Result;
+import io.github.group18.View.MainMenu;
+import io.github.group18.View.ProfileMenu;
 import io.github.group18.enums.Menu;
 
 public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
+    private ProfileMenu profileMenu;
 
     public Result changeUsername(String newUsername) {
         if (newUsername.isEmpty()) {
@@ -14,12 +23,10 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             return new Result(false, "Username is already taken");
         }
         for (int i = 0; i < newUsername.length(); i++) {
-            if ((newUsername.charAt(i) >= 'a' && newUsername.charAt(i) <= 'z') ||
-                    (newUsername.charAt(i) >= 'A' && newUsername.charAt(i) <= 'Z') ||
-                    (newUsername.charAt(i) >= '0' && newUsername.charAt(i) <= '9') ||
-                    (newUsername.charAt(i) == '-')) {
-
-            } else {
+            if (!((newUsername.charAt(i) >= 'a' && newUsername.charAt(i) <= 'z') ||
+                (newUsername.charAt(i) >= 'A' && newUsername.charAt(i) <= 'Z') ||
+                (newUsername.charAt(i) >= '0' && newUsername.charAt(i) <= '9') ||
+                (newUsername.charAt(i) == '-'))) {
                 return new Result(false, "invalid username letters.");
             }
         }
@@ -81,7 +88,7 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             return new Result(false, "Passwords cannot be empty");
         }
         if (!App.getCurrentUser().getPassword().equals(oldPassword)) {
-            return new Result(false, "Password does not match");
+            return new Result(false, "Wrong Password");
         }
         if (oldPassword.equals(newPassword)) {
             return new Result(true, "passwords are same. try again");
@@ -126,14 +133,114 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
     public void menuEnter(String menuName) {
         //from profilemenu we can move to mainmenu
         menuName = menuName.toLowerCase();
-        switch (menuName) {
-            case "mainmenu":
-                App.setCurrentMenu(Menu.MainMenu);
-                System.out.println("You are now in MainMenu!");
-                break;
-            default:
-                System.out.println("Invalid menu");
-                break;
+        if (menuName.equals("mainmenu")) {//App.setCurrentMenu(Menu.MainMenu);
+            System.out.println("You are now in MainMenu!");
+        } else {
+            System.out.println("Invalid menu");
         }
     }
+
+    public void setView(ProfileMenu profileMenu) {
+        this.profileMenu = profileMenu;
+        setListeners();
+    }
+
+    private void setListeners() {
+        profileMenu.getApplyUsername().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = changeUsername(profileMenu.getUsernameTextField().getText());
+                if (!result.isSuccessful()) {
+                    showErrorDialog(result.getMessage());
+                } else {
+                    RegisterMenuController.saveUsersToFile();
+                    showSuccessDialog(result.getMessage());
+                }
+            }
+        });
+
+        profileMenu.getApplyPassword().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = changePassword(profileMenu.getPasswordTextField().getText(), profileMenu.getOldpasswordTextField().getText());
+                if (!result.isSuccessful()) {
+                    showErrorDialog(result.getMessage());
+                } else {
+                    RegisterMenuController.saveUsersToFile();
+                    showSuccessDialog(result.getMessage());
+                }
+            }
+        });
+
+        profileMenu.getApplyNickname().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = changeNickname(profileMenu.getNicknameTextField().getText());
+                if (!result.isSuccessful()) {
+                    showErrorDialog(result.getMessage());
+                } else {
+                    RegisterMenuController.saveUsersToFile();
+                    showSuccessDialog(result.getMessage());
+                }
+            }
+        });
+
+        profileMenu.getApplyEmail().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result result = changeEmail(profileMenu.getEmailTextField().getText());
+                if (!result.isSuccessful()) {
+                    showErrorDialog(result.getMessage());
+                } else {
+                    RegisterMenuController.saveUsersToFile();
+                    showSuccessDialog(result.getMessage());
+                }
+            }
+        });
+
+        profileMenu.getBackButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetMannager.getGameAssetMannager().getSkin()));
+            }
+        });
+    }
+
+    private void showErrorDialog(String message) {
+        Dialog dialog = new Dialog("Error", GameAssetMannager.getGameAssetMannager().getSkin());
+        dialog.text(message);
+
+        TextButton okButton = new TextButton("OK", GameAssetMannager.getGameAssetMannager().getSkin());
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.button(okButton);
+        dialog.show(profileMenu.getStage());
+    }
+
+    private void showSuccessDialog(String message) {
+        Dialog dialog = new Dialog("Success", GameAssetMannager.getGameAssetMannager().getSkin());
+        dialog.text(message);
+
+        TextButton okButton = new TextButton("OK", GameAssetMannager.getGameAssetMannager().getSkin());
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.button(okButton);
+        dialog.show(profileMenu.getStage());
+    }
+
 }

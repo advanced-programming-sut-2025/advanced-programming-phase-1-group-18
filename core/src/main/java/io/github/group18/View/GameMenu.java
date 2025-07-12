@@ -3,7 +3,6 @@ package io.github.group18.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
-import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.enums.GameMenuCommands;
 import io.github.group18.enums.LoginMenuCommands;
@@ -44,11 +42,11 @@ public class GameMenu extends AppMenu implements Screen {
         this.background = GameAssetManager.getBackground();
         this.skin = skin;
         this.controller = controller;
-        this.MenuTitle = new Label("Game Menu", skin , "title");
         this.startNewGame = new TextButton("Start New Game", skin);
         this.loadGame = new TextButton("Load Game", skin);
         this.exitGame = new TextButton("Exit", skin);
         this.terminateGame = new TextButton("Terminate", skin);
+        this.MenuTitle = new Label("Game Menu", skin , "title");
         this.menuTable = new Table();
         this.savedGameTable = new Table();
         controller.setView(this);
@@ -91,14 +89,14 @@ public class GameMenu extends AppMenu implements Screen {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-                    getMather(input).group(1).trim())));
+                getMather(input).group(1).trim())));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
             System.out.println(controller.season());
         } else if (GameMenuCommands.CHEAT_THOR.getMather(input) != null) {
             System.out.println(controller.cheatThor(Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(1)),
-                    Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2))));
+                Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2))));
         } else if (GameMenuCommands.WEATHER.getMather(input) != null) {
             System.out.println(controller.weather());
         } else if (GameMenuCommands.WEATHER_FORECAST.getMather(input) != null) {
@@ -111,9 +109,9 @@ public class GameMenu extends AppMenu implements Screen {
             System.out.println(controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2))));
         } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
             controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
 
         } else if (GameMenuCommands.HelpReadingMap.getMather(input) != null) {
             controller.helpReadingMap();
@@ -169,23 +167,23 @@ public class GameMenu extends AppMenu implements Screen {
             System.out.println(controller.friendships());
         } else if (GameMenuCommands.Talk.getMather(input) != null) {
             System.out.println(controller.talk(GameMenuCommands.Talk.getMather(input).group(1),
-                    GameMenuCommands.Talk.getMather(input).group(2)));
+                GameMenuCommands.Talk.getMather(input).group(2)));
         } else if (GameMenuCommands.TalkHistory.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.TalkHistory.getMather(input);
             System.out.println(controller.talkHistory(matcher.group(1)));
         } else if (GameMenuCommands.Gift.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.Gift.getMather(input);
             System.out.println(controller.gift(
-                    matcher.group(1),
-                    Integer.parseInt(matcher.group(3)),
-                    matcher.group(2)));
+                matcher.group(1),
+                Integer.parseInt(matcher.group(3)),
+                matcher.group(2)));
         } else if (GameMenuCommands.GiftList.getMather(input) != null) {
             System.out.println(controller.giftList());
         } else if (GameMenuCommands.GiftRate.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.GiftRate.getMather(input);
             System.out.println(controller.giftRate(
-                    Integer.parseInt(matcher.group(1)),
-                    Integer.parseInt(matcher.group(2))));
+                Integer.parseInt(matcher.group(1)),
+                Integer.parseInt(matcher.group(2))));
         } else if (GameMenuCommands.GiftHistory.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.GiftHistory.getMather(input);
             System.out.println(controller.giftHistory(matcher.group(1)));
