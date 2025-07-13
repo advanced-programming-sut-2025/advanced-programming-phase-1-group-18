@@ -26,7 +26,7 @@ public class LoginGDXView implements Screen {
     private final TextButton Veirfy;
     private final TextButton goBack;
     private final TextButton forgotPasswordButton;
-
+    private final TextButton goBacktoRegister;
 
     public Table table;
 
@@ -34,17 +34,21 @@ public class LoginGDXView implements Screen {
     public LoginGDXView(LoginGDXController controller, Skin skin)
     {
         this.controller = controller;
-        this.loginLabel= new Label("login Menu", skin);
+        this.loginLabel= new Label("login Menu", skin, "title");
         loginLabel.setColor(Color.RED);
-        loginLabel.setFontScale(3);
-        this.username = new TextField("username:", skin);
+//        loginLabel.setFontScale(3);
+        this.username = new TextField("", skin);
+        username.setMessageText("Username");
         this.usernameerror = new Label("", skin);
-        this.password = new TextField("password:", skin);
+        this.password = new TextField("", skin);
+        password.setMessageText("Password");
         this.passworderror = new Label("", skin);
-        this.goBack = new TextButton("Go Back",skin);
+        this.goBack = new TextButton("Go Back to First menu",skin);
+        this.goBacktoRegister =  new TextButton("Go Back to Register Menu",skin);
         this.Veirfy =  new TextButton("Veirfy",skin);
         this.forgotPasswordButton = new TextButton("Forgot Password",skin);
-        this.stayLoggedIn = new TextField("stay logged in:(Just 'Yes' or 'No')", skin);
+        this.stayLoggedIn = new TextField("", skin);
+        stayLoggedIn.setMessageText("stay logged in:(Just 'Yes' or 'No')");
         this.stayLoggedinerror = new Label("", skin);
         this.table = new Table();
         controller.setView(this);
@@ -62,26 +66,26 @@ public class LoginGDXView implements Screen {
 
         table.setFillParent(true);
         table.add(loginLabel);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(username).width(600);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(usernameerror);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(password).width(600);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(passworderror);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(stayLoggedIn).width(600);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(stayLoggedinerror);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(Veirfy);
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(2, 0, 10, 0);
         table.add(forgotPasswordButton);
-        table.row().pad(10, 0, 10, 0);
-
+        table.row().pad(2, 0, 10, 0);
         table.add(goBack);
-
+        table.row().pad(2, 0, 10, 0);
+        table.add(goBacktoRegister);
         //for controlling by scroll
         ScrollPane scrollPane = new ScrollPane(table);
         scrollPane.setFillParent(true);
@@ -136,6 +140,9 @@ public class LoginGDXView implements Screen {
     }
     public TextButton getForgotPasswordButton() {
         return forgotPasswordButton;
+    }
+    public TextButton getGoBackToRegister() {
+        return goBacktoRegister;
     }
     //Fields
     public TextField getUsernameField() {

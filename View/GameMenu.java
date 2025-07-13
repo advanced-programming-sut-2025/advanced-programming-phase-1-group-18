@@ -1,6 +1,16 @@
 package io.github.group18.View;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Main;
+import io.github.group18.Model.GameAssetManager;
 import io.github.group18.enums.GameMenuCommands;
 import io.github.group18.enums.LoginMenuCommands;
 
@@ -10,20 +20,51 @@ import java.util.regex.Matcher;
 
 import io.github.group18.Controller.TradeMenuController;
 
-public class GameMenu extends AppMenu {
-    private final GameMenuController controller = new GameMenuController();
+public class GameMenu extends AppMenu implements Screen {
+
+    private GameMenuController controller = new GameMenuController();
     private final TradeMenuController tradeController = new TradeMenuController();
+
+    private Stage stage;
+    private final TextButton startNewGame;
+    private final TextButton loadGame;
+    private final TextButton exitGame;
+    private final TextButton terminateGame;
+    private final Label MenuTitle;
+    private final Table menuTable;
+    private Table savedGameTable;
+    private Skin skin;
+    private Texture background;
+    private int gameWidth = Gdx.graphics.getWidth();
+    private int gameHeight = Gdx.graphics.getHeight();
+
+    public GameMenu(GameMenuController controller , Skin skin) {
+        this.background = GameAssetManager.getBackground();
+        this.skin = skin;
+        this.controller = controller;
+        this.startNewGame = new TextButton("Start New Game", skin);
+        this.loadGame = new TextButton("Load Game", skin);
+        this.exitGame = new TextButton("Exit", skin);
+        this.terminateGame = new TextButton("Terminate", skin);
+        this.MenuTitle = new Label("Game Menu", skin , "title");
+        this.menuTable = new Table();
+        this.savedGameTable = new Table();
+        controller.setView(this);
+//        App.setGameMenuController(controller); TODO بعد از انجام قبلی ها
+
+    }
 
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
-            try {
-                System.out.println(controller.gameNew(input, scanner));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+//            try {
+//                System.out.println(controller.gameNew(input, scanner));
+//            } catch (Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+            //Matched with graphics
         } else if (GameMenuCommands.ExitGame.getMather(input) != null) {
             System.out.println(controller.exitGame());
         } else if (GameMenuCommands.VoteTerminateGame.getMather(input) != null) {
@@ -48,14 +89,14 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-                    getMather(input).group(1).trim())));
+                getMather(input).group(1).trim())));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
             System.out.println(controller.season());
         } else if (GameMenuCommands.CHEAT_THOR.getMather(input) != null) {
             System.out.println(controller.cheatThor(Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(1)),
-                    Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2))));
+                Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2))));
         } else if (GameMenuCommands.WEATHER.getMather(input) != null) {
             System.out.println(controller.weather());
         } else if (GameMenuCommands.WEATHER_FORECAST.getMather(input) != null) {
@@ -68,9 +109,9 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2))));
         } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
             controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
-                    Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
 
         } else if (GameMenuCommands.HelpReadingMap.getMather(input) != null) {
             controller.helpReadingMap();
@@ -126,23 +167,23 @@ public class GameMenu extends AppMenu {
             System.out.println(controller.friendships());
         } else if (GameMenuCommands.Talk.getMather(input) != null) {
             System.out.println(controller.talk(GameMenuCommands.Talk.getMather(input).group(1),
-                    GameMenuCommands.Talk.getMather(input).group(2)));
+                GameMenuCommands.Talk.getMather(input).group(2)));
         } else if (GameMenuCommands.TalkHistory.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.TalkHistory.getMather(input);
             System.out.println(controller.talkHistory(matcher.group(1)));
         } else if (GameMenuCommands.Gift.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.Gift.getMather(input);
             System.out.println(controller.gift(
-                    matcher.group(1),
-                    Integer.parseInt(matcher.group(3)),
-                    matcher.group(2)));
+                matcher.group(1),
+                Integer.parseInt(matcher.group(3)),
+                matcher.group(2)));
         } else if (GameMenuCommands.GiftList.getMather(input) != null) {
             System.out.println(controller.giftList());
         } else if (GameMenuCommands.GiftRate.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.GiftRate.getMather(input);
             System.out.println(controller.giftRate(
-                    Integer.parseInt(matcher.group(1)),
-                    Integer.parseInt(matcher.group(2))));
+                Integer.parseInt(matcher.group(1)),
+                Integer.parseInt(matcher.group(2))));
         } else if (GameMenuCommands.GiftHistory.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.GiftHistory.getMather(input);
             System.out.println(controller.giftHistory(matcher.group(1)));
@@ -261,5 +302,175 @@ public class GameMenu extends AppMenu {
 //         else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
 //            controller.showMyMarriageProposals();
 //        }
+    }
+
+    @Override
+    public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+
+// Setup main menu table
+        menuTable.setFillParent(true);
+        menuTable.center();
+
+// Add game title to menu
+        menuTable.add(MenuTitle).colspan(2).padBottom(100);
+        menuTable.row();
+
+// Add "Start New Game" button
+        menuTable.add(startNewGame).colspan(2).padBottom(10).width(500);
+        menuTable.row();
+
+// Create outer table for saved games with background and padding
+        Table outerSavedGame = new Table(skin);
+        outerSavedGame.setBackground(skin.getDrawable("white"));
+        outerSavedGame.pad(5);
+
+// Add "saved Games" label to inner table
+        Label savedGameLabel = new Label("Saved Game: \n NOTHING", skin);
+        savedGameLabel.setColor(Color.BLACK);
+        savedGameTable.add(savedGameLabel).colspan(2).padBottom(10).center();
+        savedGameTable.row();
+
+// Add savedGameTable to outerSavedGame table
+        outerSavedGame.add(savedGameTable);
+
+// Add outerSavedGame to menu table
+        menuTable.add(outerSavedGame).colspan(2).padBottom(10).width(500);
+        menuTable.row();
+
+// Add load, exit, and terminate buttons
+        menuTable.add(loadGame).colspan(2).padBottom(10).width(500);
+        menuTable.row();
+
+        menuTable.add(exitGame).colspan(2).padBottom(10).width(500);
+        menuTable.row();
+
+        menuTable.add(terminateGame).colspan(2).padBottom(10).width(500);
+
+// Finally add menuTable to stage
+        stage.addActor(menuTable);
+
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+        Main.getMain().getBatch().begin();
+        Main.getMain().getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.getMain().getBatch().end();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+        controller.handleGameMenuButtons();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+
+    public GameMenuController getController() {
+        return controller;
+    }
+
+    public void setController(GameMenuController controller) {
+        this.controller = controller;
+    }
+
+    public TradeMenuController getTradeController() {
+        return tradeController;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public TextButton getStartNewGame() {
+        return startNewGame;
+    }
+
+    public TextButton getLoadGame() {
+        return loadGame;
+    }
+
+    public TextButton getExitGame() {
+        return exitGame;
+    }
+
+    public TextButton getTerminateGame() {
+        return terminateGame;
+    }
+
+    public Label getMenuTitle() {
+        return MenuTitle;
+    }
+
+    public Table getMenuTable() {
+        return menuTable;
+    }
+
+    public Table getSavedGameTable() {
+        return savedGameTable;
+    }
+
+    public void setSavedGameTable(Table savedGameTable) {
+        this.savedGameTable = savedGameTable;
+    }
+
+    public Skin getSkin() {
+        return skin;
+    }
+
+    public void setSkin(Skin skin) {
+        this.skin = skin;
+    }
+
+    public Texture getBackground() {
+        return background;
+    }
+
+    public void setBackground(Texture background) {
+        this.background = background;
+    }
+
+    public int getGameWidth() {
+        return gameWidth;
+    }
+
+    public void setGameWidth(int gameWidth) {
+        this.gameWidth = gameWidth;
+    }
+
+    public int getGameHeight() {
+        return gameHeight;
+    }
+
+    public void setGameHeight(int gameHeight) {
+        this.gameHeight = gameHeight;
     }
 }

@@ -75,8 +75,8 @@ public class RegisterLoginGdxView implements Screen {
         escapeHint.getColor().a = 1f;
         escapeHint.addAction(Actions.forever(
             Actions.sequence(
-                Actions.fadeOut(0.8f),
-                Actions.fadeIn(0.8f)
+                Actions.fadeOut(1f),
+                Actions.fadeIn(1f)
             )
         ));
         table.row().padTop(5);

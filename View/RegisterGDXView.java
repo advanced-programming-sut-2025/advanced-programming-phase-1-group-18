@@ -29,6 +29,8 @@ public class RegisterGDXView implements Screen {
     private final Label gendererror;
     private final TextButton verify;
     private final TextButton goBack;
+    private final TextButton goToLogin;
+    private final TextButton randomPass;
     public Table table;
 
     private final RegisterGDXController controller;
@@ -36,21 +38,30 @@ public class RegisterGDXView implements Screen {
     public RegisterGDXView(RegisterGDXController controller, Skin skin)
     {
         this.controller = controller;
+        this.randomPass  = new TextButton("Random Password", skin);
         this.registerTitle = new Label("Register Menu", skin);
         registerTitle.setColor(Color.RED);
-        this.username = new TextField("username:", skin);
+        this.username = new TextField("", skin);
+        username.setMessageText("Username");
         this.usernameerror = new Label("", skin);
-        this.password = new TextField("password:", skin);
+        this.password = new TextField("", skin);
+        password.setMessageText("Password");
         this.passworderror = new Label("", skin);
-        this.repassword = new TextField("password again:", skin);
+        this.repassword = new TextField("", skin);
+        repassword.setMessageText("Password again");
         this.repassworderror = new Label("", skin);
-        this.nickname = new TextField("nickname:", skin);
-        this.email = new TextField("email:", skin);
+        this.nickname = new TextField("", skin);
+        nickname.setMessageText("Nickname");
+        this.email = new TextField("", skin);
+        email.setMessageText("Email");
         this.emailerror = new Label("", skin);
-        this.gender = new TextField("gender:", skin);
+        this.gender = new TextField("", skin);
+        gender.setMessageText("Gender");
         this.gendererror = new Label("", skin);
         this.verify = new TextButton("Verify",skin);
+
         this.goBack = new TextButton("Go Back",skin);
+        this.goToLogin = new TextButton("Go to Login Menu",skin);
         this.table = new Table();
         controller.setView(this);
     }
@@ -66,33 +77,32 @@ public class RegisterGDXView implements Screen {
 
         table.setFillParent(true);
         table.add(registerTitle);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(username).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(usernameerror);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(password).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(passworderror);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(repassword).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(repassworderror);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(nickname).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(email).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(emailerror).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(gender).width(600);
-        table.row().pad(2, 0, 10, 0);
-        table.add(gendererror).width(600);
-        table.row().pad(2, 0, 10, 0);
+        table.row().pad(1, 0, 10, 0);
         table.add(verify);
-        table.row().pad(2, 0, 10, 0);
-        table.add(goBack);
-
+        table.row().pad(1, 0, 10, 0);
+        table.add(randomPass);
+        table.row().pad(1, 0, 10, 0);
+        table.add(goToLogin);
         //for controlling by scroll
         ScrollPane scrollPane = new ScrollPane(table);
         scrollPane.setFillParent(true);
@@ -140,6 +150,12 @@ public class RegisterGDXView implements Screen {
     }
     public TextButton getVerifyButton() {
         return verify ;
+    }
+    public TextButton getGoToLoginButton() {
+        return goToLogin;
+    }
+    public TextButton getRandomPassButton() {
+        return randomPass;
     }
     //Fields
     public TextField getUsernameField() {
