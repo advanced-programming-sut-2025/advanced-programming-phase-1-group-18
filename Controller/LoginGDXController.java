@@ -6,10 +6,7 @@ import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Controller.LoginMenuController;
 import io.github.group18.Model.User;
-import io.github.group18.View.ForgotPasswordGDXView;
-import io.github.group18.View.LoginGDXView;
-import io.github.group18.View.RegisterGDXView;
-import io.github.group18.View.RegisterLoginGdxView;
+import io.github.group18.View.*;
 import io.github.group18.enums.Menu;
 
 import static io.github.group18.Controller.LoginMenuController.findUserByUsername;
@@ -63,18 +60,22 @@ public class LoginGDXController
                     view.setPasswordErrorLabel("Wrong Password!");
                     isOkay = false;
                 }
-/*
                 if(isOkay)
                 {
                     user.setStayLoggedIn(!(stayLoggedIn == null));
                     App.setCurrentUser(user);
+                    Main.getMain().getScreen().dispose();
+                    Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
                 }
-                */
             }
 
             if(view.getForgotPasswordButton().isChecked())
             {
                 Main.getMain().setScreen(new ForgotPasswordGDXView(new ForgotPasswordGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
+            }
+            if(view.getGoBackToRegister().isChecked())
+            {
+                Main.getMain().setScreen(new RegisterGDXView(new RegisterGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
             }
         }
 
