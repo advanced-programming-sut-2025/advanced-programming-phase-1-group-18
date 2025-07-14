@@ -1,13 +1,7 @@
+Clock.png
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
 RegisterImage.jpg
-Skin/1hoursheet.PNG
-Skin/font-export.fnt
-Skin/font-subtitle-export.fnt
-Skin/font-title-export.fnt
-Skin/pixthulhu-ui.atlas
-Skin/pixthulhu-ui.json
-Skin/pixthulhu-ui.png
 avatar.png
 bullet.png
 default.vert
@@ -20,3 +14,12 @@ map3.png
 map4.png
 mapDeafult.png
 menu_bg.png
+skin/1hoursheet.PNG
+skin/font-export.fnt
+skin/font-subtitle-export.fnt
+skin/font-title-export.fnt
+skin/pixthulhu-ui.atlas
+skin/pixthulhu-ui.json
+skin/pixthulhu-ui.png
+testSpriteSheet/clockAtlas.atlas
+testSpriteSheet/clockAtlas.png

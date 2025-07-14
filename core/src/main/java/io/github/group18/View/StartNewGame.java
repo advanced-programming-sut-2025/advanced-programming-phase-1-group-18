@@ -59,7 +59,7 @@ public class StartNewGame implements Screen {
         table.row();
 
 // First input row: player field (spanning 2 columns) + choose map label + choose map box
-        table.add(addPlayerField).width(500).colspan(2);
+        table.add(addPlayerField).width(500).colspan(4).center().pad(20);
 //        table.add(addPlayerField).width(500).colspan(2).pad(10);
 //        table.add(new Label("Choose Map", skin)).pad(10).right();
 //        table.add(chooseMapBox).width(200).pad(10).left();

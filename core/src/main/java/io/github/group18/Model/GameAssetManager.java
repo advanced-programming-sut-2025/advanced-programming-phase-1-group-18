@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class GameAssetManager {
@@ -17,6 +18,8 @@ public class GameAssetManager {
     Texture map3Texture = new Texture(Gdx.files.internal("map3.png"));
     Texture map4Texture = new Texture(Gdx.files.internal("map4.png"));
     Texture mapDeafultTexture = new Texture(Gdx.files.internal("mapDeafult.png"));
+
+    TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
 
 
     public static Texture defaultAvatar = new Texture(Gdx.files.internal("avatar.png"));
@@ -105,5 +108,13 @@ public class GameAssetManager {
             Gdx.app.error("Avatar", "Error loading: " + avatarPath, e);
         }
         return getDefaultAvatar(); // Fallback
+    }
+
+    public TextureAtlas getTextureAtlas() {
+        return textureAtlas;
+    }
+
+    public void setTextureAtlas(TextureAtlas textureAtlas) {
+        this.textureAtlas = textureAtlas;
     }
 }

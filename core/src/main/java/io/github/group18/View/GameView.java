@@ -24,11 +24,13 @@ public class GameView {
     private float stateTime = 0f;
     private int moveDirection = 0;
     private Texture pixel; // Add this
+    private ClockController clock;
 
 
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
+        clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
 //        loadTextures();
     }
 
@@ -87,7 +89,7 @@ public class GameView {
         if (App.getCurrentGame() != null) {
             DateTime time = App.getCurrentGame().getCurrentDateTime();
             if (time != null) {
-                ClockController.render(batch, time);
+                clock.render(batch, time);
             }
         }
     }
