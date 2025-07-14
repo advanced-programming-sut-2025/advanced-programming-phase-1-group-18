@@ -104,53 +104,76 @@ public class ProfileMenu extends AppMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        // Background (fills screen)
         Texture bgTexture = new Texture(Gdx.files.internal("MainMenuBackground.jpg"));
         Image background = new Image(bgTexture);
+        background.setFillParent(true);
         stage.addActor(background);
 
         table.setFillParent(true);
-        table.center();
+        table.top(); // Start from the top (prevents overflow)
 
-        table.add(usernameLabel).width((float) Main.getScreenWidth() / 5);
-        table.add(usernameTextField).width((float) Main.getScreenWidth() / 2);
-        table.add(applyUsername).width((float) Main.getScreenWidth() / 6);
-        table.row();
+        // Dynamic scaling (now more compact)
+        float labelWidth = 0.18f;   // 18% of screen width
+        float fieldWidth = 0.35f;   // 35% of screen width
+        float buttonWidth = 0.12f;  // 12% of screen width
+        float minButtonWidth = 120; // Minimum button width
 
-        table.add(oldPasswordLabel).width((float) Main.getScreenWidth() / 5);
-        table.add(oldpasswordTextField).width((float) Main.getScreenWidth() / 2);
-        table.row();
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+        float padSize = screenHeight * 0.005f; // Smaller padding (0.5% of height)
 
-        table.add(passwordLabel).width((float) Main.getScreenWidth() / 6).pad(0).left();
-        table.add(passwordTextField).width((float) Main.getScreenWidth() / 3).pad(0);
-        table.add(applyPassword).width((float) Main.getScreenWidth() / 7).pad(0).right();
-        table.add(randomPassword).width((float) Main.getScreenWidth() / 4).pad(0).right();
-        table.row();
+        // Ensure buttons aren't too small
+        float actualButtonWidth = Math.max(screenWidth * buttonWidth, minButtonWidth);
 
-        table.add(nicknameLabel).width((float) Main.getScreenWidth() / 5);
-        table.add(nicknameTextField).width((float) Main.getScreenWidth() / 2);
-        table.add(applyNickname).width((float) Main.getScreenWidth() / 6);
-        table.row();
-
-        table.add(emailLabel).width((float) Main.getScreenWidth() / 5);
-        table.add(emailTextField).width((float) Main.getScreenWidth() / 2);
-        table.add(applyEmail).width((float) Main.getScreenWidth() / 6);
+        // Row 1: Username (smaller padding)
+        table.add(usernameLabel).width(screenWidth * labelWidth).padBottom(padSize);
+        table.add(usernameTextField).width(screenWidth * fieldWidth).padBottom(padSize);
+        table.add(applyUsername).width(actualButtonWidth).padBottom(padSize);
         table.row();
 
-        table.add(avatarButton).center().size(256,256);
+        // Row 2: Old Password
+        table.add(oldPasswordLabel).width(screenWidth * labelWidth).padBottom(padSize);
+        table.add(oldpasswordTextField).width(screenWidth * fieldWidth).padBottom(padSize);
         table.row();
 
-        table.add(genderLabel).colspan(3).center();
-        table.row();
-        table.add(highestMoenyEarnedLabel).colspan(3).center();
-        table.row();
-        table.add(gamesPlayedLabel).colspan(3).center();
+        // Row 3: New Password (adjusted for "Random Password")
+        table.add(passwordLabel).width(screenWidth * labelWidth * 0.7f).padBottom(padSize).left();
+        table.add(passwordTextField).width(screenWidth * fieldWidth * 0.8f).padBottom(padSize);
+        table.add(applyPassword).width(actualButtonWidth).padBottom(padSize).right();
+        table.add(randomPassword).width(actualButtonWidth * 1.3f).padBottom(padSize).right();
         table.row();
 
-        table.add(backButton).colspan(3).center().padTop(20);
-        //table.debug();
+        // Row 4: Nickname
+        table.add(nicknameLabel).width(screenWidth * labelWidth).padBottom(padSize);
+        table.add(nicknameTextField).width(screenWidth * fieldWidth).padBottom(padSize);
+        table.add(applyNickname).width(actualButtonWidth).padBottom(padSize);
+        table.row();
+
+        // Row 5: Email
+        table.add(emailLabel).width(screenWidth * labelWidth).padBottom(padSize);
+        table.add(emailTextField).width(screenWidth * fieldWidth).padBottom(padSize);
+        table.add(applyEmail).width(actualButtonWidth).padBottom(padSize);
+        table.row();
+
+        // Avatar (smaller but still visible)
+        float avatarSize = Math.min(screenHeight * 0.15f, 150); // Max 150px height
+        table.add(avatarButton).center().size(avatarSize).padBottom(padSize * 2);
+        table.row();
+
+        // Info labels (less padding)
+        table.add(genderLabel).colspan(4).center().padBottom(padSize);
+        table.row();
+        table.add(highestMoenyEarnedLabel).colspan(4).center().padBottom(padSize);
+        table.row();
+        table.add(gamesPlayedLabel).colspan(4).center().padBottom(padSize);
+        table.row();
+
+        // Back button (smaller top padding)
+        table.add(backButton).colspan(4).center().width(actualButtonWidth * 1.5f).padTop(padSize * 2);
+
         stage.addActor(table);
     }
-
 
     @Override
     public void render(float v) {

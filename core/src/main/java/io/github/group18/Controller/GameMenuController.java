@@ -5,8 +5,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
-import io.github.group18.View.AppView;
-import io.github.group18.View.GameMenu;
+import io.github.group18.View.GameMenuMenu;
 import io.github.group18.View.StartNewGame;
 import io.github.group18.enums.*;
 
@@ -22,13 +21,7 @@ import java.util.Map;
 
 public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
-    private GameMenu view;
-
-    public void setView(GameMenu view) {
-        this.view = view;
-    }
-
-    public void handleGameMenuButtons() {
+    public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
             if(view.getExitGame().isPressed()){
                 exitGame();
@@ -619,7 +612,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public void nextTurn() {
+    public static void nextTurn() {
 
         App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
         if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
@@ -706,7 +699,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    private void startNewDay() {
+    private static void startNewDay() {
         //restock markets
         App.getCurrentGame().getBlackSmithMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();

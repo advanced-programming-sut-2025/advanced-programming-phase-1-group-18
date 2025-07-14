@@ -5,8 +5,6 @@ import io.github.group18.Main;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.View.ChoosingMapView;
-import io.github.group18.View.GameMenu;
-import io.github.group18.View.GameView;
 import io.github.group18.View.StartNewGame;
 
 import java.util.ArrayList;
@@ -93,10 +91,15 @@ public class ChoosingMapController {
                         if (!result.isSuccessful()){
                             view.getNotif().setText(result.getMessage());
                         }else {
-                            GameView gameView = new GameView(new GameController(),view.getSkin());
-                            gameView.setMenuController(gameMenuController);
-                            Main.getMain().getScreen().dispose();
-                            Main.getMain().setScreen(gameView);
+                            GameController gameController = new GameController(Main.getMain());
+                            gameController.init();
+                            gameController.run();
+//                            mainMenu.hide();
+
+//                            GameView gameView = new GameView(new GameController(),view.getSkin());
+//                            gameView.setMenuController(gameMenuController);
+//                            Main.getMain().getScreen().dispose();
+//                            Main.getMain().setScreen(gameView);
                         }
                     }catch (Exception e){
                         view.getNotif().setText(e.getMessage());
