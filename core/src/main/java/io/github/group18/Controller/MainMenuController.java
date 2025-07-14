@@ -1,7 +1,7 @@
 package io.github.group18.Controller;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
-import io.github.group18.Model.GameAssetMannager;
+import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.View.GameMenu;
 import io.github.group18.View.MainMenu;
@@ -28,7 +28,7 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
                 System.out.println("You are now in GameMenu!");
                 break;
             case "profilemenu":
-                App.setCurrentMenu(Menu.ProfileMenu);
+//                App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "loginmenu":
@@ -48,19 +48,17 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
     public void handleMainMenuButtons() {
         if (mainMenu.getProfileMenuButton().isChecked()) {
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new ProfileMenu(new ProfileMenuController(), GameAssetMannager.getGameAssetMannager().getSkin()));
+            Main.getMain().setScreen(new ProfileMenu(new ProfileMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
         } else if (mainMenu.getGameMenuButton().isChecked()) {
-
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameMenu(new GameMenuController(),GameAssetMannager.getGameAssetMannager().getSkin()));
-
-            //TODO
+            Main.getMain().setScreen(new GameMenu(new GameMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
         } else if (mainMenu.getLogoutButton().isChecked()) {
             logout();
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(),GameAssetMannager.getGameAssetMannager().getSkin()));
-
-            //TODO
+            Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(),GameAssetManager.getGameAssetManager().getSkin()));
+        } else if(mainMenu.getExitButton().isChecked())
+        {
+            System.exit(0);
         }
     }
 

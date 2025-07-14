@@ -2,14 +2,20 @@ package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.ProfileMenuController;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
+import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.User;
 import io.github.group18.enums.ProfileMenuCommands;
 
@@ -25,6 +31,7 @@ public class ProfileMenu extends AppMenu implements Screen {
 
     private final Label passwordLabel;
     private final TextField passwordTextField;
+    private final TextButton randomPassword;
     private final TextButton applyPassword;
 
     private final Label oldPasswordLabel;
@@ -38,6 +45,9 @@ public class ProfileMenu extends AppMenu implements Screen {
     private final TextField emailTextField;
     private final TextButton applyEmail;
 
+    private final ImageButton avatarButton;
+    private String currentAvatarPath;
+
     private final Label genderLabel;
     private final Label highestMoenyEarnedLabel;
     private final Label gamesPlayedLabel;
@@ -46,7 +56,7 @@ public class ProfileMenu extends AppMenu implements Screen {
     private final ProfileMenuController profileMenuController;
 
     public ProfileMenu(ProfileMenuController profileMenuController, Skin skin) {
-        App.setCurrentUser(new User("alisoltani", "aliSOLTANI123@", "ali", "alisoltani1810@gmail.com", "male"));
+//        App.setCurrentUser(new User("alisoltani", "aliSOLTANI123@", "ali", "alisoltani1810@gmail.com", "male"));
         this.profileMenuController = profileMenuController;
 
         this.usernameLabel = new Label("Username:", skin);
@@ -56,6 +66,7 @@ public class ProfileMenu extends AppMenu implements Screen {
         this.passwordLabel = new Label("New Password:", skin);
         this.passwordTextField = new TextField("", skin);
         this.applyPassword = new TextButton("Apply", skin);
+        this.randomPassword = new TextButton("Random Password",skin);
 
         this.oldPasswordLabel = new Label("Old Password:", skin);
         this.oldpasswordTextField = new TextField("", skin);
@@ -67,6 +78,16 @@ public class ProfileMenu extends AppMenu implements Screen {
         this.emailLabel = new Label("Email:", skin);
         this.emailTextField = new TextField(App.getCurrentUser().getEmail(), skin);
         this.applyEmail = new TextButton("Apply", skin);
+
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        this.avatarButton = new ImageButton(style);
+        updateAvatarButtonStyle(App.getCurrentUser().getAvatar());
+        avatarButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                profileMenuController.handleAvatarChange();
+            }
+        });
 
         this.genderLabel = new Label("Gender: " + App.getCurrentUser().getGender(), skin);
         this.highestMoenyEarnedLabel = new Label("Highest Moeny Earned: " + App.getCurrentUser().getHighestGold(), skin);
@@ -99,9 +120,10 @@ public class ProfileMenu extends AppMenu implements Screen {
         table.add(oldpasswordTextField).width((float) Main.getScreenWidth() / 2);
         table.row();
 
-        table.add(passwordLabel).width((float) Main.getScreenWidth() / 5);
-        table.add(passwordTextField).width((float) Main.getScreenWidth() / 2);
-        table.add(applyPassword).width((float) Main.getScreenWidth() / 6);
+        table.add(passwordLabel).width((float) Main.getScreenWidth() / 6).pad(0).left();
+        table.add(passwordTextField).width((float) Main.getScreenWidth() / 3).pad(0);
+        table.add(applyPassword).width((float) Main.getScreenWidth() / 7).pad(0).right();
+        table.add(randomPassword).width((float) Main.getScreenWidth() / 4).pad(0).right();
         table.row();
 
         table.add(nicknameLabel).width((float) Main.getScreenWidth() / 5);
@@ -114,6 +136,9 @@ public class ProfileMenu extends AppMenu implements Screen {
         table.add(applyEmail).width((float) Main.getScreenWidth() / 6);
         table.row();
 
+        table.add(avatarButton).center().size(256,256);
+        table.row();
+
         table.add(genderLabel).colspan(3).center();
         table.row();
         table.add(highestMoenyEarnedLabel).colspan(3).center();
@@ -122,7 +147,7 @@ public class ProfileMenu extends AppMenu implements Screen {
         table.row();
 
         table.add(backButton).colspan(3).center().padTop(20);
-
+        //table.debug();
         stage.addActor(table);
     }
 
@@ -251,6 +276,30 @@ public class ProfileMenu extends AppMenu implements Screen {
 
     public TextButton getApplyEmail() {
         return applyEmail;
+    }
+
+    public ImageButton getAvatarButton() {
+        return avatarButton;
+    }
+
+    public TextButton getRandomPassword() {
+        return randomPassword;
+    }
+
+    public void updateAvatarButtonStyle(String newAvatarPath) {
+        Texture avatarTexture = GameAssetManager.getUserAvatar(newAvatarPath);
+        if (avatarTexture == null) {
+            Gdx.app.error("Avatar", "Texture is null for: " + newAvatarPath);
+            return;
+        }
+
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(new TextureRegion(avatarTexture));
+        style.imageDown = new TextureRegionDrawable(new TextureRegion(avatarTexture)).tint(Color.GRAY);
+
+        assert avatarButton != null;
+        avatarButton.setStyle(style);
+        currentAvatarPath = newAvatarPath;
     }
 
     @Override
