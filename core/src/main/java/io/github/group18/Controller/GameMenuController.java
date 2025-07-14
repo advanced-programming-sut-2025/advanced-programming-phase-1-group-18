@@ -43,6 +43,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
     }
+
     public static void checkSkilRecipe() {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         if (currentPlayer.getForagingSkill().getLevel() >= 150) {
@@ -327,7 +328,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
     }
-
 
     public Result whoAmI() {
         int Playerindex = App.getCurrentGame().getIndexPlayerinControl();

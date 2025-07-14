@@ -1,1 +1,46 @@
-[{"Username":"a","Password":"5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807","Email":"aa.aa@a","Gender":"","NickName":"aa","stayLoggedIn":false,"timesPlayed":0,"highestGold":0},{"Username":"b","Password":"5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807","Email":"aaa.bb@ab.com","Gender":"male","NickName":"ab","stayLoggedIn":false,"timesPlayed":0,"highestGold":0},{"Username":"c","Password":"5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807","Email":"aa.a@a.v","Gender":"feml","NickName":"a","stayLoggedIn":false,"timesPlayed":0,"highestGold":0}]
+[
+  {
+    "Username": "ali",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "alisoltani1810@gmail.com",
+    "Gender": "male",
+    "NickName": "ali",
+    "stayLoggedIn": true,
+    "timesPlayed": 1,
+    "highestGold": 0,
+    "avatar": "avatars/avatar_1752487524556.png"
+  },
+  {
+    "Username": "ali1",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "alisoltani1810@gmail.com",
+    "Gender": "female",
+    "NickName": "ali",
+    "stayLoggedIn": false,
+    "timesPlayed": 1,
+    "highestGold": 0,
+    "avatar": "avatar.png"
+  },
+  {
+    "Username": "ali2",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "alisoltani1810@gmail.com",
+    "Gender": "male",
+    "NickName": "ali",
+    "stayLoggedIn": false,
+    "timesPlayed": 1,
+    "highestGold": 0,
+    "avatar": "avatar.png"
+  },
+  {
+    "Username": "ali3",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "alisoltani1810@gmail.com",
+    "Gender": "female",
+    "NickName": "ali",
+    "stayLoggedIn": false,
+    "timesPlayed": 1,
+    "highestGold": 0,
+    "avatar": "avatar.png"
+  }
+]
