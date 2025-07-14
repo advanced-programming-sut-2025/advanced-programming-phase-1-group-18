@@ -10,6 +10,7 @@ public class User {
     protected boolean stayLoggedIn;
     protected int timesPlayed;
     protected int highestGold;
+    protected String avatar;
 
     public String getUsername() {
         return Username;
@@ -66,6 +67,7 @@ public class User {
         this.Email = Email;
         this.Gender = Gender;
         this.NickName = NickName;
+        this.avatar = "avatar.png";
     }
 
     public User() {
@@ -87,5 +89,13 @@ public class User {
 
     public void setHighestGold(int highestGold) {
         this.highestGold = highestGold;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

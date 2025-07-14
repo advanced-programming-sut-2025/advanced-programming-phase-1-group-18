@@ -16,7 +16,7 @@ public class StartNewGame implements Screen {
     private Stage stage;
     private TextButton addPlayerButton;
     private TextField addPlayerField;
-    private TextButton playButton;
+    private TextButton chooseMapButton;
     private TextButton backButton;
     private SelectBox<Integer> chooseMapBox;
     private Table table;
@@ -31,7 +31,7 @@ public class StartNewGame implements Screen {
         this.stage = new Stage();
         this.table = new Table();
         this.addPlayerButton = new TextButton("Add Player", skin);
-        this.playButton = new TextButton("Play Game", skin);
+        this.chooseMapButton = new TextButton("Choose Map", skin);
         this.backButton = new TextButton("Back", skin);
         this.notif = new Label("", skin);
         this.addPlayerField = new TextField("",skin);
@@ -59,9 +59,10 @@ public class StartNewGame implements Screen {
         table.row();
 
 // First input row: player field (spanning 2 columns) + choose map label + choose map box
-        table.add(addPlayerField).width(500).colspan(2).pad(10);
-        table.add(new Label("Choose Map", skin)).pad(10).right();
-        table.add(chooseMapBox).width(200).pad(10).left();
+        table.add(addPlayerField).width(500).colspan(4).center().pad(20);
+//        table.add(addPlayerField).width(500).colspan(2).pad(10);
+//        table.add(new Label("Choose Map", skin)).pad(10).right();
+//        table.add(chooseMapBox).width(200).pad(10).left();
         table.row();
 
 // Second row: addPlayerButton spanning all columns
@@ -70,7 +71,7 @@ public class StartNewGame implements Screen {
 
 // Third row: chooseMapButton and backButton centered with empty cells for spacing
         table.add().expandX(); // empty for spacing
-        table.add(playButton).pad(10).center();
+        table.add(chooseMapButton).pad(10).center();
         table.add(backButton).pad(10).center();
         table.add().expandX(); // empty for spacing
         table.row();
@@ -151,12 +152,12 @@ public class StartNewGame implements Screen {
         this.addPlayerField = addPlayerField;
     }
 
-    public TextButton getPlayButton() {
-        return playButton;
+    public TextButton getChooseMapButton() {
+        return chooseMapButton;
     }
 
-    public void setPlayButton(TextButton playButton) {
-        this.playButton = playButton;
+    public void setChooseMapButton(TextButton chooseMapButton) {
+        this.chooseMapButton = chooseMapButton;
     }
 
     public TextButton getBackButton() {

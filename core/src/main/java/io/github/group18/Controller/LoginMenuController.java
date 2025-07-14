@@ -22,9 +22,9 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         if (password.isEmpty()) {
             return new Result(false, "you should enter password");
         }
-//        if (findUserByUsername(username) != null) {
-//            return new Result(false, "user already exist");
-//        }
+        if (findUserByUsername(username) != null) {
+           return new Result(false, "user already exist");
+        }
         User user = findUserByUsername(username);
         String hashedInput = RegisterMenuController.hashPasswordSHA256(password);
         if (!user.getPassword().equals(hashedInput)) {
@@ -110,11 +110,11 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         menuName = menuName.toLowerCase();
         switch (menuName) {
             case "registermenu":
-                App.setCurrentMenu(Menu.RegisterMenu);
+//                App.setCurrentMenu(Menu.RegisterMenu);
                 System.out.println("You are now in RegisterMenu!");
                 break;
             case "profilemenu":
-                App.setCurrentMenu(Menu.ProfileMenu);
+//                App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "mainmenu":
@@ -127,7 +127,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         }
     }
 
-    public User findUserByUsername(String username) {
+    public static User findUserByUsername(String username) {
         for (User user : App.getUsers_List()) {
             if (user.getUsername().equals(username)) {
                 return user;

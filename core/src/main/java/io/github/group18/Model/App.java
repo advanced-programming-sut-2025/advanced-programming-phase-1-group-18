@@ -2,7 +2,6 @@ package io.github.group18.Model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import io.github.group18.Controller.GameMenuController;
 import io.github.group18.enums.Menu;
 
 import java.io.*;
@@ -10,16 +9,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class App {
-    protected static Menu CurrentMenu = Menu.RegisterMenu;
     protected static ArrayList<Game> Games = new ArrayList<>();
+    protected static Menu CurrentMenu = Menu.RegisterMenu;
     protected static User CurrentUser;
     protected static Game CurrentGame;
     protected static ArrayList<User> Users_List = new ArrayList<>();
     private static final String USER_FILE = "users.json";
 
-    private static final GameMenuController gameMenuController = new GameMenuController();
-
     public static ArrayList<User> getUsers_List() {
+        if (Users_List == null) {
+            Users_List = new ArrayList<>();
+        }
         return Users_List;
     }
 
@@ -78,13 +78,5 @@ public class App {
 
     public static void setCurrentGame(Game currentGame) {
         CurrentGame = currentGame;
-    }
-
-    public static GameMenuController getGameMenuController() {
-        return gameMenuController;
-    }
-
-    public static void setGameMenuController(GameMenuController gameMenuController) {
-        gameMenuController = gameMenuController;
     }
 }

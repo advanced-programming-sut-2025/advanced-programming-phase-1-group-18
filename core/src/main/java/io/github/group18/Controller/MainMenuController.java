@@ -1,9 +1,16 @@
 package io.github.group18.Controller;
+import io.github.group18.Main;
 import io.github.group18.Model.App;
+import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
+import io.github.group18.View.GameMenuMenu;
+import io.github.group18.View.MainMenu;
+import io.github.group18.View.ProfileMenu;
+import io.github.group18.View.RegisterLoginGdxView;
 import io.github.group18.enums.Menu;
 
 public class MainMenuController implements MenuEnter, ShowCurrentMenu{
+    private MainMenu mainMenu;
 
     public Result logout() {
         App.setCurrentUser(null);
@@ -21,7 +28,7 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
                 System.out.println("You are now in GameMenu!");
                 break;
             case "profilemenu":
-                App.setCurrentMenu(Menu.ProfileMenu);
+//                App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "loginmenu":
@@ -29,12 +36,33 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
                 System.out.println("You are now in LoginMenu!");
                 break;
             case "registermenu":
-                App.setCurrentMenu(Menu.RegisterMenu);
+//                App.setCurrentMenu(Menu.RegisterMenu);
                 System.out.println("You are now in RegisterMenu!");
                 break;
             default:
                 System.out.println("Invalid menu");
                 break;
         }
+    }
+
+    public void handleMainMenuButtons() {
+        if (mainMenu.getProfileMenuButton().isChecked()) {
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new ProfileMenu(new ProfileMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+        } else if (mainMenu.getGameMenuButton().isChecked()) {
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new GameMenuMenu(new GameMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
+        } else if (mainMenu.getLogoutButton().isChecked()) {
+            logout();
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(),GameAssetManager.getGameAssetManager().getSkin()));
+        } else if(mainMenu.getExitButton().isChecked())
+        {
+            System.exit(0);
+        }
+    }
+
+    public void setView(MainMenu mainMenu) {
+        this.mainMenu = mainMenu;
     }
 }
