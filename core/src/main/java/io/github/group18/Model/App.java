@@ -17,6 +17,9 @@ public class App {
     private static final String USER_FILE = "users.json";
 
     public static ArrayList<User> getUsers_List() {
+        if (Users_List == null) {
+            Users_List = new ArrayList<>();
+        }
         return Users_List;
     }
 
