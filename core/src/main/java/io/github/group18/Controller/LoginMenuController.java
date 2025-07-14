@@ -114,7 +114,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
                 System.out.println("You are now in RegisterMenu!");
                 break;
             case "profilemenu":
-                App.setCurrentMenu(Menu.ProfileMenu);
+//                App.setCurrentMenu(Menu.ProfileMenu);
                 System.out.println("You are now in ProfileMenu!");
                 break;
             case "mainmenu":

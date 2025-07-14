@@ -114,9 +114,9 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
 
         for (int i = 0; i < username.length(); i++) {
             if ((username.charAt(i) >= 'a' && username.charAt(i) <= 'z') ||
-                    (username.charAt(i) >= 'A' && username.charAt(i) <= 'Z') ||
-                    (username.charAt(i) >= '0' && username.charAt(i) <= '9') ||
-                    (username.charAt(i) == '-')) {
+                (username.charAt(i) >= 'A' && username.charAt(i) <= 'Z') ||
+                (username.charAt(i) >= '0' && username.charAt(i) <= '9') ||
+                (username.charAt(i) == '-')) {
 
             } else {
                 return new Result(false, "invalid userrname letters.");
@@ -301,6 +301,9 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
 
     //check the username is Unique
     public static boolean isUsernameUnique(String username) {
+        if (App.getUsers_List() == null) {
+            return false;
+        }
         for (User user : App.getUsers_List()) {
             if (user.getUsername().equals(username)) {
                 return true;
