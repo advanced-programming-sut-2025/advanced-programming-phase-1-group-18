@@ -3,7 +3,7 @@ package io.github.group18.Controller;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.View.ChoosingMapView;
-import io.github.group18.View.GameMenu;
+import io.github.group18.View.GameMenuMenu;
 import io.github.group18.View.StartNewGame;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class StartNewGameController {
                 users = new ArrayList<>();
                 maps = new ArrayList<>();
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new GameMenu(new GameMenuController(),view.getSkin()));
+                Main.getMain().setScreen(new GameMenuMenu(new GameMenuController(),view.getSkin()));
             }
         }
     }

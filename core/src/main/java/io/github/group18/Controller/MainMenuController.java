@@ -3,7 +3,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
-import io.github.group18.View.GameMenu;
+import io.github.group18.View.GameMenuMenu;
 import io.github.group18.View.MainMenu;
 import io.github.group18.View.ProfileMenu;
 import io.github.group18.View.RegisterLoginGdxView;
@@ -51,7 +51,7 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu{
             Main.getMain().setScreen(new ProfileMenu(new ProfileMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
         } else if (mainMenu.getGameMenuButton().isChecked()) {
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameMenu(new GameMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
+            Main.getMain().setScreen(new GameMenuMenu(new GameMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
         } else if (mainMenu.getLogoutButton().isChecked()) {
             logout();
             Main.getMain().getScreen().dispose();

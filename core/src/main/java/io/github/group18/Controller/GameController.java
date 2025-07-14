@@ -1,29 +1,38 @@
 package io.github.group18.Controller;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.group18.Model.App;
-import io.github.group18.Model.DateTime;
-import io.github.group18.View.GameView;
+import io.github.group18.Main;
+import io.github.group18.View.GameMenu;
 
 public class GameController {
-    GameView view;
-    private SpriteBatch batch = new SpriteBatch();
-    private ClockController clockController;
+    private boolean escapePressed = false;
+    private final Main main;
+    private GameMenu gameMenu;
 
-
-    public GameView getView() {
-        return view;
+    public GameController(Main main) {
+        this.main = main;
     }
 
-    public void setView(GameView view) {
-        this.view = view;
-        clockController = new ClockController(App.getCurrentGame().getCurrentDateTime());
+    public void init() {
+        gameMenu = new GameMenu(this);
     }
 
-    public void updateGame(float delta) {
-        if (view != null) {
-            DateTime time = App.getCurrentGame().getCurrentDateTime();
-            clockController.update();
-        }
+    public void run() {
+        main.setScreen(gameMenu);
     }
+
+
+//    public void useItem(ItemDescriptionId selectedItem, Point point, GameModel game) {
+//        TileDescriptionId selectedTile = game.getTile(point);
+//        if (!selectedItem.getAllowedTiles().contains(selectedTile)) {
+//            return;
+//        }
+//
+//        game.getPlayer().useSelectedItem();
+//        selectedItem.getFunction().invoke(game, point);
+//    }
+//
+//    public void advanceToNextDay() {
+//        gameMenu.gameModel.advanceToNextDay();
+//        gameMenu.startSleepTransition();
+//    }
 }
