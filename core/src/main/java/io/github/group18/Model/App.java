@@ -2,6 +2,7 @@ package io.github.group18.Model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.enums.Menu;
 
@@ -15,6 +16,7 @@ public class App {
     protected static User CurrentUser;
     protected static Game CurrentGame;
     protected static GameMenuController GameMenuController;
+    protected static GameController GameController;
     protected static ArrayList<User> Users_List = new ArrayList<>();
     private static final String USER_FILE = "users.json";
 
@@ -88,5 +90,13 @@ public class App {
 
     public static void setGameMenuController(GameMenuController gameMenuController) {
         GameMenuController = gameMenuController;
+    }
+
+    public static GameController getGameController() {
+        return GameController;
+    }
+
+    public static void setGameController(GameController gameController) {
+        GameController = gameController;
     }
 }

@@ -1012,6 +1012,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
                 }
             }
+            App.getGameController().getGameMenu().getLightningEffect().start();
 //                    thor.setKhordeh(kashiList);
         }
 
@@ -1199,7 +1200,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             coal.setType(ForagingMineralsEnums.Coal);
             App.getCurrentGame().getMap().get(x).get(y).setInside(coal);
         }
-
+        App.getGameController().getGameMenu().getLightningEffect().start();
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 

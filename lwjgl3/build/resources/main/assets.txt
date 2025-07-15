@@ -591,6 +591,8 @@ Foraging/Yam.png
 Foraging/Yellow_Juice.png
 Foraging/Yellow_Pickles.png
 Greenhouse/greenhouse.png
+EnergyBar/bar.png
+EnergyBar/green.png
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
 Mineral/Aerinite.png

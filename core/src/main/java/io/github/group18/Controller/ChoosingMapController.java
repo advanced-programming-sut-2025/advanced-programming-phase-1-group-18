@@ -94,6 +94,7 @@ public class ChoosingMapController {
                         }else {
                             App.setGameMenuController(gameMenuController);
                             GameController gameController = new GameController(Main.getMain());
+                            App.setGameController(gameController);
                             gameController.init(App.getCurrentGame());
                             gameController.run();
 //                            mainMenu.hide();
