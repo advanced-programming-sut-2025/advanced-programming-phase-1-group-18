@@ -69,7 +69,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.VoteTerminateGame.getMather(input) != null) {
             System.out.println(controller.voteTerminateGame(scanner));
         } else if (GameMenuCommands.NextTurn.getMather(input) != null) {
-            controller.nextTurn();
+//            controller.nextTurn();
         } else if (GameMenuCommands.Plant.getMather(input) != null) {
             System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"), GameMenuCommands.Plant.getMather(input).group("direction")));
         } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
@@ -87,10 +87,10 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.DAY_OF_WEEK.getMather(input) != null) {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
-            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-                getMather(input).group(1).trim())));
+//            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
+//                getMather(input).group(1).trim())));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
-            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
+//            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
             System.out.println(controller.season());
         } else if (GameMenuCommands.CHEAT_THOR.getMather(input) != null) {

@@ -5,6 +5,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
+import io.github.group18.View.GameMenu;
 import io.github.group18.View.GameMenuMenu;
 import io.github.group18.View.StartNewGame;
 import io.github.group18.enums.*;
@@ -23,15 +24,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
-            if(view.getExitGame().isPressed()){
+            if (view.getExitGame().isPressed()) {
                 exitGame();
             } else if (view.getTerminateGame().isPressed()) {
                 voteTerminateGame(new Scanner(System.in));
-            }else if (view.getLoadGame().isPressed()) {
+            } else if (view.getLoadGame().isPressed()) {
                 loadGame();
-            }else if (view.getStartNewGame().isPressed()) {
+            } else if (view.getStartNewGame().isPressed()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(),view.getSkin(),this));
+                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
 
             }
         }
@@ -366,7 +367,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result gameNew(ArrayList<String>users , ArrayList<Integer>maps) throws NoSuchFieldException, IllegalAccessException {
+    public Result gameNew(ArrayList<String> users, ArrayList<Integer> maps) throws NoSuchFieldException, IllegalAccessException {
 //        String[] parts = command.split("\\s+");
 //        if (parts.length < 3) {
 //            return new Result(false, "Invalid command format");
@@ -612,7 +613,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public static void nextTurn() {
+    public static void nextTurn(GameMenu gameMenu) {
 
         App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
         if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
@@ -621,7 +622,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
 
-                startNewDay();
+                startNewDay(gameMenu, true);
 
             } else {
                 App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
@@ -699,7 +700,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    private static void startNewDay() {
+    public static void startNewDay(GameMenu gameMenu, boolean transaction) {
+        if (transaction) {
+            gameMenu.startSleepTransition();
+            return;
+        }
         //restock markets
         App.getCurrentGame().getBlackSmithMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
@@ -1093,7 +1098,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         };
     }
 
-    public Result cheatAdvanceTime(int hour) {
+    public Result cheatAdvanceTime(int hour, GameMenu gameMenu) {
         if (hour < 0) {
             return new Result(false, "cheatCode: Invalid hour");
         }
@@ -1132,7 +1137,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < hour / 24; i++) {
-            startNewDay();
+            startNewDay(gameMenu,true);
         }
 //        if (hour / 24 >= 1) {
 //            App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
@@ -1140,7 +1145,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "cheatCode: Hour changed! New Hour: " + hourOfDay + " New Day: " + newDay);
     }
 
-    public Result cheatAdvanceDate(int day) {
+    public Result cheatAdvanceDate(int day, GameMenu gameMenu) {
         if (day < 0) {
             return new Result(false, "cheatCode: Invalid day");
         }
@@ -1177,7 +1182,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < day; i++) {
-            startNewDay();
+            startNewDay(gameMenu,true);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
