@@ -5,7 +5,7 @@ import io.github.group18.enums.StoneTypes;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Stone
+public class Stone implements PictureModel
 {
     protected StoneTypes type;
     protected int Price;
@@ -58,5 +58,10 @@ public class Stone
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getStones().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
 
+    }
+
+    @Override
+    public String getPath() {
+        return "Mineral/" + type.toString().replace(" ", "") + ".png";
     }
 }

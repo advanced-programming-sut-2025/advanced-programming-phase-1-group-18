@@ -1,5 +1,7 @@
 package io.github.group18.Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import io.github.group18.enums.Seasons;
 import io.github.group18.enums.WeatherEnum;
 import io.github.group18.Model.Items.Gift;
@@ -82,42 +84,22 @@ public class Game {
     // Sebastian
     protected static int NPCSEBASTIANTopLeftX = 480;
     protected static int NPCSEBASTIANTopLeftY = 100;
-//    protected int NPCSEBASTIANWidth = 1;
-//    protected int NPCSEBASTIANHeight = 1;
-//    protected int NPCSEBASTIANEntranceX;
-//    protected int NPCSEBASTIANEntranceY;
 
     // Abigail
     protected static int NPCABIGAILTopLeftX = 500;
     protected static int NPCABIGAILTopLeftY = 100;
-//    protected int NPCABIGAILWidth;
-//    protected int NPCABIGAILHeight;
-//    protected int NPCABIGAILEntranceX;
-//    protected int NPCABIGAILEntranceY;
 
     // Harvey
     protected static int NPCHARVEYTopLeftX = 520;
     protected static int NPCHARVEYTopLeftY = 100;
-//    protected int NPCHARVEYWidth;
-//    protected int NPCHARVEYHeight;
-//    protected int NPCHARVEYEntranceX;
-//    protected int NPCHARVEYEntranceY;
 
     // Leah
     protected static int NPCLEAHTopLeftX = 480;
     protected static int NPCLEAHTopLeftY = 460;
-//    protected int NPCLEAHWidth;
-//    protected int NPCLEAHHeight;
-//    protected int NPCLEAHEntranceX;
-//    protected int NPCLEAHEntranceY;
 
     // Robin
     protected static int NPCROBINTopLeftX = 520;
     protected static int NPCROBINTopLeftY = 460;
-//    protected int NPCROBINWidth;
-//    protected int NPCROBINHeight;
-//    protected int NPCROBINEntranceX;
-//    protected int NPCROBINEntranceY;
 
     protected static int NPCSEBASTIANx = 480;
     protected static int NPCSEBASTIANy = 100;
@@ -155,6 +137,14 @@ public class Game {
     protected NPC NPCLEAH;
     protected NPC NPCROBIN;
 
+
+    private OrthographicCamera camera;
+    public static final int mapWidth = 1000;
+    public static final int mapHeight = 560;
+    public static final int TILE_SIZE = 160;
+    private float cameraLerpSpeed = 8f;
+    private int lookAheadTiles = 4;
+    private boolean cameraInitialized = false;
 
     public Game() {
 
@@ -1014,5 +1004,74 @@ public class Game {
 
     public void setTrades(ArrayList<Trade> trades) {
         this.trades = trades;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public float getCameraLerpSpeed() {
+        return cameraLerpSpeed;
+    }
+
+    public void setCameraLerpSpeed(float cameraLerpSpeed) {
+        this.cameraLerpSpeed = cameraLerpSpeed;
+    }
+
+    public int getLookAheadTiles() {
+        return lookAheadTiles;
+    }
+
+    public void setLookAheadTiles(int lookAheadTiles) {
+        this.lookAheadTiles = lookAheadTiles;
+    }
+
+    public boolean isCameraInitialized() {
+        return cameraInitialized;
+    }
+
+    public void setCameraInitialized(boolean cameraInitialized) {
+        this.cameraInitialized = cameraInitialized;
+    }
+
+    public Player getCurrentPlayer() {
+        try {
+            if (App.getCurrentGame() != null) {
+                return App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    public void update(float deltaTime) {
+        if (!cameraInitialized) {
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            camera.update();
+            cameraInitialized = true;
+        }
+
+        // Simple camera follow - no lerping, no prediction
+        if (getCurrentPlayer() != null) {
+            float playerX = (float)getCurrentPlayer().getX() * TILE_SIZE;
+            float playerY = (float)getCurrentPlayer().getY() * TILE_SIZE;
+
+            // Directly set camera position to player position
+            camera.position.set(playerX, playerY, 0);
+
+            // Clamp to map boundaries
+            float halfWidth = camera.viewportWidth / 2;
+            float halfHeight = camera.viewportHeight / 2;
+            camera.position.x = Math.max(halfWidth, Math.min(playerX, mapWidth * TILE_SIZE - halfWidth));
+            camera.position.y = Math.max(halfHeight, Math.min(playerY, mapHeight * TILE_SIZE - halfHeight));
+
+            camera.update();
+        }
     }
 }

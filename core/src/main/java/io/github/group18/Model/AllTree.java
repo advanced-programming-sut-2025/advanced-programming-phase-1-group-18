@@ -6,7 +6,7 @@ import io.github.group18.enums.TreeSeedEnums;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllTree extends Tree {
+public class AllTree extends Tree implements PictureModel{
     AllTreesEnums type;
     TreeSeedEnums source;
     private int daysGrowCounter;
@@ -280,4 +280,8 @@ public class AllTree extends Tree {
         }
     }
 
+    @Override
+    public String getPath() {
+        return "Trees/" + type.toString().replace(" ", "") + ".png";
+    }
 }

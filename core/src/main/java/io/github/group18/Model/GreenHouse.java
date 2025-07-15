@@ -2,7 +2,7 @@ package io.github.group18.Model;
 
 import java.util.ArrayList;
 
-public class GreenHouse {
+public class GreenHouse implements PictureModel{
     protected boolean Status = false;
     protected ArrayList<Matarsak> Matarsaks = new ArrayList<>();
     protected ArrayList<Kashi> insideKashis;
@@ -55,5 +55,10 @@ public class GreenHouse {
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
+    }
+
+    @Override
+    public String getPath() {
+        return "GreenHouse/greenhouse.png";
     }
 }

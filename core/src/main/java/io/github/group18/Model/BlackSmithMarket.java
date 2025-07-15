@@ -5,7 +5,7 @@ import io.github.group18.enums.ForagingMineralsEnums;
 
 import java.util.HashMap;
 
-public class BlackSmithMarket implements adaptMapMarket {
+public class BlackSmithMarket implements adaptMapMarket , PictureModel{
     HashMap<Mineral, Integer> Stock = new HashMap<>();
 
     public HashMap<Mineral, Integer> getStock() {
@@ -56,6 +56,11 @@ public class BlackSmithMarket implements adaptMapMarket {
         mineral4.setType(ForagingMineralsEnums.GoldOre);
         mineral4.setPrice(400);
         Stock.put(mineral4, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }
 

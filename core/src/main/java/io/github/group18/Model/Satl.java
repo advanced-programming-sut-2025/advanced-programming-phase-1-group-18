@@ -5,7 +5,7 @@ import io.github.group18.Model.Items.Item;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Satl
+public class Satl implements PictureModel
 {
     protected HashMap<Item, Integer> Items;
 
@@ -75,5 +75,10 @@ public class Satl
 
     public void setItems(HashMap<Item, Integer> items) {
         Items = items;
+    }
+
+    @Override
+    public String getPath() {
+        return "Chest.png";
     }
 }

@@ -5,7 +5,7 @@ import io.github.group18.enums.StoneTypes;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Quarry {
+public class Quarry implements PictureModel{
     protected ArrayList<Kashi> insideKashis;
     protected Stone stone;
 
@@ -63,5 +63,10 @@ public class Quarry {
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setQuarrys(new ArrayList<>());
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getQuarrys().add(this);
+    }
+
+    @Override
+    public String getPath() {
+        return "Stone.png";
     }
 }

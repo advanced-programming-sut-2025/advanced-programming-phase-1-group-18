@@ -24,15 +24,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
-            if (view.getExitGame().isPressed()) {
+            if(view.getExitGame().isPressed()){
                 exitGame();
             } else if (view.getTerminateGame().isPressed()) {
                 voteTerminateGame(new Scanner(System.in));
-            } else if (view.getLoadGame().isPressed()) {
+            }else if (view.getLoadGame().isPressed()) {
                 loadGame();
-            } else if (view.getStartNewGame().isPressed()) {
+            }else if (view.getStartNewGame().isPressed()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
+                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(),view.getSkin(),this));
 
             }
         }
@@ -347,9 +347,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public void setMapp(Game game) {
         ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
-        int columns = 560; // Define the number of columns
+        int columns = Game.mapHeight; // Define the number of columns
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < Game.mapWidth; i++) {
             ArrayList<Kashi> row = new ArrayList<>();
             for (int j = 0; j < columns; j++) {
                 row.add(new Kashi()); // Initialize each cell with an instance of Kashi
@@ -358,7 +358,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         game.setMap(Map);
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < Game.mapWidth; i++) {
             for (int j = 0; j < columns; j++) {
                 Map.get(i).get(j).setWalkable(true);
                 Map.get(i).get(j).setEnterance(false);
@@ -367,14 +367,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result gameNew(ArrayList<String> users, ArrayList<Integer> maps) throws NoSuchFieldException, IllegalAccessException {
-//        String[] parts = command.split("\\s+");
-//        if (parts.length < 3) {
-//            return new Result(false, "Invalid command format");
-//        }
-//        String[] usernames = Arrays.copyOfRange(parts, 3, parts.length);
-//        if (command.split("\\s+").length - 3 >= 0)
-//            System.arraycopy(command.split("\\s+"), 3, usernames, 0, command.split("\\s+").length - 3);
+    public Result gameNew(ArrayList<String>users , ArrayList<Integer>maps) throws NoSuchFieldException, IllegalAccessException {
+
         String[] usernames = users.toArray(new String[0]);
 
         if (usernames.length > 3) {
@@ -555,7 +549,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            App.setCurrentGame(null);
+//            App.setCurrentGame(null);
             App.setCurrentMenu(Menu.GameMenu);
             System.exit(0);
             return new Result(true, "Game Exited");
@@ -594,7 +588,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            App.setCurrentGame(null);
+//            App.setCurrentGame(null);
             App.setCurrentMenu(Menu.GameMenu);
             System.exit(0);
             return new Result(true, "Game Exited");
@@ -705,7 +699,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             gameMenu.startSleepTransition();
             return;
         }
-        //restock markets
         App.getCurrentGame().getBlackSmithMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
@@ -1285,8 +1278,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
-                        player.getX(),
-                        player.getY(),
+                        (int) player.getX(),
+                        (int) player.getY(),
                         x, y);
 
                     if (result != null) {
@@ -1309,7 +1302,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
-                                    int[] current = new int[]{player.getX(), player.getY()};
+                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
                                     String direction = AStarPathfinder.getDirection(current, step);
                                     if (lastDirection != null && !lastDirection.equals(direction)) {
                                         turnsMade++;
@@ -1359,8 +1352,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
-                        player.getX(),
-                        player.getY(),
+                        (int) player.getX(),
+                        (int) player.getY(),
                         x, y);
 
                     if (result != null) {
@@ -1383,7 +1376,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
-                                    int[] current = new int[]{player.getX(), player.getY()};
+                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
                                     String direction = AStarPathfinder.getDirection(current, step);
                                     if (lastDirection != null && !lastDirection.equals(direction)) {
                                         turnsMade++;
@@ -1434,8 +1427,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
-                        player.getX(),
-                        player.getY(),
+                        (int) player.getX(),
+                        (int) player.getY(),
                         x, y);
 
                     if (result != null) {
@@ -1458,7 +1451,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
-                                    int[] current = new int[]{player.getX(), player.getY()};
+                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
                                     String direction = AStarPathfinder.getDirection(current, step);
                                     if (lastDirection != null && !lastDirection.equals(direction)) {
                                         turnsMade++;
@@ -1563,8 +1556,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
-                        player.getX(),
-                        player.getY(),
+                        (int) player.getX(),
+                        (int) player.getY(),
                         x, y);
 
                     if (result != null) {
@@ -1587,7 +1580,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
-                                    int[] current = new int[]{player.getX(), player.getY()};
+                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
                                     String direction = AStarPathfinder.getDirection(current, step);
                                     if (lastDirection != null && !lastDirection.equals(direction)) {
                                         turnsMade++;
@@ -2260,7 +2253,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
         Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        if (App.getCurrentGame().getMap().get(currentplayer.getX() + dir_x).get(currentplayer.getY() + dir_y).isShokhmZadeh() == false) {
+        if (!App.getCurrentGame().getMap().get((int) currentplayer.getX() + dir_x).get((int) currentplayer.getY() + dir_y).isShokhmZadeh()) {
             return new Result(false, "You have to shokhm it first");
         }
         if (source.equalsIgnoreCase("mixedseeds") || source.equalsIgnoreCase("mixedseed")) {
@@ -2316,8 +2309,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 Player currentPlayer = App.getCurrentGame().getPlayers()
                     .get(App.getCurrentGame().getIndexPlayerinControl());
                 Kashi kashi = App.getCurrentGame().getMap()
-                    .get(currentPlayer.getX() + dir_x)
-                    .get(currentPlayer.getY() + dir_y);
+                    .get((int) currentPlayer.getX() + dir_x)
+                    .get((int) currentPlayer.getY() + dir_y);
                 kashi.setInside(allCrop);
 
                 currentPlayer.getMyFarm().getAllCrops().add(allCrop);
@@ -2356,7 +2349,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
                         Player currentPlayer = App.getCurrentGame().getPlayers()
                             .get(App.getCurrentGame().getIndexPlayerinControl());
-                        Kashi kashi1 = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
+                        Kashi kashi1 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
                         kashi1.setInside(allCrop1);
 
                         currentPlayer.getMyFarm().getAllCrops().add(allCrop1);
@@ -2395,7 +2388,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
                             Player currentPlayer = App.getCurrentGame().getPlayers()
                                 .get(App.getCurrentGame().getIndexPlayerinControl());
-                            Kashi kashi2 = App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y);
+                            Kashi kashi2 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
                             kashi2.setInside(allTree);
 
                             currentPlayer.getMyFarm().getAllTrees().add(allTree);
@@ -2577,12 +2570,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                     if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("deluxeretainingsoil")) {
                         found = true;
-                        if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-                            if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
+                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
+                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
                             } else {
-                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
                             }
                             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
@@ -2597,12 +2590,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                     if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("basicretainingsoil")) {
                         found = true;
-                        if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-                            if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
+                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
+                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
                             } else {
-                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
                             }
                             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
@@ -2617,12 +2610,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                     if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("qualityretainingsoil")) {
                         found = true;
-                        if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-                            if (App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
+                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
+                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
                             } else {
-                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get(currentPlayer.getX() + dir_x).get(currentPlayer.getY() + dir_y).getInside();
+                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
                                 allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
                             }
                             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
@@ -2828,7 +2821,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         name = name.replaceAll(" ", "").toLowerCase();
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord(player.getX(), player.getY());
+        Cord tileCord = new Cord((int) player.getX(), (int) player.getY());
         int dir_x = -1;
         int dir_y = -1;
         switch (direction.toLowerCase()) {
@@ -3244,8 +3237,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (animal.getXofAnimal() == -1 && animal.getYofAnimal() == -1) {
             return new Result(false, "it is inside!");
         } else {
-            int x = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX();
-            int y = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY();
+            int x = (int) App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX();
+            int y = (int) App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY();
             int xOfAnimal = animal.getXofAnimal();
             int yOfAnimal = animal.getYofAnimal();
             boolean isOkay = AreYouNearForNavazesh(x, y, xOfAnimal, yOfAnimal);
@@ -3583,14 +3576,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
         try {
-            if ((App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY()).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY()).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() - 1).getInside() instanceof Satl)) {
+            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
 
             } else {
                 return new Result(false, "Please stand near a Satl");
@@ -3659,8 +3652,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
         Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
-        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
 
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to talk");
@@ -3726,8 +3719,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
         Player targetPlayer = App.getCurrentGame().getPlayerByUsername(userName);
-        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to talk");
         }
@@ -3882,8 +3875,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
         Player targetPlayer = App.getCurrentGame().getPlayerByUsername(userName);
-        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to hug");
         }
@@ -3911,8 +3904,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
         Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
-        int dx = Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy = Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
 
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to talk");
@@ -3961,8 +3954,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (destinationPlayer == null) {
             return new Result(false, "Player not found");
         }
-        int dx = Math.abs(currentPlayer.getX() - destinationPlayer.getX());
-        int dy = Math.abs(currentPlayer.getY() - destinationPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - destinationPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - destinationPlayer.getY());
 
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "Be more near than her/him");
@@ -4073,29 +4066,29 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     private boolean validNPCPlace(NPCEnums npcEnums) {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
-        return (App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() + 1).getInside() instanceof NPC &&
-            ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
+        return (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof NPC &&
+            ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() - 1).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX()).get(currentPlayer.getY() - 1).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY()).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY()).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY()).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY()).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() + 1).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() - 1).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() + 1).get(currentPlayer.getY() - 1).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() + 1).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
 
-            (App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() - 1).getInside() instanceof NPC &&
-                ((NPC) App.getCurrentGame().getMap().get(currentPlayer.getX() - 1).get(currentPlayer.getY() - 1).getInside()).getName() == npcEnums);
+            (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof NPC &&
+                ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside()).getName() == npcEnums);
 
 
     }

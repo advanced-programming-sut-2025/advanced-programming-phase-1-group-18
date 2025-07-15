@@ -1,7 +1,7 @@
 package io.github.group18.Model;
 import java.util.ArrayList;
 
-public class Cottage
+public class Cottage implements PictureModel
 {
     protected ArrayList<Kashi> insideKashis;
     protected Refrigerator myRefrigerator;
@@ -43,5 +43,10 @@ public class Cottage
 
     public void setMyRefrigerator(Refrigerator myRefrigerator) {
         this.myRefrigerator = myRefrigerator;
+    }
+
+    @Override
+    public String getPath() {
+        return "Cottage.jpg";
     }
 }

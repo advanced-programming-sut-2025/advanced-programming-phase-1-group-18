@@ -46,11 +46,9 @@ public class GameMenu implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        gameModel.update(delta);
+        gameModel.update(delta);
         gameView.render();
         gameMenuInputAdapter.update(delta);
-
-        handleNightBrightness();
 
         handleNightSleepFade(delta);
 
@@ -76,36 +74,8 @@ public class GameMenu implements Screen {
                 }
             }
 
-            // Render black overlay
             gameView.getBatch().begin();
             gameView.getBatch().setColor(0f, 0f, 0f, sleepAlpha);
-            gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            gameView.getBatch().setColor(1f, 1f, 1f, 1f);
-            gameView.getBatch().end();
-        }
-    }
-
-    private void handleNightBrightness() {
-        int currentHour = gameModel.getCurrentDateTime().getHour();
-        float brightness = 1f;
-
-        if (currentHour >= 18 || currentHour <= 6) {
-            float nightFactor;
-            if (currentHour >= 18 && currentHour < 24) {
-                nightFactor = (currentHour - 18) / 6f;
-            } else {
-                nightFactor = (6 - currentHour) / 6f;
-            }
-
-            brightness = 1f - (nightFactor * 0.5f);
-        }
-
-
-        if (brightness < 1f) {
-            float overlayAlpha = 1f - brightness;
-
-            gameView.getBatch().begin();
-            gameView.getBatch().setColor(0f, 0f, 0f, overlayAlpha);
             gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             gameView.getBatch().setColor(1f, 1f, 1f, 1f);
             gameView.getBatch().end();
