@@ -11,7 +11,7 @@ public class MilkPail extends Tool implements Name, Price {
 
     public String  use(String direction) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord(player.getX(), player.getY());
+        Cord tileCord = new Cord((int)player.getX(), (int)player.getY());
         int dir_x = -1;
         int dir_y = -1;
         switch (direction.toLowerCase()) {

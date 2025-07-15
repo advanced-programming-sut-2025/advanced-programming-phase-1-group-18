@@ -1,12 +1,15 @@
 package io.github.group18.View;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.DateTime;
@@ -36,8 +39,8 @@ public class GameView {
     }
 
     private void loadTextures() {
-//        textures = new HashMap<>();
-//
+        textures = new HashMap<>();
+
 //        for (TileDescriptionId id : TileDescriptionId.values()) {
 //            String path = id.getIconPath();
 //            textures.put(id.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
@@ -50,24 +53,24 @@ public class GameView {
 //            String path = cs.getIconPath();
 //            textures.put(cs.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
 //        }
-//
-//        playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
-//
-//        for (int i = 14; i > 9; i--) {
-//            Array<TextureRegion> walkFrames = new Array<>();
-//            if (i == 14) {
-//                for (int j = 0; j < 4; j++) {
-//                    String region = "player_" + 13 + "_" + 0;
-//                    walkFrames.add(playerAtlas.findRegion(region));
-//                }
-//            } else {
-//                for (int j = 0; j < 4; j++) {
-//                    String region = "player_" + i + "_" + j;
-//                    walkFrames.add(playerAtlas.findRegion(region));
-//                }
-//            }
-//            playerAnimations.add(new Animation<>(0.15f, walkFrames, Animation.PlayMode.LOOP));
-//        }
+
+        playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
+
+        for (int i = 14; i > 9; i--) {
+            Array<TextureRegion> walkFrames = new Array<>();
+            if (i == 14) {
+                for (int j = 0; j < 4; j++) {
+                    String region = "player_" + 13 + "_" + 0;
+                    walkFrames.add(playerAtlas.findRegion(region));
+                }
+            } else {
+                for (int j = 0; j < 4; j++) {
+                    String region = "player_" + i + "_" + j;
+                    walkFrames.add(playerAtlas.findRegion(region));
+                }
+            }
+            playerAnimations.add(new Animation<>(0.15f, walkFrames, Animation.PlayMode.LOOP));
+        }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 1);
@@ -78,11 +81,11 @@ public class GameView {
 
 
     public void render() {
-//        batch.setProjectionMatrix(game.getCamera().combined);
+        batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
         renderClock();
 //        renderTiles();
-//        renderPlayer();
+        renderPlayer();
         batch.end();
     }
 
@@ -168,20 +171,21 @@ public class GameView {
 //        batch.setColor(1f, 1f, 1f, 1f);
 //    }
 //
-//    private void renderPlayer() {
-//        Pair<Float,Float> pos = game.getPlayer().getPosition();
-//
-//        moveDirection = game.getPlayer().getMovingDirection();
-//
-//        stateTime += Gdx.graphics.getDeltaTime();
-//
-//        Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
-//        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-//
-//        batch.draw(currentFrame, pos.first * StardewMini.TILE_SIZE, pos.second * StardewMini.TILE_SIZE, StardewMini.TILE_SIZE, StardewMini.TILE_SIZE * 2);
+    private void renderPlayer() {
+        int first = (int) game.getCurrentPlayer().getX();
+        int second = (int) game.getCurrentPlayer().getY();
+
+        moveDirection = game.getCurrentPlayer().getMovingDirection();
+
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
+        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+
+        batch.draw(currentFrame, first * game.TILE_SIZE, second * game.TILE_SIZE, game.TILE_SIZE, game.TILE_SIZE * 2);
 //        renderInventory();
-//    }
-//
+    }
+
 //    private void renderInventory() {
 //        Player player = game.getPlayer();
 //        Map<ItemDescriptionId, Pair<Integer, Integer>> inventory = player.getInventory();

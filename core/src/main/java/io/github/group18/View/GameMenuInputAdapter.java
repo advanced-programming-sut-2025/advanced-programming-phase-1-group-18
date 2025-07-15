@@ -14,6 +14,7 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
 import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.Player;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
@@ -80,39 +81,39 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     public void update(float delta) {
-//        Player player = game.getPlayer();
-//        float vx = 0, vy = 0;
-//        int dir = 0;
-//
-//        if (keysHeld.contains(Input.Keys.W)) {
-//            vy += 1;
-//            dir = 3;
-//        }
-//        if (keysHeld.contains(Input.Keys.S)) {
-//            vy -= 1;
-//            dir = 1;
-//        }
-//        if (keysHeld.contains(Input.Keys.A)) {
-//            vx -= 1;
-//            dir = 4;
-//        }
-//        if (keysHeld.contains(Input.Keys.D)) {
-//            vx += 1;
-//            dir = 2;
-//        }
-//
-//        float length = (float) Math.sqrt(vx * vx + vy * vy);
-//        if (length > 0) {
-//            vx /= length;
-//            vy /= length;
-//            player.setMovingDirection(dir);
-//        } else {
-//            player.setMovingDirection(0);
-//        }
-//
-//        float speed = player.getSpeed();
-//        player.setVelocity(vx * speed, vy * speed);
-//        player.update(delta, game.getTiles());
+        Player player = game.getCurrentPlayer();
+        float vx = 0, vy = 0;
+        int dir = 0;
+
+        if (keysHeld.contains(Input.Keys.W)) {
+            vy += 1;
+            dir = 3;
+        }
+        if (keysHeld.contains(Input.Keys.S)) {
+            vy -= 1;
+            dir = 1;
+        }
+        if (keysHeld.contains(Input.Keys.A)) {
+            vx -= 1;
+            dir = 4;
+        }
+        if (keysHeld.contains(Input.Keys.D)) {
+            vx += 1;
+            dir = 2;
+        }
+
+        float length = (float) Math.sqrt(vx * vx + vy * vy);
+        if (length > 0) {
+            vx /= length;
+            vy /= length;
+            player.setMovingDirection(dir);
+        } else {
+            player.setMovingDirection(0);
+        }
+
+        float speed = player.getSpeed();
+        player.setVelocity(vx * speed, vy * speed);
+        player.update(delta, game.getMap());
     }
 
 //    private void performAction(int screenX, int screenY) {
