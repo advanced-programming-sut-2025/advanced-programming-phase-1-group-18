@@ -18,7 +18,7 @@ public class FishingPole extends Item implements Name, Price {
 
     public String use() {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord(player.getX(), player.getY());
+        Cord tileCord = new Cord((int) player.getX(), (int) player.getY());
         boolean isFound = false;
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {

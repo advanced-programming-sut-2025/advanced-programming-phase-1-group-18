@@ -80,6 +80,7 @@ public class App {
 
     public static void setCurrentGame(Game currentGame) {
         CurrentGame = currentGame;
+        System.exit(0);
     }
 
     public static GameMenuController getGameMenuController() {

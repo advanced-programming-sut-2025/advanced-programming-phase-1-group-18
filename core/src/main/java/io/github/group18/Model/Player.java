@@ -14,8 +14,8 @@ public class Player extends User {
     protected int maxEnergy = 200;
     protected int maxEnergyforMarriage = 200;
 
-    protected int x;
-    protected int y;
+    protected double x;
+    protected double y;
     protected Farm myFarm;
     protected boolean UnlimitedEnergy;
     protected Skill FarmingSkill;
@@ -35,6 +35,10 @@ public class Player extends User {
     protected Tool inMyHandTool = null;
     //
     protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
+
+    private int movingDirection = 0;
+    private float speed = 2f;
+    private float vx = 0, vy = 0;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -119,7 +123,7 @@ public class Player extends User {
         Energy = energy;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -127,7 +131,7 @@ public class Player extends User {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -279,5 +283,60 @@ public class Player extends User {
 
     public void setPartner(Player partner) {
         this.partner = partner;
+    }
+
+    public int getMovingDirection() {
+        return movingDirection;
+    }
+
+    public void setMovingDirection(int movingDirection) {
+        this.movingDirection = movingDirection;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public float getVx() {
+        return vx;
+    }
+
+    public void setVx(float vx) {
+        this.vx = vx;
+    }
+
+    public float getVy() {
+        return vy;
+    }
+
+    public void setVy(float vy) {
+        this.vy = vy;
+    }
+
+    public void setVelocity(float vx, float vy) {
+        this.vx = vx;
+        this.vy = vy;
+    }
+
+    public void update(float delta, ArrayList<ArrayList<Kashi>> tiles) {
+        tryMove(vx * delta, vy * delta, tiles);
+    }
+
+    public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles) {
+        int newX = (int) (x + dx);
+        int newY = (int) (y + dy);
+
+        if (newX < 0 || newX >= tiles.size() || newY < 0 || newY >= tiles.get(0).size()) return false;
+
+        if (!(tiles.get(newX).get(newY).getInside() instanceof Lake)) {
+            x += dx;
+            y += dy;
+            return true;
+        }
+        return false;
     }
 }

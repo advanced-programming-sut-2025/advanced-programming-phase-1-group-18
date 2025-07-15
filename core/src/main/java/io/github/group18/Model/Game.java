@@ -1,5 +1,7 @@
 package io.github.group18.Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import io.github.group18.enums.Seasons;
 import io.github.group18.enums.WeatherEnum;
 import io.github.group18.Model.Items.Gift;
@@ -82,42 +84,22 @@ public class Game {
     // Sebastian
     protected static int NPCSEBASTIANTopLeftX = 480;
     protected static int NPCSEBASTIANTopLeftY = 100;
-//    protected int NPCSEBASTIANWidth = 1;
-//    protected int NPCSEBASTIANHeight = 1;
-//    protected int NPCSEBASTIANEntranceX;
-//    protected int NPCSEBASTIANEntranceY;
 
     // Abigail
     protected static int NPCABIGAILTopLeftX = 500;
     protected static int NPCABIGAILTopLeftY = 100;
-//    protected int NPCABIGAILWidth;
-//    protected int NPCABIGAILHeight;
-//    protected int NPCABIGAILEntranceX;
-//    protected int NPCABIGAILEntranceY;
 
     // Harvey
     protected static int NPCHARVEYTopLeftX = 520;
     protected static int NPCHARVEYTopLeftY = 100;
-//    protected int NPCHARVEYWidth;
-//    protected int NPCHARVEYHeight;
-//    protected int NPCHARVEYEntranceX;
-//    protected int NPCHARVEYEntranceY;
 
     // Leah
     protected static int NPCLEAHTopLeftX = 480;
     protected static int NPCLEAHTopLeftY = 460;
-//    protected int NPCLEAHWidth;
-//    protected int NPCLEAHHeight;
-//    protected int NPCLEAHEntranceX;
-//    protected int NPCLEAHEntranceY;
 
     // Robin
     protected static int NPCROBINTopLeftX = 520;
     protected static int NPCROBINTopLeftY = 460;
-//    protected int NPCROBINWidth;
-//    protected int NPCROBINHeight;
-//    protected int NPCROBINEntranceX;
-//    protected int NPCROBINEntranceY;
 
     protected static int NPCSEBASTIANx = 480;
     protected static int NPCSEBASTIANy = 100;
@@ -154,6 +136,13 @@ public class Game {
     protected NPC NPCHARVEY;
     protected NPC NPCLEAH;
     protected NPC NPCROBIN;
+
+
+    private OrthographicCamera camera;
+    public static final int mapWidth = 1000;
+    public static final int mapHeight = 560;
+    public static final int TILE_SIZE = 160;
+    boolean onetime = true;
 
 
     public Game() {
@@ -1014,5 +1003,67 @@ public class Game {
 
     public void setTrades(ArrayList<Trade> trades) {
         this.trades = trades;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public Player getCurrentPlayer() {
+        try {
+            if (App.getCurrentGame() != null && App.getCurrentGame().getCurrentPlayer() != null) {
+                return App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    public void update(float deltaTime) {
+        if(onetime)
+        {
+            onetime = false;
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            camera.position.set((float) getCurrentPlayer().getX(), (float) getCurrentPlayer().getY(), 0);
+        }
+        if (App.getCurrentGame() != null && App.getCurrentGame().getCurrentPlayer() != null) {
+            float playerX = (float) (getCurrentPlayer().getX() * TILE_SIZE);
+            float playerY = (float) (getCurrentPlayer().getY() * TILE_SIZE);
+
+            float camX = camera.position.x;
+            float camY = camera.position.y;
+
+            float viewHalfWidth = camera.viewportWidth / 2;
+            float viewHalfHeight = camera.viewportHeight / 2;
+
+            float borderx = TILE_SIZE * 2;
+            float bordery = TILE_SIZE * 2;
+
+            // Horizontal movement
+            if (playerX < camX - viewHalfWidth + borderx) {
+                camX = playerX + viewHalfWidth - borderx;
+            } else if (playerX > camX + viewHalfWidth - borderx) {
+                camX = playerX - viewHalfWidth + borderx;
+            }
+
+            // Vertical movement
+            if (playerY < camY - viewHalfHeight + bordery) {
+                camY = playerY + viewHalfHeight - bordery;
+            } else if (playerY > camY + viewHalfHeight - bordery) {
+                camY = playerY - viewHalfHeight + bordery;
+            }
+
+            camX = Math.max(viewHalfWidth, Math.min(camX, mapWidth * TILE_SIZE - viewHalfWidth));
+            camY = Math.max(viewHalfHeight, Math.min(camY, mapHeight * TILE_SIZE - viewHalfHeight));
+
+            camera.position.set(camX, camY, 0);
+            camera.update();
+        }
     }
 }
