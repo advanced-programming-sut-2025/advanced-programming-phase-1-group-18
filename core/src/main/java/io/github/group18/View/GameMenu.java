@@ -72,9 +72,9 @@ public class GameMenu implements Screen {
             gameView.getBatch().setColor(1f, 1f, 1f, 1f);
             gameView.getBatch().end();
 
-            cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            cheatCodeStage.draw();
         }
+        cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        cheatCodeStage.draw();
     }
 
     public void startSleepTransition() {
