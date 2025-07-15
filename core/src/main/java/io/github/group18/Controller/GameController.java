@@ -20,7 +20,9 @@ public class GameController {
         main.setScreen(gameMenu);
     }
 
-
+    public GameMenu getGameMenu() {
+        return gameMenu;
+    }
 //    public void useItem(ItemDescriptionId selectedItem, Point point, GameModel game) {
 //        TileDescriptionId selectedTile = game.getTile(point);
 //        if (!selectedItem.getAllowedTiles().contains(selectedTile)) {

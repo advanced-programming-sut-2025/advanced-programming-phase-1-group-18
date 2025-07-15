@@ -1,14 +1,19 @@
 package io.github.group18.View;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Main;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.GameAssetManager;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
@@ -39,7 +44,14 @@ public class GameMenuInputAdapter extends InputAdapter {
             GameMenuController.nextTurn();
             return true;
         }
+        if (keycode == Input.Keys.C) {
 
+            Stage stage = gameController.getGameMenu().getCheatCodeStage();
+            Gdx.input.setInputProcessor(stage);
+            CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+                GameAssetManager.getGameAssetManager().getSkin());
+            cheatDialog.show(stage);
+        }
         return true;
     }
 
