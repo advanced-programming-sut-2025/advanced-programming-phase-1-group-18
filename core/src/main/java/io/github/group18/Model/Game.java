@@ -1015,7 +1015,7 @@ public class Game {
 
     public Player getCurrentPlayer() {
         try {
-            if (App.getCurrentGame() != null && App.getCurrentGame().getCurrentPlayer() != null) {
+            if (App.getCurrentGame() != null) {
                 return App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
             }
         } catch (Exception e) {

@@ -34,7 +34,7 @@ public class GameView {
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
-        clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
+        clock = new ClockController();
         loadTextures();
     }
 
@@ -86,20 +86,57 @@ public class GameView {
         renderClock();
 //        renderTiles();
         renderPlayer();
+        renderBrightness();
         batch.end();
+    }
+
+    private void renderBrightness() {
+        int currentHour = game.getCurrentDateTime().getHour();
+        float brightness = 1f;
+
+        if (currentHour >= 18 || currentHour <= 6) {
+            float nightFactor;
+            if (currentHour >= 18 && currentHour < 24) {
+                nightFactor = (currentHour - 18) / 6f;
+            } else {
+                nightFactor = (6 - currentHour) / 6f;
+            }
+            brightness = 1f - (nightFactor * 0.5f);
+        }
+
+        if (brightness < 1f) {
+            float overlayAlpha = 1f - brightness;
+
+            // Get camera dimensions
+            float camX = game.getCamera().position.x;
+            float camY = game.getCamera().position.y;
+            float viewportWidth = game.getCamera().viewportWidth;
+            float viewportHeight = game.getCamera().viewportHeight;
+
+            // Calculate world-space rectangle that covers the entire viewport
+            float left = camX - viewportWidth / 2;
+            float bottom = camY - viewportHeight / 2;
+
+            batch.setColor(0f, 0f, 0f, overlayAlpha);
+            batch.draw(pixel,
+                left, bottom,           // Bottom-left corner
+                viewportWidth,          // Width
+                viewportHeight);        // Height
+            batch.setColor(1f, 1f, 1f, 1f);
+        }
     }
 
     private void renderClock() {
         if (App.getCurrentGame() != null) {
             DateTime time = App.getCurrentGame().getCurrentDateTime();
             if (time != null) {
-                clock.render(batch, time);
+                clock.render(batch, time, game.getCamera());
             }
         }
     }
 
 
-//    private void renderTiles() {
+    //    private void renderTiles() {
 //        TileDescriptionId[][] tiles = game.getTiles();
 //
 //        float camX = game.getCamera().position.x;
@@ -172,8 +209,8 @@ public class GameView {
 //    }
 //
     private void renderPlayer() {
-        int first = (int) game.getCurrentPlayer().getX();
-        int second = (int) game.getCurrentPlayer().getY();
+        double first = game.getCurrentPlayer().getX();
+        double second = game.getCurrentPlayer().getY();
 
         moveDirection = game.getCurrentPlayer().getMovingDirection();
 
@@ -182,7 +219,7 @@ public class GameView {
         Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
         TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
 
-        batch.draw(currentFrame, first * game.TILE_SIZE, second * game.TILE_SIZE, game.TILE_SIZE, game.TILE_SIZE * 2);
+        batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
 //        renderInventory();
     }
 
