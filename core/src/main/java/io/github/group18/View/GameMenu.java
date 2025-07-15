@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.group18.Controller.GameController;
+import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Model.App;
 import io.github.group18.Model.Game;
 
 public class GameMenu implements Screen {
@@ -21,14 +23,14 @@ public class GameMenu implements Screen {
     private Stage cheatCodeStage;
 
 
-    public GameMenu(GameController gameController) {
+    public GameMenu(GameController gameController,Game gameModel) {
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
-        initializeGame();
+        initializeGame(gameModel);
     }
 
-    private void initializeGame() {
-        gameModel = new Game();
+    private void initializeGame(Game gameModel) {
+        this.gameModel = gameModel;
         gameView = new GameView(gameModel);
         gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
@@ -41,19 +43,28 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        gameModel.update(delta);
         gameView.render();
         gameMenuInputAdapter.update(delta);
 
+        handleNightBrightness();
+
+        handleNightSleepFade(delta);
+
+        cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        cheatCodeStage.draw();
+    }
+
+    private void handleNightSleepFade(float delta) {
         if (isSleeping) {
             sleepTimer += delta;
             if (!advancingDay && sleepAlpha < 1f) {
                 sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
                 if (sleepAlpha >= 1f) {
-//                    gameModel.advanceToNextDay();
+                    GameMenuController.startNewDay(gameController.getGameMenu(), false);
                     advancingDay = true;
                 }
             } else if (advancingDay && sleepAlpha > 0f) {
@@ -71,9 +82,33 @@ public class GameMenu implements Screen {
             gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             gameView.getBatch().setColor(1f, 1f, 1f, 1f);
             gameView.getBatch().end();
+        }
+    }
 
-            cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            cheatCodeStage.draw();
+    private void handleNightBrightness() {
+        int currentHour = gameModel.getCurrentDateTime().getHour();
+        float brightness = 1f;
+
+        if (currentHour >= 18 || currentHour <= 6) {
+            float nightFactor;
+            if (currentHour >= 18 && currentHour < 24) {
+                nightFactor = (currentHour - 18) / 6f;
+            } else {
+                nightFactor = (6 - currentHour) / 6f;
+            }
+
+            brightness = 1f - (nightFactor * 0.5f);
+        }
+
+
+        if (brightness < 1f) {
+            float overlayAlpha = 1f - brightness;
+
+            gameView.getBatch().begin();
+            gameView.getBatch().setColor(0f, 0f, 0f, overlayAlpha);
+            gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            gameView.getBatch().setColor(1f, 1f, 1f, 1f);
+            gameView.getBatch().end();
         }
     }
 

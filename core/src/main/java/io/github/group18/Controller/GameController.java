@@ -1,6 +1,7 @@
 package io.github.group18.Controller;
 
 import io.github.group18.Main;
+import io.github.group18.Model.Game;
 import io.github.group18.View.GameMenu;
 
 public class GameController {
@@ -12,8 +13,8 @@ public class GameController {
         this.main = main;
     }
 
-    public void init() {
-        gameMenu = new GameMenu(this);
+    public void init(Game gameModel) {
+        gameMenu = new GameMenu(this,gameModel);
     }
 
     public void run() {

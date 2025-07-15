@@ -1,5 +1,6 @@
 package io.github.group18.View;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
@@ -31,10 +32,10 @@ public class GameView {
         this.game = game;
         batch = new SpriteBatch();
         clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
-//        loadTextures();
+        loadTextures();
     }
 
-//    private void loadTextures() {
+    private void loadTextures() {
 //        textures = new HashMap<>();
 //
 //        for (TileDescriptionId id : TileDescriptionId.values()) {
@@ -67,13 +68,13 @@ public class GameView {
 //            }
 //            playerAnimations.add(new Animation<>(0.15f, walkFrames, Animation.PlayMode.LOOP));
 //        }
-//
-//        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-//        pixmap.setColor(0, 0, 0, 1);
-//        pixmap.fill();
-//        pixel = new Texture(pixmap);
-//        pixmap.dispose();
-//    }
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 1);
+        pixmap.fill();
+        pixel = new Texture(pixmap);
+        pixmap.dispose();
+    }
 
 
     public void render() {
