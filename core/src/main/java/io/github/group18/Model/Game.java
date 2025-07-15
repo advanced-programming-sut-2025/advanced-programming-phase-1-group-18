@@ -142,8 +142,9 @@ public class Game {
     public static final int mapWidth = 1000;
     public static final int mapHeight = 560;
     public static final int TILE_SIZE = 160;
-    boolean onetime = true;
-
+    private float cameraLerpSpeed = 8f;
+    private int lookAheadTiles = 4;
+    private boolean cameraInitialized = false;
 
     public Game() {
 
@@ -1013,6 +1014,30 @@ public class Game {
         this.camera = camera;
     }
 
+    public float getCameraLerpSpeed() {
+        return cameraLerpSpeed;
+    }
+
+    public void setCameraLerpSpeed(float cameraLerpSpeed) {
+        this.cameraLerpSpeed = cameraLerpSpeed;
+    }
+
+    public int getLookAheadTiles() {
+        return lookAheadTiles;
+    }
+
+    public void setLookAheadTiles(int lookAheadTiles) {
+        this.lookAheadTiles = lookAheadTiles;
+    }
+
+    public boolean isCameraInitialized() {
+        return cameraInitialized;
+    }
+
+    public void setCameraInitialized(boolean cameraInitialized) {
+        this.cameraInitialized = cameraInitialized;
+    }
+
     public Player getCurrentPlayer() {
         try {
             if (App.getCurrentGame() != null) {
@@ -1025,44 +1050,27 @@ public class Game {
     }
 
     public void update(float deltaTime) {
-        if(onetime)
-        {
-            onetime = false;
+        if (!cameraInitialized) {
             camera = new OrthographicCamera();
             camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            camera.position.set((float) getCurrentPlayer().getX(), (float) getCurrentPlayer().getY(), 0);
+            camera.update();
+            cameraInitialized = true;
         }
-        if (App.getCurrentGame() != null && App.getCurrentGame().getCurrentPlayer() != null) {
-            float playerX = (float) (getCurrentPlayer().getX() * TILE_SIZE);
-            float playerY = (float) (getCurrentPlayer().getY() * TILE_SIZE);
 
-            float camX = camera.position.x;
-            float camY = camera.position.y;
+        // Simple camera follow - no lerping, no prediction
+        if (getCurrentPlayer() != null) {
+            float playerX = (float)getCurrentPlayer().getX() * TILE_SIZE;
+            float playerY = (float)getCurrentPlayer().getY() * TILE_SIZE;
 
-            float viewHalfWidth = camera.viewportWidth / 2;
-            float viewHalfHeight = camera.viewportHeight / 2;
+            // Directly set camera position to player position
+            camera.position.set(playerX, playerY, 0);
 
-            float borderx = TILE_SIZE * 2;
-            float bordery = TILE_SIZE * 2;
+            // Clamp to map boundaries
+            float halfWidth = camera.viewportWidth / 2;
+            float halfHeight = camera.viewportHeight / 2;
+            camera.position.x = Math.max(halfWidth, Math.min(playerX, mapWidth * TILE_SIZE - halfWidth));
+            camera.position.y = Math.max(halfHeight, Math.min(playerY, mapHeight * TILE_SIZE - halfHeight));
 
-            // Horizontal movement
-            if (playerX < camX - viewHalfWidth + borderx) {
-                camX = playerX + viewHalfWidth - borderx;
-            } else if (playerX > camX + viewHalfWidth - borderx) {
-                camX = playerX - viewHalfWidth + borderx;
-            }
-
-            // Vertical movement
-            if (playerY < camY - viewHalfHeight + bordery) {
-                camY = playerY + viewHalfHeight - bordery;
-            } else if (playerY > camY + viewHalfHeight - bordery) {
-                camY = playerY - viewHalfHeight + bordery;
-            }
-
-            camX = Math.max(viewHalfWidth, Math.min(camX, mapWidth * TILE_SIZE - viewHalfWidth));
-            camY = Math.max(viewHalfHeight, Math.min(camY, mapHeight * TILE_SIZE - viewHalfHeight));
-
-            camera.position.set(camX, camY, 0);
             camera.update();
         }
     }

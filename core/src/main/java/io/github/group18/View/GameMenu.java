@@ -74,7 +74,6 @@ public class GameMenu implements Screen {
                 }
             }
 
-            // Render black overlay
             gameView.getBatch().begin();
             gameView.getBatch().setColor(0f, 0f, 0f, sleepAlpha);
             gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

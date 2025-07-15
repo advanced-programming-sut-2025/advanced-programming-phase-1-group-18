@@ -1,6 +1,7 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -11,17 +12,14 @@ import java.util.Map;
 
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
-import io.github.group18.Model.App;
-import io.github.group18.Model.DateTime;
-import io.github.group18.Model.Game;
-import io.github.group18.Model.Kashi;
+import io.github.group18.Model.*;
 
 public class GameView {
 
     private final Game game;
     private SpriteBatch batch;
     private TextureRegion[][] tileTextures;
-    private Map<String, TextureRegion> textures;
+    private Map<Object, TextureRegion> textures;
     private BitmapFont smallFont;
     private GlyphLayout layout = new GlyphLayout();
     private TextureAtlas playerAtlas;
@@ -41,18 +39,35 @@ public class GameView {
 
     private void loadTextures() {
         textures = new HashMap<>();
-
-//        for (TileDescriptionId id : TileDescriptionId.values()) {
-//            String path = id.getIconPath();
-//            textures.put(id.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
+//        ArrayList<ArrayList<Kashi>> map = game.getMap();
+//        for (int i = 0; i < Game.mapWidth; i++) {
+//            for (int j = 0; j < Game.mapHeight; j++) {
+//                Kashi kashi = map.get(i).get(j);
+//                Object content = kashi.getInside();
+//
+//                if (content instanceof PictureModel pictureModel) {
+//                    String path = pictureModel.getPath();
+//
+//                    try {
+//                        Texture texture = new Texture(Gdx.files.internal(path));
+//                        textures.put(content, new TextureRegion(texture));
+//                    } catch (Exception e) {
+//
+//                        //TODO
+//                        //this is never going to happen but for now we have it
+//
+////                        Gdx.app.error("Texture Loading", "Failed to load texture: " + path, e);
+//                        textures.put(content, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+//                    }
+//                } else {
+//                    textures.put(content, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+//                }
+//            }
 //        }
+
 //        for (ItemDescriptionId id : ItemDescriptionId.values()) {
 //            String path = id.getIconPath();
 //            textures.put(id.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
-//        }
-//        for (CarrotStages cs : CarrotStages.values()) {
-//            String path = cs.getIconPath();
-//            textures.put(cs.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
 //        }
 
         playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
@@ -84,9 +99,9 @@ public class GameView {
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
-        renderClock();
         renderTiles();
         renderPlayer();
+        renderClock();
         renderBrightness();
         batch.end();
     }
@@ -136,77 +151,65 @@ public class GameView {
         }
     }
 
-
     private void renderTiles() {
-//        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
-//
-//        float camX = game.getCamera().position.x;
-//        float camY = game.getCamera().position.y;
-//        float viewportWidth = game.getCamera().viewportWidth;
-//        float viewportHeight = game.getCamera().viewportHeight;
-//
-//        int tileSize = game.TILE_SIZE;
-//
-//        float cameraLeft = camX - viewportWidth / 2;
-//        float cameraBottom = camY - viewportHeight / 2;
-//
-//        int startX = Math.max(0, (int) (cameraLeft / tileSize) - 2);
-//        int startY = Math.max(0, (int) (cameraBottom / tileSize) - 2);
-//        int endX = Math.min(tiles.size(), (int) ((camX + viewportWidth / 2) / tileSize) + 2);
-//        int endY = Math.min(tiles.get(0).size(), (int) ((camY + viewportHeight / 2) / tileSize) + 2);
-//
-//        // Render base tiles
-//        for (int x = startX; x < endX; x++) {
-//            for (int y = startY; y < endY; y++) {
-//                Kashi id = tiles.get(x).get(y);
-//                if (id != null) {
-//                    float drawX = x * tileSize - cameraLeft;
-//                    float drawY = y * tileSize - cameraBottom;
-//
-////                    GrowingCrop crop = game.getGrowingCrops().get(new Point(x, y));
-////                    if (crop != null && crop.watered()) {
-////                        batch.setColor(0.7f, 0.7f, 0.7f, 1f);
-////                    } else {
-////                        batch.setColor(1f, 1f, 1f, 1f);
-////                    }
-//
-//                    TextureRegion texture = textures.get(id.name());
-//                    if (texture != null) {
-//                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
+
+        OrthographicCamera cam = game.getCamera();
+        float camX = cam.position.x;
+        float camY = cam.position.y;
+        float halfWidth = cam.viewportWidth / 2;
+        float halfHeight = cam.viewportHeight / 2;
+
+        int tileSize = game.TILE_SIZE;
+        int bufferTiles = 2; // number of extra tiles around edges
+
+        int startX = (int) Math.floor((camX - halfWidth) / tileSize) - bufferTiles;
+        int startY = (int) Math.floor((camY - halfHeight) / tileSize) - bufferTiles;
+        int endX = (int) Math.ceil((camX + halfWidth) / tileSize) + bufferTiles;
+        int endY = (int) Math.ceil((camY + halfHeight) / tileSize) + bufferTiles;
+
+        startX = Math.max(0, startX);
+        startY = Math.max(0, startY);
+        endX = Math.min(tiles.size() - 1, endX);
+        endY = Math.min(tiles.get(0).size() - 1, endY);
+
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                Kashi tile = tiles.get(x).get(y);
+                if (tile != null) {
+
+                    Object inside = tile.getInside();
+                    if (!textures.containsKey(inside)) {
+                        if (inside instanceof PictureModel pictureModel) {
+                            try {
+                                Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                                textures.put(inside, new TextureRegion(tex));
+                            } catch (Exception e) {
+                                textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                            }
+                        } else {
+                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                        }
+                    }
+                    drawKashi(x, y, tile, tileSize,
+                        camX - halfWidth, camY - halfHeight, textures.get(inside));
+                }
+            }
+        }
+    }
+
+    private void drawKashi(int x, int y, Kashi id, int tileSize, float cameraLeft, float cameraBottom, TextureRegion texture) {
+        float drawX = x * tileSize - cameraLeft;
+        float drawY = y * tileSize - cameraBottom;
+
+//                    GrowingCrop crop = game.getGrowingCrops().get(new Point(x, y));
+//                    if (crop != null && crop.watered()) {
+//                        batch.setColor(0.7f, 0.7f, 0.7f, 1f);
+//                    } else {
+//                        batch.setColor(1f, 1f, 1f, 1f);
 //                    }
-//                }
-//            }
-//        }
-//
-//        // Render crops on top
-//        for (Map.Entry<Point, GrowingCrop> entry : game.getGrowingCrops().entrySet()) {
-//            Point point = entry.getKey();
-//            GrowingCrop crop = entry.getValue();
-//
-//            int x = point.x;
-//            int y = point.y;
-//
-//            if (x >= startX && x < endX && y >= startY && y < endY) {
-//                float drawX = x * tileSize - cameraLeft;
-//                float drawY = y * tileSize - cameraBottom;
-//
-//                int growth = crop.getGrowth();
-//                CarrotStages cs;
-//
-//                if (growth < 2) cs = CarrotStages.CARROT_STAGE_1;
-//                else if (growth < 4) cs = CarrotStages.CARROT_STAGE_2;
-//                else if (growth < 6) cs = CarrotStages.CARROT_STAGE_3;
-//                else cs = CarrotStages.CARROT_STAGE_4;
-//
-//                TextureRegion cropTexture = textures.get(cs.name());
-//                if (cropTexture != null) {
-//                    batch.setColor(1f, 1f, 1f, 1f);
-//                    batch.draw(cropTexture, drawX, drawY, tileSize, tileSize);
-//                }
-//            }
-//        }
-//
-//        batch.setColor(1f, 1f, 1f, 1f);
+
+        batch.draw(texture, drawX, drawY, tileSize, tileSize);
     }
 
     private void renderPlayer() {

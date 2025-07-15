@@ -33,6 +33,6 @@ public class Lake implements PictureModel
 
     @Override
     public String getPath() {
-        return "game/ties/water.png";
+        return "game/tiles/water.png";
     }
 }
