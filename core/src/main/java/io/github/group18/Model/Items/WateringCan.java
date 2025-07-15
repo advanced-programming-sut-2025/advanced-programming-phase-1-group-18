@@ -2,7 +2,7 @@ package io.github.group18.Model.Items;
 
 import io.github.group18.Model.*;
 
-public class WateringCan extends Tool implements Name, Price {
+public class WateringCan extends Tool implements Name, Price ,PictureModel{
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
@@ -258,6 +258,11 @@ public class WateringCan extends Tool implements Name, Price {
             default:
                 break;
         }
+    }
+
+    @Override
+    public String getPath() {
+        return "Watering_Can/Watering_Can.png";
     }
 }
 

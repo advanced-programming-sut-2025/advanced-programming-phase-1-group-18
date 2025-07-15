@@ -1,14 +1,11 @@
 package io.github.group18.Model.Items;
 
-import io.github.group18.Model.App;
-import io.github.group18.Model.Cord;
-import io.github.group18.Model.Kashi;
-import io.github.group18.Model.Name;
+import io.github.group18.Model.*;
 import io.github.group18.enums.ForagingCropsEnums;
 
 import java.util.ArrayList;
 
-public class ForagingCrop extends Crop implements Name, Price {
+public class ForagingCrop extends Crop implements Name, Price , PictureModel {
     ForagingCropsEnums type;
 
 
@@ -161,5 +158,10 @@ public class ForagingCrop extends Crop implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return getBaseSellPrice();
+    }
+
+    @Override
+    public String getPath() {
+        return "Crops/" + getCorrectName().replace(" ", "") + ".png";
     }
 }

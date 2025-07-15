@@ -2,7 +2,7 @@ package io.github.group18.Model;
 
 import java.util.ArrayList;
 
-public class ShippingBin implements Name
+public class ShippingBin implements Name, PictureModel
 {
     protected ArrayList<Kashi> insideKashis;
 
@@ -36,5 +36,10 @@ public class ShippingBin implements Name
     @Override
     public String getCorrectName() {
         return "shippingbin";
+    }
+
+    @Override
+    public String getPath() {
+        return "Chest.png";
     }
 }

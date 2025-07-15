@@ -7,7 +7,7 @@ import io.github.group18.Model.Items.Item;
 
 import java.util.HashMap;
 
-public class FishShopMarket implements adaptMapMarket {
+public class FishShopMarket implements adaptMapMarket ,PictureModel{
     HashMap<Item, Integer> Stock = new HashMap<>();
 
     public HashMap<Item, Integer> getStock() {
@@ -64,5 +64,10 @@ public class FishShopMarket implements adaptMapMarket {
 
 
 
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }

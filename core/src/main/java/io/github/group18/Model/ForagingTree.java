@@ -4,7 +4,7 @@ import io.github.group18.enums.ForagingTreesEnums;
 
 import java.util.ArrayList;
 
-public class ForagingTree extends Tree {
+public class ForagingTree extends Tree implements PictureModel{
     ForagingTreesEnums type;
 
     public ForagingTreesEnums getType() {
@@ -31,4 +31,8 @@ public class ForagingTree extends Tree {
         this.setType(foragingTreesEnums);
     }
 
+    @Override
+    public String getPath() {
+        return "Trees/" + type.toString().replace(" ", "") + ".png";
+    }
 }

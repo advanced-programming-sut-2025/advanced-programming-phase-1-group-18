@@ -10,7 +10,7 @@ import io.github.group18.enums.TavilehAnimalEnums;
 
 import java.util.HashMap;
 
-public class MarniesRanchMarket  implements adaptMapMarket{
+public class MarniesRanchMarket  implements adaptMapMarket,PictureModel{
     HashMap<Item, Integer> Stock = new HashMap<>();
     HashMap<Animal, Integer> AnimalStock = new HashMap<>();
 
@@ -117,5 +117,8 @@ public class MarniesRanchMarket  implements adaptMapMarket{
         AnimalStock.put(pig, 2);
     }
 
-
+    @Override
+    public String getPath() {
+        return "Store.png";
+    }
 }

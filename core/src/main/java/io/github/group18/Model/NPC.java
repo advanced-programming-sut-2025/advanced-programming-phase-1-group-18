@@ -7,7 +7,7 @@ import java.util.HashMap;
 import io.github.group18.Model.Items.*;
 import io.github.group18.enums.*;
 
-public class NPC implements adaptMapMarket {
+public class NPC implements adaptMapMarket ,PictureModel{
     private NPCEnums name;
     private String job;
     private boolean talkedWithToday;
@@ -201,5 +201,9 @@ public class NPC implements adaptMapMarket {
         return new Result(true, "");
     }
 
+    @Override
+    public String getPath() {
+        return "NPC.jpg";
+    }
 }
 

@@ -1,7 +1,7 @@
 package io.github.group18.Model;
 import java.util.ArrayList;
 
-public class Lake
+public class Lake implements PictureModel
 {
     protected ArrayList<Kashi> insideKashis;
 
@@ -31,4 +31,8 @@ public class Lake
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getLakes().add(this);
     }
 
+    @Override
+    public String getPath() {
+        return "game/ties/water.png";
+    }
 }

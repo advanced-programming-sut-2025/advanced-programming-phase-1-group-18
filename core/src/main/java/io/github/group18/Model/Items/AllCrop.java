@@ -1,9 +1,6 @@
 package io.github.group18.Model.Items;
 
-import io.github.group18.Model.App;
-import io.github.group18.Model.Cord;
-import io.github.group18.Model.Kashi;
-import io.github.group18.Model.Name;
+import io.github.group18.Model.*;
 import io.github.group18.enums.AllCropsEnums;
 import io.github.group18.enums.ForagingSeedsEnums;
 import io.github.group18.enums.MixedSeedsEnums;
@@ -11,7 +8,7 @@ import io.github.group18.enums.MixedSeedsEnums;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllCrop extends Crop implements Name, Price {
+public class AllCrop extends Crop implements Name, Price, PictureModel {
     private ForagingSeedsEnums sourceForagingSeedEnum;
     private MixedSeedsEnums sourceMixedSeedEnum;
     private AllCropsEnums type;
@@ -851,5 +848,10 @@ public class AllCrop extends Crop implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return this.getBaseSellPrice();
+    }
+
+    @Override
+    public String getPath() {
+        return "Crops/" + getCorrectName().replace(" ", "") + ".png";
     }
 }

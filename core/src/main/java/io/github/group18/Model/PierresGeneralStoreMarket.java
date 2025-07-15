@@ -7,7 +7,7 @@ import io.github.group18.enums.TreeSeedEnums;
 
 import java.util.HashMap;
 
-public class PierresGeneralStoreMarket  implements adaptMapMarket{
+public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
 
     HashMap<Object, Integer> Stock = new HashMap<>();
     private boolean largePackBougth = false;
@@ -417,5 +417,10 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket{
         }
         Stock.put(artichokeSeeds, 5);
 
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }

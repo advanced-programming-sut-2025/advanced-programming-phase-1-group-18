@@ -3,11 +3,12 @@ package io.github.group18.Model.Items;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Cord;
 import io.github.group18.Model.Kashi;
+import io.github.group18.Model.PictureModel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Satl
+public class Satl implements PictureModel
 {
     protected HashMap<Item, Integer> Items;
 
@@ -75,4 +76,8 @@ public class Satl
         Items.clear();
     }
 
+    @Override
+    public String getPath() {
+        return "Chest.png";
+    }
 }

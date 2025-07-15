@@ -1,9 +1,10 @@
 package io.github.group18.Model.Items;
 
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 import io.github.group18.enums.ForagingMineralsEnums;
 
-public class Mineral extends Item implements Name ,Price{
+public class Mineral extends Item implements Name ,Price , PictureModel {
     private ForagingMineralsEnums type;
     private int price;
 
@@ -32,5 +33,10 @@ public class Mineral extends Item implements Name ,Price{
     @Override
     public int getCorrectPrice() {
         return this.price;
+    }
+
+    @Override
+    public String getPath() {
+        return "Mineral/" + getCorrectName().replace(" ", "") + ".png";
     }
 }

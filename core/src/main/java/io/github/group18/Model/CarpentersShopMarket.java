@@ -5,7 +5,7 @@ import io.github.group18.Model.Items.StoneItem;
 
 import java.util.HashMap;
 
-public class CarpentersShopMarket implements adaptMapMarket {
+public class CarpentersShopMarket implements adaptMapMarket ,PictureModel{
     HashMap<Object, Integer> Stock = new HashMap<>();
     private boolean barn = false;
     private boolean bigbarn = false;
@@ -108,5 +108,10 @@ public class CarpentersShopMarket implements adaptMapMarket {
         Stock.put(shippingBin, Integer.MAX_VALUE);
         Well well = new Well();
         Stock.put(well, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }

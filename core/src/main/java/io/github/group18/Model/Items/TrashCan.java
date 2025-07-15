@@ -2,11 +2,12 @@ package io.github.group18.Model.Items;
 
 import io.github.group18.Model.App;
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 import io.github.group18.Model.Player;
 
 import java.util.Map;
 
-public class TrashCan extends Tool implements Name,Price
+public class TrashCan extends Tool implements Name,Price, PictureModel
 {
     protected String Jens;
     protected int EnergyUsage;
@@ -101,5 +102,10 @@ public class TrashCan extends Tool implements Name,Price
             default:
                 return 200;
         }
+    }
+
+    @Override
+    public String getPath() {
+        return "Chest.png";
     }
 }

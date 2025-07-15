@@ -7,7 +7,7 @@ import io.github.group18.enums.ForagingSeedsEnums;
 
 import java.util.HashMap;
 
-public class JojoMartMarket implements adaptMapMarket {
+public class JojoMartMarket implements adaptMapMarket ,PictureModel{
     HashMap<Object, Integer> Stock = new HashMap<>();
 
     public HashMap<Object, Integer> getStock() {
@@ -265,5 +265,10 @@ public class JojoMartMarket implements adaptMapMarket {
             Stock.put(powdermelonSeeds, 10);
         }
 
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }

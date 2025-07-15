@@ -14,6 +14,7 @@ import io.github.group18.Controller.ClockController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.DateTime;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.Kashi;
 
 public class GameView {
 
@@ -84,7 +85,7 @@ public class GameView {
         batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
         renderClock();
-//        renderTiles();
+        renderTiles();
         renderPlayer();
         renderBrightness();
         batch.end();
@@ -136,38 +137,38 @@ public class GameView {
     }
 
 
-    //    private void renderTiles() {
-//        TileDescriptionId[][] tiles = game.getTiles();
+    private void renderTiles() {
+//        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
 //
 //        float camX = game.getCamera().position.x;
 //        float camY = game.getCamera().position.y;
 //        float viewportWidth = game.getCamera().viewportWidth;
 //        float viewportHeight = game.getCamera().viewportHeight;
 //
-//        int tileSize = StardewMini.TILE_SIZE;
+//        int tileSize = game.TILE_SIZE;
 //
 //        float cameraLeft = camX - viewportWidth / 2;
 //        float cameraBottom = camY - viewportHeight / 2;
 //
 //        int startX = Math.max(0, (int) (cameraLeft / tileSize) - 2);
 //        int startY = Math.max(0, (int) (cameraBottom / tileSize) - 2);
-//        int endX = Math.min(tiles.length, (int) ((camX + viewportWidth / 2) / tileSize) + 2);
-//        int endY = Math.min(tiles[0].length, (int) ((camY + viewportHeight / 2) / tileSize) + 2);
+//        int endX = Math.min(tiles.size(), (int) ((camX + viewportWidth / 2) / tileSize) + 2);
+//        int endY = Math.min(tiles.get(0).size(), (int) ((camY + viewportHeight / 2) / tileSize) + 2);
 //
 //        // Render base tiles
 //        for (int x = startX; x < endX; x++) {
 //            for (int y = startY; y < endY; y++) {
-//                TileDescriptionId id = tiles[x][y];
+//                Kashi id = tiles.get(x).get(y);
 //                if (id != null) {
 //                    float drawX = x * tileSize - cameraLeft;
 //                    float drawY = y * tileSize - cameraBottom;
 //
-//                    GrowingCrop crop = game.getGrowingCrops().get(new Point(x, y));
-//                    if (crop != null && crop.watered()) {
-//                        batch.setColor(0.7f, 0.7f, 0.7f, 1f);
-//                    } else {
-//                        batch.setColor(1f, 1f, 1f, 1f);
-//                    }
+////                    GrowingCrop crop = game.getGrowingCrops().get(new Point(x, y));
+////                    if (crop != null && crop.watered()) {
+////                        batch.setColor(0.7f, 0.7f, 0.7f, 1f);
+////                    } else {
+////                        batch.setColor(1f, 1f, 1f, 1f);
+////                    }
 //
 //                    TextureRegion texture = textures.get(id.name());
 //                    if (texture != null) {
@@ -206,8 +207,8 @@ public class GameView {
 //        }
 //
 //        batch.setColor(1f, 1f, 1f, 1f);
-//    }
-//
+    }
+
     private void renderPlayer() {
         double first = game.getCurrentPlayer().getX();
         double second = game.getCurrentPlayer().getY();
