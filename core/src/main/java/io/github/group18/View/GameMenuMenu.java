@@ -53,8 +53,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     }
 
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input ,Scanner scanner) {
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
@@ -471,5 +470,10 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     public void setGameHeight(int gameHeight) {
         this.gameHeight = gameHeight;
+    }
+
+    @Override
+    public void check(Scanner scanner) {
+
     }
 }

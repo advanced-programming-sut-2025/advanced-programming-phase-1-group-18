@@ -113,6 +113,8 @@ public class GameMenu implements Screen {
         );
         batch.end();
 
+        cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        cheatCodeStage.draw();
         // 4. RESTORE original states EXACTLY
         batch.setProjectionMatrix(originalProj);
         batch.setColor(originalColor);
