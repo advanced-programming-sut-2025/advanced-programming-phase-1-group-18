@@ -1,4 +1,6 @@
 Clock.png
+EnergyBar/bar.png
+EnergyBar/green.png
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
 RegisterImage.jpg

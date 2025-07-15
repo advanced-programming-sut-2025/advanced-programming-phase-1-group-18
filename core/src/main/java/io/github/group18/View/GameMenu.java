@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.group18.Controller.GameController;
+import io.github.group18.Controller.LightningEffect;
+import io.github.group18.Main;
 import io.github.group18.Model.Game;
 
 public class GameMenu implements Screen {
@@ -19,11 +21,13 @@ public class GameMenu implements Screen {
     private static final float FADE_SPEED = 1.5f;   // speed of fading
     private boolean advancingDay = false;
     private Stage cheatCodeStage;
+    private LightningEffect lightningEffect;
 
 
     public GameMenu(GameController gameController) {
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
+        lightningEffect = new LightningEffect();
         initializeGame();
     }
 
@@ -45,7 +49,9 @@ public class GameMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        gameModel.update(delta);
+        lightningEffect.update(delta);
         gameView.render();
+        lightningEffect.render(Main.getBatch());
         gameMenuInputAdapter.update(delta);
 
         if (isSleeping) {
@@ -118,5 +124,12 @@ public class GameMenu implements Screen {
         this.cheatCodeStage = cheatCodeStage;
     }
 
+    public LightningEffect getLightningEffect() {
+        return lightningEffect;
+    }
+
+    public void setLightningEffect(LightningEffect lightningEffect) {
+        this.lightningEffect = lightningEffect;
+    }
     // Other Screen methods
 }

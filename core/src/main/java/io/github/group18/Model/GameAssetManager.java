@@ -18,6 +18,8 @@ public class GameAssetManager {
     Texture map3Texture = new Texture(Gdx.files.internal("map3.png"));
     Texture map4Texture = new Texture(Gdx.files.internal("map4.png"));
     Texture mapDeafultTexture = new Texture(Gdx.files.internal("mapDeafult.png"));
+    Texture barTexture = new Texture(Gdx.files.internal("EnergyBar/bar.png"));
+    Texture greenBarTexture = new Texture(Gdx.files.internal("EnergyBar/green.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
 
@@ -116,5 +118,21 @@ public class GameAssetManager {
 
     public void setTextureAtlas(TextureAtlas textureAtlas) {
         this.textureAtlas = textureAtlas;
+    }
+
+    public Texture getBarTexture() {
+        return barTexture;
+    }
+
+    public void setBarTexture(Texture barTexture) {
+        this.barTexture = barTexture;
+    }
+
+    public Texture getGreenBarTexture() {
+        return greenBarTexture;
+    }
+
+    public void setGreenBarTexture(Texture greenBarTexture) {
+        this.greenBarTexture = greenBarTexture;
     }
 }

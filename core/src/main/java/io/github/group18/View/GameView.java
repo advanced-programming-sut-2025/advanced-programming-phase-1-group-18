@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import io.github.group18.Controller.ClockController;
+import io.github.group18.Controller.EnergyController;
+import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.App;
 import io.github.group18.Model.DateTime;
 import io.github.group18.Model.Game;
@@ -25,12 +27,15 @@ public class GameView {
     private int moveDirection = 0;
     private Texture pixel; // Add this
     private ClockController clock;
+    private EnergyController energy;
+
 
 
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
         clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
+        energy = new EnergyController();
 //        loadTextures();
     }
 
@@ -80,6 +85,7 @@ public class GameView {
 //        batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
         renderClock();
+        energy.render(batch);
 //        renderTiles();
 //        renderPlayer();
         batch.end();
