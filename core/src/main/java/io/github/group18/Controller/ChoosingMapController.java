@@ -2,6 +2,7 @@ package io.github.group18.Controller;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.group18.Main;
+import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.View.ChoosingMapView;
@@ -91,6 +92,7 @@ public class ChoosingMapController {
                         if (!result.isSuccessful()){
                             view.getNotif().setText(result.getMessage());
                         }else {
+                            App.setGameMenuController(gameMenuController);
                             GameController gameController = new GameController(Main.getMain());
                             gameController.init();
                             gameController.run();

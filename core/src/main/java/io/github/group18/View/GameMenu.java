@@ -3,6 +3,7 @@ package io.github.group18.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.Game;
 
@@ -17,9 +18,11 @@ public class GameMenu implements Screen {
     private static final float SLEEP_DURATION = 2f; // seconds
     private static final float FADE_SPEED = 1.5f;   // speed of fading
     private boolean advancingDay = false;
+    private Stage cheatCodeStage;
 
 
     public GameMenu(GameController gameController) {
+        this.cheatCodeStage = new Stage();
         this.gameController = gameController;
         initializeGame();
     }
@@ -68,6 +71,9 @@ public class GameMenu implements Screen {
             gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             gameView.getBatch().setColor(1f, 1f, 1f, 1f);
             gameView.getBatch().end();
+
+            cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+            cheatCodeStage.draw();
         }
     }
 
@@ -104,5 +110,13 @@ public class GameMenu implements Screen {
 
     }
 
-// Other Screen methods
+    public Stage getCheatCodeStage() {
+        return cheatCodeStage;
+    }
+
+    public void setCheatCodeStage(Stage cheatCodeStage) {
+        this.cheatCodeStage = cheatCodeStage;
+    }
+
+    // Other Screen methods
 }
