@@ -1082,13 +1082,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay() % 7;
         return switch (dayOfWeek) {
-            case 0 -> new Result(true, "Sunday");
-            case 1 -> new Result(true, "Monday");
-            case 2 -> new Result(true, "Tuesday");
-            case 3 -> new Result(true, "Wednesday");
-            case 4 -> new Result(true, "Thursday");
-            case 5 -> new Result(true, "Friday");
-            case 6 -> new Result(true, "Saturday");
+            case 0 -> new Result(true, "Sun");
+            case 1 -> new Result(true, "Mon");
+            case 2 -> new Result(true, "Tue");
+            case 3 -> new Result(true, "Wed");
+            case 4 -> new Result(true, "Thu");
+            case 5 -> new Result(true, "Fri");
+            case 6 -> new Result(true, "Sat");
             default -> null;
         };
     }
