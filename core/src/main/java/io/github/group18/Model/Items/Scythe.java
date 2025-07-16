@@ -3,7 +3,7 @@ package io.github.group18.Model.Items;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
-public class Scythe extends Tool implements Name, Price {
+public class Scythe extends Tool implements Name, Price ,PictureModel{
     protected int EnergyUsage;
     protected String usage;
 
@@ -172,5 +172,10 @@ public class Scythe extends Tool implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return 200;
+    }
+
+    @Override
+    public String getPath() {
+        return "Tools/Scythe.png";
     }
 }

@@ -24,6 +24,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     public GameMenuInputAdapter(Game game, GameController gameController) {
         this.game = game;
         this.gameController = gameController;
+        game.getCurrentPlayer().setShowInventory(true);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
             int selectedSlot = keycode - Input.Keys.NUM_1;
-//            game.getPlayer().setSelectedSlot(selectedSlot);
+            game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
             return true;
         }
 
@@ -53,6 +54,10 @@ public class GameMenuInputAdapter extends InputAdapter {
                 GameAssetManager.getGameAssetManager().getSkin());
             cheatDialog.show(stage);
         }
+        if (keycode == Input.Keys.T) {
+            game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
+            return true;
+        }
         return true;
     }
 
@@ -64,10 +69,10 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-//        int current = game.getPlayer().getSelectedSlot();
-//        int size = game.getPlayer().getMaxInventorySize();
-//        int next = (current + (amountY > 0 ? 1 : -1) + size) % size;
-//        game.getPlayer().setSelectedSlot(next);
+        int current = game.getCurrentPlayer().getInventory().getSelectedSlot();
+        int size = game.getCurrentPlayer().getInventory().getMaxQuantity();
+        int next = (current + (amountY > 0 ? 1 : -1) + size) % size;
+        game.getCurrentPlayer().getInventory().setSelectedSlot(next);
         return true;
     }
 
@@ -137,4 +142,18 @@ public class GameMenuInputAdapter extends InputAdapter {
 //            gameController.useItem(selectedItem, new Point(tileX, tileY), game);
 //        }
 //    }
+
+
+    public Game getGame() {
+        return game;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public Set<Integer> getKeysHeld() {
+        return keysHeld;
+    }
+
 }

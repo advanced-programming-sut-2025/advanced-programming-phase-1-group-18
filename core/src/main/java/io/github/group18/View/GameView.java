@@ -1,6 +1,7 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,9 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Model.*;
+import io.github.group18.Model.Items.Item;
+
 
 public class GameView {
 
@@ -35,40 +39,11 @@ public class GameView {
         batch = new SpriteBatch();
         clock = new ClockController();
         loadTextures();
+        loadFont();
     }
 
     private void loadTextures() {
         textures = new HashMap<>();
-//        ArrayList<ArrayList<Kashi>> map = game.getMap();
-//        for (int i = 0; i < Game.mapWidth; i++) {
-//            for (int j = 0; j < Game.mapHeight; j++) {
-//                Kashi kashi = map.get(i).get(j);
-//                Object content = kashi.getInside();
-//
-//                if (content instanceof PictureModel pictureModel) {
-//                    String path = pictureModel.getPath();
-//
-//                    try {
-//                        Texture texture = new Texture(Gdx.files.internal(path));
-//                        textures.put(content, new TextureRegion(texture));
-//                    } catch (Exception e) {
-//
-//                        //TODO
-//                        //this is never going to happen but for now we have it
-//
-////                        Gdx.app.error("Texture Loading", "Failed to load texture: " + path, e);
-//                        textures.put(content, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-//                    }
-//                } else {
-//                    textures.put(content, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-//                }
-//            }
-//        }
-
-//        for (ItemDescriptionId id : ItemDescriptionId.values()) {
-//            String path = id.getIconPath();
-//            textures.put(id.name(), new TextureRegion(new Texture(Gdx.files.internal(path))));
-//        }
 
         playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
 
@@ -95,11 +70,18 @@ public class GameView {
         pixmap.dispose();
     }
 
+    private void loadFont() {
+        smallFont = new BitmapFont();
+        smallFont.setColor(Color.WHITE);
+        smallFont.getData().setScale(1.5f);
+    }
+
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
         renderTiles();
         renderPlayer();
+        renderInventory();
         renderClock();
         renderBrightness();
         batch.end();
@@ -181,7 +163,6 @@ public class GameView {
         TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
 
         batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
-//        renderInventory();
     }
 
     private void renderBrightness() {
@@ -229,51 +210,84 @@ public class GameView {
         }
     }
 
-//    private void renderInventory() {
-//        Player player = game.getPlayer();
-//        Map<ItemDescriptionId, Pair<Integer, Integer>> inventory = player.getInventory();
-//        int selectedSlot = player.getSelectedSlot(); // Assuming you have this method
-//
-//        int screenWidth = Gdx.graphics.getWidth();
-//        int slotSize = StardewMini.TILE_SIZE /2;
-//        int numSlots = player.getMaxInventorySize();
-//        int startX = (screenWidth - numSlots * slotSize) / 2;
-//        int y = StardewMini.TILE_SIZE /2;
-//
-//        for (int i = 0; i < numSlots; i++) {
-//            int x = startX + i * slotSize;
-//
-//            batch.draw(textures.get(TileDescriptionId.SLOT.name()), x, y, slotSize, slotSize);
-//
-//            String slotNum = String.valueOf(i + 1);
-//            smallFont.draw(batch, slotNum, x + 2, y + slotSize - 2);
-//        }
-//
-//        // Highlight selected slot
-//        if (selectedSlot >= 0 && selectedSlot < numSlots) {
-//            int highlightX = startX + selectedSlot * slotSize;
-//            batch.draw(textures.get(TileDescriptionId.HIGHLIGHT.name()), highlightX, y, slotSize, slotSize);
-//        }
-//
-//        for (Map.Entry<ItemDescriptionId, Pair<Integer, Integer>> entry : inventory.entrySet()) {
-//            ItemDescriptionId id = entry.getKey();
-//            int quantity = entry.getValue().first;
-//            int index = entry.getValue().second;
-//
-//            if (index < 0 || index >= numSlots) continue;
-//
-//            TextureRegion itemTex = textures.get(id.name());
-//            if (itemTex != null) {
-//                int x = startX + index * slotSize;
-//                batch.draw(itemTex, x, y, slotSize, slotSize);
-//
-//                // Draw item quantity at bottom-right corner
-//                String count = String.valueOf(quantity);
-//                layout.setText(smallFont, count);
-//                smallFont.draw(batch, count, x + slotSize - layout.width - 2, y + layout.height + 2);
-//            }
-//        }
-//    }
+    private void renderInventory() {
+        if (game.getCurrentPlayer().isShowInventory()) {
+            loadInventoryItems();
+            Player player = game.getCurrentPlayer();
+            Inventory playerInventory = player.getInventory();
+            Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
+            int selectedSlot = player.getInventory().getSelectedSlot();
+
+            // Save the original projection matrix
+            Matrix4 originalMatrix = batch.getProjectionMatrix();
+
+            // Set up screen-space projection
+            Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.setProjectionMatrix(uiMatrix);
+
+            int slotSize = game.TILE_SIZE / 2;
+            int numSlots = player.getInventory().getMaxQuantity();
+            int startX = (Gdx.graphics.getWidth() - numSlots * slotSize) / 2;
+            int y = game.TILE_SIZE / 2; // Distance from bottom of screen
+
+            // Draw slots
+            Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
+            Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
+
+            for (int i = 0; i < numSlots; i++) {
+                int x = startX + i * slotSize;
+                batch.draw(slotTexture, x, y, slotSize, slotSize);
+
+                // Draw slot numbers (1-9)
+                String slotNum = String.valueOf(i + 1);
+                smallFont.draw(batch, slotNum, x + 2, y + slotSize - 2);
+            }
+
+            // Draw highlight for selected slot
+            if (selectedSlot >= 0 && selectedSlot < numSlots) {
+                int highlightX = startX + selectedSlot * slotSize;
+                batch.draw(highlightTexture, highlightX, y, slotSize, slotSize);
+            }
+
+            // Draw items
+            for (Map.Entry<Item, Pair<Integer, Integer>> entry : inventory.entrySet()) {
+                Item item = entry.getKey();
+                int quantity = entry.getValue().first;
+                int index = entry.getValue().second;
+
+                if (index < 0 || index >= numSlots) continue;
+
+                TextureRegion itemTex = textures.get(item);
+                if (itemTex != null) {
+                    int x = startX + index * slotSize;
+                    batch.draw(itemTex, x, y, slotSize, slotSize);
+
+                    // Draw item count
+                    String count = String.valueOf(quantity);
+                    layout.setText(smallFont, count);
+                    smallFont.draw(batch, count, x + slotSize - layout.width - 2, y + layout.height + 2);
+                }
+            }
+
+            // Restore original projection matrix
+            batch.setProjectionMatrix(originalMatrix);
+
+            // Dispose temporary textures (or cache them if used frequently)
+            slotTexture.dispose();
+            highlightTexture.dispose();
+        }
+    }
+
+    private void loadInventoryItems() {
+        for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
+            if (item instanceof PictureModel pictureModel) {
+                String path = pictureModel.getPath();
+                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+            } else {
+                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+            }
+        }
+    }
 
     public Batch getBatch() {
         return batch;

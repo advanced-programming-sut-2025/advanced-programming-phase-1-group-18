@@ -5,7 +5,7 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 import io.github.group18.enums.StoneTypes;
 
-public class Pickaxe extends Tool implements Name, Price {
+public class Pickaxe extends Tool implements Name, Price,PictureModel {
     protected String Jens;
     protected int EnergyUsage;
     protected String usage;
@@ -795,5 +795,10 @@ public class Pickaxe extends Tool implements Name, Price {
             default:
                 return 200;
         }
+    }
+
+    @Override
+    public String getPath() {
+        return "Tools/Pickaxe/Pickaxe.png";
     }
 }
