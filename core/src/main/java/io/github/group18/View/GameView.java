@@ -153,8 +153,21 @@ public class GameView {
         startY = Math.max(0, startY);
         endX = Math.min(tiles.size() - 1, endX);
         endY = Math.min(tiles.get(0).size() - 1, endY);
+        drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
+    }
+
+    private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+        int tileSize = game.TILE_SIZE;
+        TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png")));
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                float drawX = x * tileSize;
+                float drawY = y * tileSize;
+                batch.draw(texture, drawX, drawY, tileSize, tileSize);
+            }
+        }
     }
 
     private void drawTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {

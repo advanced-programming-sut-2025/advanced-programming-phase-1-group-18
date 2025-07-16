@@ -47,6 +47,6 @@ public class Cottage implements PictureModel
 
     @Override
     public String getPath() {
-        return "Cottage.jpg";
+        return "Cottage.png";
     }
 }
