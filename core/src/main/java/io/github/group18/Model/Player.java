@@ -10,9 +10,9 @@ public class Player extends User {
     private int daysAfterJavabeRad = 0;
 
     protected User Owner;
-    protected int Energy;
-    protected int maxEnergy = 200;
-    protected int maxEnergyforMarriage = 200;
+    protected double Energy;
+    protected double maxEnergy = 200;
+    protected double maxEnergyforMarriage = 200;
 
     protected double x;
     protected double y;
@@ -37,7 +37,7 @@ public class Player extends User {
     protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
 
     private int movingDirection = 0;
-    private float speed = 2f;
+    private float speed = 4f;
     private float vx = 0, vy = 0;
 
     public Player() {
@@ -75,7 +75,7 @@ public class Player extends User {
         Scythe scythe = new Scythe();
         this.inventory.addItem(scythe, 1);
 
-        TrashCan trashCan =  new TrashCan("initial");
+        TrashCan trashCan = new TrashCan("initial");
         this.inventory.addItem(trashCan, 1);
     }
 
@@ -115,11 +115,11 @@ public class Player extends User {
         Owner = owner;
     }
 
-    public int getEnergy() {
+    public double getEnergy() {
         return Energy;
     }
 
-    public void setEnergy(int energy) {
+    public void setEnergy(double energy) {
         Energy = energy;
     }
 
@@ -227,19 +227,19 @@ public class Player extends User {
         this.artisansInProduce = artisansInProduce;
     }
 
-    public int getMaxEnergy() {
+    public double getMaxEnergy() {
         return maxEnergy;
     }
 
-    public void setMaxEnergy(int maxEnergy) {
+    public void setMaxEnergy(double maxEnergy) {
         this.maxEnergy = maxEnergy;
     }
 
-    public int getMaxEnergyforMarriage() {
+    public double getMaxEnergyforMarriage() {
         return maxEnergyforMarriage;
     }
 
-    public void setMaxEnergyforMarriage(int maxEnergyforMarriage) {
+    public void setMaxEnergyforMarriage(double maxEnergyforMarriage) {
         this.maxEnergyforMarriage = maxEnergyforMarriage;
     }
 
@@ -327,14 +327,18 @@ public class Player extends User {
     }
 
     public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles) {
+        if (Energy <= 0) return false;
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
 
-        if (newX < 0 || newX >= tiles.size() || newY < 0 || newY >= tiles.get(0).size()) return false;
+        if (newX < 1 || newX >= tiles.size() - 1 || newY < 1 || newY >= tiles.get(0).size() - 1) return false;
 
         if (!(tiles.get(newX).get(newY).getInside() instanceof Lake)) {
             x += dx;
             y += dy;
+            if (dx != 0 || dy != 0) {
+                Energy -=  50 * (dx * dx + dy * dy);
+            }
             return true;
         }
         return false;

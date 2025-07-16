@@ -95,7 +95,6 @@ public class GameView {
         pixmap.dispose();
     }
 
-
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
@@ -104,6 +103,85 @@ public class GameView {
         renderClock();
         renderBrightness();
         batch.end();
+    }
+
+    private void renderTiles() {
+        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
+        OrthographicCamera cam = game.getCamera();
+        int tileSize = game.TILE_SIZE;
+
+        int startX = (int) ((cam.position.x - cam.viewportWidth / 2) / tileSize) - 2;
+        int startY = (int) ((cam.position.y - cam.viewportHeight / 2) / tileSize) - 2;
+        int endX = (int) ((cam.position.x + cam.viewportWidth / 2) / tileSize) + 2;
+        int endY = (int) ((cam.position.y + cam.viewportHeight / 2) / tileSize) + 2;
+
+        startX = Math.max(0, startX);
+        startY = Math.max(0, startY);
+        endX = Math.min(tiles.size() - 1, endX);
+        endY = Math.min(tiles.get(0).size() - 1, endY);
+        loadTiles(startX, startY, endX, endY, tiles);
+        drawtiles(startX, startY, endX, endY, tiles);
+    }
+
+    private void drawtiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+        int tileSize = game.TILE_SIZE;
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                Kashi tile = tiles.get(x).get(y);
+                if (tile == null) continue;
+
+                Object inside = tile.getInside();
+                TextureRegion texture = textures.get(inside);
+                if (texture == null) {
+                    System.out.println("this aint happenin");
+                    texture = textures.get("game/tiles/grass.png");
+                }
+
+                float drawX = x * tileSize;
+                float drawY = y * tileSize;
+                batch.draw(texture, drawX, drawY, tileSize, tileSize);
+            }
+        }
+    }
+
+    private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                Kashi tile = tiles.get(x).get(y);
+                if (tile == null) continue;
+
+                Object inside = tile.getInside();
+                if (!textures.containsKey(inside)) {
+                    if (inside instanceof PictureModel pictureModel) {
+                        try {
+                            Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                            textures.put(inside, new TextureRegion(tex));
+                        } catch (Exception e) {
+                            System.out.println(inside.getClass().getSimpleName());
+                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                        }
+                    } else {
+                        textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                    }
+                }
+            }
+        }
+    }
+
+    private void renderPlayer() {
+        double first = game.getCurrentPlayer().getX();
+        double second = game.getCurrentPlayer().getY();
+
+        moveDirection = game.getCurrentPlayer().getMovingDirection();
+
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
+        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+
+        batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
+//        renderInventory();
     }
 
     private void renderBrightness() {
@@ -149,82 +227,6 @@ public class GameView {
                 clock.render(batch, time, game.getCamera());
             }
         }
-    }
-
-    private void renderTiles() {
-        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
-
-        OrthographicCamera cam = game.getCamera();
-        float camX = cam.position.x;
-        float camY = cam.position.y;
-        float halfWidth = cam.viewportWidth / 2;
-        float halfHeight = cam.viewportHeight / 2;
-
-        int tileSize = game.TILE_SIZE;
-        int bufferTiles = 2; // number of extra tiles around edges
-
-        int startX = (int) Math.floor((camX - halfWidth) / tileSize) - bufferTiles;
-        int startY = (int) Math.floor((camY - halfHeight) / tileSize) - bufferTiles;
-        int endX = (int) Math.ceil((camX + halfWidth) / tileSize) + bufferTiles;
-        int endY = (int) Math.ceil((camY + halfHeight) / tileSize) + bufferTiles;
-
-        startX = Math.max(0, startX);
-        startY = Math.max(0, startY);
-        endX = Math.min(tiles.size() - 1, endX);
-        endY = Math.min(tiles.get(0).size() - 1, endY);
-
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
-                Kashi tile = tiles.get(x).get(y);
-                if (tile != null) {
-
-                    Object inside = tile.getInside();
-                    if (!textures.containsKey(inside)) {
-                        if (inside instanceof PictureModel pictureModel) {
-                            try {
-                                Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
-                                textures.put(inside, new TextureRegion(tex));
-                            } catch (Exception e) {
-                                textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-                            }
-                        } else {
-                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-                        }
-                    }
-                    drawKashi(x, y, tile, tileSize,
-                        camX - halfWidth, camY - halfHeight, textures.get(inside));
-                }
-            }
-        }
-    }
-
-    private void drawKashi(int x, int y, Kashi id, int tileSize, float cameraLeft, float cameraBottom, TextureRegion texture) {
-        float drawX = x * tileSize - cameraLeft;
-        float drawY = y * tileSize - cameraBottom;
-
-//                    GrowingCrop crop = game.getGrowingCrops().get(new Point(x, y));
-//                    if (crop != null && crop.watered()) {
-//                        batch.setColor(0.7f, 0.7f, 0.7f, 1f);
-//                    } else {
-//                        batch.setColor(1f, 1f, 1f, 1f);
-//                    }
-
-        batch.draw(texture, drawX, drawY, tileSize, tileSize);
-    }
-
-    private void renderPlayer() {
-        double first = game.getCurrentPlayer().getX();
-        double second = game.getCurrentPlayer().getY();
-
-        moveDirection = game.getCurrentPlayer().getMovingDirection();
-
-        stateTime += Gdx.graphics.getDeltaTime();
-
-        Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
-        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-
-        batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
-//        renderInventory();
     }
 
 //    private void renderInventory() {
