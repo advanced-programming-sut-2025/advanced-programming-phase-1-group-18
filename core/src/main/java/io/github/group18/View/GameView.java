@@ -36,7 +36,6 @@ public class GameView {
     private EnergyController energy;
 
 
-
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
@@ -101,6 +100,7 @@ public class GameView {
 
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
+
                 Kashi tile = tiles.get(x).get(y);
                 if (tile == null) continue;
 
@@ -179,24 +179,149 @@ public class GameView {
     }
 
     private void drawTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+        ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
+        ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                Kashi tile = tiles.get(x).get(y);
-                if (tile == null) continue;
+                if (tiles.get(x).get(y).getInside() != null) {
+                    getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
+                    if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                    } else {
+                        boolean flag = false;
+                        BottomLeft bottomLeft = null;
+                        for (int i = 0; i < bottomLeftTiles.size(); i++) {
+                            bottomLeft = bottomLeftTiles.get(i);
+                            if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            Kashi tile = tiles.get(x).get(y);
+                            Object inside = tile.getInside();
+                            TextureRegion texture = textures.get(inside);
+                            float drawX = x * tileSize;
+                            float drawY = y * tileSize;
+                            batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
+                        } else {
+                            Kashi tile = tiles.get(x).get(y);
+                            if (tile == null) continue;
 
-                Object inside = tile.getInside();
-                TextureRegion texture = textures.get(inside);
-//                Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
-                if (texture == null) {
-                    System.out.println("this aint happenin");
-                    texture = textures.get("game/tiles/grass.png");
+                            Object inside = tile.getInside();
+                            TextureRegion texture = textures.get(inside);
+                            if (texture == null) {
+                                texture = textures.get("game/tiles/grass.png");
+                            }
+
+                            float drawX = x * tileSize;
+                            float drawY = y * tileSize;
+                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
+
+        if (tiles == null || kashi == null || kashi.getInside() == null) {
+            System.out.println("Null detected in tiles or kashi");
+            return;
+        }
+
+        if (x < 0 || y < 0 || x >= tiles.size()) {
+            System.out.println("X coordinate out of bounds");
+            return;
+        }
+
+        ArrayList<Kashi> row = tiles.get(x);
+        if (row == null || y >= row.size()) {
+            System.out.println("Y coordinate out of bounds");
+            return;
+        }
+
+        Kashi tile = row.get(y);
+        if (tile == null || tile.getInside() == null) {
+            System.out.println("Tile or its inside is null");
+            return;
+        }
+
+        Class<?> clazz = kashi.getInside().getClass();
+
+        while (x >= 0) {
+            Kashi currentTile = tiles.get(x).get(y);
+            if (currentTile == null || currentTile.getInside() == null ||
+                !currentTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
+            x--;
+        }
+        x++;
+
+        while (y >= 0) {
+            Kashi currentTile = tiles.get(x).get(y);
+            if (currentTile == null || currentTile.getInside() == null ||
+                !currentTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
+            y--;
+        }
+        y++;
+
+        int startX = x;
+        int startY = y;
+        int currentY;
+        int widthcounter = 0;
+        int heightcounter = 0;
+
+        for (int i = startX; i < tiles.size(); i++) {
+            Kashi rowTile = tiles.get(i).get(startY);
+            if (rowTile == null || rowTile.getInside() == null ||
+                !rowTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
+            widthcounter++;
+
+            for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
+                Kashi colTile = tiles.get(i).get(currentY);
+                if (colTile == null || colTile.getInside() == null ||
+                    !colTile.getInside().getClass().equals(clazz)) {
+                    break;
+                }
+                heightcounter++;
+            }
+        }
+
+        BottomLeft bottomLeft;
+        if (widthcounter > 1 || heightcounter > 1) {
+            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
+            bottomLeftTiles.add(bottomLeft);
+            for (int i = startX; i < tiles.size(); i++) {
+                Kashi rowTile = tiles.get(i).get(startY);
+                if (rowTile == null || rowTile.getInside() == null ||
+                    !rowTile.getInside().getClass().equals(clazz)) {
+                    break;
                 }
 
-                float drawX = x * tileSize;
-                float drawY = y * tileSize;
-                batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
+                    if (i == startX && currentY == startY) continue;
+                    Kashi colTile = tiles.get(i).get(currentY);
+                    if (colTile == null || colTile.getInside() == null ||
+                        !colTile.getInside().getClass().equals(clazz)) {
+                        break;
+                    }
+
+                    Pair<Integer, Integer> coord = new Pair<>(i, currentY);
+                    if (!alreadyRenderedTiles.contains(coord)) {
+                        alreadyRenderedTiles.add(coord);
+                    }
+                }
             }
+//            System.out.println("X: " + x + " Y: " + y + " width: " + widthcounter + " height: " + heightcounter);
+        } else {
+            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
         }
     }
 
@@ -284,10 +409,10 @@ public class GameView {
             Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             batch.setProjectionMatrix(uiMatrix);
 
-            int slotSize = game.TILE_SIZE*2 ;
+            int slotSize = game.TILE_SIZE * 2;
             int numSlots = player.getInventory().getMaxQuantity();
             int startX = (Gdx.graphics.getWidth() - numSlots * slotSize) / 2;
-            int y = game.TILE_SIZE*2; // Distance from bottom of screen
+            int y = game.TILE_SIZE * 2; // Distance from bottom of screen
 
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));

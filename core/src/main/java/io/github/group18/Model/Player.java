@@ -400,7 +400,7 @@ public class Player extends User {
             x += dx;
             y += dy;
             if (dx != 0 || dy != 0) {
-                Energy -= 50 * (dx * dx + dy * dy);
+                Energy -= 10 * (dx * dx + dy * dy);
                 Energy = Math.max(Energy, 0);
 //                System.out.println("Energy: " + Energy);
             }
