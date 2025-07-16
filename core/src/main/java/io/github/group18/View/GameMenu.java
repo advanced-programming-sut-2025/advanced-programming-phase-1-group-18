@@ -2,7 +2,12 @@ package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.GameMenuController;
@@ -23,7 +28,7 @@ public class GameMenu implements Screen {
     private Stage cheatCodeStage;
 
 
-    public GameMenu(GameController gameController,Game gameModel) {
+    public GameMenu(GameController gameController, Game gameModel) {
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
         initializeGame(gameModel);
@@ -46,6 +51,8 @@ public class GameMenu implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
         gameModel.update(delta);
         gameView.render();
         gameMenuInputAdapter.update(delta);
@@ -57,29 +64,68 @@ public class GameMenu implements Screen {
     }
 
     private void handleNightSleepFade(float delta) {
-        if (isSleeping) {
-            sleepTimer += delta;
-            if (!advancingDay && sleepAlpha < 1f) {
-                sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
-                if (sleepAlpha >= 1f) {
-                    GameMenuController.startNewDay(gameController.getGameMenu(), false);
-                    advancingDay = true;
-                }
-            } else if (advancingDay && sleepAlpha > 0f) {
-                sleepAlpha = Math.max(0f, sleepAlpha - delta * FADE_SPEED);
-                if (sleepAlpha <= 0f) {
-                    isSleeping = false;
-                    advancingDay = false;
-                    sleepTimer = 0f;
-                }
-            }
+        if (!isSleeping) return;
 
-            gameView.getBatch().begin();
-            gameView.getBatch().setColor(0f, 0f, 0f, sleepAlpha);
-            gameView.getBatch().draw(gameView.getPixel(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            gameView.getBatch().setColor(1f, 1f, 1f, 1f);
-            gameView.getBatch().end();
+        // --- Alpha Logic ---
+        sleepTimer += delta;
+        if (!advancingDay && sleepAlpha < 1f) {
+            sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
+            if (sleepAlpha >= 1f) {
+                GameMenuController.startNewDay(gameController.getGameMenu(), false);
+                advancingDay = true;
+            }
+        } else if (advancingDay && sleepAlpha > 0f) {
+            sleepAlpha = Math.max(0f, sleepAlpha - delta * FADE_SPEED);
+            if (sleepAlpha <= 0f) {
+                isSleeping = false;
+                advancingDay = false;
+                sleepTimer = 0f;
+                resetRenderStates(); // Critical: Clean up after fade
+                return; // Skip rendering when fade is done
+            }
         }
+
+        // --- Isolated Fade Rendering ---
+        Batch batch = gameView.getBatch();
+
+        // 1. Backup ALL relevant states
+        Matrix4 originalProj = batch.getProjectionMatrix().cpy();
+        Color originalColor = new Color(batch.getColor());
+        int srcFunc = batch.getBlendSrcFunc();
+        int dstFunc = batch.getBlendDstFunc();
+        boolean blendingEnabled = Gdx.gl.glIsEnabled(GL20.GL_BLEND);
+
+        // 2. Configure fade-specific settings
+        batch.setProjectionMatrix(
+            new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
+        );
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        // 3. Draw the fade
+        batch.begin();
+        batch.setColor(0f, 0f, 0f, sleepAlpha);
+        batch.draw(
+            gameView.getPixel(),
+            0, 0,
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight()
+        );
+        batch.end();
+
+        // 4. RESTORE original states EXACTLY
+        batch.setProjectionMatrix(originalProj);
+        batch.setColor(originalColor);
+        batch.setBlendFunction(srcFunc, dstFunc);
+        if (!blendingEnabled) Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void resetRenderStates() {
+        // Force-clean OpenGL/Batch states (paranoid mode)
+        Batch batch = gameView.getBatch();
+        batch.setColor(1f, 1f, 1f, 1f); // Reset color
+        Gdx.gl.glDisable(GL20.GL_BLEND); // Force-disable blending
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Default blend
     }
 
     public void startSleepTransition() {

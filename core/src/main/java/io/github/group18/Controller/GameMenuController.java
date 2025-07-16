@@ -465,8 +465,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             int topLeftx = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLeftx");
             int topLefty = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLefty");
 
-            player.setX(topLeftx);
-            player.setY(topLefty);
+            player.setX(topLeftx + 5);
+            player.setY(topLefty + 5);
 
             if (i == 0) {
                 setMapp(NewGame);
@@ -660,23 +660,23 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
             if (i == 0) {
                 if (App.getCurrentGame().getPlayers().get(0).getEnergy() > 0) {
-                    App.getCurrentGame().getPlayers().get(0).setX(player1.getX());
-                    App.getCurrentGame().getPlayers().get(0).setY(player1.getY());
+                    App.getCurrentGame().getPlayers().get(0).setX(player1.getX() + 5);
+                    App.getCurrentGame().getPlayers().get(0).setY(player1.getY() + 5);
                 }
             } else if (i == 1) {
                 if (App.getCurrentGame().getPlayers().get(1).getEnergy() > 0) {
-                    App.getCurrentGame().getPlayers().get(1).setX(player2.getX());
-                    App.getCurrentGame().getPlayers().get(1).setY(player2.getY());
+                    App.getCurrentGame().getPlayers().get(1).setX(player2.getX() + 5);
+                    App.getCurrentGame().getPlayers().get(1).setY(player2.getY() + 5);
                 }
             } else if (i == 2) {
                 if (App.getCurrentGame().getPlayers().get(2).getEnergy() > 0) {
-                    App.getCurrentGame().getPlayers().get(2).setX(player3.getX());
-                    App.getCurrentGame().getPlayers().get(2).setY(player3.getY());
+                    App.getCurrentGame().getPlayers().get(2).setX(player3.getX() + 5);
+                    App.getCurrentGame().getPlayers().get(2).setY(player3.getY() + 5);
                 }
             } else if (i == 3) {
                 if (App.getCurrentGame().getPlayers().get(3).getEnergy() > 0) {
-                    App.getCurrentGame().getPlayers().get(3).setX(player4.getX());
-                    App.getCurrentGame().getPlayers().get(3).setY(player4.getY());
+                    App.getCurrentGame().getPlayers().get(3).setX(player4.getX() + 5);
+                    App.getCurrentGame().getPlayers().get(3).setY(player4.getY() + 5);
                 }
             }
         }
@@ -1298,7 +1298,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
-                                int energyBefore = player.getEnergy();
+                                double energyBefore = player.getEnergy();
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
@@ -1322,7 +1322,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     tilesWalked++;
                                 }
 
-                                int finalEnergy = energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade);
+                                double finalEnergy = energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade);
                                 player.setEnergy(finalEnergy);
 
                                 return new Result(true, "You went to your destination successfully!");
@@ -1372,7 +1372,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
-                                int energyBefore = player.getEnergy();
+                                double energyBefore = player.getEnergy();
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
@@ -1447,7 +1447,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
-                                int energyBefore = player.getEnergy();
+                                double energyBefore = player.getEnergy();
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {
@@ -1576,7 +1576,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
-                                int energyBefore = player.getEnergy();
+                                double energyBefore = player.getEnergy();
                                 String lastDirection = null;
 
                                 for (int[] step : result.path) {

@@ -162,6 +162,6 @@ public class ForagingCrop extends Crop implements Name, Price , PictureModel {
 
     @Override
     public String getPath() {
-        return "Crops/" + getCorrectName().replace(" ", "") + ".png";
+        return "Foraging/" + getCorrectName().replace(" ", "") + ".png";
     }
 }
