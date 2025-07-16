@@ -2,6 +2,7 @@ Bucket.jpg
 Chest.png
 Clock.png
 Cottage.jpg
+Cottage.png
 Crops/Amaranth.png
 Crops/Amaranth_Seeds.png
 Crops/Amaranth_Stage_1.png
