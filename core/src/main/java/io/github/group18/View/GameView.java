@@ -187,7 +187,6 @@ public class GameView {
 
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
-                batch.draw(GameAssetManager.getGameAssetManager().getBgGrass(), drawX, drawY, tileSize, tileSize);
                 batch.draw(texture, drawX, drawY, tileSize, tileSize);
             }
         }
