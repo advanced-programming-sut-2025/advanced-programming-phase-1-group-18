@@ -893,6 +893,8 @@ Watering_Can/Steel_Watering_Can.png
 Watering_Can/Watering_Can.png
 avatar.png
 bullet.png
+craftingSpriteSheet/crafting.atlas
+craftingSpriteSheet/crafting.png
 default.vert
 font/stardew-valley.ttf
 game/character/faint.jpeg

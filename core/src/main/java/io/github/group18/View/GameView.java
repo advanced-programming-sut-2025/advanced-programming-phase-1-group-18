@@ -179,6 +179,7 @@ public class GameView {
 
                 Object inside = tile.getInside();
                 TextureRegion texture = textures.get(inside);
+//                Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
                 if (texture == null) {
                     System.out.println("this aint happenin");
                     texture = textures.get("game/tiles/grass.png");
@@ -275,10 +276,10 @@ public class GameView {
             Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             batch.setProjectionMatrix(uiMatrix);
 
-            int slotSize = game.TILE_SIZE / 2;
+            int slotSize = game.TILE_SIZE*2 ;
             int numSlots = player.getInventory().getMaxQuantity();
             int startX = (Gdx.graphics.getWidth() - numSlots * slotSize) / 2;
-            int y = game.TILE_SIZE / 2; // Distance from bottom of screen
+            int y = game.TILE_SIZE*2; // Distance from bottom of screen
 
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));

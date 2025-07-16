@@ -141,7 +141,7 @@ public class Game {
     private OrthographicCamera camera;
     public static final int mapWidth = 1000;
     public static final int mapHeight = 560;
-    public static final int TILE_SIZE = 160;
+    public static final int TILE_SIZE = 50;
     private float cameraLerpSpeed = 8f;
     private int lookAheadTiles = 4;
     private boolean cameraInitialized = false;
