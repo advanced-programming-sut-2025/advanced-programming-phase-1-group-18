@@ -182,39 +182,42 @@ public class GameView {
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles);
-                if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                if (tiles.get(x).get(y).getInside() != null) {
 
-                } else {
-                    boolean flag = false;
-                    BottomLeft bottomLeft = null;
-                    for (int i = 0; i < bottomLeftTiles.size(); i++) {
-                        bottomLeft = bottomLeftTiles.get(i);
-                        if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
-                            flag = true;
-                            break;
-                        }
-                    }
-                    if (flag) {
-                        Kashi tile = tiles.get(x).get(y);
-                        Object inside = tile.getInside();
-                        TextureRegion texture = textures.get(inside);
-                        float drawX = x * tileSize;
-                        float drawY = y * tileSize;
-                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight());
+                    getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles);
+                    if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+
                     } else {
-                        Kashi tile = tiles.get(x).get(y);
-                        if (tile == null) continue;
-
-                        Object inside = tile.getInside();
-                        TextureRegion texture = textures.get(inside);
-                        if (texture == null) {
-                            texture = textures.get("game/tiles/grass.png");
+                        boolean flag = false;
+                        BottomLeft bottomLeft = null;
+                        for (int i = 0; i < bottomLeftTiles.size(); i++) {
+                            bottomLeft = bottomLeftTiles.get(i);
+                            if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
+                                flag = true;
+                                break;
+                            }
                         }
+                        if (flag) {
+                            Kashi tile = tiles.get(x).get(y);
+                            Object inside = tile.getInside();
+                            TextureRegion texture = textures.get(inside);
+                            float drawX = x * tileSize;
+                            float drawY = y * tileSize;
+                            batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight());
+                        } else {
+                            Kashi tile = tiles.get(x).get(y);
+                            if (tile == null) continue;
 
-                        float drawX = x * tileSize;
-                        float drawY = y * tileSize;
-                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                            Object inside = tile.getInside();
+                            TextureRegion texture = textures.get(inside);
+                            if (texture == null) {
+                                texture = textures.get("game/tiles/grass.png");
+                            }
+
+                            float drawX = x * tileSize;
+                            float drawY = y * tileSize;
+                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        }
                     }
                 }
             }
@@ -222,31 +225,75 @@ public class GameView {
     }
 
     public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles) {
-        int firstx = x;
-        int firsty = y;
+        // 1. First check all possible null cases
+        if (tiles == null || kashi == null || kashi.getInside() == null) {
+            System.out.println("Null detected in tiles or kashi");
+            return;
+        }
 
+        // 2. Check array bounds and tile existence
+        if (x < 0 || y < 0 || x >= tiles.size()) {
+            System.out.println("X coordinate out of bounds");
+            return;
+        }
+
+        ArrayList<Kashi> row = tiles.get(x);
+        if (row == null || y >= row.size()) {
+            System.out.println("Y coordinate out of bounds");
+            return;
+        }
+
+        Kashi tile = row.get(y);
+        if (tile == null || tile.getInside() == null) {
+            System.out.println("Tile or its inside is null");
+            return;
+        }
+
+        // 3. Now safe to proceed
         Class<?> clazz = kashi.getInside().getClass();
 
-        while (x >= 0 && tiles.get(x).get(y).getInside().getClass().equals(clazz)) {
+        // 4. Modified while loops with additional null checks
+        while (x >= 0) {
+            Kashi currentTile = tiles.get(x).get(y);
+            if (currentTile == null || currentTile.getInside() == null ||
+                !currentTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
             x--;
         }
         x++;
 
-        while (y >= 0 && tiles.get(x).get(y).getInside().getClass().equals(clazz)) {
+        while (y >= 0) {
+            Kashi currentTile = tiles.get(x).get(y);
+            if (currentTile == null || currentTile.getInside() == null ||
+                !currentTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
             y--;
         }
         y++;
 
+        // Rest of your method remains the same...
         int startX = x;
         int startY = y;
         int currentY;
-
         int widthcounter = 0;
         int heightcounter = 0;
 
-        for (int i = startX; i < tiles.size() && tiles.get(i).get(startY).getInside().getClass().equals(clazz); i++) {
+        for (int i = startX; i < tiles.size(); i++) {
+            Kashi rowTile = tiles.get(i).get(startY);
+            if (rowTile == null || rowTile.getInside() == null ||
+                !rowTile.getInside().getClass().equals(clazz)) {
+                break;
+            }
             widthcounter++;
-            for (currentY = startY; currentY < tiles.get(i).size() && tiles.get(i).get(currentY).getInside().getClass().equals(clazz); currentY++) {
+
+            for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
+                Kashi colTile = tiles.get(i).get(currentY);
+                if (colTile == null || colTile.getInside() == null ||
+                    !colTile.getInside().getClass().equals(clazz)) {
+                    break;
+                }
                 heightcounter++;
             }
         }
@@ -255,8 +302,20 @@ public class GameView {
         if (widthcounter > 1 || heightcounter > 1) {
             bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
             bottomLeftTiles.add(bottomLeft);
-            for (int i = startX + 1; i < tiles.size() && tiles.get(i).get(startY).getInside().getClass().equals(clazz); i++) {
-                for (currentY = startY + 1; currentY < tiles.get(i).size() && tiles.get(i).get(currentY).getInside().getClass().equals(clazz); currentY++) {
+            for (int i = startX + 1; i < tiles.size(); i++) {
+                Kashi rowTile = tiles.get(i).get(startY);
+                if (rowTile == null || rowTile.getInside() == null ||
+                    !rowTile.getInside().getClass().equals(clazz)) {
+                    break;
+                }
+
+                for (currentY = startY + 1; currentY < tiles.get(i).size(); currentY++) {
+                    Kashi colTile = tiles.get(i).get(currentY);
+                    if (colTile == null || colTile.getInside() == null ||
+                        !colTile.getInside().getClass().equals(clazz)) {
+                        break;
+                    }
+
                     Pair<Integer, Integer> coord = new Pair<>(i, currentY);
                     if (!alreadyRenderedTiles.contains(coord)) {
                         alreadyRenderedTiles.add(coord);
@@ -266,7 +325,6 @@ public class GameView {
         } else {
             bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
         }
-
     }
 
     private void renderPlayer() {
