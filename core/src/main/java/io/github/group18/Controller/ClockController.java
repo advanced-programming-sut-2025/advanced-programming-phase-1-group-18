@@ -1,11 +1,13 @@
 package io.github.group18.Controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Matrix4;
 import io.github.group18.Model.App;
 import io.github.group18.Model.DateTime;
 import io.github.group18.Model.GameAssetManager;
@@ -69,21 +71,35 @@ public class ClockController {
     }
 
     public void render(SpriteBatch batch, DateTime dateTime, OrthographicCamera camera) {
-        // Calculate position relative to camera viewport
-        float clockX = camera.position.x + (camera.viewportWidth/2) - rawClock.getWidth() - 10;
-        float clockY = camera.position.y + (camera.viewportHeight/2) - rawClock.getHeight() - 10;
+        // Save original projection matrix
+        Matrix4 originalMatrix = batch.getProjectionMatrix();
+
+        // Set up screen-space projection
+        Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.setProjectionMatrix(uiMatrix);
+
+        // Fixed screen positions (adjust these values as needed)
+        float clockX = Gdx.graphics.getWidth() - rawClock.getWidth() - 20; // Right side with 20px padding
+        float clockY = Gdx.graphics.getHeight() - rawClock.getHeight() - 20; // Top with 20px padding
 
         // Update all sprite positions
         rawClock.setPosition(clockX, clockY);
         clockArrow.setPosition(clockX + 88 - clockArrow.getWidth()/2, clockY + 156);
-        Sunny.setPosition(clockX + 29*scale, clockY + 35*scale);
-        Rain.setPosition(clockX + 29*scale, clockY + 35*scale);
-        Snow.setPosition(clockX + 29*scale, clockY + 35*scale);
-        Storm.setPosition(clockX + 29*scale, clockY + 35*scale);
-        Summer.setPosition(clockX + 53*scale, clockY + 35*scale);
-        Fall.setPosition(clockX + 53*scale, clockY + 35*scale);
-        Winter.setPosition(clockX + 53*scale, clockY + 35*scale);
-        Spring.setPosition(clockX + 53*scale, clockY + 35*scale);
+
+        // Common positions for weather and season icons
+        float weatherX = clockX + 29*scale;
+        float weatherY = clockY + 35*scale;
+        float seasonX = clockX + 53*scale;
+        float seasonY = clockY + 35*scale;
+
+        Sunny.setPosition(weatherX, weatherY);
+        Rain.setPosition(weatherX, weatherY);
+        Snow.setPosition(weatherX, weatherY);
+        Storm.setPosition(weatherX, weatherY);
+        Summer.setPosition(seasonX, seasonY);
+        Fall.setPosition(seasonX, seasonY);
+        Winter.setPosition(seasonX, seasonY);
+        Spring.setPosition(seasonX, seasonY);
 
         // Draw clock
         clockArrow.setRotation(-((dateTime.getHour() - 9)*12 + 180));
@@ -117,6 +133,9 @@ public class ClockController {
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         gold.draw(batch, String.valueOf(currentPlayer.getGold()),
             clockX + 17*scale, clockY + 3*scale + gold.getLineHeight());
+
+        // Restore original projection matrix
+        batch.setProjectionMatrix(originalMatrix);
     }
 
     public void dispose() {

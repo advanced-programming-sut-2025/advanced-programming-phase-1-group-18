@@ -39,25 +39,25 @@ public class TrashCan extends Tool implements Name,Price, PictureModel
         }
     }
 
-    public void trash(String objectName, int number){
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Map<Item,Integer> inventoryMap = player.getInventory().getItems();
-        for (Item item : inventoryMap.keySet()){
-            if (item.getClass().getSimpleName().equals(objectName)){
-                if (inventoryMap.get(item) >= number){
-                    int newNumber = inventoryMap.get(item) - number;
-                    inventoryMap.put(item, newNumber);
-                    break;
-                } else{
-                    //todo return number > itemCount
-                    return;
-                }
-            } else {
-                //todo return not found
-                return;
-            }
-        }
-    }
+//    public void trash(String objectName, int number){
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Map<Item,Integer> inventoryMap = player.getInventory().getItems();
+//        for (Item item : inventoryMap.keySet()){
+//            if (item.getClass().getSimpleName().equals(objectName)){
+//                if (inventoryMap.get(item) >= number){
+//                    int newNumber = inventoryMap.get(item) - number;
+//                    inventoryMap.put(item, newNumber);
+//                    break;
+//                } else{
+//                    //todo return number > itemCount
+//                    return;
+//                }
+//            } else {
+//                //todo return not found
+//                return;
+//            }
+//        }
+//    }
 
     public String getUsage() {
         return usage;

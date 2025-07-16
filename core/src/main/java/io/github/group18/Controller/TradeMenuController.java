@@ -46,158 +46,158 @@ public class TradeMenuController extends GameMenuController implements MenuEnter
             System.out.printf("player : %s\n",player.getOwner().getUsername());
         }
     }
-    public Result tradeWithMoney(String username, String type, String item, int amount, int price) {
-
-        Player targetPlayer = findPlayerByUsername(username);
-        if (targetPlayer == null) {
-            return new Result(false, "Your entered username was not found!");
-        }
-
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Inventory inventory = currentPlayer.getInventory();
-        Map<Item, Integer> itemInventory = inventory.getItems();
-
-        if (type.equalsIgnoreCase("offer")) {
-
-            Item itemToOffer = null;
-            for (Item item1 : itemInventory.keySet()) {
-                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
-                    itemToOffer = item1;
-                    break;
-                }
-            }
-
-            if (itemToOffer == null) {
-                return new Result(false, "You don't have that item to offer!");
-            }
-
-            if (itemInventory.get(itemToOffer) < amount) {
-                return new Result(false, "You don't have enough items to offer!");
-            }
-
-            if (currentPlayer.getGold() < price) {
-                return new Result(false, "You don't have enough gold to offer!");
-            }
-
-            Trade trade = new Trade("offer", itemToOffer, amount, price, null, null, currentPlayer);
-            trade.setReceiver(targetPlayer);
-            App.getCurrentGame().getTrades().add(trade);
-            TradeManager.addTrade(trade);
-            return new Result(true, "Trade offer sent successfully. Awaiting response from target player.");
-        }
-        else if (type.equalsIgnoreCase("request")) {
-
-            if (currentPlayer.getGold() < price) {
-                return new Result(false, "You don't have enough gold to request!");
-            }
-
-            Item itemToRequest = null;
-            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
-                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
-                    itemToRequest = item1;
-                    break;
-                }
-            }
-            if(itemToRequest == null) {
-                return new Result(false, "destination don't have that item to give you!");
-            }
-
-
-            Trade trade = new Trade("request", itemToRequest, amount, price, null, null, currentPlayer);
-            trade.setReceiver(targetPlayer);
-            App.getCurrentGame().getTrades().add(trade);
-            TradeManager.addTrade(trade);
-            return new Result(true, "Trade request sent successfully. Awaiting response from target player.");
-        }
-
-        return new Result(false, "Invalid trade type.");
-    }
-
-
-    public Result tradeWithItem(String username, String type, String item, int amount, String targetItem, int targetAmount) {
-        Player targetPlayer = findPlayerByUsername(username);
-        if (targetPlayer == null) {
-            return new Result(false, "Your entered username was not found!");
-        }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Inventory inventory = currentPlayer.getInventory();
-        Map<Item, Integer> itemInventory = inventory.getItems();
-
-        if (type.equalsIgnoreCase("offer")) {
-
-            Item itemToOffer = null;
-            for (Item item1 : itemInventory.keySet()) {
-                if (item1.getName().equals(item.toLowerCase().replace(" ",""))) {
-                    itemToOffer = item1;
-                    break;
-                }
-            }
-
-            if (itemToOffer == null) {
-                return new Result(false, "You don't have the item to offer!");
-            }
+//    public Result tradeWithMoney(String username, String type, String item, int amount, int price) {
+//
+//        Player targetPlayer = findPlayerByUsername(username);
+//        if (targetPlayer == null) {
+//            return new Result(false, "Your entered username was not found!");
+//        }
+//
+//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Inventory inventory = currentPlayer.getInventory();
+//        Map<Item, Integer> itemInventory = inventory.getItems();
+//
+//        if (type.equalsIgnoreCase("offer")) {
+//
+//            Item itemToOffer = null;
+//            for (Item item1 : itemInventory.keySet()) {
+//                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
+//                    itemToOffer = item1;
+//                    break;
+//                }
+//            }
+//
+//            if (itemToOffer == null) {
+//                return new Result(false, "You don't have that item to offer!");
+//            }
+//
+//            if (itemInventory.get(itemToOffer) < amount) {
+//                return new Result(false, "You don't have enough items to offer!");
+//            }
+//
+//            if (currentPlayer.getGold() < price) {
+//                return new Result(false, "You don't have enough gold to offer!");
+//            }
+//
+//            Trade trade = new Trade("offer", itemToOffer, amount, price, null, null, currentPlayer);
+//            trade.setReceiver(targetPlayer);
+//            App.getCurrentGame().getTrades().add(trade);
+//            TradeManager.addTrade(trade);
+//            return new Result(true, "Trade offer sent successfully. Awaiting response from target player.");
+//        }
+//        else if (type.equalsIgnoreCase("request")) {
+//
+//            if (currentPlayer.getGold() < price) {
+//                return new Result(false, "You don't have enough gold to request!");
+//            }
+//
+//            Item itemToRequest = null;
+//            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
+//                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
+//                    itemToRequest = item1;
+//                    break;
+//                }
+//            }
+//            if(itemToRequest == null) {
+//                return new Result(false, "destination don't have that item to give you!");
+//            }
+//
+//
+//            Trade trade = new Trade("request", itemToRequest, amount, price, null, null, currentPlayer);
+//            trade.setReceiver(targetPlayer);
+//            App.getCurrentGame().getTrades().add(trade);
+//            TradeManager.addTrade(trade);
+//            return new Result(true, "Trade request sent successfully. Awaiting response from target player.");
+//        }
+//
+//        return new Result(false, "Invalid trade type.");
+//    }
 
 
-            if (itemInventory.get(itemToOffer) < amount) {
-                return new Result(false, "You don't have enough items to offer!");
-            }
-
-
-            Item targetItemToReceive = null;
-            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
-                if (item1.getCorrectName().equals(targetItem)) {
-                    targetItemToReceive = item1;
-                    break;
-                }
-            }
-
-            if (targetItemToReceive == null) {
-                return new Result(false, "Target player doesn't have the item you want!");
-            }
-
-
-            if (targetPlayer.getInventory().getItemQuantity(targetItemToReceive) < targetAmount) {
-                return new Result(false, "Target player doesn't have enough items to offer!");
-            }
-
-
-            Trade trade = new Trade("offer", itemToOffer, amount, null, targetItemToReceive, targetAmount, currentPlayer);
-            trade.setReceiver(targetPlayer);
-            App.getCurrentGame().getTrades().add(trade);
-            TradeManager.addTrade(trade);
-            return new Result(true, "Trade offer sent successfully. Awaiting response from target player.");
-        }
-        else if (type.equalsIgnoreCase("request")) {
-
-            Item itemToRequest = null;
-            for (Item item1 : itemInventory.keySet()) {
-                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
-                    itemToRequest = item1;
-                    break;
-                }
-            }
-
-            System.out.println(itemToRequest.getCorrectName());
-            Item targetItemToReceive = null;
-            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
-                if (item1.getCorrectName().equals(targetItem.toLowerCase().replace(" ",""))) {
-                    targetItemToReceive = item1;
-                    break;
-                }
-            }
-
-            if (targetItemToReceive == null) {
-                return new Result(false, "Target player doesn't have the item you're requesting!");
-            }
-            Trade trade = new Trade("request", itemToRequest, amount, null, targetItemToReceive, targetAmount, currentPlayer);
-            trade.setReceiver(targetPlayer);
-            App.getCurrentGame().getTrades().add(trade);
-            TradeManager.addTrade(trade);
-            return new Result(true, "Trade request sent successfully. Awaiting response from target player.");
-        }
-
-        return new Result(false, "Invalid trade type.");
-    }
+//    public Result tradeWithItem(String username, String type, String item, int amount, String targetItem, int targetAmount) {
+//        Player targetPlayer = findPlayerByUsername(username);
+//        if (targetPlayer == null) {
+//            return new Result(false, "Your entered username was not found!");
+//        }
+//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Inventory inventory = currentPlayer.getInventory();
+//        Map<Item, Integer> itemInventory = inventory.getItems();
+//
+//        if (type.equalsIgnoreCase("offer")) {
+//
+//            Item itemToOffer = null;
+//            for (Item item1 : itemInventory.keySet()) {
+//                if (item1.getName().equals(item.toLowerCase().replace(" ",""))) {
+//                    itemToOffer = item1;
+//                    break;
+//                }
+//            }
+//
+//            if (itemToOffer == null) {
+//                return new Result(false, "You don't have the item to offer!");
+//            }
+//
+//
+//            if (itemInventory.get(itemToOffer) < amount) {
+//                return new Result(false, "You don't have enough items to offer!");
+//            }
+//
+//
+//            Item targetItemToReceive = null;
+//            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
+//                if (item1.getCorrectName().equals(targetItem)) {
+//                    targetItemToReceive = item1;
+//                    break;
+//                }
+//            }
+//
+//            if (targetItemToReceive == null) {
+//                return new Result(false, "Target player doesn't have the item you want!");
+//            }
+//
+//
+//            if (targetPlayer.getInventory().getItemQuantity(targetItemToReceive) < targetAmount) {
+//                return new Result(false, "Target player doesn't have enough items to offer!");
+//            }
+//
+//
+//            Trade trade = new Trade("offer", itemToOffer, amount, null, targetItemToReceive, targetAmount, currentPlayer);
+//            trade.setReceiver(targetPlayer);
+//            App.getCurrentGame().getTrades().add(trade);
+//            TradeManager.addTrade(trade);
+//            return new Result(true, "Trade offer sent successfully. Awaiting response from target player.");
+//        }
+//        else if (type.equalsIgnoreCase("request")) {
+//
+//            Item itemToRequest = null;
+//            for (Item item1 : itemInventory.keySet()) {
+//                if (item1.getCorrectName().equals(item.toLowerCase().replace(" ",""))) {
+//                    itemToRequest = item1;
+//                    break;
+//                }
+//            }
+//
+//            System.out.println(itemToRequest.getCorrectName());
+//            Item targetItemToReceive = null;
+//            for (Item item1 : targetPlayer.getInventory().getItems().keySet()) {
+//                if (item1.getCorrectName().equals(targetItem.toLowerCase().replace(" ",""))) {
+//                    targetItemToReceive = item1;
+//                    break;
+//                }
+//            }
+//
+//            if (targetItemToReceive == null) {
+//                return new Result(false, "Target player doesn't have the item you're requesting!");
+//            }
+//            Trade trade = new Trade("request", itemToRequest, amount, null, targetItemToReceive, targetAmount, currentPlayer);
+//            trade.setReceiver(targetPlayer);
+//            App.getCurrentGame().getTrades().add(trade);
+//            TradeManager.addTrade(trade);
+//            return new Result(true, "Trade request sent successfully. Awaiting response from target player.");
+//        }
+//
+//        return new Result(false, "Invalid trade type.");
+//    }
 
     public void tradeList()
     {
@@ -227,97 +227,97 @@ public class TradeMenuController extends GameMenuController implements MenuEnter
         }
 
     }
-    public Result tradeResponse(String acceptOrReject, int tradeId) {
-        Trade trade = findTradeById(tradeId);
-        if (trade == null) {
-            return new Result(false, "Trade with given ID not found!");
-        }
+//    public Result tradeResponse(String acceptOrReject, int tradeId) {
+//        Trade trade = findTradeById(tradeId);
+//        if (trade == null) {
+//            return new Result(false, "Trade with given ID not found!");
+//        }
+//
+//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        if (trade.getReceiver() != currentPlayer) {
+//            return new Result(false, "This trade is not directed to you.");
+//        }
+//
+//
+//        if (trade.getStatus() != TradeStatus.PENDING) {
+//            return new Result(false, "This trade has already been processed.");
+//        }
+//
+//
+//        if (acceptOrReject.equalsIgnoreCase("accept")) {
+//            trade.setStatus(TradeStatus.ACCEPTED);
+//            return executeTrade(trade);
+//        }
+//
+//        else if (acceptOrReject.equalsIgnoreCase("reject")) {
+//            trade.setStatus(TradeStatus.REJECTED);
+//            return new Result(true, "Trade request has been rejected.");
+//        }
+//
+//        else {
+//            return new Result(false, "Invalid response. Please use 'accept' or 'reject'.");
+//        }
+//    }
 
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        if (trade.getReceiver() != currentPlayer) {
-            return new Result(false, "This trade is not directed to you.");
-        }
-
-
-        if (trade.getStatus() != TradeStatus.PENDING) {
-            return new Result(false, "This trade has already been processed.");
-        }
-
-
-        if (acceptOrReject.equalsIgnoreCase("accept")) {
-            trade.setStatus(TradeStatus.ACCEPTED);
-            return executeTrade(trade);
-        }
-
-        else if (acceptOrReject.equalsIgnoreCase("reject")) {
-            trade.setStatus(TradeStatus.REJECTED);
-            return new Result(true, "Trade request has been rejected.");
-        }
-
-        else {
-            return new Result(false, "Invalid response. Please use 'accept' or 'reject'.");
-        }
-    }
-
-    private Result executeTrade(Trade trade) {
-        Player sender = trade.getSender();
-        Player receiver = trade.getReceiver();
-
-
-        if (trade.getType().equals("offer")) {
-
-            if (trade.getPrice() != null) {
-                sender.setGold(sender.getGold() - trade.getPrice());
-                receiver.setGold(receiver.getGold() + trade.getPrice());
-            }
-            if (trade.getItem() != null) {
-                sender.getInventory().removeItem(trade.getItem(), trade.getAmount());
-                receiver.getInventory().addItem(trade.getItem(), trade.getAmount());
-            }
-
-
-            if (trade.getTargetItem() != null) {
-                sender.getInventory().removeItem(trade.getTargetItem(), trade.getTargetAmount());
-                receiver.getInventory().addItem(trade.getTargetItem(), trade.getTargetAmount());
-            }
-
-            return new Result(true, "Trade has been successfully executed.");
-        }
-        else if (trade.getType().equals("request")) {
-
-
-            if (trade.getPrice() != null && receiver.getGold() < trade.getPrice()) {
-                return new Result(false, "Receiver does not have enough gold to fulfill the request.");
-            }
-
-
-            if (trade.getItem() != null) {
-                if (!receiver.getInventory().hasItem(trade.getItem()) ||
-                        receiver.getInventory().getItems().get(trade.getItem()) < trade.getAmount()) {
-                    System.out.println( receiver.getInventory().getItems().get(trade.getItem()));
-                    System.out.println("****NOOOOOOOO****");
-                    return new Result(false, "Receiver does not have enough target items to fulfill the request.");
-                }
-            }
-
-
-            if (trade.getPrice() != null) {
-                receiver.setGold(receiver.getGold() - trade.getPrice());
-                sender.setGold(sender.getGold() + trade.getPrice());
-            }
-
-
-            if (trade.getItem() != null) {
-                receiver.getInventory().removeItem(trade.getItem(), trade.getAmount());
-                sender.getInventory().addItem(trade.getItem(), trade.getAmount());
-            }
-
-            return new Result(true, "Trade has been successfully executed.");
-        }
-
-
-        return new Result(false, "Failed to execute trade.");
-    }
+//    private Result executeTrade(Trade trade) {
+//        Player sender = trade.getSender();
+//        Player receiver = trade.getReceiver();
+//
+//
+//        if (trade.getType().equals("offer")) {
+//
+//            if (trade.getPrice() != null) {
+//                sender.setGold(sender.getGold() - trade.getPrice());
+//                receiver.setGold(receiver.getGold() + trade.getPrice());
+//            }
+//            if (trade.getItem() != null) {
+//                sender.getInventory().removeItem(trade.getItem(), trade.getAmount());
+//                receiver.getInventory().addItem(trade.getItem(), trade.getAmount());
+//            }
+//
+//
+//            if (trade.getTargetItem() != null) {
+//                sender.getInventory().removeItem(trade.getTargetItem(), trade.getTargetAmount());
+//                receiver.getInventory().addItem(trade.getTargetItem(), trade.getTargetAmount());
+//            }
+//
+//            return new Result(true, "Trade has been successfully executed.");
+//        }
+//        else if (trade.getType().equals("request")) {
+//
+//
+//            if (trade.getPrice() != null && receiver.getGold() < trade.getPrice()) {
+//                return new Result(false, "Receiver does not have enough gold to fulfill the request.");
+//            }
+//
+//
+//            if (trade.getItem() != null) {
+//                if (!receiver.getInventory().hasItem(trade.getItem()) ||
+//                        receiver.getInventory().getItems().get(trade.getItem()) < trade.getAmount()) {
+//                    System.out.println( receiver.getInventory().getItems().get(trade.getItem()));
+//                    System.out.println("****NOOOOOOOO****");
+//                    return new Result(false, "Receiver does not have enough target items to fulfill the request.");
+//                }
+//            }
+//
+//
+//            if (trade.getPrice() != null) {
+//                receiver.setGold(receiver.getGold() - trade.getPrice());
+//                sender.setGold(sender.getGold() + trade.getPrice());
+//            }
+//
+//
+//            if (trade.getItem() != null) {
+//                receiver.getInventory().removeItem(trade.getItem(), trade.getAmount());
+//                sender.getInventory().addItem(trade.getItem(), trade.getAmount());
+//            }
+//
+//            return new Result(true, "Trade has been successfully executed.");
+//        }
+//
+//
+//        return new Result(false, "Failed to execute trade.");
+//    }
 
 
     public void tradeHistory() {

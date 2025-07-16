@@ -25,7 +25,7 @@ public class CarpentersShopMenu extends AppMenu {
             String buildingName = CarpentersShopCommands.BUILDBUILDING.getMather(input).group(1);
             int xOfBuilding = Integer.parseInt(CarpentersShopCommands.BUILDBUILDING.getMather(input).group(2));
             int yOfBuilding = Integer.parseInt(CarpentersShopCommands.BUILDBUILDING.getMather(input).group(3));
-            System.out.println(controller.build(buildingName, xOfBuilding, yOfBuilding));
+//            System.out.println(controller.build(buildingName, xOfBuilding, yOfBuilding));
         } else if (CarpentersShopCommands.MenuEnter.getMather(input) != null) {
             controller.menuEnter(CarpentersShopCommands.MenuEnter.getMather(input).group(1));
         } else {

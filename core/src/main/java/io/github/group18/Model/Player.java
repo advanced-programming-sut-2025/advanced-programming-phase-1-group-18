@@ -39,6 +39,7 @@ public class Player extends User {
     private int movingDirection = 0;
     private float speed = 4f;
     private float vx = 0, vy = 0;
+    private boolean showInventory;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -58,6 +59,7 @@ public class Player extends User {
         this.CookingRecipes = new ArrayList<>();
         this.CraftingRecipes = new ArrayList<>();
         this.artisansInProduce = new ArrayList<>();
+
         this.inventory = new Inventory(12, "initial");
 
         WateringCan wateringCan = new WateringCan("initial", 5, 40, 40);
@@ -315,6 +317,22 @@ public class Player extends User {
 
     public void setVy(float vy) {
         this.vy = vy;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public boolean isShowInventory() {
+        return showInventory;
+    }
+
+    public void setShowInventory(boolean showInventory) {
+        this.showInventory = showInventory;
     }
 
     public void setVelocity(float vx, float vy) {
