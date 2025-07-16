@@ -63,6 +63,22 @@ public class GameView {
             playerAnimations.add(new Animation<>(0.15f, walkFrames, Animation.PlayMode.LOOP));
         }
 
+        Array<TextureRegion> faintFrames = new Array<>();
+        TextureRegion frame;
+        for (int i = 0; i < 7; i++) {
+            frame = playerAtlas.findRegion("player_faint_" + i);
+            if (frame == null) {
+                Gdx.app.error("Animation", "Missing faint frame: player_faint_" + i);
+            } else {
+                faintFrames.add(frame);
+            }
+        }
+        if (faintFrames.size == 7) {
+            playerAnimations.add(new Animation<>(0.2f, faintFrames));
+        } else {
+            Gdx.app.error("Animation", "Missing faint frames! Loaded: " + faintFrames.size);
+        }
+
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 1);
         pixmap.fill();
@@ -74,6 +90,42 @@ public class GameView {
         smallFont = new BitmapFont();
         smallFont.setColor(Color.WHITE);
         smallFont.getData().setScale(1.5f);
+    }
+
+    private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                Kashi tile = tiles.get(x).get(y);
+                if (tile == null) continue;
+
+                Object inside = tile.getInside();
+                if (!textures.containsKey(inside)) {
+                    if (inside instanceof PictureModel pictureModel) {
+                        try {
+                            Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                            textures.put(inside, new TextureRegion(tex));
+                        } catch (Exception e) {
+                            System.out.println(inside.getClass().getSimpleName());
+                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                        }
+                    } else {
+                        textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                    }
+                }
+            }
+        }
+    }
+
+    private void loadInventoryItems() {
+        for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
+            if (item instanceof PictureModel pictureModel) {
+                String path = pictureModel.getPath();
+                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+            } else {
+                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+            }
+        }
     }
 
     public void render() {
@@ -102,10 +154,10 @@ public class GameView {
         endX = Math.min(tiles.size() - 1, endX);
         endY = Math.min(tiles.get(0).size() - 1, endY);
         loadTiles(startX, startY, endX, endY, tiles);
-        drawtiles(startX, startY, endX, endY, tiles);
+        drawTiles(startX, startY, endX, endY, tiles);
     }
 
-    private void drawtiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+    private void drawTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
@@ -126,32 +178,8 @@ public class GameView {
         }
     }
 
-    private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
-                Kashi tile = tiles.get(x).get(y);
-                if (tile == null) continue;
-
-                Object inside = tile.getInside();
-                if (!textures.containsKey(inside)) {
-                    if (inside instanceof PictureModel pictureModel) {
-                        try {
-                            Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
-                            textures.put(inside, new TextureRegion(tex));
-                        } catch (Exception e) {
-                            System.out.println(inside.getClass().getSimpleName());
-                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-                        }
-                    } else {
-                        textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
-                    }
-                }
-            }
-        }
-    }
-
     private void renderPlayer() {
+        Player player = game.getCurrentPlayer();
         double first = game.getCurrentPlayer().getX();
         double second = game.getCurrentPlayer().getY();
 
@@ -159,8 +187,17 @@ public class GameView {
 
         stateTime += Gdx.graphics.getDeltaTime();
 
-        Animation<TextureRegion> currentAnimation = playerAnimations.get(moveDirection);
-        TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+        TextureRegion currentFrame = new TextureRegion();
+
+        switch (player.getState()) {
+            case Player.STATE_FAINTING:
+                currentFrame = playerAnimations.get(5)
+                    .getKeyFrame(player.getFaintTimer(), false);
+                break;
+            case Player.STATE_IDLE:
+                currentFrame = playerAnimations.get(player.getMovingDirection())
+                    .getKeyFrame(stateTime, true);
+        }
 
         batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
     }
@@ -169,35 +206,35 @@ public class GameView {
         int currentHour = game.getCurrentDateTime().getHour();
         float brightness = 1f;
 
+        // Calculate darkness intensity (6PM-6AM)
         if (currentHour >= 18 || currentHour <= 6) {
             float nightFactor;
             if (currentHour >= 18 && currentHour < 24) {
-                nightFactor = (currentHour - 18) / 6f;
+                nightFactor = (currentHour - 18) / 6f; // 6PM-12AM: 0 to 1
             } else {
-                nightFactor = (6 - currentHour) / 6f;
+                nightFactor = (6 - currentHour) / 6f; // 12AM-6AM: 1 to 0
             }
-            brightness = 1f - (nightFactor * 0.5f);
+            brightness = 1f - (nightFactor * 0.7f); // More dramatic darkness
         }
 
         if (brightness < 1f) {
-            float overlayAlpha = 1f - brightness;
+            // Save original batch state
+            Matrix4 originalMatrix = batch.getProjectionMatrix();
+            Color originalColor = new Color(batch.getColor());
+            batch.setColor(0f, 0f, 0f, 1f - brightness);
 
-            // Get camera dimensions
-            float camX = game.getCamera().position.x;
-            float camY = game.getCamera().position.y;
-            float viewportWidth = game.getCamera().viewportWidth;
-            float viewportHeight = game.getCamera().viewportHeight;
+            // Switch to screen coordinates
+            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-            // Calculate world-space rectangle that covers the entire viewport
-            float left = camX - viewportWidth / 2;
-            float bottom = camY - viewportHeight / 2;
-
-            batch.setColor(0f, 0f, 0f, overlayAlpha);
+            // Draw full-screen overlay
             batch.draw(pixel,
-                left, bottom,           // Bottom-left corner
-                viewportWidth,          // Width
-                viewportHeight);        // Height
-            batch.setColor(1f, 1f, 1f, 1f);
+                0, 0,
+                Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight());
+
+            // Restore original state
+            batch.setProjectionMatrix(originalMatrix);
+            batch.setColor(originalColor);
         }
     }
 
@@ -275,17 +312,6 @@ public class GameView {
             // Dispose temporary textures (or cache them if used frequently)
             slotTexture.dispose();
             highlightTexture.dispose();
-        }
-    }
-
-    private void loadInventoryItems() {
-        for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof PictureModel pictureModel) {
-                String path = pictureModel.getPath();
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
-            } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
-            }
         }
     }
 

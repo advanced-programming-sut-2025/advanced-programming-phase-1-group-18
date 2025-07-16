@@ -894,6 +894,7 @@ avatar.png
 bullet.png
 default.vert
 font/stardew-valley.ttf
+game/character/faint.jpeg
 game/character/player.png
 game/character/sprites_player.atlas
 game/crops/Carrot.png
