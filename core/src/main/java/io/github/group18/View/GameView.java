@@ -32,7 +32,8 @@ public class GameView {
     private int moveDirection = 0;
     private Texture pixel; // Add this
     private ClockController clock;
-
+    private ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles;
+    private ArrayList<BottomLeft> bottomLeftTiles;
 
     public GameView(Game game) {
         this.game = game;
@@ -93,9 +94,16 @@ public class GameView {
     }
 
     private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
+        alreadyRenderedTiles = new ArrayList<>();
+        bottomLeftTiles = new ArrayList<>();
 
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
+
+                if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                    continue;
+                }
+
                 Kashi tile = tiles.get(x).get(y);
                 if (tile == null) continue;
 
@@ -174,22 +182,91 @@ public class GameView {
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                Kashi tile = tiles.get(x).get(y);
-                if (tile == null) continue;
+                getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles);
+                if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
 
-                Object inside = tile.getInside();
-                TextureRegion texture = textures.get(inside);
-//                Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
-                if (texture == null) {
-                    System.out.println("this aint happenin");
-                    texture = textures.get("game/tiles/grass.png");
+                } else {
+                    boolean flag = false;
+                    BottomLeft bottomLeft = null;
+                    for (int i = 0; i < bottomLeftTiles.size(); i++) {
+                        bottomLeft = bottomLeftTiles.get(i);
+                        if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        Kashi tile = tiles.get(x).get(y);
+                        Object inside = tile.getInside();
+                        TextureRegion texture = textures.get(inside);
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight());
+                    } else {
+                        Kashi tile = tiles.get(x).get(y);
+                        if (tile == null) continue;
+
+                        Object inside = tile.getInside();
+                        TextureRegion texture = textures.get(inside);
+                        if (texture == null) {
+                            texture = textures.get("game/tiles/grass.png");
+                        }
+
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                    }
                 }
-
-                float drawX = x * tileSize;
-                float drawY = y * tileSize;
-                batch.draw(texture, drawX, drawY, tileSize, tileSize);
             }
         }
+    }
+
+    public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles) {
+        int firstx = x;
+        int firsty = y;
+
+        Class<?> clazz = kashi.getInside().getClass();
+
+        while (x >= 0 && tiles.get(x).get(y).getInside().getClass().equals(clazz)) {
+            x--;
+        }
+        x++;
+
+        while (y >= 0 && tiles.get(x).get(y).getInside().getClass().equals(clazz)) {
+            y--;
+        }
+        y++;
+
+        int startX = x;
+        int startY = y;
+        int currentY;
+
+        int widthcounter = 0;
+        int heightcounter = 0;
+
+        for (int i = startX; i < tiles.size() && tiles.get(i).get(startY).getInside().getClass().equals(clazz); i++) {
+            widthcounter++;
+            for (currentY = startY; currentY < tiles.get(i).size() && tiles.get(i).get(currentY).getInside().getClass().equals(clazz); currentY++) {
+                heightcounter++;
+            }
+        }
+
+        BottomLeft bottomLeft;
+        if (widthcounter > 1 || heightcounter > 1) {
+            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
+            bottomLeftTiles.add(bottomLeft);
+            for (int i = startX + 1; i < tiles.size() && tiles.get(i).get(startY).getInside().getClass().equals(clazz); i++) {
+                for (currentY = startY + 1; currentY < tiles.get(i).size() && tiles.get(i).get(currentY).getInside().getClass().equals(clazz); currentY++) {
+                    Pair<Integer, Integer> coord = new Pair<>(i, currentY);
+                    if (!alreadyRenderedTiles.contains(coord)) {
+                        alreadyRenderedTiles.add(coord);
+                    }
+                }
+            }
+        } else {
+            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
+        }
+
     }
 
     private void renderPlayer() {
@@ -276,10 +353,10 @@ public class GameView {
             Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             batch.setProjectionMatrix(uiMatrix);
 
-            int slotSize = game.TILE_SIZE*2 ;
+            int slotSize = game.TILE_SIZE * 2;
             int numSlots = player.getInventory().getMaxQuantity();
             int startX = (Gdx.graphics.getWidth() - numSlots * slotSize) / 2;
-            int y = game.TILE_SIZE*2; // Distance from bottom of screen
+            int y = game.TILE_SIZE * 2; // Distance from bottom of screen
 
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
