@@ -32,6 +32,7 @@ public class LightningEffect {
             stage = 3;
         } else if (stage == 3 && timer >= 0.1f) { // پایان افکت
             active = false;
+
         }
     }
 
