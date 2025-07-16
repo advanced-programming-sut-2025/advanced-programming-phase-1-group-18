@@ -38,13 +38,13 @@ Crops/Beet_Stage_2.png
 Crops/Beet_Stage_3.png
 Crops/Beet_Stage_4.png
 Crops/Beet_Stage_5.png
-Crops/BlueBerry.png
 Crops/BlueJazz.png
 Crops/Blue_Jazz_Stage_1.png
 Crops/Blue_Jazz_Stage_2.png
 Crops/Blue_Jazz_Stage_3.png
 Crops/Blue_Jazz_Stage_4.png
 Crops/Blue_Jazz_Stage_5.png
+Crops/Blueberry.png
 Crops/Blueberry_Seeds.png
 Crops/Blueberry_Stage_1.png
 Crops/Blueberry_Stage_2.png
@@ -90,7 +90,7 @@ Crops/Carrot_Stage_1.png
 Crops/Carrot_Stage_2.png
 Crops/Carrot_Stage_3.png
 Crops/Carrot_Stage_4.png
-Crops/CauliFlower.png
+Crops/Cauliflower.png
 Crops/Cauliflower_Seeds.png
 Crops/Cauliflower_Stage_1.png
 Crops/Cauliflower_Stage_2.png
@@ -129,7 +129,7 @@ Crops/Cranberry_Stage_6.png
 Crops/Cranberry_Stage_7.png
 Crops/Demetrius_Icon.png
 Crops/Dust_Sprite.png
-Crops/EggPlant.png
+Crops/Eggplant.png
 Crops/Eggplant_Parmesan.png
 Crops/Eggplant_Seeds.png
 Crops/Eggplant_Stage_1.png
@@ -273,7 +273,7 @@ Crops/Potato_Stage_3.png
 Crops/Potato_Stage_4.png
 Crops/Potato_Stage_5.png
 Crops/Potato_Stage_6.png
-Crops/PowderMelon.png
+Crops/Powdermelon.png
 Crops/Powdermelon_Seeds.png
 Crops/Powdermelon_Stage_1.png
 Crops/Powdermelon_Stage_2.png
@@ -326,8 +326,8 @@ Crops/Spaghetti.png
 Crops/Spangle_Seeds.png
 Crops/Spicy_Eel.png
 Crops/Spring_Seeds.png
-Crops/StarFruit.png
 Crops/Stardrop.png
+Crops/Starfruit.png
 Crops/Starfruit_Seeds.png
 Crops/Starfruit_Stage_1.png
 Crops/Starfruit_Stage_2.png
@@ -336,7 +336,7 @@ Crops/Starfruit_Stage_4.png
 Crops/Starfruit_Stage_5.png
 Crops/Starfruit_Stage_6.png
 Crops/Stir_Fry.png
-Crops/StrawBerry.png
+Crops/Strawberry.png
 Crops/Strawberry_Seeds.png
 Crops/Strawberry_Stage_1.png
 Crops/Strawberry_Stage_2.png
@@ -363,7 +363,7 @@ Crops/Summer_Squash_Stage_4.png
 Crops/Summer_Squash_Stage_5.png
 Crops/Summer_Squash_Stage_6.png
 Crops/Summer_Squash_Stage_7.png
-Crops/SunFlower.png
+Crops/Sunflower.png
 Crops/Sunflower_Seeds.png
 Crops/Sunflower_Stage_1.png
 Crops/Sunflower_Stage_2.png
@@ -431,6 +431,8 @@ Crops/Yam_Stage_2.png
 Crops/Yam_Stage_3.png
 Crops/Yam_Stage_4.png
 Crops/Yam_Stage_5.png
+EnergyBar/bar.png
+EnergyBar/green.png
 Foraging/Autumn%27s_Bounty.png
 Foraging/Basic_Fertilizer.png
 Foraging/Blackberry.png
@@ -657,13 +659,6 @@ Mineral/Tigerseye.png
 Mineral/Topaz.png
 NPC.jpg
 RegisterImage.jpg
-Skin/1hoursheet.PNG
-Skin/font-export.fnt
-Skin/font-subtitle-export.fnt
-Skin/font-title-export.fnt
-Skin/pixthulhu-ui.atlas
-Skin/pixthulhu-ui.json
-Skin/pixthulhu-ui.png
 Stone.png
 Store.png
 Tools/36_Backpack.png
@@ -925,6 +920,13 @@ mapDeafult.png
 menu_bg.png
 music/theme1.mp3
 music/theme2.mp3
+skin/1hoursheet.PNG
+skin/font-export.fnt
+skin/font-subtitle-export.fnt
+skin/font-title-export.fnt
+skin/pixthulhu-ui.atlas
+skin/pixthulhu-ui.json
+skin/pixthulhu-ui.png
 testSpriteSheet/clockAtlas.atlas
 testSpriteSheet/clockAtlas.png
 ui/font-list.fnt

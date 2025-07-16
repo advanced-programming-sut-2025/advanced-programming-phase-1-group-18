@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
+import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.enums.GameMenuCommands;
 import io.github.group18.enums.LoginMenuCommands;
@@ -53,8 +54,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     }
 
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input ,Scanner scanner) {
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
@@ -87,8 +87,8 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.DAY_OF_WEEK.getMather(input) != null) {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
-//            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-//                getMather(input).group(1).trim())));
+            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
+                getMather(input).group(1).trim()), App.getGameController().getGameMenu()));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
 //            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
@@ -471,5 +471,10 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     public void setGameHeight(int gameHeight) {
         this.gameHeight = gameHeight;
+    }
+
+    @Override
+    public void check(Scanner scanner) {
+
     }
 }

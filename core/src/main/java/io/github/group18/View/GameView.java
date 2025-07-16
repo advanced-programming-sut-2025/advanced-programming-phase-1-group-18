@@ -14,9 +14,10 @@ import java.util.Map;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
+import io.github.group18.Controller.EnergyController;
+import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
-
 
 public class GameView {
 
@@ -32,12 +33,16 @@ public class GameView {
     private int moveDirection = 0;
     private Texture pixel; // Add this
     private ClockController clock;
+    private EnergyController energy;
+
 
 
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
         clock = new ClockController();
+        energy = new EnergyController();
+//        loadTextures();
         loadTextures();
         loadFont();
     }
@@ -135,6 +140,9 @@ public class GameView {
         renderPlayer();
         renderInventory();
         renderClock();
+        energy.render(batch);
+//        renderTiles();
+//        renderPlayer();
         renderBrightness();
         batch.end();
     }

@@ -1012,6 +1012,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
                 }
             }
+            App.getGameController().getGameMenu().getLightningEffect().start();
 //                    thor.setKhordeh(kashiList);
         }
 
@@ -1143,37 +1144,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "cheatCode: Invalid day");
         }
         int newDay = day + App.getCurrentGame().getCurrentDateTime().getDay();
-        //App.getCurrentGame().setCurrentDateTime(new DateTime(day, newDay));
-//        Deque<WeatherEnum> weather = new ArrayDeque<>();
-//        weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
-//        App.getCurrentGame().setCurrentWeather(weather.pollFirst());
-//        App.getCurrentGame().setWeather(weather);
-//        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
-//            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
-//            switch (season2) {
-//                case "Spring":
-//                    weather.addLast(getRandomWeather(Seasons.Summer));
-//                    App.getCurrentGame().setWeather(weather);
-//                    break;
-//                case "Summer":
-//                    weather.addLast(getRandomWeather(Seasons.Fall));
-//                    App.getCurrentGame().setWeather(weather);
-//                    break;
-//                case "Fall":
-//                    weather.addLast(getRandomWeather(Seasons.Winter));
-//                    App.getCurrentGame().setWeather(weather);
-//                    break;
-//                case "Winter":
-//                    weather.addLast(getRandomWeather(Seasons.Spring));
-//                    App.getCurrentGame().setWeather(weather);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        } else {
-//            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
-//            App.getCurrentGame().setWeather(weather);
-//        }
+        App.getCurrentGame().setCurrentDateTime(new DateTime(day, newDay));
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+        App.getCurrentGame().setCurrentWeather(weather.pollFirst());
+        App.getCurrentGame().setWeather(weather);
+        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
+            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
+            switch (season2) {
+                case "Spring":
+                    weather.addLast(getRandomWeather(Seasons.Summer));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Summer":
+                    weather.addLast(getRandomWeather(Seasons.Fall));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Fall":
+                    weather.addLast(getRandomWeather(Seasons.Winter));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Winter":
+                    weather.addLast(getRandomWeather(Seasons.Spring));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+            App.getCurrentGame().setWeather(weather);
+        }
         for (int i = 0; i < day; i++) {
             startNewDay(gameMenu,true);
         }
@@ -1199,7 +1200,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             coal.setType(ForagingMineralsEnums.Coal);
             App.getCurrentGame().getMap().get(x).get(y).setInside(coal);
         }
-
+        App.getGameController().getGameMenu().getLightningEffect().start();
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 
