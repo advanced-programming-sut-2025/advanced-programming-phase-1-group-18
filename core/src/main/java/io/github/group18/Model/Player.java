@@ -41,6 +41,12 @@ public class Player extends User {
     private float vx = 0, vy = 0;
     private boolean showInventory;
 
+    public static final int STATE_IDLE = 0;
+    public static final int STATE_FAINTING = 5; // After your existing states
+    private int state = STATE_IDLE;
+    private float faintTimer;
+
+
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
         super();
@@ -335,17 +341,56 @@ public class Player extends User {
         this.showInventory = showInventory;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public float getFaintTimer() {
+        return faintTimer;
+    }
+
+    public void setFaintTimer(float faintTimer) {
+        this.faintTimer = faintTimer;
+    }
+
     public void setVelocity(float vx, float vy) {
         this.vx = vx;
         this.vy = vy;
     }
 
     public void update(float delta, ArrayList<ArrayList<Kashi>> tiles) {
+        if (Energy <= 0 && state != STATE_FAINTING) {
+            faint();
+        }
+
+        // Handle current state
+        switch (state) {
+            case STATE_FAINTING:
+                faintTimer += delta;
+                if (faintTimer >= 1.4f) {
+                    state = STATE_IDLE;
+                    faintTimer = 0f;
+
+                }
+                break;
+            case STATE_IDLE:
+                if (Energy < 0) { // Low energy warning
+                    state = STATE_FAINTING;
+                    faintTimer = 0f;
+                }
+                break;
+        }
+
         tryMove(vx * delta, vy * delta, tiles);
     }
 
     public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles) {
-        if (Energy <= 0) return false;
+        if (state == STATE_FAINTING) return false;
+
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
 
@@ -362,5 +407,12 @@ public class Player extends User {
             return true;
         }
         return false;
+    }
+
+    public void faint() {
+        if (state != STATE_FAINTING) {
+            state = STATE_FAINTING;
+            faintTimer = 0f;
+        }
     }
 }

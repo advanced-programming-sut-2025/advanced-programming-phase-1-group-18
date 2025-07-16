@@ -54,7 +54,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 GameAssetManager.getGameAssetManager().getSkin());
             cheatDialog.show(stage);
         }
-        if (keycode == Input.Keys.T) {
+        if (keycode == Input.Keys.B) {
             game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
             return true;
         }
