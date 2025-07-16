@@ -40,10 +40,9 @@ public class GameView {
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
-        clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
+        clock = new ClockController();
         energy = new EnergyController();
 //        loadTextures();
-        clock = new ClockController(App.getCurrentGame().getCurrentDateTime());
         loadTextures();
         loadFont();
     }

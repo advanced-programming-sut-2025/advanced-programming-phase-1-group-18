@@ -23,11 +23,11 @@ public class EnergyController {
         energyTexture.setPosition(Gdx.graphics.getWidth()-energyTexture.getWidth()-10,
             10);
         greenBarTexture.setPosition(energyTexture.getX()+9*scale, 10+6*scale);
-        energy = currentPlayer.getEnergy();
+        energy = (int) currentPlayer.getEnergy();
         maxEnergyLen = greenBarTexture.getHeight();
     }
     public void render(SpriteBatch batch){
-        float nesbat = (float) currentPlayer.getEnergy() /currentPlayer.getMaxEnergy();
+        float nesbat = (float) ((float) currentPlayer.getEnergy() /currentPlayer.getMaxEnergy());
         greenBarTexture.setSize(greenBarTexture.getWidth(), nesbat*maxEnergyLen);
         energyTexture.draw(batch);
         greenBarTexture.draw(batch);
