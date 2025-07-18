@@ -34,7 +34,7 @@ public class StartNewGame implements Screen {
         this.chooseMapButton = new TextButton("Choose Map", skin);
         this.backButton = new TextButton("Back", skin);
         this.notif = new Label("", skin);
-        this.addPlayerField = new TextField("",skin);
+        this.addPlayerField = new TextField("b",skin);
         addPlayerField.setMessageText("Enter Player Name");
         this.menuTitle = new Label("Add Player", skin,"title");
         this.chooseMapBox = new SelectBox<>(skin);

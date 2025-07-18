@@ -890,6 +890,8 @@ avatar.png
 bullet.png
 craftingSpriteSheet/crafting.atlas
 craftingSpriteSheet/crafting.png
+craftingSpriteSheet/craftingMenu.png
+craftingSpriteSheet/exit.png
 default.vert
 font/stardew-valley.ttf
 game/character/faint.jpeg

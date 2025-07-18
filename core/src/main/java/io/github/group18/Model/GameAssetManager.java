@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameAssetManager {
     private static GameAssetManager gameAssetManager;
     private final Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+    private final Skin skinNormal = new Skin(Gdx.files.internal("ui/uiskin.json"));
     public static Texture menuBackground = new Texture(Gdx.files.internal("menu_bg.png"));
 
     Texture backgroundMapTexture = new Texture(Gdx.files.internal("map.png"));
@@ -21,10 +22,13 @@ public class GameAssetManager {
     Texture barTexture = new Texture(Gdx.files.internal("EnergyBar/bar.png"));
     Texture greenBarTexture = new Texture(Gdx.files.internal("EnergyBar/green.png"));
     Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
+    Texture bgCraftingMenu = new Texture(Gdx.files.internal("craftingSpriteSheet/craftingMenu.png"));
+    Texture exitTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/exit.png"));
 
 
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
+    TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
 
 
     public static Texture defaultAvatar = new Texture(Gdx.files.internal("avatar.png"));
@@ -40,6 +44,10 @@ public class GameAssetManager {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public Skin getSkinNormal() {
+        return skinNormal;
     }
 
     public static Texture getBackground() {
@@ -145,5 +153,29 @@ public class GameAssetManager {
 
     public void setGreenBarTexture(Texture greenBarTexture) {
         this.greenBarTexture = greenBarTexture;
+    }
+
+    public Texture getBgCraftingMenu() {
+        return bgCraftingMenu;
+    }
+
+    public void setBgCraftingMenu(Texture bgCraftingMenu) {
+        this.bgCraftingMenu = bgCraftingMenu;
+    }
+
+    public TextureAtlas getCraftingAtlas() {
+        return craftingAtlas;
+    }
+
+    public void setCraftingAtlas(TextureAtlas craftingAtlas) {
+        this.craftingAtlas = craftingAtlas;
+    }
+
+    public Texture getExitTexture() {
+        return exitTexture;
+    }
+
+    public void setExitTexture(Texture exitTexture) {
+        this.exitTexture = exitTexture;
     }
 }

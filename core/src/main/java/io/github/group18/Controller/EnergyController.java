@@ -27,6 +27,7 @@ public class EnergyController {
         maxEnergyLen = greenBarTexture.getHeight();
     }
     public void render(SpriteBatch batch){
+        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         float nesbat = (float) ((float) currentPlayer.getEnergy() /currentPlayer.getMaxEnergy());
         greenBarTexture.setSize(greenBarTexture.getWidth(), nesbat*maxEnergyLen);
         energyTexture.draw(batch);

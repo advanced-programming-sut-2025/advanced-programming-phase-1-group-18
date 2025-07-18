@@ -28,6 +28,7 @@ public class GameMenu implements Screen {
     private static final float FADE_SPEED = 1.5f;   // speed of fading
     private boolean advancingDay = false;
     private Stage cheatCodeStage;
+    private CraftingMenu craftingMenu;
     private LightningEffect lightningEffect;
 
 
@@ -35,6 +36,8 @@ public class GameMenu implements Screen {
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
+        this.craftingMenu = new CraftingMenu();
+        craftingMenu.setActive(false);
         initializeGame(gameModel);
     }
 
@@ -54,9 +57,6 @@ public class GameMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-
         gameModel.update(delta);
         lightningEffect.update(delta);
         gameView.render();
@@ -67,6 +67,7 @@ public class GameMenu implements Screen {
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
+        craftingMenu.render();
     }
 
     private void handleNightSleepFade(float delta) {
@@ -183,6 +184,14 @@ public class GameMenu implements Screen {
 
     public void setLightningEffect(LightningEffect lightningEffect) {
         this.lightningEffect = lightningEffect;
+    }
+
+    public CraftingMenu getCraftingMenu() {
+        return craftingMenu;
+    }
+
+    public void setCraftingMenu(CraftingMenu craftingMenu) {
+        this.craftingMenu = craftingMenu;
     }
     // Other Screen methods
 }

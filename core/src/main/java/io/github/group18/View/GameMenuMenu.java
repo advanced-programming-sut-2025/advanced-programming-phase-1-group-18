@@ -198,7 +198,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             System.out.println(controller.craftingShowRecipes());
         } else if (GameMenuCommands.CRAFT_ITEM.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.CRAFT_ITEM.getMather(input);
-//            System.out.println(controller.craftingCraft(matcher.group(1).trim()));
+            System.out.println(controller.craftingCraft(matcher.group(1).trim()));
         } else if (GameMenuCommands.PLACE_ITEM.getMather(input) != null) {
             Matcher matcher = GameMenuCommands.PLACE_ITEM.getMather(input);
             String name = matcher.group(1).trim();
@@ -208,7 +208,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             Matcher matcher = GameMenuCommands.CHEAT_ADD_ITEM.getMather(input);
             String name = matcher.group(1).trim();
             int count = Integer.parseInt(matcher.group(2));
-//            System.out.println(controller.cheatAddItem(name, count));
+            System.out.println(controller.cheatAddItem(name, count));
         } else if (GameMenuCommands.Fishing.getMather(input) != null) {
 //            System.out.println(controller.fishing(GameMenuCommands.Fishing.getMather(input).group(1)));
         } else if (GameMenuCommands.ArtisanUse.getMather(input) != null) {
