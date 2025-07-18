@@ -50,12 +50,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
         if (keycode == Input.Keys.C) {
-
-//            Scanner scanner = new Scanner(System.in);
-//            String cheatCode = scanner.nextLine();
-//            GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
-//                GameAssetManager.getGameAssetManager().getSkin());
-//            gameMenuMenu.check(scanner);
             Stage stage = gameController.getGameMenu().getCheatCodeStage();
             Gdx.input.setInputProcessor(stage);
             CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
@@ -63,9 +57,14 @@ public class GameMenuInputAdapter extends InputAdapter {
             cheatDialog.show(stage);
             cheatDialog.setColor(Color.WHITE);
         }
-        if (keycode == Input.Keys.B) {
+        if (keycode == Input.Keys.I) {
             game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
             return true;
+        }
+        if (keycode == Input.Keys.B) {
+            App.getGameController().getGameMenu().getCraftingMenu().setActive(true);
+            App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
+            Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
         }
         return true;
     }

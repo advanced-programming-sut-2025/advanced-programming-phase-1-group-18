@@ -2675,35 +2675,35 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, resultBuilder.toString());
     }
 
-//    public Result craftingCraft(String itemName) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player currentPlayer = getCurrentPlayer();
-//
-//        // 1. بررسی انرژی و دسترسی‌های اولیه
-//        if (currentPlayer.getEnergy() < 2) {
-//            return new Result(false, "Not enough energy to craft " + itemName);
-//        }
-//
-//        if (!CraftingRecipesEnums.containsCraft(itemName)) {
-//            return new Result(false, "No crafting recipe found for " + itemName);
-//        }
-//
-//        // 2. پیدا کردن دستور ساخت
-//        CraftingRecipesEnums recipe = findRecipe(currentPlayer, itemName);
-//        if (recipe == null) {
-//            return new Result(false, "Craft recipe not found");
-//        }
-//
-//        // 3. بررسی مواد اولیه
-//        if (!hasRequiredMaterials(currentPlayer, recipe)) {
-//            return new Result(false, "Not enough resources to craft " + itemName);
-//        }
-//
-//        // 4. انجام عملیات ساخت
-//        return executeCrafting(currentPlayer, itemName, recipe);
-//    }
+    public Result craftingCraft(String itemName) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        Player currentPlayer = getCurrentPlayer();
+
+        // 1. بررسی انرژی و دسترسی‌های اولیه
+        if (currentPlayer.getEnergy() < 2) {
+            return new Result(false, "Not enough energy to craft " + itemName);
+        }
+
+        if (!CraftingRecipesEnums.containsCraft(itemName)) {
+            return new Result(false, "No crafting recipe found for " + itemName);
+        }
+
+        // 2. پیدا کردن دستور ساخت
+        CraftingRecipesEnums recipe = findRecipe(currentPlayer, itemName);
+        if (recipe == null) {
+            return new Result(false, "Craft recipe not found");
+        }
+
+        // 3. بررسی مواد اولیه
+        if (!hasRequiredMaterials(currentPlayer, recipe)) {
+            return new Result(false, "Not enough resources to craft " + itemName);
+        }
+
+        // 4. انجام عملیات ساخت
+        return executeCrafting(currentPlayer, itemName, recipe);
+    }
 
     private Player getCurrentPlayer() {
         Game currentGame = App.getCurrentGame();
@@ -2717,104 +2717,105 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             .orElse(null);
     }
 
-//    private boolean hasRequiredMaterials(Player player, CraftingRecipesEnums recipe) {
-//        Map<String, Integer> requiredItems = recipe.getIngredients();
-//
-//        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
-//            String itemName = entry.getKey().replaceAll(" ", "");
-//            int requiredCount = entry.getValue();
-//
-//            if (itemName.equalsIgnoreCase("wood")) {
-//                if (player.getWood() < requiredCount) {
-//                    return false;
-//                }
-//            } else {
-//                int totalCount = 0;
-//                for (Map.Entry<Item, Integer> inventoryEntry : player.getInventory().getItems().entrySet()) {
-//                    if (inventoryEntry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
-//                        totalCount += inventoryEntry.getValue();
-//                    }
-//                }
-//                if (totalCount < requiredCount) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private int countPlayerItems(Player player, String itemName) {
-//        return player.getInventory().getItems().entrySet().stream()
-//                .filter(entry -> entry.getKey().getCorrectName().equalsIgnoreCase(itemName))
-//                .mapToInt(Map.Entry::getValue)
-//                .sum();
-//    }
+    private boolean hasRequiredMaterials(Player player, CraftingRecipesEnums recipe) {
+        Map<String, Integer> requiredItems = recipe.getIngredients();
 
-//    private Result executeCrafting(Player player, String itemName, CraftingRecipesEnums recipe) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        // مصرف مواد اولیه
-//        consumeMaterials(player, recipe);
-//
-//        // افزودن آیتم ساخته شده
-//        addCraftedItem(player, itemName);
-//
-//        // کاهش انرژی
-//        player.setEnergy(player.getEnergy() - 2);
-//
-//        return new Result(true, itemName + " crafted successfully");
-//    }
+        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
+            String itemName = entry.getKey().replaceAll(" ", "");
+            int requiredCount = entry.getValue();
 
-//    private void consumeMaterials(Player player, CraftingRecipesEnums recipe) {
-//        if (isFainted()) {
-//            System.out.println("You are fainted!");
-//        }
-//        for (Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
-//            String itemName = entry.getKey().replaceAll(" ", "");
-//            int requiredCount = entry.getValue();
-//
-//            if (itemName.equalsIgnoreCase("wood")) {
-//                player.setWood(player.getWood() - requiredCount);
-//            } else {
-//                int remaining = requiredCount;
-//                Iterator<Map.Entry<Item, Integer>> iterator = player.getInventory().getItems().entrySet().iterator();
-//
-//                while (iterator.hasNext() && remaining > 0) {
-//                    Map.Entry<Item, Integer> inventoryEntry = iterator.next();
-//                    if (inventoryEntry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
-//                        int available = inventoryEntry.getValue();
-//
-//                        if (available <= remaining) {
-//                            remaining -= available;
-//                            iterator.remove();
-//                        } else {
-//                            inventoryEntry.setValue(available - remaining);
-//                            remaining = 0;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+            if (itemName.equalsIgnoreCase("wood")) {
+                if (player.getWood() < requiredCount) {
+                    return false;
+                }
+            } else {
+                int totalCount = 0;
+                for (Map.Entry<Item, Pair<Integer,Integer>> inventoryEntry : player.getInventory().getItems().entrySet()) {
+                    if (inventoryEntry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
+                        totalCount += inventoryEntry.getValue().first;
+                    }
+                }
+                if (totalCount < requiredCount) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-//    private void addCraftedItem(Player player, String itemName) {
-//        if (isFainted()) {
-//            System.out.println("You are fainted!");
-//        }
-//        player.getInventory().getItems().entrySet().stream()
-//            .filter(entry -> entry.getKey() instanceof CraftingItem &&
-//                entry.getKey().getClass().getSimpleName().equalsIgnoreCase(itemName))
-//            .findFirst()
-//            .ifPresentOrElse(
-//                entry -> entry.setValue(entry.getValue() + 1),
-//                () -> {
-//                    CraftingItem newItem = new CraftingItem(itemName);
-//                    newItem.setName(itemName);
-//                    player.getInventory().getItems().put(newItem, 1);
-//                }
-//            );
-//    }
+    private int countPlayerItems(Player player, String itemName) {
+        return player.getInventory().getItems().entrySet().stream()
+            .filter(entry -> entry.getKey().getCorrectName().equalsIgnoreCase(itemName))
+            .mapToInt(entry -> entry.getValue().first) // گرفتن تعداد از Pair
+            .sum();
+    }
+
+
+    private Result executeCrafting(Player player, String itemName, CraftingRecipesEnums recipe) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        // مصرف مواد اولیه
+        consumeMaterials(player, recipe);
+
+        // افزودن آیتم ساخته شده
+        addCraftedItem(player, itemName);
+
+        // کاهش انرژی
+        player.setEnergy(player.getEnergy() - 2);
+
+        return new Result(true, itemName + " crafted successfully");
+    }
+
+    private void consumeMaterials(Player player, CraftingRecipesEnums recipe) {
+        if (isFainted()) {
+            System.out.println("You are fainted!");
+        }
+        for (Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
+            String itemName = entry.getKey().replaceAll(" ", "");
+            int requiredCount = entry.getValue();
+
+            if (itemName.equalsIgnoreCase("wood")) {
+                player.setWood(player.getWood() - requiredCount);
+            } else {
+                int remaining = requiredCount;
+                Iterator<Map.Entry<Item, Pair<Integer, Integer>>> iterator = player.getInventory().getItems().entrySet().iterator();
+
+                while (iterator.hasNext() && remaining > 0) {
+                    Map.Entry<Item, Pair<Integer, Integer>> inventoryEntry = iterator.next();
+                    if (inventoryEntry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
+                        int available = inventoryEntry.getValue().first;
+
+                        if (available <= remaining) {
+                            remaining -= available;
+                            iterator.remove();
+                        } else {
+                            inventoryEntry.setValue(new Pair<>(available - remaining,inventoryEntry.getValue().second));
+                            remaining = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void addCraftedItem(Player player, String itemName) {
+        if (isFainted()) {
+            System.out.println("You are fainted!");
+        }
+        player.getInventory().getItems().entrySet().stream()
+            .filter(entry -> entry.getKey() instanceof CraftingItem &&
+                entry.getKey().getClass().getSimpleName().equalsIgnoreCase(itemName))
+            .findFirst()
+            .ifPresentOrElse(
+                entry -> entry.setValue(new Pair<>(entry.getValue().first + 1,entry.getValue().second)),
+                () -> {
+                    CraftingItem newItem = new CraftingItem(itemName);
+                    newItem.setName(itemName);
+                    player.getInventory().addItem(newItem,1);
+                }
+            );
+    }
 
 //    public Result placeItem(String name, String direction) {
 //        if (isFainted()) {
@@ -2896,143 +2897,143 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        return new Result(false, "item " + name + " not found");
 //    }
 
-//    public Result cheatAddItem(String name, int count) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        name = name.replace(" ", "");
-//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Map<Item, Integer> inventory = player.getInventory().getItems();
-//
-//        boolean addItem = false;
-//        boolean canAdd = (player.getInventory().getMaxQuantity() - player.getInventory().getTotalItemCount()) > 0; // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
-//
-//        if (!canAdd) {
-//            return new Result(false, "cheat code: Not enough space in inventory to add " + count + " of " + name);
-//        }
-//        if (name.equalsIgnoreCase("mixedseeds")) {
-//            MixedSeed MixedSeed = new MixedSeed();
-//            player.getInventory().addItem(MixedSeed, count);
-//            addItem = true;
-//        } else if (ForagingSeedsEnums.isContain(name)) {
-//            ForagingSeed foragingSeed = new ForagingSeed();
-//            foragingSeed.setType(ForagingSeedsEnums.getEnum(name));
-//            player.getInventory().addItem(foragingSeed, count);
-//            addItem = true;
-//        } else if (TreeSeedEnums.isContain(name)) {
-//            TreeSeed treeSeed = new TreeSeed();
-//            treeSeed.setType(TreeSeedEnums.getEnum(name));
-//            player.getInventory().addItem(treeSeed, count);
-//            addItem = true;
-//        } else if (AllCropsEnums.isContain(name)) {
-//            AllCrop allCrop = new AllCrop();
-//            allCrop.setType(AllCropsEnums.getEnum(name));
-//            player.getInventory().addItem(allCrop, count);
-//            addItem = true;
-//        } else if (ForagingMineralsEnums.isContain(name)) {
-//            Mineral mineral = new Mineral();
-//            mineral.setType(ForagingMineralsEnums.getEnum(name));
-//            player.getInventory().addItem(mineral, count);
-//            addItem = true;
-//        } else if (AllFishesEnum.isValidFish(name)) {
-//            Fish fish = new Fish(name);
-//            fish.setName(AllFishesEnum.getEnum(name).toString());
-//            player.getInventory().addItem(fish, count);
-//            addItem = true;
-//        } else if (ArtisanGoodsEnums.isContain(name)) {
-//            ArtisanGoods artisanGoods = new ArtisanGoods(name);
-//            artisanGoods.setName(ArtisanGoodsEnums.getEnum(name).toString());
-//            player.getInventory().addItem(artisanGoods, count);
-//            addItem = true;
-//        } else if (ForagingCropsEnums.isContain(name)) {
-//            ForagingCrop foragingCrop = new ForagingCrop();
-//            foragingCrop.setType(ForagingCropsEnums.getEnum(name));
-//            player.getInventory().addItem(foragingCrop, count);
-//            addItem = true;
-//        } else if (CraftingRecipesEnums.containsCraft(name)) {
-//            CraftingItem craftingItem = new CraftingItem(name);
-//            craftingItem.setName(name);
-//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).
-//                getCraftingRecipes().add(craftingItem.getCraftingItem());
-//            player.getInventory().addItem(craftingItem, count);
-//            addItem = true;
-//        } else if (PoleJensEnums.isContain(name)) {
-//            String jens = name.replaceAll("pole", "");
-//            FishingPole fishingPole = new FishingPole();
-//            fishingPole.setJens(jens);
-//            player.getInventory().addItem(fishingPole, count);
-//            addItem = true;
-//        } else {
-//            switch (name) {
-//                case "stone":
-//                    StoneItem stoneItem = new StoneItem();
-//                    stoneItem.setPrice(20);
-//                    player.getInventory().addItem(stoneItem, count);
-//                    addItem = true;
-//                    break;
-//                case "pizza":
-//                    Food food = new Food();
-//                    food.setName("pizza");
-//                    player.getInventory().addItem(food, count);
-//                    addItem = true;
-//                    break;
-//                case "wood":
-//                    player.setWood(player.getWood() + count);
-//                    addItem = true;
-//                    break;
-//                case "pumpkinpie":
-//                    FoodCooking pumpkinPie = new FoodCooking();
-//                    pumpkinPie.setSellPrice(385);
-//                    pumpkinPie.setEnergy(225);
-//                    pumpkinPie.setName(FoodCookingEnums.PumpkinPie);
-//                    player.getInventory().addItem(pumpkinPie, count);
-//                    addItem = true;
-//                case "flower":
-//                    player.getInventory().addItem(new Flower(), count);
-//                    addItem = true;
-//                    break;
+    public Result cheatAddItem(String name, int count) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        name = name.replace(" ", "");
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
+
+        boolean addItem = false;
+        boolean canAdd = !(player.getInventory().isFull()); // این متد باید بررسی کند ظرفیت اینونتوری کافی هست یا نه
+
+        if (!canAdd) {
+            return new Result(false, "cheat code: Not enough space in inventory to add " + count + " of " + name);
+        }
+        if (name.equalsIgnoreCase("mixedseeds")) {
+            MixedSeed MixedSeed = new MixedSeed();
+            player.getInventory().addItem(MixedSeed, count);
+            addItem = true;
+        } else if (ForagingSeedsEnums.isContain(name)) {
+            ForagingSeed foragingSeed = new ForagingSeed();
+            foragingSeed.setType(ForagingSeedsEnums.getEnum(name));
+            player.getInventory().addItem(foragingSeed, count);
+            addItem = true;
+        } else if (TreeSeedEnums.isContain(name)) {
+            TreeSeed treeSeed = new TreeSeed();
+            treeSeed.setType(TreeSeedEnums.getEnum(name));
+            player.getInventory().addItem(treeSeed, count);
+            addItem = true;
+        } else if (AllCropsEnums.isContain(name)) {
+            AllCrop allCrop = new AllCrop();
+            allCrop.setType(AllCropsEnums.getEnum(name));
+            player.getInventory().addItem(allCrop, count);
+            addItem = true;
+        } else if (ForagingMineralsEnums.isContain(name)) {
+            Mineral mineral = new Mineral();
+            mineral.setType(ForagingMineralsEnums.getEnum(name));
+            player.getInventory().addItem(mineral, count);
+            addItem = true;
+        } else if (AllFishesEnum.isValidFish(name)) {
+            Fish fish = new Fish(name);
+            fish.setName(AllFishesEnum.getEnum(name).toString());
+            player.getInventory().addItem(fish, count);
+            addItem = true;
+        } else if (ArtisanGoodsEnums.isContain(name)) {
+            ArtisanGoods artisanGoods = new ArtisanGoods(name);
+            artisanGoods.setName(ArtisanGoodsEnums.getEnum(name).toString());
+            player.getInventory().addItem(artisanGoods, count);
+            addItem = true;
+        } else if (ForagingCropsEnums.isContain(name)) {
+            ForagingCrop foragingCrop = new ForagingCrop();
+            foragingCrop.setType(ForagingCropsEnums.getEnum(name));
+            player.getInventory().addItem(foragingCrop, count);
+            addItem = true;
+        } else if (CraftingRecipesEnums.containsCraft(name)) {
+            CraftingItem craftingItem = new CraftingItem(name);
+            craftingItem.setName(name);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).
+                getCraftingRecipes().add(craftingItem.getCraftingItem());
+            player.getInventory().addItem(craftingItem, count);
+            addItem = true;
+        } else if (PoleJensEnums.isContain(name)) {
+            String jens = name.replaceAll("pole", "");
+            FishingPole fishingPole = new FishingPole();
+            fishingPole.setJens(jens);
+            player.getInventory().addItem(fishingPole, count);
+            addItem = true;
+        } else {
+            switch (name) {
+                case "stone":
+                    StoneItem stoneItem = new StoneItem();
+                    stoneItem.setPrice(20);
+                    player.getInventory().addItem(stoneItem, count);
+                    addItem = true;
+                    break;
+                case "pizza":
+                    Food food = new Food();
+                    food.setName("pizza");
+                    player.getInventory().addItem(food, count);
+                    addItem = true;
+                    break;
+                case "wood":
+                    player.setWood(player.getWood() + count);
+                    addItem = true;
+                    break;
+                case "pumpkinpie":
+                    FoodCooking pumpkinPie = new FoodCooking();
+                    pumpkinPie.setSellPrice(385);
+                    pumpkinPie.setEnergy(225);
+                    pumpkinPie.setName(FoodCookingEnums.PumpkinPie);
+                    player.getInventory().addItem(pumpkinPie, count);
+                    addItem = true;
+                case "flower":
+                    player.getInventory().addItem(new Flower(), count);
+                    addItem = true;
+                    break;
+            }
+
+        }
+
+        //todo if name is Item
+//        for (Item item : AllGameItems.getAllItems()) {
+//            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
+//                foundItem = item;
+//                break;
 //            }
-//
 //        }
-//
-//        //todo if name is Item
-////        for (Item item : AllGameItems.getAllItems()) {
-////            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
-////                foundItem = item;
-////                break;
-////            }
-////        }
-//
-//
-//        // بررسی امکان اضافه کردن آیتم به اینونتوری
-//        // اگر آیتم در اینونتوری هست، تعدادش را زیاد می‌کنیم
-////        boolean added = false;
-////        for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
-////            if (entry.getKey().getClass().getSimpleName().equalsIgnoreCase(name)) {
-////                inventory.put(entry.getKey(), entry.getValue() + count);
-////                added = true;
-////                break;
-////            }
-////        }
-//
-//        // اگر آیتم جدید بود، اضافه‌اش می‌کنیم
-////        if (!added) {
-////            // یک نمونه جدید از آیتم بساز (clone یا new) چون باید کلید جدید برای هش‌مپ ساخته شود
-////            try {
-////                Item newItem = foundItem.getClass().getDeclaredConstructor().newInstance();
-////                inventory.put(newItem, count);
-////            } catch (Exception e) {
-////                return new Result(false, "Error: Could not instantiate item '" + name + "'.");
-////            }
-////        }
-//
-//        if (addItem) {
-//
-//            return new Result(true, "Successfully added " + count + " of " + name + " to inventory.");
-//        } else {
-//            return new Result(false, "Failed to add " + count + " of " + name + " to inventory.");
+
+
+        // بررسی امکان اضافه کردن آیتم به اینونتوری
+        // اگر آیتم در اینونتوری هست، تعدادش را زیاد می‌کنیم
+//        boolean added = false;
+//        for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
+//            if (entry.getKey().getClass().getSimpleName().equalsIgnoreCase(name)) {
+//                inventory.put(entry.getKey(), entry.getValue() + count);
+//                added = true;
+//                break;
+//            }
 //        }
-//    }
+
+        // اگر آیتم جدید بود، اضافه‌اش می‌کنیم
+//        if (!added) {
+//            // یک نمونه جدید از آیتم بساز (clone یا new) چون باید کلید جدید برای هش‌مپ ساخته شود
+//            try {
+//                Item newItem = foundItem.getClass().getDeclaredConstructor().newInstance();
+//                inventory.put(newItem, count);
+//            } catch (Exception e) {
+//                return new Result(false, "Error: Could not instantiate item '" + name + "'.");
+//            }
+//        }
+
+        if (addItem) {
+
+            return new Result(true, "Successfully added " + count + " of " + name + " to inventory.");
+        } else {
+            return new Result(false, "Failed to add " + count + " of " + name + " to inventory.");
+        }
+    }
 
 //    public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
 //        if (isFainted()) {
