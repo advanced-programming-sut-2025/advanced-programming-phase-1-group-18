@@ -1,3 +1,4 @@
+Barn.png
 Bucket.jpg
 Chest.png
 Clock.png

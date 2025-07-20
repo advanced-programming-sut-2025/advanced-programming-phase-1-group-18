@@ -6,19 +6,22 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
+
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
-import io.github.group18.Model.App;
-import io.github.group18.Model.Game;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Player;
+import io.github.group18.Model.*;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
@@ -70,10 +73,15 @@ public class GameMenuInputAdapter extends InputAdapter {
             gameController.getGameMenu().getInventoryView().toggle();
         }
         if (keycode == Input.Keys.P) {
-            barnPlacementMode = true;
 
-            return true;
+            Stage stage = gameController.getGameMenu().getDaamdariStage();
+            Gdx.input.setInputProcessor(stage);
+            CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+                GameAssetManager.getGameAssetManager().getSkin(),this);
+            cheatDialog.show(stage);
+            cheatDialog.setColor(Color.WHITE);
         }
+
 
 
         return true;
@@ -104,13 +112,27 @@ public class GameMenuInputAdapter extends InputAdapter {
             int tileY = (int)(worldCoords.y / game.TILE_SIZE);
 
 
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    int x = tileX + dx;
+                    int y = tileY + dy;
+
+
+                    if (x >= 0 && y >= 0 && x < game.mapWidth && y < game.mapHeight) {
+                        BigBarn bigBarn = new BigBarn();
+                        game.getMap().get(x).get(y).setInside(bigBarn);
+                    }
+                }
+            }
+
             barnPlacementMode = false;
-            //gameController.getGameMenu().getGameView().buildBarnAt(tileX,tileY);
+
             return true;
         }
 
         return false;
     }
+
 
 
     public void update(float delta) {
@@ -183,5 +205,10 @@ public class GameMenuInputAdapter extends InputAdapter {
     public Set<Integer> getKeysHeld() {
         return keysHeld;
     }
+
+
+
+
+
 
 }

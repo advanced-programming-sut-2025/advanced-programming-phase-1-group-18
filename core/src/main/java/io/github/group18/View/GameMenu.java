@@ -30,6 +30,7 @@ public class GameMenu implements Screen {
     private boolean advancingDay = false;
 
     private Stage cheatCodeStage;
+    private Stage daamdariStage;
     private Stage stage;  // stage for UI like InventoryView
 
     private LightningEffect lightningEffect;
@@ -37,8 +38,11 @@ public class GameMenu implements Screen {
 
     private InputMultiplexer inputMultiplexer;
 
+
+
     public GameMenu(GameController gameController, Game gameModel) {
         this.stage = new Stage(new ScreenViewport());
+        this.daamdariStage = new Stage(new ScreenViewport());
         this.cheatCodeStage = new Stage(new ScreenViewport());
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
@@ -196,5 +200,9 @@ public class GameMenu implements Screen {
 
     public InventoryView getInventoryView() {
         return inventoryView;
+    }
+
+    public Stage getDaamdariStage() {
+        return daamdariStage;
     }
 }
