@@ -41,7 +41,6 @@ public class GameView {
         batch = new SpriteBatch();
         clock = new ClockController();
         energy = new EnergyController();
-//        loadTextures();
         loadTextures();
         loadFont();
     }
@@ -138,14 +137,13 @@ public class GameView {
 
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
+        System.out.println(Game.getCurrentPlayer().getX() + " " + Game.getCurrentPlayer().getY());
         batch.begin();
         renderTiles();
         renderPlayer();
         renderInventory();
         renderClock();
         energy.render(batch);
-//        renderTiles();
-//        renderPlayer();
         renderBrightness();
         batch.end();
     }
@@ -208,12 +206,12 @@ public class GameView {
                             float drawY = y * tileSize;
                             if (inside instanceof GreenHouse greenHouse) {
                                 for (Player player : App.getCurrentGame().getPlayers()) {
-                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
+//                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
                                 }
-                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+//                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
                             }
                             if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
-                                System.out.println("Probably not coming here?");
+//                                System.out.println("Probably not coming here?");
                                 texture = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse.png")));
                             }
                             batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());

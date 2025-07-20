@@ -1038,7 +1038,7 @@ public class Game {
         this.cameraInitialized = cameraInitialized;
     }
 
-    public Player getCurrentPlayer() {
+    public static Player getCurrentPlayer() {
         try {
             if (App.getCurrentGame() != null) {
                 return App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());

@@ -1,5 +1,8 @@
 package io.github.group18.Controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Matrix4;
 import com.google.gson.Gson;
 import io.github.group18.Main;
 import io.github.group18.Model.*;
@@ -694,6 +697,32 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
+//    private void renderKalagEffect() {
+//        float brightness = 1f;
+//
+//
+//        if (brightness < 1f) {
+//            // Save original batch state
+//            Matrix4 originalMatrix = batch.getProjectionMatrix();
+//            Color originalColor = new Color(batch.getColor());
+//            batch.setColor(0f, 0f, 0f, 1f - brightness);
+//
+//            // Switch to screen coordinates
+//            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+//
+//            // Draw full-screen overlay
+//            batch.draw(pixel,
+//                0, 0,
+//                Gdx.graphics.getWidth(),
+//                Gdx.graphics.getHeight());
+//
+//            // Restore original state
+//            batch.setProjectionMatrix(originalMatrix);
+//            batch.setColor(originalColor);
+//        }
+//    }
+
+
     public static void startNewDay(GameMenu gameMenu, boolean transaction) {
         if (transaction) {
             gameMenu.startSleepTransition();
@@ -864,6 +893,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
 
             if (shouldRemove) {
+
                 // Check what we have available to remove
                 boolean hasTrees = player.getMyFarm().getAllTrees().size() > 0;
                 boolean hasCrops = player.getMyFarm().getAllCrops().size() > 0;
@@ -2205,214 +2235,214 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Map.entry(MixedSeedsEnums.PowderMelon, AllCropsEnums.PowderMelon)
     );
 
-//    public Result plant(String source, String direction) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        int dir_x = -1;
-//        int dir_y = -1;
-//
-//        switch (direction.toLowerCase()) {
-//            case "n": {
-//                dir_x = 0;
-//                dir_y = -1;
-//                break;
-//            }
-//            case "ne": {
-//                dir_x = 1;
-//                dir_y = -1;
-//                break;
-//            }
-//            case "e": {
-//                dir_x = 1;
-//                dir_y = 0;
-//                break;
-//            }
-//            case "se": {
-//                dir_x = 1;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "s": {
-//                dir_x = 0;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "sw": {
-//                dir_x = -1;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "w": {
-//                dir_x = -1;
-//                dir_y = 0;
-//                break;
-//            }
-//            case "nw": {
-//                dir_x = -1;
-//                dir_y = -1;
-//                break;
-//            }
-//            default: {
-//                return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
-//            }
-//        }
-//        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        if (!App.getCurrentGame().getMap().get((int) currentplayer.getX() + dir_x).get((int) currentplayer.getY() + dir_y).isShokhmZadeh()) {
-//            return new Result(false, "You have to shokhm it first");
-//        }
-//        if (source.equalsIgnoreCase("mixedseeds") || source.equalsIgnoreCase("mixedseed")) {
-//            try {
-//                // 1. Validate the player has the mixed seed in inventory
-//                AllCrop allCrop = new AllCrop();
-//                boolean valid = false;
-//
-//                // Normalize the input seed name (remove spaces, handle case)
-//                String normalizedSeedName = source.trim().replace(" ", "").toLowerCase();
-//                //normalizedSeedName = mixedseeds
-//
-//                // Check inventory for the mixed seed
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof MixedSeed) {
-//                        valid = true;
-//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-//                            .getInventory().removeItem(item, 1);
-//                        break;
-//                    }
-//                }
-//
-//                if (!valid) {
-//                    return new Result(false, "You don't have mixed seed in your inventory");
-//                }
-//
-//                // 2. Get current season
-//                Seasons currentSeason = App.getCurrentGame().getCurrentSeason();
-//
-//                // 3. Get all mixed seeds that are allowed in current season
-//                List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
-//                    .filter(crop -> crop.isAllowedIn(currentSeason))
-//                    .collect(Collectors.toList());
-//
-//                if (seasonalCrops.isEmpty()) {
-//                    return new Result(false, "No crops available for planting in " + currentSeason);
-//                }
-//
-//                // 4. Randomly select one of the seasonal crops
-//                Random random = new Random();
-//                MixedSeedsEnums selectedSeed = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
-//
-//                // 5. Find the corresponding AllCropsEnums using our mapping
-//                AllCropsEnums cropEnum = SEED_TO_CROP_MAP.get(selectedSeed);
-//
-//                if (cropEnum == null) {
-//                    return new Result(false, "No corresponding crop found for " + selectedSeed.name());
-//                }
-//
-//                // 6. Initialize and place the crop
-//                allCrop.initilizeCrop(selectedSeed);
-//
-//                Player currentPlayer = App.getCurrentGame().getPlayers()
-//                    .get(App.getCurrentGame().getIndexPlayerinControl());
-//                Kashi kashi = App.getCurrentGame().getMap()
-//                    .get((int) currentPlayer.getX() + dir_x)
-//                    .get((int) currentPlayer.getY() + dir_y);
-//                kashi.setInside(allCrop);
-//
-//                currentPlayer.getMyFarm().getAllCrops().add(allCrop);
-//                return new Result(true, "Planted " + cropEnum.name() + " successfully");
-//            } catch (Exception e) {
-//            }
-//        } else {
-//            //ForagingSeed
-//            try {
-//                if (Arrays.stream(ForagingSeedsEnums.values())
-//                    .anyMatch(er -> er.name().equalsIgnoreCase(source.replace(" ", "")))) {
-//                    AllCrop allCrop1 = new AllCrop();
-//                    try {
-//                        ForagingSeedsEnums foragingSeedsEnums = Arrays.stream(ForagingSeedsEnums.values())
-//                            .filter(ef -> ef.name().equalsIgnoreCase(source.replace(" ", "")))
-//                            .findFirst()
-//                            .orElseThrow(() -> new IllegalArgumentException("No enum constant for: " + source));
-//                        boolean valid2 = false;
-//                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                            //System.out.println(item.getCorrectName() + "niffa");
-//                            if (item instanceof ForagingSeed) {
-//                                ForagingSeed foragingSeed = (ForagingSeed) item;
-//                                if (foragingSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
-//                                    valid2 = true;
-//                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                        if (!valid2) {
-//                            return new Result(false, "You don't have " + source + " in your inventory");
-//                        }
-//
-//                        allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
-//                        allCrop1.initilizeCrop(foragingSeedsEnums);
-//
-//                        Player currentPlayer = App.getCurrentGame().getPlayers()
-//                            .get(App.getCurrentGame().getIndexPlayerinControl());
-//                        Kashi kashi1 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
-//                        kashi1.setInside(allCrop1);
-//
-//                        currentPlayer.getMyFarm().getAllCrops().add(allCrop1);
-//                        return new Result(true, "Plant successfully placed");
-//
-//                    } catch (Exception eee) {
-//                        eee.printStackTrace();
-//                    }
-//                } else {
-//                    //AllTree
-//                    if (Arrays.stream(TreeSeedEnums.values())
-//                        .anyMatch(rt -> rt.name().equalsIgnoreCase(source.replace(" ", "")))) {
-//                        AllTree allTree = new AllTree();
-//                        try {
-//                            TreeSeedEnums allTreesEnums = Arrays.stream(TreeSeedEnums.values())
-//                                .filter(fv -> fv.name().equalsIgnoreCase(source.replace(" ", "")))
-//                                .findFirst()
-//                                .orElseThrow(() -> new IllegalArgumentException("No enum constant for: " + source));
-//                            boolean valid1 = false;
-//                            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                                if (item instanceof TreeSeed) {
-//                                    TreeSeed treeSeed = (TreeSeed) item;
-//                                    if (treeSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
-//                                        valid1 = true;
-//                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                            if (!valid1) {
-//                                return new Result(false, "You don't have " + source + " in your inventory");
-//                            }
-//
-//                            allTree.setSource(allTreesEnums);
-//                            allTree.initilizeCrop(allTreesEnums);
-//
-//                            Player currentPlayer = App.getCurrentGame().getPlayers()
-//                                .get(App.getCurrentGame().getIndexPlayerinControl());
-//                            Kashi kashi2 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
-//                            kashi2.setInside(allTree);
-//
-//                            currentPlayer.getMyFarm().getAllTrees().add(allTree);
-//
-//
-//                            return new Result(true, "Tree successfully placed");
-//                        } catch (Exception ee) {
-//                            return new Result(false, "what happened");
-//                        }
-//                    } else {
-//                        return new Result(false, "invalid source");
-//                    }
-//                }
-//            } catch (
-//                Exception eee) {
-//            }
-//        }
-//        return new Result(false, "can't plant");
-//    }
+    public Result plant(String source, String direction) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        int dir_x = -1;
+        int dir_y = -1;
+
+        switch (direction.toLowerCase()) {
+            case "n": {
+                dir_x = 0;
+                dir_y = -1;
+                break;
+            }
+            case "ne": {
+                dir_x = 1;
+                dir_y = -1;
+                break;
+            }
+            case "e": {
+                dir_x = 1;
+                dir_y = 0;
+                break;
+            }
+            case "se": {
+                dir_x = 1;
+                dir_y = 1;
+                break;
+            }
+            case "s": {
+                dir_x = 0;
+                dir_y = 1;
+                break;
+            }
+            case "sw": {
+                dir_x = -1;
+                dir_y = 1;
+                break;
+            }
+            case "w": {
+                dir_x = -1;
+                dir_y = 0;
+                break;
+            }
+            case "nw": {
+                dir_x = -1;
+                dir_y = -1;
+                break;
+            }
+            default: {
+                return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
+            }
+        }
+        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (!App.getCurrentGame().getMap().get((int) currentplayer.getX() + dir_x).get((int) currentplayer.getY() + dir_y).isShokhmZadeh()) {
+            return new Result(false, "You have to shokhm it first");
+        }
+        if (source.equalsIgnoreCase("mixedseeds") || source.equalsIgnoreCase("mixedseed")) {
+            try {
+                // 1. Validate the player has the mixed seed in inventory
+                AllCrop allCrop = new AllCrop();
+                boolean valid = false;
+
+                // Normalize the input seed name (remove spaces, handle case)
+                String normalizedSeedName = source.trim().replace(" ", "").toLowerCase();
+                //normalizedSeedName = mixedseeds
+
+                // Check inventory for the mixed seed
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof MixedSeed) {
+                        valid = true;
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .getInventory().removeItem(item, 1);
+                        break;
+                    }
+                }
+
+                if (!valid) {
+                    return new Result(false, "You don't have mixed seed in your inventory");
+                }
+
+                // 2. Get current season
+                Seasons currentSeason = App.getCurrentGame().getCurrentSeason();
+
+                // 3. Get all mixed seeds that are allowed in current season
+                List<MixedSeedsEnums> seasonalCrops = Arrays.stream(MixedSeedsEnums.values())
+                    .filter(crop -> crop.isAllowedIn(currentSeason))
+                    .collect(Collectors.toList());
+
+                if (seasonalCrops.isEmpty()) {
+                    return new Result(false, "No crops available for planting in " + currentSeason);
+                }
+
+                // 4. Randomly select one of the seasonal crops
+                Random random = new Random();
+                MixedSeedsEnums selectedSeed = seasonalCrops.get(random.nextInt(seasonalCrops.size()));
+
+                // 5. Find the corresponding AllCropsEnums using our mapping
+                AllCropsEnums cropEnum = SEED_TO_CROP_MAP.get(selectedSeed);
+
+                if (cropEnum == null) {
+                    return new Result(false, "No corresponding crop found for " + selectedSeed.name());
+                }
+
+                // 6. Initialize and place the crop
+                allCrop.initilizeCrop(selectedSeed);
+
+                Player currentPlayer = App.getCurrentGame().getPlayers()
+                    .get(App.getCurrentGame().getIndexPlayerinControl());
+                Kashi kashi = App.getCurrentGame().getMap()
+                    .get((int) currentPlayer.getX() + dir_x)
+                    .get((int) currentPlayer.getY() + dir_y);
+                kashi.setInside(allCrop);
+
+                currentPlayer.getMyFarm().getAllCrops().add(allCrop);
+                return new Result(true, "Planted " + cropEnum.name() + " successfully");
+            } catch (Exception e) {
+            }
+        } else {
+            //ForagingSeed
+            try {
+                if (Arrays.stream(ForagingSeedsEnums.values())
+                    .anyMatch(er -> er.name().equalsIgnoreCase(source.replace(" ", "")))) {
+                    AllCrop allCrop1 = new AllCrop();
+                    try {
+                        ForagingSeedsEnums foragingSeedsEnums = Arrays.stream(ForagingSeedsEnums.values())
+                            .filter(ef -> ef.name().equalsIgnoreCase(source.replace(" ", "")))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalArgumentException("No enum constant for: " + source));
+                        boolean valid2 = false;
+                        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                            //System.out.println(item.getCorrectName() + "niffa");
+                            if (item instanceof ForagingSeed) {
+                                ForagingSeed foragingSeed = (ForagingSeed) item;
+                                if (foragingSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
+                                    valid2 = true;
+                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!valid2) {
+                            return new Result(false, "You don't have " + source + " in your inventory");
+                        }
+
+                        allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
+                        allCrop1.initilizeCrop(foragingSeedsEnums);
+
+                        Player currentPlayer = App.getCurrentGame().getPlayers()
+                            .get(App.getCurrentGame().getIndexPlayerinControl());
+                        Kashi kashi1 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
+                        kashi1.setInside(allCrop1);
+
+                        currentPlayer.getMyFarm().getAllCrops().add(allCrop1);
+                        return new Result(true, "Plant successfully placed");
+
+                    } catch (Exception eee) {
+                        eee.printStackTrace();
+                    }
+                } else {
+                    //AllTree
+                    if (Arrays.stream(TreeSeedEnums.values())
+                        .anyMatch(rt -> rt.name().equalsIgnoreCase(source.replace(" ", "")))) {
+                        AllTree allTree = new AllTree();
+                        try {
+                            TreeSeedEnums allTreesEnums = Arrays.stream(TreeSeedEnums.values())
+                                .filter(fv -> fv.name().equalsIgnoreCase(source.replace(" ", "")))
+                                .findFirst()
+                                .orElseThrow(() -> new IllegalArgumentException("No enum constant for: " + source));
+                            boolean valid1 = false;
+                            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                                if (item instanceof TreeSeed) {
+                                    TreeSeed treeSeed = (TreeSeed) item;
+                                    if (treeSeed.getCorrectName().equals(source.toLowerCase().replace(" ", ""))) {
+                                        valid1 = true;
+                                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!valid1) {
+                                return new Result(false, "You don't have " + source + " in your inventory");
+                            }
+
+                            allTree.setSource(allTreesEnums);
+                            allTree.initilizeCrop(allTreesEnums);
+
+                            Player currentPlayer = App.getCurrentGame().getPlayers()
+                                .get(App.getCurrentGame().getIndexPlayerinControl());
+                            Kashi kashi2 = App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y);
+                            kashi2.setInside(allTree);
+
+                            currentPlayer.getMyFarm().getAllTrees().add(allTree);
+
+
+                            return new Result(true, "Tree successfully placed");
+                        } catch (Exception ee) {
+                            return new Result(false, "what happened");
+                        }
+                    } else {
+                        return new Result(false, "invalid source");
+                    }
+                }
+            } catch (
+                Exception eee) {
+            }
+        }
+        return new Result(false, "can't plant");
+    }
 
     public Result showPlant(int x, int y) {
         if (isFainted()) {
