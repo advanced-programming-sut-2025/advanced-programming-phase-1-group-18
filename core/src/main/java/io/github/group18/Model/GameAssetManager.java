@@ -21,6 +21,9 @@ public class GameAssetManager {
     Texture barTexture = new Texture(Gdx.files.internal("EnergyBar/bar.png"));
     Texture greenBarTexture = new Texture(Gdx.files.internal("EnergyBar/green.png"));
     Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
+    Texture scythe = new Texture(Gdx.files.internal("inventory/tools/Scythe.png"));
+    Texture axe = new Texture(Gdx.files.internal("inventory/tools/Axe.png"));
+    Texture pickaxe = new Texture(Gdx.files.internal("inventory/tools/Pickaxe.png"));
 
 
 
@@ -145,5 +148,19 @@ public class GameAssetManager {
 
     public void setGreenBarTexture(Texture greenBarTexture) {
         this.greenBarTexture = greenBarTexture;
+    }
+
+
+    public Texture getPickaxe() {
+        return pickaxe;
+    }
+
+    public Texture getScythe() {
+        return scythe;
+    }
+
+
+    public Texture getAxe() {
+        return axe;
     }
 }

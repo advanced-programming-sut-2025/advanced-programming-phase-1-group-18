@@ -1,20 +1,21 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
-import io.github.group18.Model.App;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.GameAssetManager;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -27,12 +28,18 @@ public class GameMenu implements Screen {
     private static final float SLEEP_DURATION = 2f; // seconds
     private static final float FADE_SPEED = 1.5f;   // speed of fading
     private boolean advancingDay = false;
-    private Stage cheatCodeStage;
-    private LightningEffect lightningEffect;
 
+    private Stage cheatCodeStage;
+    private Stage stage;  // stage for UI like InventoryView
+
+    private LightningEffect lightningEffect;
+    private InventoryView inventoryView;
+
+    private InputMultiplexer inputMultiplexer;
 
     public GameMenu(GameController gameController, Game gameModel) {
-        this.cheatCodeStage = new Stage();
+        this.stage = new Stage(new ScreenViewport());
+        this.cheatCodeStage = new Stage(new ScreenViewport());
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
         initializeGame(gameModel);
@@ -41,8 +48,17 @@ public class GameMenu implements Screen {
     private void initializeGame(Game gameModel) {
         this.gameModel = gameModel;
         gameView = new GameView(gameModel);
+        inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
+
+        stage.addActor(inventoryView.getWindow());
+        stage.addActor(inventoryView.getTooltipLabel());
+        stage.addActor(inventoryView.getSkillTooltipLabel());
         gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
-        Gdx.input.setInputProcessor(gameMenuInputAdapter);
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);               // UI first
+        inputMultiplexer.addProcessor(gameMenuInputAdapter); // then game input
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -55,8 +71,7 @@ public class GameMenu implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
+        inventoryView.update();
         gameModel.update(delta);
         lightningEffect.update(delta);
         gameView.render();
@@ -67,12 +82,14 @@ public class GameMenu implements Screen {
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
+
+        stage.act(delta);   // update UI stage
+        stage.draw();       // draw UI stage
     }
 
     private void handleNightSleepFade(float delta) {
         if (!isSleeping) return;
 
-        // --- Alpha Logic ---
         sleepTimer += delta;
         if (!advancingDay && sleepAlpha < 1f) {
             sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
@@ -86,29 +103,25 @@ public class GameMenu implements Screen {
                 isSleeping = false;
                 advancingDay = false;
                 sleepTimer = 0f;
-                resetRenderStates(); // Critical: Clean up after fade
-                return; // Skip rendering when fade is done
+                resetRenderStates();
+                return;
             }
         }
 
-        // --- Isolated Fade Rendering ---
         Batch batch = gameView.getBatch();
 
-        // 1. Backup ALL relevant states
         Matrix4 originalProj = batch.getProjectionMatrix().cpy();
         Color originalColor = new Color(batch.getColor());
         int srcFunc = batch.getBlendSrcFunc();
         int dstFunc = batch.getBlendDstFunc();
         boolean blendingEnabled = Gdx.gl.glIsEnabled(GL20.GL_BLEND);
 
-        // 2. Configure fade-specific settings
         batch.setProjectionMatrix(
             new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
         );
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        // 3. Draw the fade
         batch.begin();
         batch.setColor(0f, 0f, 0f, sleepAlpha);
         batch.draw(
@@ -121,7 +134,7 @@ public class GameMenu implements Screen {
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
-        // 4. RESTORE original states EXACTLY
+
         batch.setProjectionMatrix(originalProj);
         batch.setColor(originalColor);
         batch.setBlendFunction(srcFunc, dstFunc);
@@ -129,11 +142,10 @@ public class GameMenu implements Screen {
     }
 
     private void resetRenderStates() {
-        // Force-clean OpenGL/Batch states (paranoid mode)
         Batch batch = gameView.getBatch();
-        batch.setColor(1f, 1f, 1f, 1f); // Reset color
-        Gdx.gl.glDisable(GL20.GL_BLEND); // Force-disable blending
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Default blend
+        batch.setColor(1f, 1f, 1f, 1f);
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void startSleepTransition() {
@@ -143,26 +155,19 @@ public class GameMenu implements Screen {
         advancingDay = false;
     }
 
-
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int width, int height) {
 
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
@@ -184,5 +189,12 @@ public class GameMenu implements Screen {
     public void setLightningEffect(LightningEffect lightningEffect) {
         this.lightningEffect = lightningEffect;
     }
-    // Other Screen methods
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public InventoryView getInventoryView() {
+        return inventoryView;
+    }
 }

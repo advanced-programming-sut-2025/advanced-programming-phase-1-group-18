@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
@@ -23,6 +24,8 @@ public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
     private final GameController gameController;
     private final Set<Integer> keysHeld = new HashSet<>();
+    //new
+    private boolean barnPlacementMode = false;
 
     public GameMenuInputAdapter(Game game, GameController gameController) {
         this.game = game;
@@ -37,11 +40,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
             int selectedSlot = keycode - Input.Keys.NUM_1;
             game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
-            return true;
-        }
-
-        if (keycode == Input.Keys.ESCAPE) {
-//            gameController.goToMain();
             return true;
         }
 
@@ -67,6 +65,17 @@ public class GameMenuInputAdapter extends InputAdapter {
             game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
             return true;
         }
+        //Inventory
+        if(keycode == Input.Keys.ESCAPE) {
+            gameController.getGameMenu().getInventoryView().toggle();
+        }
+        if (keycode == Input.Keys.P) {
+            barnPlacementMode = true;
+
+            return true;
+        }
+
+
         return true;
     }
 
@@ -87,12 +96,22 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-//            performAction(screenX, screenY);
+        if (barnPlacementMode && button == Input.Buttons.LEFT) {
+
+            Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+
+            int tileX = (int)(worldCoords.x / game.TILE_SIZE);
+            int tileY = (int)(worldCoords.y / game.TILE_SIZE);
+
+
+            barnPlacementMode = false;
+            //gameController.getGameMenu().getGameView().buildBarnAt(tileX,tileY);
             return true;
         }
+
         return false;
     }
+
 
     public void update(float delta) {
         Player player = game.getCurrentPlayer();

@@ -28,12 +28,13 @@ public class GameView {
     private BitmapFont smallFont;
     private GlyphLayout layout = new GlyphLayout();
     private TextureAtlas playerAtlas;
-    private final ArrayList<Animation<TextureRegion>> playerAnimations = new ArrayList<>();
+    private static final ArrayList<Animation<TextureRegion>> playerAnimations = new ArrayList<>();
     private float stateTime = 0f;
     private int moveDirection = 0;
     private Texture pixel; // Add this
     private ClockController clock;
     private EnergyController energy;
+
 
 
     public GameView(Game game) {
@@ -130,6 +131,7 @@ public class GameView {
             } else {
                 textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
             }
+
         }
     }
 
@@ -470,5 +472,14 @@ public class GameView {
     public Texture getPixel() {
         return pixel;
     }
+
+
+
+    //setters and getters
+    public static TextureRegion getPlayerFrontImage()
+    {
+        return playerAnimations.get(0).getKeyFrame(0, false);
+    }
+
 
 }
