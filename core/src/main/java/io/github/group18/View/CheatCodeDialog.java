@@ -52,7 +52,6 @@ public class CheatCodeDialog extends Dialog {
     }
 
     private void processCheatCode(String code) {
-        // ✅ این متد را مطابق با سیستم چیت بازی‌ات پیاده‌سازی کن
         Scanner scanner = new Scanner(System.in);
         GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
             GameAssetManager.getGameAssetManager().getSkin());

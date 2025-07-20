@@ -26,6 +26,9 @@ public class GameAssetManager {
     Texture exitTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/exit.png"));
 
 
+    Texture scythe = new Texture(Gdx.files.internal("Tools/Scythe.png"));
+    Texture axe = new Texture(Gdx.files.internal("Tools/Axe/Axe.png"));
+    Texture pickaxe = new Texture(Gdx.files.internal("Tools/Pickaxe/Pickaxe.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
@@ -177,5 +180,18 @@ public class GameAssetManager {
 
     public void setExitTexture(Texture exitTexture) {
         this.exitTexture = exitTexture;
+    }
+
+
+    public Texture getScythe() {
+        return scythe;
+    }
+
+    public Texture getAxe() {
+        return axe;
+    }
+
+    public Texture getPickaxe() {
+        return pickaxe;
     }
 }

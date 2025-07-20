@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.GameAssetManager;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -31,9 +33,12 @@ public class GameMenu implements Screen {
     private CraftingMenu craftingMenu;
     private LightningEffect lightningEffect;
 
+    private InventoryView inventoryView;
+    private Stage stage;
 
     public GameMenu(GameController gameController, Game gameModel) {
         this.cheatCodeStage = new Stage();
+        this.stage = new Stage(new ScreenViewport());
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
         this.craftingMenu = new CraftingMenu();
@@ -44,6 +49,12 @@ public class GameMenu implements Screen {
     private void initializeGame(Game gameModel) {
         this.gameModel = gameModel;
         gameView = new GameView(gameModel);
+        inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
+
+        stage.addActor(inventoryView.getWindow());
+        stage.addActor(inventoryView.getTooltipLabel());
+        stage.addActor(inventoryView.getSkillTooltipLabel());
+
         gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
     }
@@ -68,6 +79,9 @@ public class GameMenu implements Screen {
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
         craftingMenu.render();
+
+        stage.act(delta);
+        stage.draw();
     }
 
     private void handleNightSleepFade(float delta) {
@@ -194,4 +208,8 @@ public class GameMenu implements Screen {
         this.craftingMenu = craftingMenu;
     }
     // Other Screen methods
+
+    public InventoryView getInventoryView() {
+        return inventoryView;
+    }
 }

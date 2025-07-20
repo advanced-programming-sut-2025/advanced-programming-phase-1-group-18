@@ -40,11 +40,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if (keycode == Input.Keys.ESCAPE) {
-//            gameController.goToMain();
-            return true;
-        }
-
         if (keycode == Input.Keys.N) {
             GameMenuController.nextTurn(gameController.getGameMenu());
             return true;
@@ -66,6 +61,10 @@ public class GameMenuInputAdapter extends InputAdapter {
             App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
             Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
         }
+        if(keycode == Input.Keys.ESCAPE) {
+            gameController.getGameMenu().getInventoryView().toggle();
+        }
+
         return true;
     }
 
