@@ -416,7 +416,7 @@ public class Farm {
         App.getCurrentGame().getNPCROBIN().adaptMap(new Cord(App.getCurrentGame().getNPCROBINx(), App.getCurrentGame().getNPCROBINy()));
     }
 
-
+    //Lake, Greenhouse, Cottage, House, Satl, Quarry, ForagingTree, ForagingCrops, Stone, ForagingSeeds
     public void createMap1(int topleftx, int toplefty) {
         Set<Cord> occupiedPositions = new HashSet<>();
 
