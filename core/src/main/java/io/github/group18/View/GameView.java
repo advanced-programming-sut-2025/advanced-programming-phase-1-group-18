@@ -310,8 +310,9 @@ public class GameView {
                 for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
                     if (i == startX && currentY == startY) continue;
                     Kashi colTile = tiles.get(i).get(currentY);
-                    if (colTile == null || colTile.getInside() == null ||
-                        !colTile.getInside().getClass().equals(clazz)) {
+                    if(colTile == null || colTile.getInside() == null ||
+                        !colTile.getInside().getClass().equals(clazz))
+                    {
                         break;
                     }
 
