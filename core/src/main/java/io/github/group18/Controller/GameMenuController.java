@@ -24,15 +24,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
-            if(view.getExitGame().isPressed()){
+            if (view.getExitGame().isPressed()) {
                 exitGame();
             } else if (view.getTerminateGame().isPressed()) {
                 voteTerminateGame(new Scanner(System.in));
-            }else if (view.getLoadGame().isPressed()) {
+            } else if (view.getLoadGame().isPressed()) {
                 loadGame();
-            }else if (view.getStartNewGame().isPressed()) {
+            } else if (view.getStartNewGame().isPressed()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(),view.getSkin(),this));
+                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
 
             }
         }
@@ -367,7 +367,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result gameNew(ArrayList<String>users , ArrayList<Integer>maps) throws NoSuchFieldException, IllegalAccessException {
+    public Result gameNew(ArrayList<String> users, ArrayList<Integer> maps) throws NoSuchFieldException, IllegalAccessException {
 
         String[] usernames = users.toArray(new String[0]);
 
@@ -1131,7 +1131,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < hour / 24; i++) {
-            startNewDay(gameMenu,true);
+            startNewDay(gameMenu, true);
         }
 //        if (hour / 24 >= 1) {
 //            App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
@@ -1176,7 +1176,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
         for (int i = 0; i < day; i++) {
-            startNewDay(gameMenu,true);
+            startNewDay(gameMenu, true);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
@@ -1255,9 +1255,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().getPlayers()
                 .get(App.getCurrentGame().getIndexPlayerinControl())
                 .getMyFarm().getMyGreenHouse().setStatus(true);
-
         }
-        return new Result(true, "Green House Build successfully");
+        return new Result(true, "Green House Build for " + App.getCurrentGame().getPlayers()
+            .get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername() + "successfully " + App.getCurrentGame().getPlayers()
+            .get(App.getCurrentGame().getIndexPlayerinControl())
+            .getMyFarm().getMyGreenHouse().isStatus() + " " + App.getCurrentGame().getPlayers()
+            .get(App.getCurrentGame().getIndexPlayerinControl())
+            .getMyFarm().getMyGreenHouse().hashCode());
     }
 
     public Result walk(int x, int y) {
@@ -2730,7 +2734,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             } else {
                 int totalCount = 0;
-                for (Map.Entry<Item, Pair<Integer,Integer>> inventoryEntry : player.getInventory().getItems().entrySet()) {
+                for (Map.Entry<Item, Pair<Integer, Integer>> inventoryEntry : player.getInventory().getItems().entrySet()) {
                     if (inventoryEntry.getKey().getCorrectName().equalsIgnoreCase(itemName)) {
                         totalCount += inventoryEntry.getValue().first;
                     }
@@ -2790,7 +2794,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             remaining -= available;
                             iterator.remove();
                         } else {
-                            inventoryEntry.setValue(new Pair<>(available - remaining,inventoryEntry.getValue().second));
+                            inventoryEntry.setValue(new Pair<>(available - remaining, inventoryEntry.getValue().second));
                             remaining = 0;
                         }
                     }
@@ -2808,11 +2812,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 entry.getKey().getClass().getSimpleName().equalsIgnoreCase(itemName))
             .findFirst()
             .ifPresentOrElse(
-                entry -> entry.setValue(new Pair<>(entry.getValue().first + 1,entry.getValue().second)),
+                entry -> entry.setValue(new Pair<>(entry.getValue().first + 1, entry.getValue().second)),
                 () -> {
                     CraftingItem newItem = new CraftingItem(itemName);
                     newItem.setName(itemName);
-                    player.getInventory().addItem(newItem,1);
+                    player.getInventory().addItem(newItem, 1);
                 }
             );
     }
@@ -2979,6 +2983,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     break;
                 case "wood":
                     player.setWood(player.getWood() + count);
+                    System.out.println("New Wood: " + player.getWood());
                     addItem = true;
                     break;
                 case "pumpkinpie":
@@ -3173,10 +3178,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                foodCookingEnums = FoodCookingEnums.valueOf(foodName);
 //            }
 //        }
-////        try {
-////        } catch (Exception e) {
-////            return new Result(false, "Invalid food");
-////        }
+
+    /// /        try {
+    /// /        } catch (Exception e) {
+    /// /            return new Result(false, "Invalid food");
+    /// /        }
 //        if (isValidFood(foodName, FOOD_ENUMS)) {
 //            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
 //                if (item instanceof FoodCooking) {
@@ -3223,7 +3229,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //        return new Result(false, "You don't have that food");
 //    }
-
     public Result buyAnimal(String animal, String name) {
         return new Result(true, "");
     }
@@ -3525,21 +3530,22 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                artisanName = goods.name();
 //                break;
 //            }
-////            for(String ingredient: itemName){
-////                for(String ingredient1 : goods.getIngredients().keySet()){
-////                    if(goods.getIngredients().equals(ingredient)){
-////                        itemCount++;
-////                    }
-////                    isEnoughIngredient = goods.getProducer().getIngredients().size() == itemCount || itemName.size() == itemCount;
-////                    if(isEnoughIngredient){
-////                        artisanName = goods.getProducer().name();
-////                    }
-////                }
-////            }
-////            if(isEnoughIngredient){
-////                break;
-////            }
-////            itemCount=0;
+
+    /// /            for(String ingredient: itemName){
+    /// /                for(String ingredient1 : goods.getIngredients().keySet()){
+    /// /                    if(goods.getIngredients().equals(ingredient)){
+    /// /                        itemCount++;
+    /// /                    }
+    /// /                    isEnoughIngredient = goods.getProducer().getIngredients().size() == itemCount || itemName.size() == itemCount;
+    /// /                    if(isEnoughIngredient){
+    /// /                        artisanName = goods.getProducer().name();
+    /// /                    }
+    /// /                }
+    /// /            }
+    /// /            if(isEnoughIngredient){
+    /// /                break;
+    /// /            }
+    /// /            itemCount=0;
 //        }
 //        if (isEnoughIngredient) {
 //            ArtisanGoods artisanGood = new ArtisanGoods(artisanName);
@@ -3549,7 +3555,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //        return new Result(false, "ingredients and crafting does not match");
 //    }
-
     public Result artisanGet(String artisanName) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
@@ -4872,78 +4877,79 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                }
 //                break;
 //            case "ROBIN":
-////                try {
-////                    Class<?> clazz = Class.forName(item);
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                } catch (Exception e) {
-////                    if (item.equalsIgnoreCase("spaghetti")) {
-////                        boolean found = false;
-////                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                            if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.spaghetti) {
-////                                found = true;
-////                                currentPlayer.getInventory().removeItem(itm, 1);
-////                                if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-////                                    App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-////                                    for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-////                                        if (friendship.getPlayer() == currentPlayer) {
-////                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                            return new Result(true, "Gifted successfully");
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                        }
-////                        if (!found) {
-////                            return new Result(false, "No item found with that name");
-////                        }
-////                    } else {
-////                        if (item.equalsIgnoreCase("iron")) {
-////                            boolean found = false;
-////                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                                if (itm instanceof Mineral && ((Mineral) itm).getType() == ForagingMineralsEnums.Iron) {
-////                                    found = true;
-////                                    currentPlayer.getInventory().removeItem(itm, 1);
-////                                    if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-////                                        App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-////                                        for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-////                                            if (friendship.getPlayer() == currentPlayer) {
-////                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                                return new Result(true, "Gifted successfully");
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                            if (!found) {
-////                                return new Result(false, "No item found with that name");
-////                            }
-////                        } else {
-////                            return new Result(false, "This item in not effective");
-////                        }
-////                    }
-////                }
-////                //spaghetti-->FoodCooking
-////                //choob-->???????
-////                //shemsh ahan-->mineral
-////                break;
+
+    /// /                try {
+    /// /                    Class<?> clazz = Class.forName(item);
+    /// /                    boolean found = false;
+    /// /                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
+    /// /                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
+    /// /                            found = true;
+    /// /                            currentPlayer.getInventory().removeItem(itm, 1);
+    /// /                            if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
+    /// /                                App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+    /// /                                for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+    /// /                                    if (friendship.getPlayer() == currentPlayer) {
+    /// /                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+    /// /                                        return new Result(true, "Gifted successfully");
+    /// /                                    }
+    /// /                                }
+    /// /                            }
+    /// /                        }
+    /// /                    }
+    /// /                    if (!found) {
+    /// /                        return new Result(false, "No item found with that name");
+    /// /                    }
+    /// /                } catch (Exception e) {
+    /// /                    if (item.equalsIgnoreCase("spaghetti")) {
+    /// /                        boolean found = false;
+    /// /                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
+    /// /                            if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.spaghetti) {
+    /// /                                found = true;
+    /// /                                currentPlayer.getInventory().removeItem(itm, 1);
+    /// /                                if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
+    /// /                                    App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+    /// /                                    for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+    /// /                                        if (friendship.getPlayer() == currentPlayer) {
+    /// /                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+    /// /                                            return new Result(true, "Gifted successfully");
+    /// /                                        }
+    /// /                                    }
+    /// /                                }
+    /// /                            }
+    /// /                        }
+    /// /                        if (!found) {
+    /// /                            return new Result(false, "No item found with that name");
+    /// /                        }
+    /// /                    } else {
+    /// /                        if (item.equalsIgnoreCase("iron")) {
+    /// /                            boolean found = false;
+    /// /                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
+    /// /                                if (itm instanceof Mineral && ((Mineral) itm).getType() == ForagingMineralsEnums.Iron) {
+    /// /                                    found = true;
+    /// /                                    currentPlayer.getInventory().removeItem(itm, 1);
+    /// /                                    if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
+    /// /                                        App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+    /// /                                        for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+    /// /                                            if (friendship.getPlayer() == currentPlayer) {
+    /// /                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+    /// /                                                return new Result(true, "Gifted successfully");
+    /// /                                            }
+    /// /                                        }
+    /// /                                    }
+    /// /                                }
+    /// /                            }
+    /// /                            if (!found) {
+    /// /                                return new Result(false, "No item found with that name");
+    /// /                            }
+    /// /                        } else {
+    /// /                            return new Result(false, "This item in not effective");
+    /// /                        }
+    /// /                    }
+    /// /                }
+    /// /                //spaghetti-->FoodCooking
+    /// /                //choob-->???????
+    /// /                //shemsh ahan-->mineral
+    /// /                break;
 //                boolean found4 = false;
 //                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
 //                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
@@ -4999,7 +5005,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //        return null;
 //    }
-
     public Result friendshipList() {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
@@ -5652,6 +5657,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             System.out.println("Invalid menu");
         }
 
+    }
+
+
+    public void cheatAdd(int count) {
+        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + count);
+        System.out.println("new Balance: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold());
     }
 
 }

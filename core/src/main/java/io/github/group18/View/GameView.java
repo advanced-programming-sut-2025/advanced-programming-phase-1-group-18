@@ -109,6 +109,9 @@ public class GameView {
                     if (inside instanceof PictureModel pictureModel) {
                         try {
                             Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                            if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
+                                tex = new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png"));
+                            }
                             textures.put(inside, new TextureRegion(tex));
                         } catch (Exception e) {
                             System.out.println(inside.getClass().getSimpleName());
@@ -203,6 +206,16 @@ public class GameView {
                             TextureRegion texture = textures.get(inside);
                             float drawX = x * tileSize;
                             float drawY = y * tileSize;
+                            if (inside instanceof GreenHouse greenHouse) {
+                                for (Player player : App.getCurrentGame().getPlayers()) {
+                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
+                                }
+                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+                            }
+                            if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
+                                System.out.println("Probably not coming here?");
+                                texture = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse.png")));
+                            }
                             batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                         } else {
                             Kashi tile = tiles.get(x).get(y);

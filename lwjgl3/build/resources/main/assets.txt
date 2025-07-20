@@ -592,6 +592,7 @@ Foraging/Winter_Seeds.png
 Foraging/Yam.png
 Foraging/Yellow_Juice.png
 Foraging/Yellow_Pickles.png
+Greenhouse/greenhouse-broken.png
 Greenhouse/greenhouse.png
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg

@@ -113,8 +113,9 @@ public enum GameMenuCommands {
     CHEATSETFRIENSHIPWITHANIMAL("\\s*cheat\\s+set\\s+friendship\\s+-n\\s+(\\w+)\\s*-c\\s*(\\d+)"),
     FEEDHAY("\\s*feed\\s+hay\\s+-n\\s*(.+)\\s*"),
     PET("\\s*pet\\s+-n\\s*(.+)\\s*"),
-    SELLANIMAL("\\s*sell\\s+animal\\s*-n\\s*(\\w+)\\s*");
+    SELLANIMAL("\\s*sell\\s+animal\\s*-n\\s*(\\w+)\\s*"),
 
+    CHEATADD("\\s*cheat\\s+add\\s+(?<count>\\d+)\\s+dollars\\s*");
 
     private final String pattern;
 

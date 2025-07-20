@@ -20,6 +20,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import io.github.group18.Controller.TradeMenuController;
+import io.github.group18.enums.MarketMenuEnums;
 
 public class GameMenuMenu extends AppMenu implements Screen {
 
@@ -39,7 +40,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
     private int gameWidth = Gdx.graphics.getWidth();
     private int gameHeight = Gdx.graphics.getHeight();
 
-    public GameMenuMenu(GameMenuController controller , Skin skin) {
+    public GameMenuMenu(GameMenuController controller, Skin skin) {
         this.background = GameAssetManager.getBackground();
         this.skin = skin;
         this.controller = controller;
@@ -47,14 +48,14 @@ public class GameMenuMenu extends AppMenu implements Screen {
         this.loadGame = new TextButton("Load Game", skin);
         this.exitGame = new TextButton("Exit", skin);
         this.terminateGame = new TextButton("Terminate", skin);
-        this.MenuTitle = new Label("Game Menu", skin , "title");
+        this.MenuTitle = new Label("Game Menu", skin, "title");
         this.menuTable = new Table();
         this.savedGameTable = new Table();
 //        App.setGameMenuController(controller); TODO بعد از انجام قبلی ها
 
     }
 
-    public void check(String input ,Scanner scanner) {
+    public void check(String input, Scanner scanner) {
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
@@ -294,6 +295,8 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.SELL.getMather(input) != null) {
             String name = GameMenuCommands.SELL.getMather(input).group(1);
             System.out.println(controller.sellAnimal(name));
+        } else if (GameMenuCommands.CHEATADD.getMather(input) != null) {
+            controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
         } else {
             System.out.println("Invalid command");
         }
