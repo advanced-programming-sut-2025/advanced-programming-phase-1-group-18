@@ -16,6 +16,7 @@ public class CheatCodeDialog extends Dialog {
     private TextField cheatInput;
     private GameMenuInputAdapter gameMenuInputAdapter;
 
+
     public CheatCodeDialog(Stage stage, Skin skin, GameMenuInputAdapter gameMenuInputAdapter) {
         super("Enter Cheat Code", skin);
         this.gameMenuInputAdapter = gameMenuInputAdapter;
