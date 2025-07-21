@@ -77,6 +77,8 @@ public class GameMenu implements Screen {
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
         craftingMenu.render();
+        stage.act(delta);
+        stage.draw();
     }
 
     private void handleNightSleepFade(float delta) {
