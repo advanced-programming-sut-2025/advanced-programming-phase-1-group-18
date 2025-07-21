@@ -6,7 +6,7 @@ import io.github.group18.enums.TreeSeedEnums;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllTree extends Tree implements PictureModel{
+public class AllTree extends Tree implements PictureModel {
     AllTreesEnums type;
     TreeSeedEnums source;
     private int daysGrowCounter;
@@ -19,6 +19,22 @@ public class AllTree extends Tree implements PictureModel{
     private int Energy;
     private int baseSellPrice;
 
+    public int getCurrentGrowthLevel() {
+        if (stages == null || stages.isEmpty()) {
+            return 1; // Default to level 1 if no stages exist
+        }
+
+        int cumulativeDays = 0;
+        for (int i = 0; i < stages.size(); i++) {
+            cumulativeDays += stages.get(i);
+            if (daysGrowCounter < cumulativeDays) {
+                return i + 1; // +1 because levels start at 1
+            }
+        }
+
+        // If daysGrowCounter exceeds all stages, return max level
+        return stages.size() + 1;
+    }
 
     public int getDaysGrowCounter() {
         return daysGrowCounter;
@@ -282,6 +298,6 @@ public class AllTree extends Tree implements PictureModel{
 
     @Override
     public String getPath() {
-        return "Trees/" + type.toString().replace(" ", "") + ".png";
+        return "Trees/" + type + getCurrentGrowthLevel() + ".png";
     }
 }

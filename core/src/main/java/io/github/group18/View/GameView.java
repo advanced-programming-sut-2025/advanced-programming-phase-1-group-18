@@ -18,6 +18,8 @@ import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.*;
+import io.github.group18.Model.Items.AllCrop;
+import io.github.group18.Model.Items.ForagingCrop;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.Model.Items.Tool;
 
@@ -49,7 +51,7 @@ public class GameView {
         loadFont();
     }
 
-    private void loadTextures() {
+    public void loadTextures() {
         textures = new HashMap<>();
 
         playerAtlas = GameAssetManager.getGameAssetManager().getPlayerAtlas();
@@ -163,6 +165,9 @@ public class GameView {
             double second = player.getY();
 
             TextureRegion textureRegion = textures.get(tool);
+            if (textureRegion == null) {
+                textureRegion = new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem());
+            }
             if (walking) {
                 Random random = new Random();
                 int x = 5 + random.nextInt(15);
@@ -236,12 +241,14 @@ public class GameView {
                         float drawY = y * tileSize;
                         if (inside instanceof GreenHouse greenHouse) {
                             for (Player player : App.getCurrentGame().getPlayers()) {
-                                System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
+//                                System.out.println("yapperoni: " + player.getOwner().getUsername() +
+//                                    player.getMyFarm().getMyGreenHouse().isStatus() + " " +
+//                                    player.getMyFarm().getMyGreenHouse().hashCode());
                             }
-                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+//                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
                         }
                         if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
-                            System.out.println("Probably not coming here?");
+//                            System.out.println("Probably not coming here?");
                             texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
                         }
                         batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
@@ -294,11 +301,15 @@ public class GameView {
         }
 
         Class<?> clazz = kashi.getInside().getClass();
+        if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
+            kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+            return;
+        }
 
         while (x >= 0) {
             Kashi currentTile = tiles.get(x).get(y);
             if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz)) {
+                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
             }
             x--;
@@ -308,7 +319,7 @@ public class GameView {
         while (y >= 0) {
             Kashi currentTile = tiles.get(x).get(y);
             if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz)) {
+                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
             }
             y--;
@@ -324,7 +335,7 @@ public class GameView {
         for (int i = startX; i < tiles.size(); i++) {
             Kashi rowTile = tiles.get(i).get(startY);
             if (rowTile == null || rowTile.getInside() == null ||
-                !rowTile.getInside().getClass().equals(clazz)) {
+                !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
             }
             widthcounter++;
@@ -332,7 +343,7 @@ public class GameView {
             for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
                 Kashi colTile = tiles.get(i).get(currentY);
                 if (colTile == null || colTile.getInside() == null ||
-                    !colTile.getInside().getClass().equals(clazz)) {
+                    !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
                 }
                 heightcounter++;
@@ -346,7 +357,7 @@ public class GameView {
             for (int i = startX; i < tiles.size(); i++) {
                 Kashi rowTile = tiles.get(i).get(startY);
                 if (rowTile == null || rowTile.getInside() == null ||
-                    !rowTile.getInside().getClass().equals(clazz)) {
+                    !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
                 }
 
@@ -354,7 +365,7 @@ public class GameView {
                     if (i == startX && currentY == startY) continue;
                     Kashi colTile = tiles.get(i).get(currentY);
                     if (colTile == null || colTile.getInside() == null ||
-                        !colTile.getInside().getClass().equals(clazz)) {
+                        !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                         break;
                     }
 
@@ -530,12 +541,11 @@ public class GameView {
         batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         // Draw red overlay
-        batch.begin();
+
         batch.draw(pixel,
             0, 0,
             Gdx.graphics.getWidth(),
             Gdx.graphics.getHeight());
-        batch.end();
 
         // Restore original state
         batch.setProjectionMatrix(originalMatrix);
