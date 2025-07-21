@@ -1,0 +1,14 @@
+SkillIcons.png
+size: 264, 66
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+FarmingSkill
+  bounds: 1, 1, 64, 64
+FishingSkill
+  bounds: 67, 1, 64, 64
+ForagingSkill
+  bounds: 133, 1, 64, 64
+MiningSkill
+  bounds: 199, 1, 64, 64
