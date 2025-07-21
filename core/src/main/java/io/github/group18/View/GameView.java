@@ -30,7 +30,7 @@ public class GameView {
     private BitmapFont smallFont;
     private GlyphLayout layout = new GlyphLayout();
     private TextureAtlas playerAtlas;
-    private final ArrayList<Animation<TextureRegion>> playerAnimations = new ArrayList<>();
+    private final static ArrayList<Animation<TextureRegion>> playerAnimations = new ArrayList<>();
     private float stateTime = 0f;
     private int moveDirection = 0;
     private Texture pixel; // Add this
@@ -579,5 +579,10 @@ public class GameView {
 
     public void setWalking(boolean walking) {
         this.walking = walking;
+    }
+
+    public static TextureRegion getPlayerFrontImage()
+    {
+        return playerAnimations.get(0).getKeyFrame(0, false);
     }
 }

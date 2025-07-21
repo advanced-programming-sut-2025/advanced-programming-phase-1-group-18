@@ -42,10 +42,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if (keycode == Input.Keys.ESCAPE) {
-//            gameController.goToMain();
-            return true;
-        }
 
         if (keycode == Input.Keys.N) {
             GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
@@ -71,6 +67,10 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.C) {
             Game.getCurrentPlayer().pickSelectedItem();
 //            performAction(screenX, screenY);
+            return true;
+        }
+        if (keycode == Input.Keys.ESCAPE) {
+            gameController.getGameMenu().getInventoryView().toggle();
             return true;
         }
 //        if (keycode == Input.Keys.X) {
