@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.GameAssetManager;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -30,7 +32,8 @@ public class GameMenu implements Screen {
     private Stage cheatCodeStage;
     private CraftingMenu craftingMenu;
     private LightningEffect lightningEffect;
-
+    private InventoryView inventoryView;
+    private Stage stage;
 
     public GameMenu(GameController gameController, Game gameModel) {
         this.cheatCodeStage = new Stage();
@@ -38,6 +41,7 @@ public class GameMenu implements Screen {
         lightningEffect = new LightningEffect();
         this.craftingMenu = new CraftingMenu();
         craftingMenu.setActive(false);
+        this.stage = new Stage(new ScreenViewport());
         initializeGame(gameModel);
     }
 
@@ -46,6 +50,11 @@ public class GameMenu implements Screen {
         gameView = new GameView(gameModel);
         gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
+        inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
+
+        stage.addActor(inventoryView.getWindow());
+        stage.addActor(inventoryView.getTooltipLabel());
+        stage.addActor(inventoryView.getSkillTooltipLabel());
     }
 
     @Override
@@ -258,5 +267,9 @@ public class GameMenu implements Screen {
 
     public void setAdvancingDay(boolean advancingDay) {
         this.advancingDay = advancingDay;
+    }
+
+    public InventoryView getInventoryView() {
+        return inventoryView;
     }
 }

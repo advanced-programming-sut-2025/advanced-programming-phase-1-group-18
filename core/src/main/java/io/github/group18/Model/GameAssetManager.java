@@ -31,6 +31,9 @@ public class GameAssetManager {
     Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
     Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
     Texture soilTexture = new Texture(Gdx.files.internal("game/tiles/soil.png"));
+    Texture scythe = new Texture(Gdx.files.internal("inventory/tools/Scythe.png"));
+    Texture axe = new Texture(Gdx.files.internal("inventory/tools/Axe.png"));
+    Texture pickaxe = new Texture(Gdx.files.internal("inventory/tools/Pickaxe.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
@@ -263,5 +266,18 @@ public class GameAssetManager {
 
     public void setSoilTexture(Texture soilTexture) {
         this.soilTexture = soilTexture;
+    }
+
+    public Texture getPickaxe() {
+        return pickaxe;
+    }
+
+    public Texture getScythe() {
+        return scythe;
+    }
+
+
+    public Texture getAxe() {
+        return axe;
     }
 }
