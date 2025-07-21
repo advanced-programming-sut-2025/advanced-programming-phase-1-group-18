@@ -9,12 +9,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.App;
+import io.github.group18.Model.Buff;
 import io.github.group18.Model.Game;
+import io.github.group18.Model.GameAssetManager;
+import io.github.group18.enums.SkillEnum;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -29,7 +35,10 @@ public class GameMenu implements Screen {
     private boolean advancingDay = false;
     private Stage cheatCodeStage;
     private CraftingMenu craftingMenu;
+    private CookingMenu cookingMenu;
     private LightningEffect lightningEffect;
+    private Buff buff;
+    private boolean showBuff = false;
 
 
     public GameMenu(GameController gameController, Game gameModel) {
@@ -38,6 +47,8 @@ public class GameMenu implements Screen {
         lightningEffect = new LightningEffect();
         this.craftingMenu = new CraftingMenu();
         craftingMenu.setActive(false);
+        this.cookingMenu = new CookingMenu();
+        cookingMenu.setActive(false);
         initializeGame(gameModel);
     }
 
@@ -68,6 +79,10 @@ public class GameMenu implements Screen {
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();
         craftingMenu.render();
+        cookingMenu.render();
+        if (showBuff) {
+            showBuffEffect(buff);
+        }
     }
 
     private void handleNightSleepFade(float delta) {
@@ -193,5 +208,73 @@ public class GameMenu implements Screen {
     public void setCraftingMenu(CraftingMenu craftingMenu) {
         this.craftingMenu = craftingMenu;
     }
-    // Other Screen methods
+
+    public CookingMenu getCookingMenu() {
+        return cookingMenu;
+    }
+
+    public void setCookingMenu(CookingMenu cookingMenu) {
+        this.cookingMenu = cookingMenu;
+    }
+
+    public void showBuffEffect(Buff buff) {
+        Main.getBatch().begin();
+        int scale = 3;
+//        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+//        TextureRegionDrawable drawable = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
+//            getCookingAtlas().findRegion(name));
+//        drawable.setMinSize(drawable.getMinWidth()*scale, drawable.getMinHeight()*scale);
+        // لود عکس
+        TextureRegionDrawable buffTexture = new TextureRegionDrawable();
+        try {
+            buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
+                getSkillAtlas().findRegion(buff.getBuffSkillType().name()));
+        }catch (NullPointerException e) {
+            buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
+                getSkillAtlas().findRegion(SkillEnum.MiningSkill.name()));
+        }
+        buffTexture.setMinSize(buffTexture.getMinWidth()*scale, buffTexture.getMinHeight()*scale);
+        Image buffImage = new Image(buffTexture);
+
+        // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
+        buffImage.setSize(100, 100);
+        buffImage.setPosition(
+            (Gdx.graphics.getWidth() - buffImage.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - buffImage.getHeight()) / 2f
+        );
+
+        // ابتدا شفافیت را صفر کن
+        buffImage.getColor().a = 0f;
+
+        // اضافه به stage
+//        stage.addActor(buffImage);
+
+        buffImage.draw(Main.getBatch(),buffImage.getColor().a);
+//        Main.getBatch().draw(buffImage,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+
+        // اکشن fade in -> مکث -> fade out -> حذف
+        buffImage.addAction(Actions.sequence(
+            Actions.fadeIn(0.5f),
+            Actions.delay(1.5f),
+            Actions.fadeOut(0.5f),
+            Actions.run(() -> buffImage.remove())
+        ));
+        Main.getBatch().end();
+    }    // Other Screen methods
+
+    public Buff getBuff() {
+        return buff;
+    }
+
+    public void setBuff(Buff buff) {
+        this.buff = buff;
+    }
+
+    public boolean isShowBuff() {
+        return showBuff;
+    }
+
+    public void setShowBuff(boolean showBuff) {
+        this.showBuff = showBuff;
+    }
 }

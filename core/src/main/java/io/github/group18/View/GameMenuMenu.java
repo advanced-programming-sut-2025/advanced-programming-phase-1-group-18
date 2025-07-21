@@ -147,9 +147,9 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.COOKINGSHOWRECIPES.getMather(input) != null) {
             System.out.println(controller.cookingShowRecipes());
         } else if (GameMenuCommands.COOKINGPREPARE.getMather(input) != null) {
-//            System.out.println(controller.cookingPrepare(GameMenuCommands.COOKINGPREPARE.getMather(input).group(1)));
+            System.out.println(controller.cookingPrepare(GameMenuCommands.COOKINGPREPARE.getMather(input).group(1)));
         } else if (GameMenuCommands.EAT.getMather(input) != null) {
-//            System.out.println(controller.eat(GameMenuCommands.EAT.getMather(input).group(1)));
+            System.out.println(controller.eat(GameMenuCommands.EAT.getMather(input).group(1)));
         } else if (GameMenuCommands.SELL.getMather(input) != null) {
 //            System.out.println(controller.sell(GameMenuCommands.SELL.getMather(input).group(1), GameMenuCommands.SELL.getMather(input).group(2)));
         } else if (GameMenuCommands.MEETNPC.getMather(input) != null) {

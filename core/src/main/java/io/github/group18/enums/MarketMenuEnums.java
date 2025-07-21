@@ -12,6 +12,7 @@ public enum MarketMenuEnums {
 
     private final String pattern;
 
+
     MarketMenuEnums(String pattern) {
         this.pattern = pattern;
     }

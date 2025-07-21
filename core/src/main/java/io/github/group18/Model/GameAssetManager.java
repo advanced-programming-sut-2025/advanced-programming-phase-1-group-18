@@ -23,12 +23,22 @@ public class GameAssetManager {
     Texture greenBarTexture = new Texture(Gdx.files.internal("EnergyBar/green.png"));
     Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
     Texture bgCraftingMenu = new Texture(Gdx.files.internal("craftingSpriteSheet/craftingMenu.png"));
+    Texture bgCookingMenu = new Texture(Gdx.files.internal("cookingRecipes/cook menu.jpg"));
     Texture exitTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/exit.png"));
+    Texture inventoryIconTexture = new Texture(Gdx.files.internal("cookingRecipes/inventoIcon.png"));
+    Texture refrigeratorIconTexture = new Texture(Gdx.files.internal("cookingRecipes/refrIcon.png"));
+    Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
+    Texture farmingTexture = new Texture(Gdx.files.internal("SkillsIcon/FarmingSkill.png"));
+    Texture fishingTexture = new Texture(Gdx.files.internal("SkillsIcon/FishingSkill.png"));
+    Texture foragingTexture = new Texture(Gdx.files.internal("SkillsIcon/ForagingSkill.png"));
+    Texture miningTexture = new Texture(Gdx.files.internal("SkillsIcon/MiningSkill.png"));
 
 
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
+    TextureAtlas cookingAtlas = new TextureAtlas(Gdx.files.internal("cookingRecipes/cooking.atlas"));
+    TextureAtlas skillAtlas = new TextureAtlas(Gdx.files.internal("SkillsIcon/SkillIcons.atlas"));
 
 
     public static Texture defaultAvatar = new Texture(Gdx.files.internal("avatar.png"));
@@ -177,5 +187,73 @@ public class GameAssetManager {
 
     public void setExitTexture(Texture exitTexture) {
         this.exitTexture = exitTexture;
+    }
+
+    public Texture getBgCookingMenu() {
+        return bgCookingMenu;
+    }
+
+    public void setBgCookingMenu(Texture bgCookingMenu) {
+        this.bgCookingMenu = bgCookingMenu;
+    }
+
+    public TextureAtlas getCookingAtlas() {
+        return cookingAtlas;
+    }
+
+    public void setCookingAtlas(TextureAtlas cookingAtlas) {
+        this.cookingAtlas = cookingAtlas;
+    }
+
+    public Texture getInventoryIconTexture() {
+        return inventoryIconTexture;
+    }
+
+    public Texture getRefrigeratorIconTexture() {
+        return refrigeratorIconTexture;
+    }
+
+    public TextureAtlas getSkillAtlas() {
+        return skillAtlas;
+    }
+
+    public void setSkillAtlas(TextureAtlas skillAtlas) {
+        this.skillAtlas = skillAtlas;
+    }
+
+    public Texture getSlotTexture() {
+        return slotTexture;
+    }
+
+    public Texture getFarmingTexture() {
+        return farmingTexture;
+    }
+
+    public void setFarmingTexture(Texture farmingTexture) {
+        this.farmingTexture = farmingTexture;
+    }
+
+    public Texture getFishingTexture() {
+        return fishingTexture;
+    }
+
+    public void setFishingTexture(Texture fishingTexture) {
+        this.fishingTexture = fishingTexture;
+    }
+
+    public Texture getForagingTexture() {
+        return foragingTexture;
+    }
+
+    public void setForagingTexture(Texture foragingTexture) {
+        this.foragingTexture = foragingTexture;
+    }
+
+    public Texture getMiningTexture() {
+        return miningTexture;
+    }
+
+    public void setMiningTexture(Texture miningTexture) {
+        this.miningTexture = miningTexture;
     }
 }

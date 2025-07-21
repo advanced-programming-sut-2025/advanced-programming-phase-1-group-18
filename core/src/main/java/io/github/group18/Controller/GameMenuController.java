@@ -1,5 +1,12 @@
 package io.github.group18.Controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.google.gson.Gson;
 import io.github.group18.Main;
 import io.github.group18.Model.*;
@@ -2957,6 +2964,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 getCraftingRecipes().add(craftingItem.getCraftingItem());
             player.getInventory().addItem(craftingItem, count);
             addItem = true;
+        } else if (FoodCookingEnums.isContain(name)){
+            Cookingrecipe cookingrecipe = new Cookingrecipe();
+            cookingrecipe.setFood(FoodCookingEnums.valueOf(name));
+            App.getCurrentGame().getCurrentPlayer().getCookingRecipes().add(cookingrecipe);
+            addItem = true;
         } else if (PoleJensEnums.isContain(name)) {
             String jens = name.replaceAll("pole", "");
             FishingPole fishingPole = new FishingPole();
@@ -3035,49 +3047,56 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-//    public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        if (pickOrPut.equalsIgnoreCase("put")) {
-//            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().getTotalItemCount() >= 9) {
-//                return new Result(false, "Refrigerator is full");
-//            }
-//            boolean found = false;
-//            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
-//                    found = true;
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().addItem(item, 1);
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                    return new Result(true, "Successful");
-//                }
-//            }
-//            if (!found) {
-//                return new Result(false, "You don't have that item");
-//            }
-//        }
-//        if (pickOrPut.equalsIgnoreCase("pick")) {
-//            boolean found = false;
-//            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator() == null) {
-//                return new Result(false, "You don't have that item");
-//            }
-//            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().getItems().keySet()) {
-//                if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
-//                    found = true;
-//                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().isFull()) {
-//                        return new Result(false, "Inventory is full");
-//                    }
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(item, 1);
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCottage().getMyRefrigerator().removeItem(item, 1);
-//                    return new Result(true, "Successful");
-//                }
-//            }
-//            if (!found) {
-//                return new Result(false, "You don't have that item");
-//            }
-//        }
-//        return new Result(false, "");
-//    }
+    public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        Refrigerator refrigerator = App.getCurrentGame().getCurrentPlayer()
+            .getMyFarm().getMyCottage().getMyRefrigerator();
+        Stack<Integer> freeIndexes = new Stack<>();
+        for (int i = 9 - 1; i >= 0; i--) {
+            freeIndexes.push(i);
+        }
+        refrigerator.setFreeIndexes(freeIndexes);
+        if (pickOrPut.equalsIgnoreCase("put")) {
+            if (refrigerator.getTotalItemCount() >= 9) {
+                return new Result(false, "Refrigerator is full");
+            }
+            boolean found = false;
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
+                    found = true;
+                    refrigerator.addItem(item, 1);
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                    return new Result(true, "Successful");
+                }
+            }
+            if (!found) {
+                return new Result(false, "You don't have that item");
+            }
+        }
+        if (pickOrPut.equalsIgnoreCase("pick")) {
+            boolean found = false;
+            if (refrigerator == null) {
+                return new Result(false, "You don't have that item");
+            }
+            for (Item item : refrigerator.getItems().keySet()) {
+                if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
+                    found = true;
+                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().isFull()) {
+                        return new Result(false, "Inventory is full");
+                    }
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(item, 1);
+                    refrigerator.removeItem(item, 1);
+                    return new Result(true, "Successful");
+                }
+            }
+            if (!found) {
+                return new Result(false, "You don't have that item");
+            }
+        }
+        return new Result(false, "");
+    }
 
     public Result cookingShowRecipes() {
         if (isFainted()) {
@@ -3094,65 +3113,65 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-//    public Result cookingPrepare(String recipeName) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() < 3) {
-//            return new Result(false, "Not enough energy to cook");
-//        }
-//        Set<String> FOOD_ENUMS = new HashSet<>();
-//        for (FoodCookingEnums food : FoodCookingEnums.values()) {
-//            FOOD_ENUMS.add(food.name().toLowerCase());
-//        }
-//        if (isValidFood(recipeName.toLowerCase(), FOOD_ENUMS)) {
-//            FoodCookingEnums foodCookingEnums;
-//            try {
-//                foodCookingEnums = FoodCookingEnums.valueOf(recipeName);
-//            } catch (IllegalArgumentException e) {
-//                return new Result(false, "invalid food");
-//            }
-//            Cookingrecipe targetCookingRecipe = null;
-//            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes()) {
-//                if (cookingrecipe.getFood() == foodCookingEnums) {
-//                    targetCookingRecipe = cookingrecipe;
-//                }
-//            }
-//            if (targetCookingRecipe == null) {
-//                return new Result(false, "You don't have the recipe");
-//            }
-//            HashMap<String, Integer> ingredients = foodCookingEnums.getIngredients();
-//
-//            for (String food : ingredients.keySet()) {
-//                boolean found = false;
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
-//                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item) >= ingredients.get(food)) {
-//                            found = true;
-//                        }
-//                    }
-//                }
-//                if (!found) {
-//                    //System.out.println(food + " nigga");
-//                    return new Result(false, "You don't have the items needed");
-//                }
-//            }
-//            for (String food : ingredients.keySet()) {
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
-//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, ingredients.get(food));
-//                    }
-//                }
-//            }
-//
-//            FoodCooking foodCooking = targetCookingRecipe.letmecook(foodCookingEnums);
-//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(foodCooking, 1);
-//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - 3);
-//            return new Result(true, "Successfully made " + recipeName);
-//        } else {
-//            return new Result(false, "Invalid food");
-//        }
-//    }
+    public Result cookingPrepare(String recipeName) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() < 3) {
+            return new Result(false, "Not enough energy to cook");
+        }
+        Set<String> FOOD_ENUMS = new HashSet<>();
+        for (FoodCookingEnums food : FoodCookingEnums.values()) {
+            FOOD_ENUMS.add(food.name().toLowerCase());
+        }
+        if (isValidFood(recipeName.toLowerCase(), FOOD_ENUMS)) {
+            FoodCookingEnums foodCookingEnums;
+            try {
+                foodCookingEnums = FoodCookingEnums.valueOf(recipeName);
+            } catch (IllegalArgumentException e) {
+                return new Result(false, "invalid food");
+            }
+            Cookingrecipe targetCookingRecipe = null;
+            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes()) {
+                if (cookingrecipe.getFood() == foodCookingEnums) {
+                    targetCookingRecipe = cookingrecipe;
+                }
+            }
+            if (targetCookingRecipe == null) {
+                return new Result(false, "You don't have the recipe");
+            }
+            HashMap<String, Integer> ingredients = foodCookingEnums.getIngredients();
+
+            for (String food : ingredients.keySet()) {
+                boolean found = false;
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
+                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item)>= ingredients.get(food)) {
+                            found = true;
+                        }
+                    }
+                }
+                if (!found) {
+                    //System.out.println(food + " nigga");
+                    return new Result(false, "You don't have the items needed");
+                }
+            }
+            for (String food : ingredients.keySet()) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, ingredients.get(food));
+                    }
+                }
+            }
+
+            FoodCooking foodCooking = targetCookingRecipe.letmecook(foodCookingEnums);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(foodCooking, 1);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - 3);
+            return new Result(true, "Successfully made " + recipeName);
+        } else {
+            return new Result(false, "Invalid food");
+        }
+    }
 
     public static boolean isValidFood(String input, Set<String> FOOD_ENUMS) {
         String processedInput = input.replace(" ", "");
@@ -3160,69 +3179,77 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             .anyMatch(food -> food.equalsIgnoreCase(processedInput));
     }
 
-//    public Result eat(String foodName) {
-//
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Set<String> FOOD_ENUMS = new HashSet<>();
-//        FoodCookingEnums foodCookingEnums = null;
-//        for (FoodCookingEnums food : FoodCookingEnums.values()) {
-//            FOOD_ENUMS.add(food.name().toLowerCase());
-//            if (food.name().equalsIgnoreCase(foodName)) {
-//                foodCookingEnums = FoodCookingEnums.valueOf(foodName);
-//            }
-//        }
-////        try {
-////        } catch (Exception e) {
-////            return new Result(false, "Invalid food");
-////        }
-//        if (isValidFood(foodName, FOOD_ENUMS)) {
-//            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                if (item instanceof FoodCooking) {
-//                    FoodCooking foodCooking = (FoodCooking) item;
-//                    if (foodCooking.getNamee() == foodCookingEnums) {
-//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy()));
-//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
-//                        return new Result(true, "You ate " + foodName);
-//                    }
-//                }
-//            }
-//        } else if (AllCropsEnums.isContain(foodName)) {
-//            AllCropsEnums allCropsEnums = AllCropsEnums.valueOf(foodName);
-//            ForagingSeedsEnums cropSeed = allCropsEnums.getSeedSet();
-//            AllCrop crop = new AllCrop();
-//            crop.initilizeCrop(cropSeed);
-//            if (crop.isEdible()) {
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof AllCrop) {
-//                        if (crop.getCorrectName().equalsIgnoreCase(foodName)) {
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + crop.getEnergy()));
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                            return new Result(true, "You ate " + foodName);
-//                        }
-//                    }
-//                }
-//            }
-//        } else if (ArtisanGoodsEnums.isContain(foodName)) {
-//            ArtisanGoods artisanGoods = new ArtisanGoods(foodName);
-//            if (artisanGoods.getEnergyUsage() != 0) {
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof ArtisanGoods) {
-//                        if (artisanGoods.getCorrectName().equalsIgnoreCase(foodName)) {
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + artisanGoods.getEnergyUsage()));
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                            return new Result(true, "You ate " + foodName);
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
+    public Result eat(String foodName) {
+
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        Set<String> FOOD_ENUMS = new HashSet<>();
+        FoodCookingEnums foodCookingEnums = null;
+        for (FoodCookingEnums food : FoodCookingEnums.values()) {
+            FOOD_ENUMS.add(food.name().toLowerCase());
+            if (food.name().equalsIgnoreCase(foodName)) {
+                foodCookingEnums = FoodCookingEnums.valueOf(foodName);
+            }
+        }
+//        try {
+//        } catch (Exception e) {
 //            return new Result(false, "Invalid food");
 //        }
-//        return new Result(false, "You don't have that food");
-//    }
+        if (isValidFood(foodName, FOOD_ENUMS)) {
+            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                if (item instanceof FoodCooking) {
+                    FoodCooking foodCooking = (FoodCooking) item;
+                    if (foodCooking.getNamee() == foodCookingEnums) {
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().
+                            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
+                            get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy()));
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
+                        showBuffEffect(foodCooking.getBuff());
+                        App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
+//                        App.getGameController().getGameMenu().
+                        return new Result(true, "You ate " + foodName);
+                    }
+                }
+            }
+        } else if (AllCropsEnums.isContain(foodName)) {
+            AllCropsEnums allCropsEnums = AllCropsEnums.valueOf(foodName);
+            ForagingSeedsEnums cropSeed = allCropsEnums.getSeedSet();
+            AllCrop crop = new AllCrop();
+            crop.initilizeCrop(cropSeed);
+            if (crop.isEdible()) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof AllCrop) {
+                        if (crop.getCorrectName().equalsIgnoreCase(foodName)) {
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + crop.getEnergy()));
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            return new Result(true, "You ate " + foodName);
+                        }
+                    }
+                }
+            }
+        } else if (ArtisanGoodsEnums.isContain(foodName)) {
+            ArtisanGoods artisanGoods = new ArtisanGoods(foodName);
+            if (artisanGoods.getEnergyUsage() != 0) {
+                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                    if (item instanceof ArtisanGoods) {
+                        if (artisanGoods.getCorrectName().equalsIgnoreCase(foodName)) {
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).
+                                setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().
+                                    getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
+                                    get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + artisanGoods.getEnergyUsage()));
+                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            return new Result(true, "You ate " + foodName);
+                        }
+                    }
+                }
+            }
+        } else {
+            return new Result(false, "Invalid food");
+        }
+        return new Result(false, "You don't have that food");
+    }
 
     public Result buyAnimal(String animal, String name) {
         return new Result(true, "");
@@ -5652,6 +5679,45 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             System.out.println("Invalid menu");
         }
 
+    }
+    public void showBuffEffect(Buff buff) {
+        // مسیر عکس را بسته به نوع buff مشخص کن
+        Main.getBatch().begin();
+        int scale = 3;
+//        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+//        TextureRegionDrawable drawable = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
+//            getCookingAtlas().findRegion(name));
+//        drawable.setMinSize(drawable.getMinWidth()*scale, drawable.getMinHeight()*scale);
+        // لود عکس
+        TextureRegionDrawable buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
+            getSkillAtlas().findRegion(buff.getBuffSkillType().name()));
+        buffTexture.setMinSize(buffTexture.getMinWidth()*scale, buffTexture.getMinHeight()*scale);
+        Image buffImage = new Image(buffTexture);
+
+        // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
+        buffImage.setSize(100, 100);
+        buffImage.setPosition(
+            (Gdx.graphics.getWidth() - buffImage.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - buffImage.getHeight()) / 2f
+        );
+
+        // ابتدا شفافیت را صفر کن
+        buffImage.getColor().a = 0f;
+
+        // اضافه به stage
+//        stage.addActor(buffImage);
+
+        buffImage.draw(Main.getBatch(),buffImage.getColor().a);
+//        Main.getBatch().draw(buffImage,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+
+        // اکشن fade in -> مکث -> fade out -> حذف
+        buffImage.addAction(Actions.sequence(
+            Actions.fadeIn(0.5f),
+            Actions.delay(1.5f),
+            Actions.fadeOut(0.5f),
+            Actions.run(() -> buffImage.remove())
+        ));
+        Main.getBatch().end();
     }
 
 }

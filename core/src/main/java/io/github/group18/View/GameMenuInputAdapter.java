@@ -49,7 +49,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             GameMenuController.nextTurn(gameController.getGameMenu());
             return true;
         }
-        if (keycode == Input.Keys.C) {
+        if (keycode == Input.Keys.P) {
             Stage stage = gameController.getGameMenu().getCheatCodeStage();
             Gdx.input.setInputProcessor(stage);
             CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
@@ -65,6 +65,11 @@ public class GameMenuInputAdapter extends InputAdapter {
             App.getGameController().getGameMenu().getCraftingMenu().setActive(true);
             App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
             Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
+        }
+        if (keycode == Input.Keys.C) {
+            App.getGameController().getGameMenu().getCookingMenu().setActive(true);
+            App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
+            Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
         }
         return true;
     }
