@@ -44,10 +44,13 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.N) {
             nextTurn();
         }
-
-
-        if (keycode == Input.Keys.H) {
-            handleCheatCodePage();
+        if (keycode == Input.Keys.P) {
+            Stage stage = gameController.getGameMenu().getCheatCodeStage();
+            Gdx.input.setInputProcessor(stage);
+            CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+                GameAssetManager.getGameAssetManager().getSkin(),this);
+            cheatDialog.show(stage);
+            cheatDialog.setColor(Color.WHITE);
         }
 
 
@@ -63,6 +66,11 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.C) {
             Game.getCurrentPlayer().pickSelectedItem();
+        }
+        if (keycode == Input.Keys.C) {
+            App.getGameController().getGameMenu().getCookingMenu().setActive(true);
+            App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
+            Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
         }
 
 

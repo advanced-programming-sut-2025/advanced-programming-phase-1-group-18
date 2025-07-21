@@ -167,4 +167,14 @@ public enum FoodCookingEnums {
         food.setName(name);
         return food;
     }
+
+    public static boolean isContain(String poleName){
+        poleName = poleName.toLowerCase().replaceAll(" ", "");
+        for(FoodCookingEnums pole : FoodCookingEnums.values()){
+            if(pole.name().equalsIgnoreCase(poleName)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

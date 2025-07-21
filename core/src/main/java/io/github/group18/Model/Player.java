@@ -41,8 +41,11 @@ public class Player extends User {
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_FAINTING = 5; // After your existing states
+    public static final int EATING_STATE = 6;
     private int state = STATE_IDLE;
     private float faintTimer;
+    private float eatingTimer;
+
     protected Tool inMyHandTool;
 
     public Player() {
@@ -351,6 +354,14 @@ public class Player extends User {
         return faintTimer;
     }
 
+    public float getEatingTimer() {
+        return eatingTimer;
+    }
+
+    public void setEatingTimer(float eatingTimer) {
+        this.eatingTimer = eatingTimer;
+    }
+
     public void setFaintTimer(float faintTimer) {
         this.faintTimer = faintTimer;
     }
@@ -381,6 +392,13 @@ public class Player extends User {
                     faintTimer = 0f;
                 }
                 break;
+            case EATING_STATE:
+                eatingTimer += delta;
+                if (eatingTimer >= 1.5f) {
+                    state = STATE_IDLE;
+                    eatingTimer = 0f;
+                }
+
         }
 
         tryMove(vx * delta, vy * delta, tiles, gameView);
@@ -388,6 +406,7 @@ public class Player extends User {
 
     public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
         if (state == STATE_FAINTING) return false;
+        else if (state == EATING_STATE) return false;
 
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
@@ -410,6 +429,12 @@ public class Player extends User {
     public void faint() {
         if (state != STATE_FAINTING) {
             state = STATE_FAINTING;
+            faintTimer = 0f;
+        }
+    }
+    public void eat() {
+        if (state != EATING_STATE) {
+            state = EATING_STATE;
             faintTimer = 0f;
         }
     }

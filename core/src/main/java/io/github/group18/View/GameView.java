@@ -13,10 +13,12 @@ import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
-import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.AllCrop;
 import io.github.group18.Model.Items.ForagingCrop;
@@ -86,6 +88,21 @@ public class GameView {
             playerAnimations.add(new Animation<>(0.2f, faintFrames));
         } else {
             Gdx.app.error("Animation", "Missing faint frames! Loaded: " + faintFrames.size);
+        }
+        Array<TextureRegion> eatFrames = new Array<>();
+        TextureRegion frames;
+        for (int i = 0; i < 2; i++) {
+            frame = playerAtlas.findRegion("player_6_" + i);
+            if (frame == null) {
+                Gdx.app.error("Animation", "Missing eat frame: 8_" + i);
+            } else {
+                eatFrames.add(frame);
+            }
+        }
+        if (eatFrames.size == 2) {
+            playerAnimations.add(new Animation<>(0.2f, eatFrames));
+        } else {
+            Gdx.app.error("Animation", "Missing eat frames! Loaded: " + eatFrames.size);
         }
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -400,6 +417,19 @@ public class GameView {
             case Player.STATE_IDLE:
                 currentFrame = playerAnimations.get(player.getMovingDirection())
                     .getKeyFrame(stateTime, true);
+                break;
+            case Player.EATING_STATE:
+                currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
+                Texture buff = showBuffEffect(App.getCurrentGame().getCurrentPlayer().getFoodBuff());
+//                buff.draw(batch,buff.getColor().a);
+//                buff.addAction(Actions.sequence(
+//                    Actions.fadeIn(0.5f),
+//                    Actions.delay(1.5f),
+//                    Actions.fadeOut(0.5f),
+//                    Actions.run(() -> buff.remove())
+//                ));
+                batch.draw(buff,(float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE)+60);
+
         }
 
         batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
@@ -566,6 +596,50 @@ public class GameView {
     public Texture getPixel() {
         return pixel;
     }
+
+    public Texture showBuffEffect(Buff buff) {
+        int scale = 1;
+
+        // لود عکس
+        TextureRegion buffTexture = new TextureRegion();
+        switch ( buff.getBuffSkillType()){
+            case MiningSkill ->
+                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getMiningTexture());
+            case FarmingSkill ->
+                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getFarmingTexture());
+            case FishingSkill ->
+                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getFishingTexture());
+            case ForagingSkill ->
+                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getForagingTexture());
+            default ->
+                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getSlotTexture());
+        }
+//        try {
+//            buffTexture = GameAssetManager.getGameAssetManager().
+//                getSkillAtlas().findRegion(buff.getBuffSkillType().name());
+//        }catch (NullPointerException e) {
+//            buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getSlotTexture());
+//        }
+//        buffTexture.setMinSize(buffTexture.getMinWidth()*scale, buffTexture.getMinHeight()*scale);
+        Texture buffTex = buffTexture.getTexture();
+        Image buffImage = new Image(buffTexture);
+
+        // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
+        buffImage.setSize(100, 100);
+        buffImage.setPosition(
+            (Gdx.graphics.getWidth() - buffImage.getWidth()) / 2f ,
+            (Gdx.graphics.getHeight() - buffImage.getHeight()) / 2f + 50
+        );
+
+        // ابتدا شفافیت را صفر کن
+        buffImage.getColor().a = 0f;
+
+        // اضافه به stage
+//        stage.addActor(buffImage);
+//        Main.getBatch().draw(buffImage,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+        return buffTex;
+        // اکشن fade in -> مکث -> fade out -> حذف
+    }    // Other Screen methods
 
     public float getRedFlashTimer() {
         return redFlashTimer;

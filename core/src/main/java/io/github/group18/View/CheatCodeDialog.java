@@ -20,7 +20,7 @@ public class CheatCodeDialog extends Dialog {
         super("Enter Cheat Code", skin);
         this.gameMenuInputAdapter = gameMenuInputAdapter;
         // ایجاد TextField برای ورودی چیت
-        cheatInput = new TextField("", skin);
+        cheatInput = new TextField("cheat add item -n Tortilla -c 1", skin);
         cheatInput.setMessageText("Enter your cheat code here...");
 
         // افزودن به دیالوگ
