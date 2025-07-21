@@ -1,6 +1,7 @@
 package io.github.group18.Model;
 
 import io.github.group18.Model.Items.*;
+import io.github.group18.View.GameView;
 import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
@@ -31,9 +32,6 @@ public class Player extends User {
     protected ArrayList<CraftingRecipesEnums> CraftingRecipes;
     protected Inventory inventory;
     protected ArrayList<ArtisanGoods> artisansInProduce;
-    //
-    protected Tool inMyHandTool = null;
-    //
     protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
 
     private int movingDirection = 0;
@@ -45,7 +43,7 @@ public class Player extends User {
     public static final int STATE_FAINTING = 5; // After your existing states
     private int state = STATE_IDLE;
     private float faintTimer;
-
+    protected Tool inMyHandTool;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -362,7 +360,7 @@ public class Player extends User {
         this.vy = vy;
     }
 
-    public void update(float delta, ArrayList<ArrayList<Kashi>> tiles) {
+    public void update(float delta, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
         if (Energy <= 0 && state != STATE_FAINTING) {
             faint();
         }
@@ -385,10 +383,10 @@ public class Player extends User {
                 break;
         }
 
-        tryMove(vx * delta, vy * delta, tiles);
+        tryMove(vx * delta, vy * delta, tiles, gameView);
     }
 
-    public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles) {
+    public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
         if (state == STATE_FAINTING) return false;
 
         int newX = (int) (x + dx);
@@ -400,9 +398,9 @@ public class Player extends User {
             x += dx;
             y += dy;
             if (dx != 0 || dy != 0) {
-                Energy -= 10 * (dx * dx + dy * dy);
+                gameView.setWalking(true);
+                Energy -= 25 * (dx * dx + dy * dy);
                 Energy = Math.max(Energy, 0);
-//                System.out.println("Energy: " + Energy);
             }
             return true;
         }
@@ -413,6 +411,16 @@ public class Player extends User {
         if (state != STATE_FAINTING) {
             state = STATE_FAINTING;
             faintTimer = 0f;
+        }
+    }
+
+    public void pickSelectedItem() {
+        Item item = getInventory().getItemBySlot(getInventory().getSelectedSlot());
+        if (item instanceof Tool tool) {
+            inMyHandTool = tool;
+//
+
+
         }
     }
 }

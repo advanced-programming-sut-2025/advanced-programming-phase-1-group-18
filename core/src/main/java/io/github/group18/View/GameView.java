@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
@@ -18,6 +19,7 @@ import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Items.Tool;
 
 public class GameView {
 
@@ -34,14 +36,15 @@ public class GameView {
     private Texture pixel; // Add this
     private ClockController clock;
     private EnergyController energy;
-
+    private float redFlashTimer = 0f;
+    private boolean isFlashingRed = false;
+    private boolean walking = false;
 
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
         clock = new ClockController();
         energy = new EnergyController();
-//        loadTextures();
         loadTextures();
         loadFont();
     }
@@ -49,7 +52,7 @@ public class GameView {
     private void loadTextures() {
         textures = new HashMap<>();
 
-        playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
+        playerAtlas = GameAssetManager.getGameAssetManager().getPlayerAtlas();
 
         for (int i = 14; i > 9; i--) {
             Array<TextureRegion> walkFrames = new Array<>();
@@ -109,13 +112,16 @@ public class GameView {
                     if (inside instanceof PictureModel pictureModel) {
                         try {
                             Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                            if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
+                                tex = GameAssetManager.getGameAssetManager().getGreenhouseBroken();
+                            }
                             textures.put(inside, new TextureRegion(tex));
                         } catch (Exception e) {
                             System.out.println(inside.getClass().getSimpleName());
-                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                            textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
                         }
                     } else {
-                        textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                        textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
                     }
                 }
             }
@@ -128,23 +134,45 @@ public class GameView {
                 String path = pictureModel.getPath();
                 textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
             } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
             }
         }
     }
 
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
+//        System.out.println(Game.getCurrentPlayer().getX() + " " + Game.getCurrentPlayer().getY());
         batch.begin();
         renderTiles();
         renderPlayer();
+        renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
         energy.render(batch);
-//        renderTiles();
-//        renderPlayer();
+        renderKalagEffect(batch);
         renderBrightness();
+        walking = false;
         batch.end();
+    }
+
+    private void renderInMyHandToolPlayer() {
+        Player player = game.getCurrentPlayer();
+        Tool tool = player.getInMyHandTool();
+        if (tool != null) {
+            double first = player.getX();
+            double second = player.getY();
+
+            TextureRegion textureRegion = textures.get(tool);
+            if (walking) {
+                Random random = new Random();
+                int x = 5 + random.nextInt(15);
+                int y = 5 + random.nextInt(15);
+                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2 + x), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4 + y), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+
+            } else {
+                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+            }
+        }
     }
 
     private void renderTiles() {
@@ -168,7 +196,7 @@ public class GameView {
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         int tileSize = game.TILE_SIZE;
-        TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png")));
+        TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
@@ -184,40 +212,61 @@ public class GameView {
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                if (tiles.get(x).get(y).getInside() != null) {
-                    getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
-                    if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+
+                getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
+
+                if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                    //this is for blocks that are covered with big pics so they dont draw anything
+                } else {
+                    boolean flag = false;
+                    BottomLeft bottomLeft = null;
+                    for (int i = 0; i < bottomLeftTiles.size(); i++) {
+                        bottomLeft = bottomLeftTiles.get(i);
+                        if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        //this is for bottom left corners which should draw a big pic
+                        Kashi tile = tiles.get(x).get(y);
+                        Object inside = tile.getInside();
+                        TextureRegion texture = textures.get(inside);
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        if (inside instanceof GreenHouse greenHouse) {
+                            for (Player player : App.getCurrentGame().getPlayers()) {
+//                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
+                            }
+//                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+                        }
+                        if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
+//                                System.out.println("Probably not coming here?");
+                            texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
+                        }
+                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                     } else {
-                        boolean flag = false;
-                        BottomLeft bottomLeft = null;
-                        for (int i = 0; i < bottomLeftTiles.size(); i++) {
-                            bottomLeft = bottomLeftTiles.get(i);
-                            if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
-                                flag = true;
-                                break;
+                        //this is for normal blocks
+                        Kashi tile = tiles.get(x).get(y);
+                        Object inside = tile.getInside();
+
+                        if (inside == null) {
+                            if (tile.isShokhmZadeh()) {
+                                float drawX = x * tileSize;
+                                float drawY = y * tileSize;
+                                batch.draw(new TextureRegion(GameAssetManager.getGameAssetManager().getSoilTexture()), drawX, drawY, tileSize, tileSize);
+                                continue;
+                            } else {
+                                continue;
                             }
                         }
-                        if (flag) {
-                            Kashi tile = tiles.get(x).get(y);
-                            Object inside = tile.getInside();
-                            TextureRegion texture = textures.get(inside);
-                            float drawX = x * tileSize;
-                            float drawY = y * tileSize;
-                            batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
-                        } else {
-                            Kashi tile = tiles.get(x).get(y);
-                            if (tile == null) continue;
 
-                            Object inside = tile.getInside();
-                            TextureRegion texture = textures.get(inside);
-                            if (texture == null) {
-                                texture = textures.get("game/tiles/grass.png");
-                            }
 
-                            float drawX = x * tileSize;
-                            float drawY = y * tileSize;
-                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
-                        }
+                        TextureRegion texture = textures.get(inside);
+
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
                     }
                 }
             }
@@ -227,24 +276,20 @@ public class GameView {
     public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
 
         if (tiles == null || kashi == null || kashi.getInside() == null) {
-            System.out.println("Null detected in tiles or kashi");
             return;
         }
 
         if (x < 0 || y < 0 || x >= tiles.size()) {
-            System.out.println("X coordinate out of bounds");
             return;
         }
 
         ArrayList<Kashi> row = tiles.get(x);
         if (row == null || y >= row.size()) {
-            System.out.println("Y coordinate out of bounds");
             return;
         }
 
         Kashi tile = row.get(y);
         if (tile == null || tile.getInside() == null) {
-            System.out.println("Tile or its inside is null");
             return;
         }
 
@@ -327,10 +372,10 @@ public class GameView {
 
     private void renderPlayer() {
         Player player = game.getCurrentPlayer();
-        double first = game.getCurrentPlayer().getX();
-        double second = game.getCurrentPlayer().getY();
+        double first = player.getX();
+        double second = player.getY();
 
-        moveDirection = game.getCurrentPlayer().getMovingDirection();
+        moveDirection = player.getMovingDirection();
 
         stateTime += Gdx.graphics.getDeltaTime();
 
@@ -417,7 +462,6 @@ public class GameView {
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
             Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
-
             for (int i = 0; i < numSlots; i++) {
                 int x = startX + i * slotSize;
                 batch.draw(slotTexture, x, y, slotSize, slotSize);
@@ -462,6 +506,48 @@ public class GameView {
         }
     }
 
+    public void renderKalagEffect(SpriteBatch batch) {
+        if (!isFlashingRed) return;
+
+        // Update timer
+        redFlashTimer -= Gdx.graphics.getDeltaTime();
+        if (redFlashTimer <= 0) {
+            isFlashingRed = false;
+            return;
+        }
+
+        // Create single pixel texture (could optimize by creating this once)
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(1, 0, 0, 0.7f); // Red color with 70% opacity
+        pixmap.fill();
+        Texture pixel = new Texture(pixmap);
+        pixmap.dispose();
+
+        Matrix4 originalMatrix = batch.getProjectionMatrix();
+        Color originalColor = new Color(batch.getColor());
+
+        // Set up full-screen drawing
+        batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        // Draw red overlay
+        batch.begin();
+        batch.draw(pixel,
+            0, 0,
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight());
+        batch.end();
+
+        // Restore original state
+        batch.setProjectionMatrix(originalMatrix);
+        batch.setColor(originalColor);
+        pixel.dispose();
+    }
+
+    public void startRedFlash() {
+        redFlashTimer = 2f; // 2 seconds duration
+        isFlashingRed = true;
+    }
+
     public Batch getBatch() {
         return batch;
     }
@@ -471,4 +557,27 @@ public class GameView {
         return pixel;
     }
 
+    public float getRedFlashTimer() {
+        return redFlashTimer;
+    }
+
+    public void setRedFlashTimer(float redFlashTimer) {
+        this.redFlashTimer = redFlashTimer;
+    }
+
+    public boolean isFlashingRed() {
+        return isFlashingRed;
+    }
+
+    public void setFlashingRed(boolean flashingRed) {
+        isFlashingRed = flashingRed;
+    }
+
+    public boolean isWalking() {
+        return walking;
+    }
+
+    public void setWalking(boolean walking) {
+        this.walking = walking;
+    }
 }

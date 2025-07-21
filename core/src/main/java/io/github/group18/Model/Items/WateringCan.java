@@ -17,68 +17,19 @@ public class WateringCan extends Tool implements Name, Price ,PictureModel{
         this.max_Capacity = max_Capacity;
     }
 
-    public String use(String direction) {
+    public String use(Kashi kashi) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord((int)player.getX(),(int) player.getY());
-        int dir_x = -1;
-        int dir_y = -1;
-        switch (direction.toLowerCase()) {
-            case "n": {
-                dir_x = 0;
-                dir_y = -1;
-                break;
-            }
-            case "ne": {
-                dir_x = 1;
-                dir_y = -1;
-                break;
-            }
-            case "e": {
-                dir_x = 1;
-                dir_y = 0;
-                break;
-            }
-            case "se": {
-                dir_x = 1;
-                dir_y = 1;
-                break;
-            }
-            case "s": {
-                dir_x = 0;
-                dir_y = 1;
-                break;
-            }
-            case "sw": {
-                dir_x = -1;
-                dir_y = 1;
-                break;
-            }
-            case "w": {
-                dir_x = -1;
-                dir_y = 0;
-                break;
-            }
-            case "nw": {
-                dir_x = -1;
-                dir_y = -1;
-                break;
-            }
-            default: {
-                return "Not a valid direction!";
-            }
-        }
-        tileCord.setX(dir_x + tileCord.getX());
-        tileCord.setY(dir_y + tileCord.getY());
+
         if (player.getFarmingSkill().getLevel() == 5) {
             if (player.getEnergy() >= getEnergyUsage() - 1) {
-                if (isValidForFilling(tileCord)) {
+                if (isValidForFilling(kashi)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getMax_Capacity());
                     return "Watering Can filled";
-                } else if (isValidForWatering(tileCord)) {
+                } else if (isValidForWatering(kashi)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
-                    Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
+                    Object plant = kashi.getInside();
                     if (plant instanceof AllCrop) {
                         if (!((AllCrop) plant).isFedThisDay()) {
                             ((AllCrop) plant).setFedThisDay(true);
@@ -102,14 +53,14 @@ public class WateringCan extends Tool implements Name, Price ,PictureModel{
             }
         } else {
             if (player.getEnergy() >= getEnergyUsage()) {
-                if (isValidForFilling(tileCord)) {
+                if (isValidForFilling(kashi)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getMax_Capacity());
                     return "Watering Can filled";
-                } else if (isValidForWatering(tileCord)) {
+                } else if (isValidForWatering(kashi)) {
                     player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
                     setCapacity(getCapacity() - 1);
-                    Object plant = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside();
+                    Object plant = kashi.getInside();
                     if (plant instanceof AllCrop) {
                         if (!((AllCrop) plant).isFedThisDay()) {
                             ((AllCrop) plant).setFedThisDay(true);
@@ -136,16 +87,14 @@ public class WateringCan extends Tool implements Name, Price ,PictureModel{
     }
 
 
-    public static boolean isValidForFilling(Cord cord) {
-        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+    public static boolean isValidForFilling(Kashi kashi) {
         if (kashi.getInside() instanceof Lake || kashi.getInside() instanceof GreenHouse) {
             return true;
         }
         return false;
     }
 
-    public static boolean isValidForWatering(Cord cord) {
-        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+    public static boolean isValidForWatering(Kashi kashi) {
         if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
             return true;
         }

@@ -20,6 +20,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import io.github.group18.Controller.TradeMenuController;
+import io.github.group18.enums.MarketMenuEnums;
 
 public class GameMenuMenu extends AppMenu implements Screen {
 
@@ -39,7 +40,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
     private int gameWidth = Gdx.graphics.getWidth();
     private int gameHeight = Gdx.graphics.getHeight();
 
-    public GameMenuMenu(GameMenuController controller , Skin skin) {
+    public GameMenuMenu(GameMenuController controller, Skin skin) {
         this.background = GameAssetManager.getBackground();
         this.skin = skin;
         this.controller = controller;
@@ -47,14 +48,14 @@ public class GameMenuMenu extends AppMenu implements Screen {
         this.loadGame = new TextButton("Load Game", skin);
         this.exitGame = new TextButton("Exit", skin);
         this.terminateGame = new TextButton("Terminate", skin);
-        this.MenuTitle = new Label("Game Menu", skin , "title");
+        this.MenuTitle = new Label("Game Menu", skin, "title");
         this.menuTable = new Table();
         this.savedGameTable = new Table();
 //        App.setGameMenuController(controller); TODO بعد از انجام قبلی ها
 
     }
 
-    public void check(String input ,Scanner scanner) {
+    public void check(String input, Scanner scanner) {
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
@@ -71,7 +72,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.NextTurn.getMather(input) != null) {
 //            controller.nextTurn();
         } else if (GameMenuCommands.Plant.getMather(input) != null) {
-//            System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"), GameMenuCommands.Plant.getMather(input).group("direction")));
+            System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"), GameMenuCommands.Plant.getMather(input).group("direction")));
         } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
             System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2))));
         } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
@@ -88,7 +89,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-                getMather(input).group(1).trim()), App.getGameController().getGameMenu()));
+                getMather(input).group(1).trim()), App.getGameController().getGameMenu(),App.getGameController().getGameMenu().getGameView()));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
 //            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
@@ -135,7 +136,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 //            System.out.println(controller.toolShowAvailable());
         } else if (GameMenuCommands.TOOLSUSE.getMather(input) != null) {
             String direction = GameMenuCommands.TOOLSUSE.getMather(input).group(1);
-            System.out.println(controller.toolsUse(direction));
+//            System.out.println(controller.toolsUse(direction));
         } else if (GameMenuCommands.COOKINGREFRIGERATOR.getMather(input) != null) {
             String action = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(1);
             String item = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(2);
@@ -294,6 +295,8 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.SELL.getMather(input) != null) {
             String name = GameMenuCommands.SELL.getMather(input).group(1);
             System.out.println(controller.sellAnimal(name));
+        } else if (GameMenuCommands.CHEATADD.getMather(input) != null) {
+            controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
         } else {
             System.out.println("Invalid command");
         }

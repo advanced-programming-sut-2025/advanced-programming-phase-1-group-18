@@ -41,7 +41,7 @@ public class CheatCodeDialog extends Dialog {
         boolean confirmed = (Boolean) object;
         if (confirmed) {
             String code = cheatInput.getText();
-            System.out.println("Cheat Code Entered: " + code);
+//            System.out.println("Cheat Code Entered: " + code);
 
             processCheatCode(code);
 

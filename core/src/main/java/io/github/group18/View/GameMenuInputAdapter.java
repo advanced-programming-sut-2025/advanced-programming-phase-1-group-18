@@ -4,20 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
-import io.github.group18.Model.App;
-import io.github.group18.Model.Game;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Player;
+import io.github.group18.Model.*;
+import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Items.Tool;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
@@ -46,14 +48,14 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         if (keycode == Input.Keys.N) {
-            GameMenuController.nextTurn(gameController.getGameMenu());
+            GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
             return true;
         }
-        if (keycode == Input.Keys.C) {
+        if (keycode == Input.Keys.H) {
             Stage stage = gameController.getGameMenu().getCheatCodeStage();
             Gdx.input.setInputProcessor(stage);
             CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-                GameAssetManager.getGameAssetManager().getSkin(),this);
+                GameAssetManager.getGameAssetManager().getSkin(), this);
             cheatDialog.show(stage);
             cheatDialog.setColor(Color.WHITE);
         }
@@ -66,7 +68,16 @@ public class GameMenuInputAdapter extends InputAdapter {
             App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
             Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
         }
-        return true;
+        if (keycode == Input.Keys.C) {
+            Game.getCurrentPlayer().pickSelectedItem();
+//            performAction(screenX, screenY);
+            return true;
+        }
+//        if (keycode == Input.Keys.X) {
+//            performAction(screenX, screenY);
+//            return true;
+//        }
+        return false;
     }
 
     @Override
@@ -87,7 +98,12 @@ public class GameMenuInputAdapter extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
+            Game.getCurrentPlayer().pickSelectedItem();
 //            performAction(screenX, screenY);
+            return true;
+        }
+        if (button == Input.Buttons.RIGHT) {
+            performAction(screenX, screenY);
             return true;
         }
         return false;
@@ -126,30 +142,28 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         float speed = player.getSpeed();
         player.setVelocity(vx * speed, vy * speed);
-        player.update(delta, game.getMap());
+        player.update(delta, game.getMap(), gameController.getGameMenu().getGameView());
     }
 
-//    private void performAction(int screenX, int screenY) {
-//        OrthographicCamera camera = game.getCamera();
-//        camera.update();
-//        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-//        Pair<Float, Float> playerPos = game.getPlayer().getPosition();
-//
-//        int tileX = (int) (worldCoordinates.x / StardewMini.TILE_SIZE);
-//        int tileY = (int) (worldCoordinates.y / StardewMini.TILE_SIZE);
-//
-//        int dx = tileX - Math.round(playerPos.first);
-//        int dy = tileY - Math.round(playerPos.second);
-//
-//        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-//            return;
-//        }
-//
-//        ItemDescriptionId selectedItem = game.getPlayer().getSelectedItem();
-//        if (selectedItem != null) {
-//            gameController.useItem(selectedItem, new Point(tileX, tileY), game);
-//        }
-//    }
+    private void performAction(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+        int dx = tileX - Math.round(playerPos.first);
+        int dy = tileY - Math.round(playerPos.second);
+
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+            return;
+        }
+
+        Item item = Game.getCurrentPlayer().getInventory().getItemBySlot(game.getCurrentPlayer().getInventory().getSelectedSlot());
+        gameController.useItem(item, tileX, tileY, game);
+    }
 
 
     public Game getGame() {
