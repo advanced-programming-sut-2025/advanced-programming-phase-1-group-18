@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
@@ -18,6 +19,7 @@ import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Items.Tool;
 
 public class GameView {
 
@@ -36,6 +38,7 @@ public class GameView {
     private EnergyController energy;
     private float redFlashTimer = 0f;
     private boolean isFlashingRed = false;
+    private boolean walking = false;
 
     public GameView(Game game) {
         this.game = game;
@@ -49,7 +52,7 @@ public class GameView {
     private void loadTextures() {
         textures = new HashMap<>();
 
-        playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
+        playerAtlas = GameAssetManager.getGameAssetManager().getPlayerAtlas();
 
         for (int i = 14; i > 9; i--) {
             Array<TextureRegion> walkFrames = new Array<>();
@@ -110,15 +113,15 @@ public class GameView {
                         try {
                             Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
                             if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
-                                tex = new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png"));
+                                tex = GameAssetManager.getGameAssetManager().getGreenhouseBroken();
                             }
                             textures.put(inside, new TextureRegion(tex));
                         } catch (Exception e) {
                             System.out.println(inside.getClass().getSimpleName());
-                            textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                            textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
                         }
                     } else {
-                        textures.put(inside, new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png"))));
+                        textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
                     }
                 }
             }
@@ -131,23 +134,45 @@ public class GameView {
                 String path = pictureModel.getPath();
                 textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
             } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
             }
         }
     }
 
     public void render() {
         batch.setProjectionMatrix(game.getCamera().combined);
-        System.out.println(Game.getCurrentPlayer().getX() + " " + Game.getCurrentPlayer().getY());
+//        System.out.println(Game.getCurrentPlayer().getX() + " " + Game.getCurrentPlayer().getY());
         batch.begin();
         renderTiles();
         renderPlayer();
+        renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
         energy.render(batch);
         renderKalagEffect(batch);
         renderBrightness();
+        walking = false;
         batch.end();
+    }
+
+    private void renderInMyHandToolPlayer() {
+        Player player = game.getCurrentPlayer();
+        Tool tool = player.getInMyHandTool();
+        if (tool != null) {
+            double first = player.getX();
+            double second = player.getY();
+
+            TextureRegion textureRegion = textures.get(tool);
+            if (walking) {
+                Random random = new Random();
+                int x = 5 + random.nextInt(15);
+                int y = 5 + random.nextInt(15);
+                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2 + x), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4 + y), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+
+            } else {
+                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+            }
+        }
     }
 
     private void renderTiles() {
@@ -171,7 +196,7 @@ public class GameView {
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         int tileSize = game.TILE_SIZE;
-        TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png")));
+        TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
@@ -214,7 +239,7 @@ public class GameView {
                             }
                             if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
 //                                System.out.println("Probably not coming here?");
-                                texture = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse.png")));
+                                texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
                             }
                             batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                         } else {
@@ -340,10 +365,10 @@ public class GameView {
 
     private void renderPlayer() {
         Player player = game.getCurrentPlayer();
-        double first = game.getCurrentPlayer().getX();
-        double second = game.getCurrentPlayer().getY();
+        double first = player.getX();
+        double second = player.getY();
 
-        moveDirection = game.getCurrentPlayer().getMovingDirection();
+        moveDirection = player.getMovingDirection();
 
         stateTime += Gdx.graphics.getDeltaTime();
 
@@ -430,7 +455,6 @@ public class GameView {
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
             Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
-
             for (int i = 0; i < numSlots; i++) {
                 int x = startX + i * slotSize;
                 batch.draw(slotTexture, x, y, slotSize, slotSize);
@@ -540,5 +564,13 @@ public class GameView {
 
     public void setFlashingRed(boolean flashingRed) {
         isFlashingRed = flashingRed;
+    }
+
+    public boolean isWalking() {
+        return walking;
+    }
+
+    public void setWalking(boolean walking) {
+        this.walking = walking;
     }
 }

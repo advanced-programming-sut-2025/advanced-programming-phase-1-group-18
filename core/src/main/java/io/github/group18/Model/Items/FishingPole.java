@@ -10,7 +10,7 @@ import io.github.group18.enums.SkillEnum;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FishingPole extends Item implements Name, Price {
+public class FishingPole extends Tool implements Name, Price {
     private static final int MAX_LEVEL = 5;
     protected String Jens;
     protected int EnergyUsage;

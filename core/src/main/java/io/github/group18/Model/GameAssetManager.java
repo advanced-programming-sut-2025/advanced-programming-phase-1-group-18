@@ -24,16 +24,21 @@ public class GameAssetManager {
     Texture bgGrass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
     Texture bgCraftingMenu = new Texture(Gdx.files.internal("craftingSpriteSheet/craftingMenu.png"));
     Texture exitTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/exit.png"));
-
-
+    Texture greenhouseBroken = new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png"));
+    Texture grass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
+    Texture defaultInventoryItem = new Texture(Gdx.files.internal("Tools/Gold_Pan.png"));
+    Texture greenhouse = new Texture(Gdx.files.internal("Greenhouse/greenhouse.png"));
+    Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
+    Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
-
+    TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
 
     public static Texture defaultAvatar = new Texture(Gdx.files.internal("avatar.png"));
 
-    private GameAssetManager() {}
+    private GameAssetManager() {
+    }
 
     public static GameAssetManager getGameAssetManager() {
         if (gameAssetManager == null) {
@@ -177,5 +182,77 @@ public class GameAssetManager {
 
     public void setExitTexture(Texture exitTexture) {
         this.exitTexture = exitTexture;
+    }
+
+    public static void setGameAssetManager(GameAssetManager gameAssetManager) {
+        GameAssetManager.gameAssetManager = gameAssetManager;
+    }
+
+    public static Texture getMenuBackground() {
+        return menuBackground;
+    }
+
+    public static void setMenuBackground(Texture menuBackground) {
+        GameAssetManager.menuBackground = menuBackground;
+    }
+
+    public TextureAtlas getPlayerAtlas() {
+        return playerAtlas;
+    }
+
+    public void setPlayerAtlas(TextureAtlas playerAtlas) {
+        this.playerAtlas = playerAtlas;
+    }
+
+    public static void setDefaultAvatar(Texture defaultAvatar) {
+        GameAssetManager.defaultAvatar = defaultAvatar;
+    }
+
+    public Texture getGreenhouseBroken() {
+        return greenhouseBroken;
+    }
+
+    public void setGreenhouseBroken(Texture greenhouseBroken) {
+        this.greenhouseBroken = greenhouseBroken;
+    }
+
+    public Texture getGrass() {
+        return grass;
+    }
+
+    public void setGrass(Texture grass) {
+        this.grass = grass;
+    }
+
+    public Texture getDefaultInventoryItem() {
+        return defaultInventoryItem;
+    }
+
+    public void setDefaultInventoryItem(Texture defaultInventoryItem) {
+        this.defaultInventoryItem = defaultInventoryItem;
+    }
+
+    public Texture getGreenhouse() {
+        return greenhouse;
+    }
+
+    public void setGreenhouse(Texture greenhouse) {
+        this.greenhouse = greenhouse;
+    }
+
+    public Texture getHighlightTexture() {
+        return highlightTexture;
+    }
+
+    public void setHighlightTexture(Texture highlightTexture) {
+        this.highlightTexture = highlightTexture;
+    }
+
+    public Texture getSlotTexture() {
+        return slotTexture;
+    }
+
+    public void setSlotTexture(Texture slotTexture) {
+        this.slotTexture = slotTexture;
     }
 }

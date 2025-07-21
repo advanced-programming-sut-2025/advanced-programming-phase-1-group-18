@@ -1193,7 +1193,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
         for (int i = 0; i < day; i++) {
-            startNewDay(gameMenu, true,gameView);
+            startNewDay(gameMenu, true, gameView);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);

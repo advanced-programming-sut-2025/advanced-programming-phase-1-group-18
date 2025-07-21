@@ -46,14 +46,14 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         if (keycode == Input.Keys.N) {
-            GameMenuController.nextTurn(gameController.getGameMenu(),gameController.getGameMenu().getGameView());
+            GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
             return true;
         }
-        if (keycode == Input.Keys.C) {
+        if (keycode == Input.Keys.H) {
             Stage stage = gameController.getGameMenu().getCheatCodeStage();
             Gdx.input.setInputProcessor(stage);
             CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-                GameAssetManager.getGameAssetManager().getSkin(),this);
+                GameAssetManager.getGameAssetManager().getSkin(), this);
             cheatDialog.show(stage);
             cheatDialog.setColor(Color.WHITE);
         }
@@ -66,7 +66,12 @@ public class GameMenuInputAdapter extends InputAdapter {
             App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
             Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
         }
-        return true;
+        if (keycode == Input.Keys.C) {
+            Game.getCurrentPlayer().pickSelectedItem();
+//            performAction(screenX, screenY);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -87,6 +92,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
+            Game.getCurrentPlayer().pickSelectedItem();
 //            performAction(screenX, screenY);
             return true;
         }
@@ -126,7 +132,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         float speed = player.getSpeed();
         player.setVelocity(vx * speed, vy * speed);
-        player.update(delta, game.getMap());
+        player.update(delta, game.getMap(),gameController.getGameMenu().getGameView());
     }
 
 //    private void performAction(int screenX, int screenY) {
