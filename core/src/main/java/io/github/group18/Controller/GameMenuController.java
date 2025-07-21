@@ -2,6 +2,9 @@ package io.github.group18.Controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.google.gson.Gson;
 import io.github.group18.Main;
@@ -10,6 +13,7 @@ import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
 import io.github.group18.View.GameMenu;
 import io.github.group18.View.GameMenuMenu;
+import io.github.group18.View.GameView;
 import io.github.group18.View.StartNewGame;
 import io.github.group18.enums.*;
 
@@ -610,7 +614,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public static void nextTurn(GameMenu gameMenu) {
+    public static void nextTurn(GameMenu gameMenu, GameView gameView) {
 
         App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
         if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
@@ -619,7 +623,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
             if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
 
-                startNewDay(gameMenu, true);
+                startNewDay(gameMenu, true, gameView);
 
             } else {
                 App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
@@ -697,49 +701,25 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-//    private void renderKalagEffect() {
-//        float brightness = 1f;
-//
-//
-//        if (brightness < 1f) {
-//            // Save original batch state
-//            Matrix4 originalMatrix = batch.getProjectionMatrix();
-//            Color originalColor = new Color(batch.getColor());
-//            batch.setColor(0f, 0f, 0f, 1f - brightness);
-//
-//            // Switch to screen coordinates
-//            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-//
-//            // Draw full-screen overlay
-//            batch.draw(pixel,
-//                0, 0,
-//                Gdx.graphics.getWidth(),
-//                Gdx.graphics.getHeight());
-//
-//            // Restore original state
-//            batch.setProjectionMatrix(originalMatrix);
-//            batch.setColor(originalColor);
-//        }
-//    }
-
-
-    public static void startNewDay(GameMenu gameMenu, boolean transaction) {
+    public static void startNewDay(GameMenu gameMenu, boolean transaction, GameView gameView) {
         if (transaction) {
             gameMenu.startSleepTransition();
             return;
         }
+
+        //filling markets
         App.getCurrentGame().getBlackSmithMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
         App.getCurrentGame().getFishShopMarket().fillStock();
-        //System.out.println("nigga");
         App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
-        //System.out.println("nigga1");
         App.getCurrentGame().getMarniesRanchMarket().fillStock();
         App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
 
+        //going back to cottage
         getBackHome();
 
+        //handle energy after gash
         for (Player player : App.getCurrentGame().getPlayers()) {
             if (player.getDaysAfterGash() >= 1) {
                 player.setMaxEnergy(200);
@@ -750,7 +730,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
             player.setEnergy(player.getMaxEnergy());
         }
-// for marriage
+
+        // handle energy after marriage
         for (Player player : App.getCurrentGame().getPlayers()) {
             if (player.getDaysAfterJavabeRad() >= 6) {
                 player.setMaxEnergy(200);
@@ -761,6 +742,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
             player.setEnergy(player.getMaxEnergyforMarriage());
         }
+
         //NPC gift player
         for (Friendshipali friendshipali : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
             if (friendshipali.getFriendshipLevel() / 200 >= 3) {
@@ -866,6 +848,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
 
+        //fill the markets
         App.getCurrentGame().getPierresGeneralStoreMarket().setLargePackBougth(false);
         App.getCurrentGame().getPierresGeneralStoreMarket().setDeluxePackBought(false);
         App.getCurrentGame().getCarpentersShopMarket().setBarn(false);
@@ -875,13 +858,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         App.getCurrentGame().getCarpentersShopMarket().setDeluxebarn(false);
         App.getCurrentGame().getCarpentersShopMarket().setDeluxecoop(false);
 
+        //handle kalag attack
         Random rand = new Random();
         for (Player player : App.getCurrentGame().getPlayers()) {
             int chanceOfKalag = player.getMyFarm().getAllTrees().size() + player.getMyFarm().getAllCrops().size();
             int threshold = (chanceOfKalag / 16) + 1;
             boolean shouldRemove = false;
 
-// Determine if we should attempt removal based on threshold
             if (threshold >= 4) {
                 shouldRemove = true; // 100%
             } else if (threshold >= 3) {
@@ -893,7 +876,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
 
             if (shouldRemove) {
-
+                gameView.startRedFlash();
                 // Check what we have available to remove
                 boolean hasTrees = player.getMyFarm().getAllTrees().size() > 0;
                 boolean hasCrops = player.getMyFarm().getAllCrops().size() > 0;
@@ -988,11 +971,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
 
+        //handling new day datetime
         App.getCurrentGame().setCurrentDateTime(new DateTime(9, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
 
+        //update friendships
         App.getCurrentGame().endOfDayUpdate();
 
-
+        //handle weather
         App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
         Deque<WeatherEnum> weather = new ArrayDeque<>();
         if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
@@ -1023,6 +1008,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
 
+        //Strike thor if needed
         if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
             //Thor thor = new Thor();
             int farmWide = 50;
@@ -1046,6 +1032,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                    thor.setKhordeh(kashiList);
         }
 
+        //update animal navazesh
         for (Player player : App.getCurrentGame().getPlayers()) {
             ArrayList<Animal> animals = player.getMyBoughtAnimals();
             for (Animal animal : animals) {
@@ -1122,7 +1109,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         };
     }
 
-    public Result cheatAdvanceTime(int hour, GameMenu gameMenu) {
+    public Result cheatAdvanceTime(int hour, GameMenu gameMenu, GameView gameView) {
         if (hour < 0) {
             return new Result(false, "cheatCode: Invalid hour");
         }
@@ -1161,7 +1148,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < hour / 24; i++) {
-            startNewDay(gameMenu, true);
+            startNewDay(gameMenu, true, gameView);
         }
 //        if (hour / 24 >= 1) {
 //            App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);

@@ -46,7 +46,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         if (keycode == Input.Keys.N) {
-            GameMenuController.nextTurn(gameController.getGameMenu());
+            GameMenuController.nextTurn(gameController.getGameMenu(),gameController.getGameMenu().getGameView());
             return true;
         }
         if (keycode == Input.Keys.C) {

@@ -34,7 +34,8 @@ public class GameView {
     private Texture pixel; // Add this
     private ClockController clock;
     private EnergyController energy;
-
+    private float redFlashTimer = 0f;
+    private boolean isFlashingRed = false;
 
     public GameView(Game game) {
         this.game = game;
@@ -144,6 +145,7 @@ public class GameView {
         renderInventory();
         renderClock();
         energy.render(batch);
+        renderKalagEffect(batch);
         renderBrightness();
         batch.end();
     }
@@ -473,6 +475,48 @@ public class GameView {
         }
     }
 
+    public void renderKalagEffect(SpriteBatch batch) {
+        if (!isFlashingRed) return;
+
+        // Update timer
+        redFlashTimer -= Gdx.graphics.getDeltaTime();
+        if (redFlashTimer <= 0) {
+            isFlashingRed = false;
+            return;
+        }
+
+        // Create single pixel texture (could optimize by creating this once)
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(1, 0, 0, 0.7f); // Red color with 70% opacity
+        pixmap.fill();
+        Texture pixel = new Texture(pixmap);
+        pixmap.dispose();
+
+        Matrix4 originalMatrix = batch.getProjectionMatrix();
+        Color originalColor = new Color(batch.getColor());
+
+        // Set up full-screen drawing
+        batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        // Draw red overlay
+        batch.begin();
+        batch.draw(pixel,
+            0, 0,
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight());
+        batch.end();
+
+        // Restore original state
+        batch.setProjectionMatrix(originalMatrix);
+        batch.setColor(originalColor);
+        pixel.dispose();
+    }
+
+    public void startRedFlash() {
+        redFlashTimer = 2f; // 2 seconds duration
+        isFlashingRed = true;
+    }
+
     public Batch getBatch() {
         return batch;
     }
@@ -482,4 +526,19 @@ public class GameView {
         return pixel;
     }
 
+    public float getRedFlashTimer() {
+        return redFlashTimer;
+    }
+
+    public void setRedFlashTimer(float redFlashTimer) {
+        this.redFlashTimer = redFlashTimer;
+    }
+
+    public boolean isFlashingRed() {
+        return isFlashingRed;
+    }
+
+    public void setFlashingRed(boolean flashingRed) {
+        isFlashingRed = flashingRed;
+    }
 }

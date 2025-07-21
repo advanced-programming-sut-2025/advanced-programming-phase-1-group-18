@@ -78,7 +78,7 @@ public class GameMenu implements Screen {
         if (!advancingDay && sleepAlpha < 1f) {
             sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
             if (sleepAlpha >= 1f) {
-                GameMenuController.startNewDay(gameController.getGameMenu(), false);
+                GameMenuController.startNewDay(gameController.getGameMenu(), false, gameView);
                 advancingDay = true;
             }
         } else if (advancingDay && sleepAlpha > 0f) {
@@ -194,4 +194,69 @@ public class GameMenu implements Screen {
         this.craftingMenu = craftingMenu;
     }
     // Other Screen methods
+
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
+
+    public Game getGameModel() {
+        return gameModel;
+    }
+
+    public void setGameModel(Game gameModel) {
+        this.gameModel = gameModel;
+    }
+
+    public GameMenuInputAdapter getGameMenuInputAdapter() {
+        return gameMenuInputAdapter;
+    }
+
+    public void setGameMenuInputAdapter(GameMenuInputAdapter gameMenuInputAdapter) {
+        this.gameMenuInputAdapter = gameMenuInputAdapter;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
+    public boolean isSleeping() {
+        return isSleeping;
+    }
+
+    public void setSleeping(boolean sleeping) {
+        isSleeping = sleeping;
+    }
+
+    public float getSleepAlpha() {
+        return sleepAlpha;
+    }
+
+    public void setSleepAlpha(float sleepAlpha) {
+        this.sleepAlpha = sleepAlpha;
+    }
+
+    public float getSleepTimer() {
+        return sleepTimer;
+    }
+
+    public void setSleepTimer(float sleepTimer) {
+        this.sleepTimer = sleepTimer;
+    }
+
+    public boolean isAdvancingDay() {
+        return advancingDay;
+    }
+
+    public void setAdvancingDay(boolean advancingDay) {
+        this.advancingDay = advancingDay;
+    }
 }
