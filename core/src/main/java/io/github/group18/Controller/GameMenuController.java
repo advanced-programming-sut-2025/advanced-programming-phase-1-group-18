@@ -1156,7 +1156,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "cheatCode: Hour changed! New Hour: " + hourOfDay + " New Day: " + newDay);
     }
 
-    public Result cheatAdvanceDate(int day, GameMenu gameMenu) {
+    public Result cheatAdvanceDate(int day, GameMenu gameMenu, GameView gameView) {
         if (day < 0) {
             return new Result(false, "cheatCode: Invalid day");
         }
@@ -1193,7 +1193,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
         for (int i = 0; i < day; i++) {
-            startNewDay(gameMenu, true);
+            startNewDay(gameMenu, true,gameView);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);

@@ -89,7 +89,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             System.out.println(controller.dayOfWeek());
         } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
             System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-                getMather(input).group(1).trim()), App.getGameController().getGameMenu()));
+                getMather(input).group(1).trim()), App.getGameController().getGameMenu(),App.getGameController().getGameMenu().getGameView()));
         } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
 //            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
         } else if (GameMenuCommands.SEASON.getMather(input) != null) {
