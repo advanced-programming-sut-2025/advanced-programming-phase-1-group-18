@@ -136,7 +136,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 //            System.out.println(controller.toolShowAvailable());
         } else if (GameMenuCommands.TOOLSUSE.getMather(input) != null) {
             String direction = GameMenuCommands.TOOLSUSE.getMather(input).group(1);
-            System.out.println(controller.toolsUse(direction));
+//            System.out.println(controller.toolsUse(direction));
         } else if (GameMenuCommands.COOKINGREFRIGERATOR.getMather(input) != null) {
             String action = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(1);
             String item = GameMenuCommands.COOKINGREFRIGERATOR.getMather(input).group(2);

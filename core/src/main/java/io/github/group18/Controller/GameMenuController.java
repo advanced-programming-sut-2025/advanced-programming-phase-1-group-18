@@ -16,12 +16,15 @@ import io.github.group18.View.GameMenuMenu;
 import io.github.group18.View.GameView;
 import io.github.group18.View.StartNewGame;
 import io.github.group18.enums.*;
+import io.github.group18.enums.Menu;
 
+import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -2119,45 +2122,45 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "!");
     }
 
-    public Result toolsUse(String direction) {
-
-        if (isFainted()) {
-            return new Result(false, "You are fainted!");
-        }
-        Tool tool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
-        if (tool instanceof Axe) {
-            System.out.println(((Axe) tool).use(direction));
-            return new Result(true, "You used your tool");
-        } else if (tool instanceof Pickaxe) {
-            System.out.println(((Pickaxe) tool).use(direction));
-            return new Result(true, "You used your tool");
-        } else if (tool instanceof WateringCan) {
-            System.out.println(((WateringCan) tool).use(direction));
-            return new Result(true, "You used your tool");
-        } else if (tool instanceof Hoe) {
-            System.out.println(((Hoe) tool).use(direction));
-            return new Result(true, "You used your tool");
-
-        } else if (tool instanceof MilkPail) {
-            System.out.println(((MilkPail) tool).use(direction));
-            return new Result(true, "You used your tool");
-
-        } else if (tool instanceof Shear) {
-            System.out.println(((Shear) tool).use(direction));
-            return new Result(true, "You used your tool");
-
-        } else if (tool instanceof TrashCan) {
-            System.out.println();
-            return new Result(true, "You used your tool");
-
-        } else if (tool instanceof Scythe) {
-            System.out.println(((Scythe) tool).use(direction));
-            return new Result(true, "You used your tool");
-
-        } else {
-            return new Result(false, "Invalid situation");
-        }
-    }
+//    public static Result toolsUse(Tool tool, Point point, Game game, GameController gameController) {
+//
+//        if (isFainted()) {
+//            return new Result(false, "You are fainted!");
+//        }
+//
+//        if (tool instanceof Axe) {
+//            System.out.println(((Axe) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//        } else if (tool instanceof Pickaxe) {
+//            System.out.println(((Pickaxe) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//        } else if (tool instanceof WateringCan) {
+//            System.out.println(((WateringCan) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//        } else if (tool instanceof Hoe) {
+//            System.out.println(((Hoe) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//
+//        } else if (tool instanceof MilkPail) {
+//            System.out.println(((MilkPail) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//
+//        } else if (tool instanceof Shear) {
+//            System.out.println(((Shear) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//
+//        } else if (tool instanceof TrashCan) {
+//            System.out.println();
+//            return new Result(true, "You used your tool");
+//
+//        } else if (tool instanceof Scythe) {
+//            System.out.println(((Scythe) tool).use(direction));
+//            return new Result(true, "You used your tool");
+//
+//        } else {
+//            return new Result(false, "Invalid situation");
+//        }
+//    }
 
     public Result craftInfo(String craftName) {
         if (isFainted()) {

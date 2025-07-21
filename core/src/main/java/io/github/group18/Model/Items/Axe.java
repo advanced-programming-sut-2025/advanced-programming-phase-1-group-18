@@ -37,63 +37,9 @@ public class Axe extends Tool implements Name, Price,PictureModel {
         }
     }
 
-    public Result use(String direction) {
+    public Result use(Kashi kashi) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord((int)player.getX(), (int)player.getY());
-        int dir_x = -1;
-        int dir_y = -1;
-        System.out.println(direction);
-        switch (direction.toLowerCase()) {
-            case "n":
-                dir_x = 0;
-                dir_y = -1;
-                break;
 
-            case "ne":
-                dir_x = 1;
-                dir_y = -1;
-                break;
-
-            case "e":
-                dir_x = 1;
-                dir_y = 0;
-                break;
-
-            case "se":
-                dir_x = 1;
-                dir_y = 1;
-                break;
-
-            case "s":
-                dir_x = 0;
-                dir_y = 1;
-                break;
-
-            case "sw":
-                dir_x = -1;
-                dir_y = 1;
-                break;
-
-            case "w":
-                dir_x = -1;
-                dir_y = 0;
-                break;
-
-            case "nw":
-                dir_x = -1;
-                dir_y = -1;
-                break;
-
-            default:
-                return null;
-
-        }
-        tileCord.setX(dir_x + tileCord.getX());
-        tileCord.setY(dir_y + tileCord.getY());
-        //System.out.println("khar1");
-        Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
-
-        //System.out.println("khar2");
         Tool mytool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
         Axe myaxe = (Axe) mytool;
         if (!(kashi.getInside() instanceof AllTree)) {

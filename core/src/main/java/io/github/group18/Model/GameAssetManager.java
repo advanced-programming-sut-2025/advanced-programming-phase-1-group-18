@@ -30,6 +30,7 @@ public class GameAssetManager {
     Texture greenhouse = new Texture(Gdx.files.internal("Greenhouse/greenhouse.png"));
     Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
     Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
+    Texture soilTexture = new Texture(Gdx.files.internal("game/tiles/soil.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
@@ -254,5 +255,13 @@ public class GameAssetManager {
 
     public void setSlotTexture(Texture slotTexture) {
         this.slotTexture = slotTexture;
+    }
+
+    public Texture getSoilTexture() {
+        return soilTexture;
+    }
+
+    public void setSoilTexture(Texture soilTexture) {
+        this.soilTexture = soilTexture;
     }
 }

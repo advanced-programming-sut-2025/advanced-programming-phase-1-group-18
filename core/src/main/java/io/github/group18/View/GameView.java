@@ -212,50 +212,61 @@ public class GameView {
         int tileSize = game.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                if (tiles.get(x).get(y).getInside() != null) {
-                    getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
-                    if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
-                    } else {
-                        boolean flag = false;
-                        BottomLeft bottomLeft = null;
-                        for (int i = 0; i < bottomLeftTiles.size(); i++) {
-                            bottomLeft = bottomLeftTiles.get(i);
-                            if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
-                                flag = true;
-                                break;
-                            }
+
+                getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
+
+                if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                    //this is for blocks that are covered with big pics so they dont draw anything
+                } else {
+                    boolean flag = false;
+                    BottomLeft bottomLeft = null;
+                    for (int i = 0; i < bottomLeftTiles.size(); i++) {
+                        bottomLeft = bottomLeftTiles.get(i);
+                        if (bottomLeft.getX() == x && bottomLeft.getY() == y && bottomLeft.isBalls()) {
+                            flag = true;
+                            break;
                         }
-                        if (flag) {
-                            Kashi tile = tiles.get(x).get(y);
-                            Object inside = tile.getInside();
-                            TextureRegion texture = textures.get(inside);
-                            float drawX = x * tileSize;
-                            float drawY = y * tileSize;
-                            if (inside instanceof GreenHouse greenHouse) {
-                                for (Player player : App.getCurrentGame().getPlayers()) {
+                    }
+                    if (flag) {
+                        //this is for bottom left corners which should draw a big pic
+                        Kashi tile = tiles.get(x).get(y);
+                        Object inside = tile.getInside();
+                        TextureRegion texture = textures.get(inside);
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        if (inside instanceof GreenHouse greenHouse) {
+                            for (Player player : App.getCurrentGame().getPlayers()) {
 //                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
-                                }
+                            }
 //                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
-                            }
-                            if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
-//                                System.out.println("Probably not coming here?");
-                                texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
-                            }
-                            batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
-                        } else {
-                            Kashi tile = tiles.get(x).get(y);
-                            if (tile == null) continue;
-
-                            Object inside = tile.getInside();
-                            TextureRegion texture = textures.get(inside);
-                            if (texture == null) {
-                                texture = textures.get("game/tiles/grass.png");
-                            }
-
-                            float drawX = x * tileSize;
-                            float drawY = y * tileSize;
-                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
                         }
+                        if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
+//                                System.out.println("Probably not coming here?");
+                            texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
+                        }
+                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
+                    } else {
+                        //this is for normal blocks
+                        Kashi tile = tiles.get(x).get(y);
+                        Object inside = tile.getInside();
+
+                        if (inside == null) {
+                            if (tile.isShokhmZadeh()) {
+                                float drawX = x * tileSize;
+                                float drawY = y * tileSize;
+                                batch.draw(new TextureRegion(GameAssetManager.getGameAssetManager().getSoilTexture()), drawX, drawY, tileSize, tileSize);
+                                continue;
+                            } else {
+                                continue;
+                            }
+                        }
+
+
+                        TextureRegion texture = textures.get(inside);
+
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
                     }
                 }
             }
@@ -265,24 +276,20 @@ public class GameView {
     public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
 
         if (tiles == null || kashi == null || kashi.getInside() == null) {
-            System.out.println("Null detected in tiles or kashi");
             return;
         }
 
         if (x < 0 || y < 0 || x >= tiles.size()) {
-            System.out.println("X coordinate out of bounds");
             return;
         }
 
         ArrayList<Kashi> row = tiles.get(x);
         if (row == null || y >= row.size()) {
-            System.out.println("Y coordinate out of bounds");
             return;
         }
 
         Kashi tile = row.get(y);
         if (tile == null || tile.getInside() == null) {
-            System.out.println("Tile or its inside is null");
             return;
         }
 

@@ -229,24 +229,20 @@ public class GameView {
     public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
 
         if (tiles == null || kashi == null || kashi.getInside() == null) {
-            System.out.println("Null detected in tiles or kashi");
             return;
         }
 
         if (x < 0 || y < 0 || x >= tiles.size()) {
-            System.out.println("X coordinate out of bounds");
             return;
         }
 
         ArrayList<Kashi> row = tiles.get(x);
         if (row == null || y >= row.size()) {
-            System.out.println("Y coordinate out of bounds");
             return;
         }
 
         Kashi tile = row.get(y);
         if (tile == null || tile.getInside() == null) {
-            System.out.println("Tile or its inside is null");
             return;
         }
 

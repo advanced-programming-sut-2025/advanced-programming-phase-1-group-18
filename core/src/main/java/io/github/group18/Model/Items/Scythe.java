@@ -7,62 +7,12 @@ public class Scythe extends Tool implements Name, Price ,PictureModel{
     protected int EnergyUsage;
     protected String usage;
 
-    public String use(String direction) {
+    public String use(Kashi kashi) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Cord tileCord = new Cord((int)player.getX(), (int)player.getY());
-        int dir_x = -1;
-        int dir_y = -1;
-        switch (direction.toLowerCase()) {
-            case "n": {
-                dir_x = 0;
-                dir_y = -1;
-                break;
-            }
-            case "ne": {
-                dir_x = 1;
-                dir_y = -1;
-                break;
-            }
-            case "e": {
-                dir_x = 1;
-                dir_y = 0;
-                break;
-            }
-            case "se": {
-                dir_x = 1;
-                dir_y = 1;
-                break;
-            }
-            case "s": {
-                dir_x = 0;
-                dir_y = 1;
-                break;
-            }
-            case "sw": {
-                dir_x = -1;
-                dir_y = 1;
-                break;
-            }
-            case "w": {
-                dir_x = -1;
-                dir_y = 0;
-                break;
-            }
-            case "nw": {
-                dir_x = -1;
-                dir_y = -1;
-                break;
-            }
-            default: {
-                return "Not a valid direction";
-            }
-        }
-        tileCord.setX(dir_x + tileCord.getX());
-        tileCord.setY(dir_y + tileCord.getY());
+
         if (player.getEnergy() >= getEnergyUsage()) {
-            if (isValidForScythe(tileCord)) {
+            if (isValidForScythe(kashi)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
-                Kashi kashi = App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY());
                 Object plant = kashi.getInside();
                 if (plant instanceof AllTree) {
                     if (((AllTree) plant).getTotalHarvestTime() == ((AllTree) plant).getDaysGrowCounter()) {
@@ -125,8 +75,7 @@ public class Scythe extends Tool implements Name, Price ,PictureModel{
         }
     }
 
-    public static boolean isValidForScythe(Cord cord) {
-        Kashi kashi = App.getCurrentGame().getMap().get(cord.getX()).get(cord.getY());
+    public static boolean isValidForScythe(Kashi kashi) {
         if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop || kashi.getInside() instanceof ForagingSeed || kashi.getInside() instanceof ForagingCrop || kashi.getInside() instanceof Mineral) {
             return true;
         }

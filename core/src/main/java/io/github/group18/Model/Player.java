@@ -418,25 +418,7 @@ public class Player extends User {
         Item item = getInventory().getItemBySlot(getInventory().getSelectedSlot());
         if (item instanceof Tool tool) {
             inMyHandTool = tool;
-//            if (tool instanceof Axe) {
 //
-//            } else if (tool instanceof Hoe) {
-//
-//            } else if (tool instanceof MilkPail) {
-//
-//            } else if (tool instanceof Pickaxe) {
-//
-//            } else if (tool instanceof Scythe) {
-//
-//            } else if (tool instanceof Shear) {
-//
-//            } else if (tool instanceof TrashCan) {
-//
-//            } else if (tool instanceof FishingPole) {
-//
-//            } else if (tool instanceof WateringCan) {
-//
-//            }
 
 
         }

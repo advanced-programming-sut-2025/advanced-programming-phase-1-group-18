@@ -1,8 +1,9 @@
 package io.github.group18.Model.Items;
 
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 
-public class StoneItem extends Item implements Name, Price {
+public class StoneItem extends Item implements Name, Price, PictureModel {
     protected int price;
 
     @Override
@@ -22,5 +23,10 @@ public class StoneItem extends Item implements Name, Price {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String getPath() {
+        return "Mineral/Marble.png";
     }
 }
