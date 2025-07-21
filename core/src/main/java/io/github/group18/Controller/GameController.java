@@ -1,6 +1,7 @@
 package io.github.group18.Controller;
 
 import io.github.group18.Main;
+import io.github.group18.Model.ForagingTree;
 import io.github.group18.Model.Game;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Kashi;
@@ -36,6 +37,7 @@ public class GameController {
 //            return;
 //        }
         Kashi kashi = game.getMap().get(x).get(y);
+        //Use Tools
         if (selectedItem instanceof Tool tool) {
             if (tool instanceof Axe axe) {
                 Result result = axe.use(kashi);
@@ -69,8 +71,20 @@ public class GameController {
             } else if (tool instanceof WateringCan wateringCan) {
                 String result = wateringCan.use(kashi);
                 System.out.println(result);
+                gameMenu.getGameView().loadTextures();
             }
         }
+        //Plant Seeds
+        if (selectedItem instanceof ForagingSeed foragingSeed) {
+            GameMenuController.plant(foragingSeed, kashi);
+        }
+        if (selectedItem instanceof TreeSeed treeSeed) {
+            GameMenuController.plant(treeSeed, kashi);
+        }
+        if (selectedItem instanceof MixedSeed mixedSeed) {
+            GameMenuController.plant(mixedSeed, kashi);
+        }
+
 //        game.getPlayer().useSelectedItem();
 //        selectedItem.getFunction().invoke(game, point);
     }

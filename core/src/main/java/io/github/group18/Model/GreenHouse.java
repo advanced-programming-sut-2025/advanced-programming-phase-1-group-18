@@ -55,7 +55,9 @@ public class GreenHouse implements PictureModel{
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
-        System.out.println(" Building: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())+ " " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyGreenHouse().hashCode());
+        System.out.println(" Building: " +
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())+ " " +
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyGreenHouse().hashCode());
     }
 
     @Override

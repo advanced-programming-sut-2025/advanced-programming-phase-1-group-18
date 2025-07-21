@@ -1,9 +1,10 @@
 package io.github.group18.Model.Items;
 
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 import io.github.group18.enums.TreeSeedEnums;
 
-public class TreeSeed extends Seed implements Name, Price {
+public class TreeSeed extends Seed implements Name, Price, PictureModel {
 
     TreeSeedEnums type;
     private int price;
@@ -33,5 +34,10 @@ public class TreeSeed extends Seed implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return this.price;
+    }
+
+    @Override
+    public String getPath() {
+        return "Trees/" + type + ".png";
     }
 }

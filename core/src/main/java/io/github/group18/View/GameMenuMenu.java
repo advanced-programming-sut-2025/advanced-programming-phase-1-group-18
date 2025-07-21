@@ -72,7 +72,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.NextTurn.getMather(input) != null) {
 //            controller.nextTurn();
         } else if (GameMenuCommands.Plant.getMather(input) != null) {
-            System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"), GameMenuCommands.Plant.getMather(input).group("direction")));
+//            System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"),null ));
         } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
             System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2))));
         } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
