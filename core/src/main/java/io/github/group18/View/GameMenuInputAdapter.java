@@ -37,47 +37,41 @@ public class GameMenuInputAdapter extends InputAdapter {
         keysHeld.add(keycode);
 
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
-            int selectedSlot = keycode - Input.Keys.NUM_1;
-            game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
-            return true;
+            switchInventorySlot(keycode);
         }
 
 
         if (keycode == Input.Keys.N) {
-            GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
-            return true;
+            nextTurn();
         }
+
+
         if (keycode == Input.Keys.H) {
-            Stage stage = gameController.getGameMenu().getCheatCodeStage();
-            Gdx.input.setInputProcessor(stage);
-            CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-                GameAssetManager.getGameAssetManager().getSkin(), this);
-            cheatDialog.show(stage);
-            cheatDialog.setColor(Color.WHITE);
+            handleCheatCodePage();
         }
+
+
         if (keycode == Input.Keys.I) {
-            game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
-            return true;
+            handleInventoryVisibility();
         }
+
+
         if (keycode == Input.Keys.B) {
-            App.getGameController().getGameMenu().getCraftingMenu().setActive(true);
-            App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
-            Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
+            handleCraftingMenu();
         }
+
+
         if (keycode == Input.Keys.C) {
             Game.getCurrentPlayer().pickSelectedItem();
-//            performAction(screenX, screenY);
-            return true;
         }
+
+
         if (keycode == Input.Keys.ESCAPE) {
-            gameController.getGameMenu().getInventoryView().toggle();
-            return true;
+            handleInevtnoryView();
         }
-//        if (keycode == Input.Keys.X) {
-//            performAction(screenX, screenY);
-//            return true;
-//        }
-        return false;
+
+
+        return true;
     }
 
     @Override
@@ -144,6 +138,41 @@ public class GameMenuInputAdapter extends InputAdapter {
         player.setVelocity(vx * speed, vy * speed);
         player.update(delta, game.getMap(), gameController.getGameMenu().getGameView());
     }
+
+
+    private void handleInevtnoryView() {
+        gameController.getGameMenu().getInventoryView().toggle();
+
+    }
+
+    private void handleCraftingMenu() {
+        App.getGameController().getGameMenu().getCraftingMenu().setActive(true);
+        App.getGameController().getGameMenu().getCraftingMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCraftingMenu().getStage());
+    }
+
+    private void handleInventoryVisibility() {
+        game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
+    }
+
+    private void handleCheatCodePage() {
+        Stage stage = gameController.getGameMenu().getCheatCodeStage();
+        Gdx.input.setInputProcessor(stage);
+        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+            GameAssetManager.getGameAssetManager().getSkin(), this);
+        cheatDialog.show(stage);
+        cheatDialog.setColor(Color.WHITE);
+    }
+
+    private void switchInventorySlot(int keycode) {
+        int selectedSlot = keycode - Input.Keys.NUM_1;
+        game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
+    }
+
+    private void nextTurn() {
+        GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
+    }
+
 
     private void performAction(int screenX, int screenY) {
         OrthographicCamera camera = game.getCamera();

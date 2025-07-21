@@ -236,12 +236,12 @@ public class GameView {
                         float drawY = y * tileSize;
                         if (inside instanceof GreenHouse greenHouse) {
                             for (Player player : App.getCurrentGame().getPlayers()) {
-//                                    System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
+                                System.out.println("yapperoni: " + player.getOwner().getUsername() + player.getMyFarm().getMyGreenHouse().isStatus() + " " + player.getMyFarm().getMyGreenHouse().hashCode());
                             }
-//                                System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
                         }
                         if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
-//                                System.out.println("Probably not coming here?");
+                            System.out.println("Probably not coming here?");
                             texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
                         }
                         batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
@@ -581,8 +581,7 @@ public class GameView {
         this.walking = walking;
     }
 
-    public static TextureRegion getPlayerFrontImage()
-    {
+    public static TextureRegion getPlayerFrontImage() {
         return playerAnimations.get(0).getKeyFrame(0, false);
     }
 }
