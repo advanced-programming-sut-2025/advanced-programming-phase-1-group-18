@@ -145,6 +145,8 @@ public class Game {
     private float cameraLerpSpeed = 8f;
     private int lookAheadTiles = 4;
     private boolean cameraInitialized = false;
+    // new
+    private String pendingPlacementName;
 
     public Game() {
 
@@ -1073,6 +1075,14 @@ public class Game {
 
             camera.update();
         }
+    }
+    //new
+    public void setPendingPlacementName(String name) {
+        this.pendingPlacementName = name;
+    }
+
+    public String getPendingPlacementName() {
+        return pendingPlacementName;
     }
 
 }

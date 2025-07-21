@@ -1,6 +1,7 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -34,6 +35,7 @@ public class GameMenu implements Screen {
     private LightningEffect lightningEffect;
     private InventoryView inventoryView;
     private Stage stage;
+    private InputMultiplexer inputMultiplexer;
 
     public GameMenu(GameController gameController, Game gameModel) {
         this.cheatCodeStage = new Stage();
@@ -55,6 +57,12 @@ public class GameMenu implements Screen {
         stage.addActor(inventoryView.getWindow());
         stage.addActor(inventoryView.getTooltipLabel());
         stage.addActor(inventoryView.getSkillTooltipLabel());
+        gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);               // UI first
+        inputMultiplexer.addProcessor(gameMenuInputAdapter); // then game input
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -273,5 +281,9 @@ public class GameMenu implements Screen {
 
     public InventoryView getInventoryView() {
         return inventoryView;
+    }
+
+    public InputMultiplexer getInputMultiplexer() {
+        return inputMultiplexer;
     }
 }

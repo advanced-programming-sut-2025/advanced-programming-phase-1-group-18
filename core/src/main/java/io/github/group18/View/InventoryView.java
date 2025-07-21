@@ -184,10 +184,9 @@ public class InventoryView {
 
         Table mainTable = new Table();
         Table skillTable = new Table();
-
         TextureRegion playerFrontFrame = GameView.getPlayerFrontImage();
         Image playerImage = new Image(new TextureRegionDrawable(playerFrontFrame));
-        Label nameLabel = new Label("Name: " + App.getCurrentUser().getUsername(), skin);
+        Label nameLabel = new Label("Name: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername(), skin);
         nameLabel.setColor(Color.GOLD);
         nameLabel.setFontScale(0.75f);
 
@@ -361,15 +360,7 @@ public class InventoryView {
     }
 
     private void showCookTab() {
-        Table profileTable = new Table();
-        Texture profileTexture = new Texture(Gdx.files.internal("background.jpg"));
-        Image profileImage = new Image(new TextureRegionDrawable(new TextureRegion(profileTexture)));
-        Label nameLabel = new Label("Name: Mammad", skin);
 
-        profileTable.add(profileImage).size(64, 64).padRight(10);
-        profileTable.add(nameLabel).left().center();
-
-        contentTable.add(profileTable);
     }
 
 
@@ -504,7 +495,6 @@ public class InventoryView {
             Vector2 pos = hoveredSkillIcon.localToStageCoordinates(new Vector2(0, 0));
             float x = pos.x + hoveredSkillIcon.getWidth() + 10;
             float y = pos.y + hoveredSkillIcon.getHeight() / 2-40;
-
             skillTooltipLabel.setText(getTooltipForSkillIcon(hoveredSkillIcon));
             skillTooltipLabel.setFontScale(1.2f);
             skillTooltipLabel.setColor(Color.BLACK);

@@ -2,7 +2,7 @@ package io.github.group18.Model;
 
 import java.util.ArrayList;
 
-public class BigCoop implements Name
+public class BigCoop implements Name,PictureModel
 {
     protected boolean Status = false;
     protected final int MaxCapacity= 8;
@@ -68,5 +68,10 @@ public class BigCoop implements Name
     @Override
     public String getCorrectName() {
         return "bigcoop";
+    }
+
+    @Override
+    public String getPath() {
+        return "Buildings/BigCoop.png";
     }
 }

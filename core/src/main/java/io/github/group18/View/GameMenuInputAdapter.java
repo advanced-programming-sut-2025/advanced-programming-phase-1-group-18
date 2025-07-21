@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.group18.Controller.CarpentersShopController;
 import io.github.group18.Controller.GameController;
 
 import java.awt.*;
@@ -26,6 +29,8 @@ public class GameMenuInputAdapter extends InputAdapter {
     private final GameController gameController;
     private final Set<Integer> keysHeld = new HashSet<>();
 
+    private String input;
+    private boolean buildingPaceMode = false;
     public GameMenuInputAdapter(Game game, GameController gameController) {
         this.game = game;
         this.gameController = gameController;
@@ -77,6 +82,21 @@ public class GameMenuInputAdapter extends InputAdapter {
 //            performAction(screenX, screenY);
 //            return true;
 //        }
+        if (keycode == Input.Keys.P) {
+            Stage stage = gameController.getGameMenu().getCheatCodeStage();
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+            PlaceEntityDialog dialog = new PlaceEntityDialog(stage, skin, name -> {
+                game.setPendingPlacementName(name);
+                input = game.getPendingPlacementName();
+                inputBuilding(input);
+                Gdx.input.setInputProcessor(gameController.getGameMenu().getInputMultiplexer());
+            });
+            dialog.show(stage);
+            Gdx.input.setInputProcessor(stage);
+            return true;
+        }
+
         return false;
     }
 
@@ -97,11 +117,96 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        //for bulding
+        if (buildingPaceMode && button == Input.Buttons.LEFT) {
+
+            Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+
+            int tileX = (int)(worldCoords.x / game.TILE_SIZE);
+            int tileY = (int)(worldCoords.y / game.TILE_SIZE);
+
+            if(input.equalsIgnoreCase("barn"))
+            {
+                CarpentersShopController.build("barn",tileX,tileY);
+//                for (int dx = -3; dx <= 3; dx++) {
+//                    for (int dy = -2; dy <= 1; dy++) {
+//                        int x = tileX + dx;
+//                        int y = tileY + dy;
+//                        System.out.println("khar"+ x);
+//                        System.out.println("nigga"+ y);
+//                          Tavileh tavileh=  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh();
+//                          game.getMap().get(x).get(y).setInside(tavileh);
+//                    }
+//                }
+
+            }
+            if(input.equalsIgnoreCase("bigbarn"))
+            {
+                CarpentersShopController.build("bigbarn",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("deluxebarn"))
+            {
+                CarpentersShopController.build("deluxebarn",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("coop"))
+            {
+                CarpentersShopController.build("coop",tileX,tileY);
+
+            }
+            if(input.equalsIgnoreCase("bigcoop"))
+            {
+                CarpentersShopController.build("bigcoop",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("deluxecoop"))
+            {
+                CarpentersShopController.build("deluxecoop",tileX,tileY);
+            }
+            buildingPaceMode = false;
+            return true;
+        }
         if (button == Input.Buttons.LEFT) {
             Game.getCurrentPlayer().pickSelectedItem();
 //            performAction(screenX, screenY);
+
+
+            //
+            Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+            int tileX = (int)(worldCoords.x / game.TILE_SIZE);
+            int tileY = (int)(worldCoords.y / game.TILE_SIZE);
+
+
+            Object inside = game.getMap().get(tileX).get(tileY).getInside();
+
+            if (inside != null) {
+                if (inside instanceof Tavileh) {
+                    System.exit(0);
+                    return true;
+                } if (inside instanceof Cage) {
+
+                    return true;
+                }
+                if (inside instanceof BigCoop) {
+
+                    return true;
+                }
+                if (inside instanceof DeluxeCoop) {
+
+                    return true;
+                }
+                if (inside instanceof BigBarn) {
+
+                    return true;
+                }
+                if (inside instanceof DeluxeBarn) {
+
+                    return true;
+                }
+            }
             return true;
         }
+
+
+
         if (button == Input.Buttons.RIGHT) {
             performAction(screenX, screenY);
             return true;
@@ -163,6 +268,81 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         Item item = Game.getCurrentPlayer().getInventory().getItemBySlot(game.getCurrentPlayer().getInventory().getSelectedSlot());
         gameController.useItem(item, tileX, tileY, game);
+    }
+
+    private void inputBuilding(String buildingName) {
+        if(buildingName == null) {
+            return;
+        }
+        if(buildingName.equals("barn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 350 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 6000 )
+            {
+                return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("bigBarn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 450 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("deluxeBarn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 550 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("Coop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 300 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 4000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("bigCoop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 400 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000 )
+            {
+                return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("deluxeCoop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 500 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 20000)
+            {
+               return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
     }
 
 

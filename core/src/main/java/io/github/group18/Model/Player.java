@@ -71,7 +71,6 @@ public class Player extends User {
 
         Pickaxe pickaxe = new Pickaxe("initial", 5);
         this.inventory.addItem(pickaxe, 1);
-
         Axe axe = new Axe("initial", 5);
         this.inventory.addItem(axe, 1);
 
