@@ -21,6 +21,23 @@ public class AllCrop extends Crop implements Name, Price, PictureModel {
     private boolean fedThisDay;
     private boolean edible;
 
+    public int getCurrentGrowthLevel() {
+        if (stages == null || stages.isEmpty()) {
+            return 1; // Default to level 1 if no stages exist
+        }
+
+        int cumulativeDays = 0;
+        for (int i = 0; i < stages.size(); i++) {
+            cumulativeDays += stages.get(i);
+            if (daysGrowCounter < cumulativeDays) {
+                return i + 1; // +1 because levels start at 1
+            }
+        }
+
+        // If daysGrowCounter exceeds all stages, return max level
+        return stages.size() + 1;
+    }
+
     public void initilizeCrop(ForagingSeedsEnums foragingSeedsenums) {
         this.setSourceForagingSeedEnum(foragingSeedsenums);
         this.setDaysGrowCounter(0);
@@ -852,6 +869,6 @@ public class AllCrop extends Crop implements Name, Price, PictureModel {
 
     @Override
     public String getPath() {
-        return "Crops/" + getCorrectName().replace(" ", "") + ".png";
+        return "Crops/" + type + getCurrentGrowthLevel() + ".png";
     }
 }
