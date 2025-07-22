@@ -17,7 +17,11 @@ public class WateringCan extends Tool implements Name, Price ,PictureModel{
         this.max_Capacity = max_Capacity;
     }
 
-    public String use(Kashi kashi) {
+    public String use(Kashi kashi,int x,int y) {
+        App.getCurrentGame().setWatering(true);
+        App.getCurrentGame().setPlantx(x);
+        App.getCurrentGame().setPlanty(y);
+        App.getCurrentGame().setWaterTimer(1f);
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
         if (player.getFarmingSkill().getLevel() == 5) {

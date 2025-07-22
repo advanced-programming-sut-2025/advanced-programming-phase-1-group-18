@@ -2,10 +2,15 @@ package io.github.group18.Controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -30,6 +35,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.lang.reflect.Field;
+import java.security.cert.TrustAnchor;
+import java.sql.Struct;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -2169,13 +2176,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //    }
 
-    public Result craftInfo(String craftName) {
+    public Result craftInfo(String craftName, GameController gameController) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
         ForagingSeedsEnums foragingSeedsEnums;
         StringBuilder craftInfo = new StringBuilder();
         craftName.replace(" ", "");
+        BitmapFont font = new BitmapFont();
+        SpriteBatch batch = new SpriteBatch();
         for (AllCropsEnums crop : AllCropsEnums.values()) {
             if (crop.name().replace(" ", "").equalsIgnoreCase(craftName.replace(" ", ""))) {
                 StringBuilder stages = new StringBuilder();
@@ -2199,10 +2208,26 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 //                craftInfo.append("Base Health: ").append(crop1.getBaseHealth()).append("\n");
                 //                craftInfo.append("Season: ").append(crop1.getSeason()).append("\n");
                 craftInfo.append("Can Become Giant: ").append(crop1.isCanBecomeGiant() ? "TRUE" : "FALSE");
+                popUpMessage(gameController, craftInfo.toString());
+                batch.begin();
+                font.draw(batch, craftInfo.toString(), 100, 100);
+                batch.end();
                 return new Result(true, craftInfo.toString());
             }
         }
+        batch.begin();
+        font.draw(batch, "craft not found", 100, 100);
+        batch.end();
+        popUpMessage(gameController, "craft not found");
         return new Result(false, "craft not found");
+    }
+
+    private void popUpMessage(GameController gameController, String message) {
+        gameController.getGameMenu().getGameModel().setPopupMessage(message);
+        gameController.getGameMenu().getGameModel().setShowPopup(true);
+        gameController.getGameMenu().getGameModel().setPopupRect(new Rectangle(Gdx.graphics.getWidth() / 2 - 150,
+            Gdx.graphics.getHeight() / 2 - 75,
+            300, 150));
     }
 
     private static final Map<MixedSeedsEnums, AllCropsEnums> SEED_TO_CROP_MAP = Map.ofEntries(
@@ -2445,138 +2470,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-//    public Result fertilize(String fertilizer, String direction) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        int dir_x = -1;
-//        int dir_y = -1;
-//
-//        switch (direction.toLowerCase()) {
-//            case "n": {
-//                dir_x = 0;
-//                dir_y = -1;
-//                break;
-//            }
-//            case "ne": {
-//                dir_x = 1;
-//                dir_y = -1;
-//                break;
-//            }
-//            case "e": {
-//                dir_x = 1;
-//                dir_y = 0;
-//                break;
-//            }
-//            case "se": {
-//                dir_x = 1;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "s": {
-//                dir_x = 0;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "sw": {
-//                dir_x = -1;
-//                dir_y = 1;
-//                break;
-//            }
-//            case "w": {
-//                dir_x = -1;
-//                dir_y = 0;
-//                break;
-//            }
-//            case "nw": {
-//                dir_x = -1;
-//                dir_y = -1;
-//                break;
-//            }
-//            default: {
-//                return new Result(false, "Please select a valid direction\nn,ne,e,se,s,sw,w,nw");
-//            }
-//        }
-//        boolean found = false;
-//        switch (fertilizer.toLowerCase()) {
-//            case "deluxe retaining soil":
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("deluxeretainingsoil")) {
-//                        found = true;
-//                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-//                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-//                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
-//                            } else {
-//                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
-//                            }
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                            return new Result(true, "Successfully Fertilized");
-//                        } else {
-//                            return new Result(false, "Stand near a plant");
-//                        }
-//                    }
-//                }
-//                break;
-//            case "basic retaining soil":
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("basicretainingsoil")) {
-//                        found = true;
-//                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-//                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-//                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
-//                            } else {
-//                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
-//                            }
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                            return new Result(true, "Successfully Fertilized");
-//                        } else {
-//                            return new Result(false, "Stand near a plant");
-//                        }
-//                    }
-//                }
-//                break;
-//            case "quality retaining soil":
-//                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//                    if (item instanceof Fertilizer && item.getCorrectName().equalsIgnoreCase("qualityretainingsoil")) {
-//                        found = true;
-//                        if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree || App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllCrop) {
-//                            if (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside() instanceof AllTree) {
-//                                AllTree allTree = (AllTree) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
-//                            } else {
-//                                AllCrop allCrop = (AllCrop) App.getCurrentGame().getMap().get((int) currentPlayer.getX() + dir_x).get((int) currentPlayer.getY() + dir_y).getInside();
-//                                allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
-//                            }
-//                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-//                            return new Result(true, "Successfully Fertilized");
-//                        } else {
-//                            return new Result(false, "Stand near a plant");
-//                        }
-//                    }
-//                }
-//                break;
-//            default:
-//                return new Result(false, "Please select a valid fertilizer");
-//        }
-//        return null;
-//    }
+    public static Result fertilize(Fertilizer fertilizer, Kashi kashi) {
 
-//    public Result howMuchWater() {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//            if (item instanceof WateringCan) {
-//                return new Result(true, "Capacity: " + (((WateringCan) item).getCapacity()));
-//            }
-//        }
-//        return new Result(false, "No WateringCan found");
-//    }
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+        if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+            if (kashi.getInside() instanceof AllTree) {
+                AllTree allTree = (AllTree) kashi.getInside();
+                allTree.setDaysGrowCounter(allTree.getTotalHarvestTime());
+            } else {
+                AllCrop allCrop = (AllCrop) kashi.getInside();
+                allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
+            }
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(fertilizer, 1);
+            return new Result(true, "Successfully Fertilized");
+        } else {
+            return new Result(false, "Stand near a plant");
+        }
+
+    }
+
+    public Result howMuchWater() {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+            if (item instanceof WateringCan) {
+                return new Result(true, "Capacity: " + (((WateringCan) item).getCapacity()));
+            }
+        }
+        return new Result(false, "No WateringCan found");
+    }
 
     public Result craftingShowRecipes() {
         if (isFainted()) {
@@ -2890,7 +2814,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 getCraftingRecipes().add(craftingItem.getCraftingItem());
             player.getInventory().addItem(craftingItem, count);
             addItem = true;
-        } else if (FoodCookingEnums.isContain(name)){
+        } else if (FoodCookingEnums.isContain(name)) {
             Cookingrecipe cookingrecipe = new Cookingrecipe();
             cookingrecipe.setFood(FoodCookingEnums.valueOf(name));
             App.getCurrentGame().getCurrentPlayer().getCookingRecipes().add(cookingrecipe);
@@ -2927,10 +2851,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     pumpkinPie.setName(FoodCookingEnums.PumpkinPie);
                     player.getInventory().addItem(pumpkinPie, count);
                     addItem = true;
+                    break;
                 case "flower":
                     player.getInventory().addItem(new Flower(), count);
                     addItem = true;
                     break;
+                case "BasicRetainingSoil":
+                    Fertilizer fertilizer2 = new Fertilizer();
+                    fertilizer2.setName("Basic Retaining Soil");
+                    fertilizer2.setPrice(100);
+                    player.getInventory().addItem(fertilizer2, count);
             }
 
         }
@@ -3073,7 +3003,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 boolean found = false;
                 for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
                     if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
-                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item)>= ingredients.get(food)) {
+                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item) >= ingredients.get(food)) {
                             found = true;
                         }
                     }
@@ -3120,8 +3050,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
 
-    //        try {
-    //        } catch (Exception e) {
+        //        try {
+        //        } catch (Exception e) {
 //            return new Result(false, "Invalid food");
 //        }
         if (isValidFood(foodName, FOOD_ENUMS)) {
@@ -3178,6 +3108,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         return new Result(false, "You don't have that food");
     }
+
     public Result buyAnimal(String animal, String name) {
         return new Result(true, "");
     }
@@ -5607,6 +5538,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
 
     }
+
     public void showBuffEffect(Buff buff) {
         // مسیر عکس را بسته به نوع buff مشخص کن
         Main.getBatch().begin();
@@ -5618,7 +5550,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         // لود عکس
         TextureRegionDrawable buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
             getSkillAtlas().findRegion(buff.getBuffSkillType().name()));
-        buffTexture.setMinSize(buffTexture.getMinWidth()*scale, buffTexture.getMinHeight()*scale);
+        buffTexture.setMinSize(buffTexture.getMinWidth() * scale, buffTexture.getMinHeight() * scale);
         Image buffImage = new Image(buffTexture);
 
         // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
@@ -5634,7 +5566,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         // اضافه به stage
 //        stage.addActor(buffImage);
 
-        buffImage.draw(Main.getBatch(),buffImage.getColor().a);
+        buffImage.draw(Main.getBatch(), buffImage.getColor().a);
 //        Main.getBatch().draw(buffImage,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
 
         // اکشن fade in -> مکث -> fade out -> حذف

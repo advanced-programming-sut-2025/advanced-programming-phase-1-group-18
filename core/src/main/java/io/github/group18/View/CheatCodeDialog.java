@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import io.github.group18.Controller.GameController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 
@@ -15,13 +16,14 @@ public class CheatCodeDialog extends Dialog {
 
     private TextField cheatInput;
     private GameMenuInputAdapter gameMenuInputAdapter;
+    private GameController gameController;
 
-
-    public CheatCodeDialog(Stage stage, Skin skin, GameMenuInputAdapter gameMenuInputAdapter) {
+    public CheatCodeDialog(Stage stage, Skin skin, GameMenuInputAdapter gameMenuInputAdapter,GameController gameController) {
         super("Enter Cheat Code", skin);
+        this.gameController = gameController;
         this.gameMenuInputAdapter = gameMenuInputAdapter;
         // ایجاد TextField برای ورودی چیت
-        cheatInput = new TextField("cheat add item -n Tortilla -c 1", skin);
+        cheatInput = new TextField("", skin);
         cheatInput.setMessageText("Enter your cheat code here...");
 
         // افزودن به دیالوگ
@@ -44,7 +46,7 @@ public class CheatCodeDialog extends Dialog {
             String code = cheatInput.getText();
 //            System.out.println("Cheat Code Entered: " + code);
 
-            processCheatCode(code);
+            processCheatCode(code,gameController);
 
         } else {
             System.out.println("Cheat Code entry cancelled.");
@@ -52,11 +54,11 @@ public class CheatCodeDialog extends Dialog {
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
     }
 
-    private void processCheatCode(String code) {
+    private void processCheatCode(String code, GameController gameController) {
         // ✅ این متد را مطابق با سیستم چیت بازی‌ات پیاده‌سازی کن
         Scanner scanner = new Scanner(System.in);
         GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
             GameAssetManager.getGameAssetManager().getSkin());
-        gameMenuMenu.check(code,scanner);
+        gameMenuMenu.check(code,scanner,gameController);
     }
 }

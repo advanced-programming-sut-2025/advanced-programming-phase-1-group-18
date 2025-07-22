@@ -433,6 +433,16 @@ Crops/Yam_Stage_4.png
 Crops/Yam_Stage_5.png
 EnergyBar/bar.png
 EnergyBar/green.png
+Fertilizer/Basic Retaining Soil.png
+Fertilizer/Basic_Fertilizer.png
+Fertilizer/Deluxe Retaining Soil.png
+Fertilizer/Deluxe_Fertilizer.png
+Fertilizer/Deluxe_Speed-Gro.png
+Fertilizer/Hyper_Speed-Gro.png
+Fertilizer/Quality Retaining Soil.png
+Fertilizer/Quality_Fertilizer.png
+Fertilizer/Speed-Gro.png
+Fertilizer/Tree_Fertilizer.png
 Foraging/Autumn%27s_Bounty.png
 Foraging/Basic_Fertilizer.png
 Foraging/Blackberry.png

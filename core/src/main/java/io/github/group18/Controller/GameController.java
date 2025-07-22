@@ -32,10 +32,7 @@ public class GameController {
     }
 
     public void useItem(Item selectedItem, int x, int y, Game game) {
-//        TileDescriptionId selectedTile = game.getTile(point);
-//        if (!selectedItem.getAllowedTiles().contains(selectedTile)) {
-//            return;
-//        }
+
         Kashi kashi = game.getMap().get(x).get(y);
         //Use Tools
         if (selectedItem instanceof Tool tool) {
@@ -69,9 +66,8 @@ public class GameController {
                 String result = fishingPole.use();
                 System.out.println(result);
             } else if (tool instanceof WateringCan wateringCan) {
-                String result = wateringCan.use(kashi);
+                String result = wateringCan.use(kashi,x,y);
                 System.out.println(result);
-                gameMenu.getGameView().loadTextures();
             }
         }
         //Plant Seeds
@@ -84,8 +80,10 @@ public class GameController {
         if (selectedItem instanceof MixedSeed mixedSeed) {
             GameMenuController.plant(mixedSeed, kashi);
         }
-
-//        game.getPlayer().useSelectedItem();
-//        selectedItem.getFunction().invoke(game, point);
+        //Fertilizer
+        if (selectedItem instanceof Fertilizer fertilizer) {
+            GameMenuController.fertilize(fertilizer, kashi);
+        }
+        gameMenu.getGameView().loadTextures();
     }
 }

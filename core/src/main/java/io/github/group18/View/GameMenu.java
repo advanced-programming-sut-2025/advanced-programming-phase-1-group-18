@@ -82,7 +82,7 @@ public class GameMenu implements Screen {
         lightningEffect.update(delta);
         gameView.render();
         lightningEffect.render(Main.getBatch());
-        gameMenuInputAdapter.update(delta);
+        gameMenuInputAdapter.update(delta,gameView.getBatch());
 
         handleNightSleepFade(delta);
 
