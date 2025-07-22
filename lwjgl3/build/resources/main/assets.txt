@@ -38,13 +38,13 @@ Crops/Beet_Stage_2.png
 Crops/Beet_Stage_3.png
 Crops/Beet_Stage_4.png
 Crops/Beet_Stage_5.png
-Crops/BlueBerry.png
 Crops/BlueJazz.png
 Crops/BlueJazz1.png
 Crops/BlueJazz2.png
 Crops/BlueJazz3.png
 Crops/BlueJazz4.png
 Crops/BlueJazz5.png
+Crops/Blueberry.png
 Crops/Blueberry_Seeds.png
 Crops/Blueberry_Stage_1.png
 Crops/Blueberry_Stage_2.png
@@ -90,13 +90,13 @@ Crops/Carrot2.png
 Crops/Carrot3.png
 Crops/Carrot4.png
 Crops/Carrot_Seeds.png
-Crops/CauliFlower.png
 Crops/CauliFlower1.png
 Crops/CauliFlower2.png
 Crops/CauliFlower3.png
 Crops/CauliFlower4.png
 Crops/CauliFlower5.png
 Crops/CauliFlower6.png
+Crops/Cauliflower.png
 Crops/Cauliflower_Seeds.png
 Crops/CoffeeBean.png
 Crops/CoffeeBean1.png
@@ -129,7 +129,7 @@ Crops/Cranberry_Stage_6.png
 Crops/Cranberry_Stage_7.png
 Crops/Demetrius_Icon.png
 Crops/Dust_Sprite.png
-Crops/EggPlant.png
+Crops/Eggplant.png
 Crops/Eggplant_Parmesan.png
 Crops/Eggplant_Seeds.png
 Crops/Eggplant_Stage_1.png
@@ -273,7 +273,7 @@ Crops/Potato_Stage_3.png
 Crops/Potato_Stage_4.png
 Crops/Potato_Stage_5.png
 Crops/Potato_Stage_6.png
-Crops/PowderMelon.png
+Crops/Powdermelon.png
 Crops/Powdermelon_Seeds.png
 Crops/Powdermelon_Stage_1.png
 Crops/Powdermelon_Stage_2.png
@@ -326,8 +326,8 @@ Crops/Spaghetti.png
 Crops/Spangle_Seeds.png
 Crops/Spicy_Eel.png
 Crops/Spring_Seeds.png
-Crops/StarFruit.png
 Crops/Stardrop.png
+Crops/Starfruit.png
 Crops/Starfruit_Seeds.png
 Crops/Starfruit_Stage_1.png
 Crops/Starfruit_Stage_2.png
@@ -336,7 +336,7 @@ Crops/Starfruit_Stage_4.png
 Crops/Starfruit_Stage_5.png
 Crops/Starfruit_Stage_6.png
 Crops/Stir_Fry.png
-Crops/StrawBerry.png
+Crops/Strawberry.png
 Crops/Strawberry_Seeds.png
 Crops/Strawberry_Stage_1.png
 Crops/Strawberry_Stage_2.png
@@ -363,7 +363,7 @@ Crops/Summer_Squash_Stage_4.png
 Crops/Summer_Squash_Stage_5.png
 Crops/Summer_Squash_Stage_6.png
 Crops/Summer_Squash_Stage_7.png
-Crops/SunFlower.png
+Crops/Sunflower.png
 Crops/Sunflower_Seeds.png
 Crops/Sunflower_Stage_1.png
 Crops/Sunflower_Stage_2.png
@@ -433,6 +433,16 @@ Crops/Yam_Stage_4.png
 Crops/Yam_Stage_5.png
 EnergyBar/bar.png
 EnergyBar/green.png
+Fertilizer/Basic Retaining Soil.png
+Fertilizer/Basic_Fertilizer.png
+Fertilizer/Deluxe Retaining Soil.png
+Fertilizer/Deluxe_Fertilizer.png
+Fertilizer/Deluxe_Speed-Gro.png
+Fertilizer/Hyper_Speed-Gro.png
+Fertilizer/Quality Retaining Soil.png
+Fertilizer/Quality_Fertilizer.png
+Fertilizer/Speed-Gro.png
+Fertilizer/Tree_Fertilizer.png
 Foraging/Autumn%27s_Bounty.png
 Foraging/Basic_Fertilizer.png
 Foraging/Blackberry.png
@@ -932,6 +942,32 @@ game/tools/hoe.png
 game/tools/scythe.png
 game/tools/watering_can.png
 grayscale.frag
+inventory/Inventory_Tab.png
+inventory/close.png
+inventory/music/Music1.mp3
+inventory/music/Music2.mp3
+inventory/music/Music3.mp3
+inventory/paye.jpg
+inventory/settings.png
+inventory/skill_tab.png
+inventory/skills/Combat_Skill_Icon.png
+inventory/skills/Farming_Skill_Icon.png
+inventory/skills/Fishing_Skill_Icon.png
+inventory/skills/Foraging_Skill_Icon.png
+inventory/skills/Mining_Skill_Icon.png
+inventory/skills/Ruby.png
+inventory/skills/ruby_skill.png
+inventory/skills/tooltip_cloud.png
+inventory/slot.png
+inventory/tab_chat.png
+inventory/tab_cooking.png
+inventory/tab_crafting.png
+inventory/tab_inventory.png
+inventory/tab_map.png
+inventory/tab_social.png
+inventory/tools/Axe.png
+inventory/tools/Pickaxe.png
+inventory/tools/Scythe.png
 libgdx.png
 map.png
 map1.png

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
@@ -55,7 +56,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     }
 
-    public void check(String input, Scanner scanner) {
+    public void check(String input, Scanner scanner, GameController gameController) {
         if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (GameMenuCommands.GameNew.getMather(input) != null) {
@@ -194,7 +195,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             Matcher matcher = GameMenuCommands.Flower.getMather(input);
 //            System.out.println(controller.flower(matcher.group(1)));
         } else if (GameMenuCommands.CRAFT_INFO.getMather(input) != null) {
-            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1)));
+            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1),gameController));
         } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
             System.out.println(controller.craftingShowRecipes());
         } else if (GameMenuCommands.CRAFT_ITEM.getMather(input) != null) {

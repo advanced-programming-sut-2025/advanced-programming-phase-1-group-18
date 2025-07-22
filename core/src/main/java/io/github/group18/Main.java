@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.gson.Gson;
+import io.github.group18.Controller.MainMenuController;
 import io.github.group18.Controller.RegisterLoginGdxController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.User;
+import io.github.group18.View.MainMenu;
 import io.github.group18.View.RegisterLoginGdxView;
 import io.github.group18.enums.Menu;
 
@@ -38,8 +40,9 @@ public class Main extends Game {
                 User user = new Gson().fromJson(reader, User.class);
                 if (user != null) {
                     App.setCurrentUser(user);
-                    App.setCurrentMenu(Menu.MainMenu);
+                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                     System.out.println("Welcome back, " + user.getUsername());
+                    return;
                 }
             } catch (IOException e) {
                 System.err.println("Failed to read logged-in user: " + e.getMessage());

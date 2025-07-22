@@ -5,21 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.GameController;
 
-import java.awt.*;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 import io.github.group18.Controller.GameMenuController;
-import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
-import io.github.group18.Model.Items.Tool;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
@@ -44,13 +45,9 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.N) {
             nextTurn();
         }
+
         if (keycode == Input.Keys.P) {
-            Stage stage = gameController.getGameMenu().getCheatCodeStage();
-            Gdx.input.setInputProcessor(stage);
-            CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-                GameAssetManager.getGameAssetManager().getSkin(),this);
-            cheatDialog.show(stage);
-            cheatDialog.setColor(Color.WHITE);
+            handleCheatCodeDialog();
         }
 
 
@@ -67,10 +64,9 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.C) {
             Game.getCurrentPlayer().pickSelectedItem();
         }
-        if (keycode == Input.Keys.C) {
-            App.getGameController().getGameMenu().getCookingMenu().setActive(true);
-            App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
-            Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
+
+        if (keycode == Input.Keys.V) {
+            handleCookingMenu();
         }
 
 
@@ -80,6 +76,21 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
         return true;
+    }
+
+    private void handleCookingMenu() {
+        App.getGameController().getGameMenu().getCookingMenu().setActive(true);
+        App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
+    }
+
+    private void handleCheatCodeDialog() {
+        Stage stage = gameController.getGameMenu().getCheatCodeStage();
+        Gdx.input.setInputProcessor(stage);
+        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+            GameAssetManager.getGameAssetManager().getSkin(), this, this.gameController);
+        cheatDialog.show(stage);
+        cheatDialog.setColor(Color.WHITE);
     }
 
     @Override
@@ -111,8 +122,9 @@ public class GameMenuInputAdapter extends InputAdapter {
         return false;
     }
 
-    public void update(float delta) {
+    public void update(float delta, Batch batch) {
         Player player = game.getCurrentPlayer();
+        Game game = gameController.getGameMenu().getGameModel();
         float vx = 0, vy = 0;
         int dir = 0;
 
@@ -145,6 +157,65 @@ public class GameMenuInputAdapter extends InputAdapter {
         float speed = player.getSpeed();
         player.setVelocity(vx * speed, vy * speed);
         player.update(delta, game.getMap(), gameController.getGameMenu().getGameView());
+        //handle craftinfo
+        if (game.isShowPopup()) {
+            // Draw semi-transparent background
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, 0.5f); // Semi-transparent black
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1);
+            shapeRenderer.rect(game.getPopupRect().x, game.getPopupRect().y, game.getPopupRect().width, game.getPopupRect().height);
+            shapeRenderer.end();
+
+            // Draw text
+            batch.begin();
+            BitmapFont font = new BitmapFont();
+            font.draw(batch, game.getPopupMessage(),
+                game.getPopupRect().x + 20,
+                game.getPopupRect().y + game.getPopupRect().height - 30);
+
+            // Draw close button
+            font.draw(batch, "[X] Close",
+                game.getPopupRect().x + game.getPopupRect().width - 80,
+                game.getPopupRect().y + 30);
+            batch.end();
+
+            // Handle input
+            if (Gdx.input.justTouched()) {
+                Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                game.getCamera().unproject(touchPos);
+
+                // Check if close was clicked (simple bounds check)
+                if (touchPos.x > game.getPopupRect().x + game.getPopupRect().width - 80 &&
+                    touchPos.x < game.getPopupRect().x + game.getPopupRect().width - 20 &&
+                    touchPos.y > game.getPopupRect().y &&
+                    touchPos.y < game.getPopupRect().y + 50) {
+                    game.setShowPopup(false);
+                }
+            }
+        }
+        //handle watering animation
+        if (game.isWatering()) {
+
+            game.setWaterTimer(game.getWaterTimer() - Gdx.graphics.getDeltaTime());
+
+            batch.begin();
+            batch.setColor(0, 0.5f, 1, 0.3f);
+            Texture whitePixel;
+            Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.WHITE);
+            pixmap.drawPixel(0, 0);
+            whitePixel = new Texture(pixmap);
+            pixmap.dispose();
+            batch.draw(whitePixel, game.getPlantx()*Game.TILE_SIZE, game.getPlanty()*Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.setColor(Color.WHITE);
+            batch.end();
+
+            if (game.getWaterTimer() <= 0) {
+                game.setWatering(false);
+            }
+        }
     }
 
 
@@ -161,15 +232,6 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void handleInventoryVisibility() {
         game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
-    }
-
-    private void handleCheatCodePage() {
-        Stage stage = gameController.getGameMenu().getCheatCodeStage();
-        Gdx.input.setInputProcessor(stage);
-        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-            GameAssetManager.getGameAssetManager().getSkin(), this);
-        cheatDialog.show(stage);
-        cheatDialog.setColor(Color.WHITE);
     }
 
     private void switchInventorySlot(int keycode) {

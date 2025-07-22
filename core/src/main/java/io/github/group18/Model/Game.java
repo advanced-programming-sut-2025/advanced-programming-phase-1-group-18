@@ -6,6 +6,7 @@ import io.github.group18.enums.Seasons;
 import io.github.group18.enums.WeatherEnum;
 import io.github.group18.Model.Items.Gift;
 
+import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -145,6 +146,12 @@ public class Game {
     private float cameraLerpSpeed = 8f;
     private int lookAheadTiles = 4;
     private boolean cameraInitialized = false;
+    private boolean showPopup = false;
+    private String popupMessage = "";
+    private Rectangle popupRect = new Rectangle();
+    private boolean watering = false;
+    private float plantx, planty;
+    private float waterTimer = 0f;
 
     public Game() {
 
@@ -1049,6 +1056,62 @@ public class Game {
         return null;
     }
 
+    public boolean isShowPopup() {
+        return showPopup;
+    }
+
+    public void setShowPopup(boolean showPopup) {
+        this.showPopup = showPopup;
+    }
+
+    public String getPopupMessage() {
+        return popupMessage;
+    }
+
+    public void setPopupMessage(String popupMessage) {
+        this.popupMessage = popupMessage;
+    }
+
+    public Rectangle getPopupRect() {
+        return popupRect;
+    }
+
+    public void setPopupRect(Rectangle popupRect) {
+        this.popupRect = popupRect;
+    }
+
+    public boolean isWatering() {
+        return watering;
+    }
+
+    public void setWatering(boolean watering) {
+        this.watering = watering;
+    }
+
+    public float getPlantx() {
+        return plantx;
+    }
+
+    public void setPlantx(float plantx) {
+        this.plantx = plantx;
+    }
+
+    public float getPlanty() {
+        return planty;
+    }
+
+    public void setPlanty(float planty) {
+        this.planty = planty;
+    }
+
+    public float getWaterTimer() {
+        return waterTimer;
+    }
+
+    public void setWaterTimer(float waterTimer) {
+        this.waterTimer = waterTimer;
+    }
+
     public void update(float deltaTime) {
         if (!cameraInitialized) {
             camera = new OrthographicCamera();
@@ -1059,8 +1122,8 @@ public class Game {
 
         // Simple camera follow - no lerping, no prediction
         if (getCurrentPlayer() != null) {
-            float playerX = (float)getCurrentPlayer().getX() * TILE_SIZE;
-            float playerY = (float)getCurrentPlayer().getY() * TILE_SIZE;
+            float playerX = (float) getCurrentPlayer().getX() * TILE_SIZE;
+            float playerY = (float) getCurrentPlayer().getY() * TILE_SIZE;
 
             // Directly set camera position to player position
             camera.position.set(playerX, playerY, 0);
