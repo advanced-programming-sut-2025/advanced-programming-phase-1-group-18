@@ -14,6 +14,7 @@ import io.github.group18.Controller.CarpentersShopController;
 import io.github.group18.Controller.GameController;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -174,12 +175,12 @@ public class GameMenuInputAdapter extends InputAdapter {
             int tileX = (int)(worldCoords.x / game.TILE_SIZE);
             int tileY = (int)(worldCoords.y / game.TILE_SIZE);
 
-
+            Kashi kashi = findSecondLeftBottomTileOfTavile(game.getMap());
             Object inside = game.getMap().get(tileX).get(tileY).getInside();
 
             if (inside != null) {
                 if (inside instanceof Tavileh) {
-                    System.exit(0);
+
                     return true;
                 } if (inside instanceof Cage) {
 
@@ -357,5 +358,35 @@ public class GameMenuInputAdapter extends InputAdapter {
     public Set<Integer> getKeysHeld() {
         return keysHeld;
     }
+
+
+    public Kashi findSecondLeftBottomTileOfTavile(ArrayList<ArrayList<Kashi>> tiles) {
+        int width = tiles.size();
+        int height = tiles.get(0).size();
+
+        for (int x = 0; x <= width - 7; x++) {
+            for (int y = 0; y <= height - 4; y++) {
+                boolean isTavileBlock = true;
+
+                for (int dx = 0; dx < 7; dx++) {
+                    for (int dy = 0; dy < 4; dy++) {
+                        if (!(tiles.get(x + dx).get(y + dy).getInside() instanceof Tavileh)) {
+                            isTavileBlock = false;
+                            break;
+                        }
+                    }
+                    if (!isTavileBlock) break;
+                }
+
+                if (isTavileBlock) {
+
+                    return tiles.get(x + 1).get(y + 3);
+                }
+            }
+        }
+
+        return null;
+    }
+
 
 }

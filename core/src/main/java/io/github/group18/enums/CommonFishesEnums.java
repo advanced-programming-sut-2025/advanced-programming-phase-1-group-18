@@ -24,13 +24,11 @@ public enum CommonFishesEnums {
     private final int basePrice;
     private final Seasons season;
 
-    // سازنده برای مقداردهی به ویژگی‌ها
     CommonFishesEnums(int value, Seasons season) {
         this.basePrice = value;
         this.season = season;
     }
 
-    // متدهای getter برای دسترسی به ویژگی‌ها
     public int getValue() {
         return basePrice;
     }

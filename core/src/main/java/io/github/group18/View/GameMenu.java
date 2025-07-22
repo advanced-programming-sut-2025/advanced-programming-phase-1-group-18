@@ -36,12 +36,15 @@ public class GameMenu implements Screen {
     private InventoryView inventoryView;
     private Stage stage;
     private InputMultiplexer inputMultiplexer;
+    private FishingMiniGame fishingMiniGame;
+
 
     public GameMenu(GameController gameController, Game gameModel) {
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
         this.craftingMenu = new CraftingMenu();
+        fishingMiniGame = new FishingMiniGame();
         craftingMenu.setActive(false);
         this.stage = new Stage(new ScreenViewport());
         initializeGame(gameModel);
@@ -87,6 +90,9 @@ public class GameMenu implements Screen {
         craftingMenu.render();
         stage.act(delta);
         stage.draw();
+
+        fishingMiniGame.update(delta);
+        fishingMiniGame.render();
     }
 
     private void handleNightSleepFade(float delta) {
