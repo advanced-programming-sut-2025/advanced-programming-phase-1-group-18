@@ -673,12 +673,6 @@ Skin/font-title-export.fnt
 Skin/pixthulhu-ui.atlas
 Skin/pixthulhu-ui.json
 Skin/pixthulhu-ui.png
-SkillsIcon/FarmingSkill.png
-SkillsIcon/FishingSkill.png
-SkillsIcon/ForagingSkill.png
-SkillsIcon/MiningSkill.png
-SkillsIcon/SkillIcons.atlas
-SkillsIcon/SkillIcons.png
 Stone.png
 Store.png
 Tools/36_Backpack.png
