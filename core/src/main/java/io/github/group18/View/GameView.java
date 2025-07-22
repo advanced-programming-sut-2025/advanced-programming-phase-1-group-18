@@ -31,6 +31,7 @@ public class GameView {
     private SpriteBatch batch;
     private TextureRegion[][] tileTextures;
     private Map<Object, TextureRegion> textures;
+    private Map<String, TextureRegion> texturesOnDrug;
     private BitmapFont smallFont;
     private GlyphLayout layout = new GlyphLayout();
     private TextureAtlas playerAtlas;
@@ -55,6 +56,7 @@ public class GameView {
 
     public void loadTextures() {
         textures = new HashMap<>();
+        texturesOnDrug = new HashMap<>();
 
         playerAtlas = GameAssetManager.getGameAssetManager().getPlayerAtlas();
 
@@ -119,10 +121,11 @@ public class GameView {
     }
 
     private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-
+//        System.out.println("loadTiles-init: " + startX + " " + endX + " " + startY + " " + endY);
+        int debigniggers = 0;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-
+//                System.out.println("loadTiles: " + x + " " + y);
                 Kashi tile = tiles.get(x).get(y);
                 if (tile == null) continue;
 
@@ -130,17 +133,28 @@ public class GameView {
                 if (!textures.containsKey(inside)) {
                     if (inside instanceof PictureModel pictureModel) {
                         try {
-                            Texture tex = new Texture(Gdx.files.internal(pictureModel.getPath()));
+                            TextureRegion tex;
+                            if (texturesOnDrug.containsKey(pictureModel.getPath())) {
+                                tex = texturesOnDrug.get(pictureModel.getPath());
+                            } else {
+//                                if (inside instanceof BlackSmithMarket) {
+//                                    System.out.println("BlackSmithMarket");
+//                                }
+                                tex = new TextureRegion(new Texture(Gdx.files.internal(pictureModel.getPath())));
+                                texturesOnDrug.put(pictureModel.getPath(), tex);
+                                debigniggers++;
+                                System.out.println(debigniggers);
+                            }
                             if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
                                 tex = GameAssetManager.getGameAssetManager().getGreenhouseBroken();
                             }
-                            textures.put(inside, new TextureRegion(tex));
+                            textures.put(inside, tex);
                         } catch (Exception e) {
                             System.out.println(inside.getClass().getSimpleName());
-                            textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
+                            textures.put(inside, GameAssetManager.getGameAssetManager().getGrass());
                         }
                     } else {
-                        textures.put(inside, new TextureRegion(GameAssetManager.getGameAssetManager().getGrass()));
+                        textures.put(inside, GameAssetManager.getGameAssetManager().getGrass());
                     }
                 }
             }
@@ -211,6 +225,8 @@ public class GameView {
         startY = Math.max(0, startY);
         endX = Math.min(tiles.size() - 1, endX);
         endY = Math.min(tiles.get(0).size() - 1, endY);
+
+
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
@@ -232,12 +248,18 @@ public class GameView {
         ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
         ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
         int tileSize = game.TILE_SIZE;
+//        System.out.println("drawTiles-init: " + startX + " " + endX + " " + startY + " " + endY);
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-
+//                System.out.println("drawTiles: " + x + " " + y);
                 getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
+                    Kashi tile = tiles.get(x).get(y);
+                    Object inside = tile.getInside();
+//                    if (inside instanceof BlackSmithMarket) {
+//                        System.out.println("are we even here1");
+//                    }
                     //this is for blocks that are covered with big pics so they dont draw anything
                 } else {
                     boolean flag = false;
@@ -256,18 +278,24 @@ public class GameView {
                         TextureRegion texture = textures.get(inside);
                         float drawX = x * tileSize;
                         float drawY = y * tileSize;
-                        if (inside instanceof GreenHouse greenHouse) {
-                            for (Player player : App.getCurrentGame().getPlayers()) {
-//                                System.out.println("yapperoni: " + player.getOwner().getUsername() +
-//                                    player.getMyFarm().getMyGreenHouse().isStatus() + " " +
-//                                    player.getMyFarm().getMyGreenHouse().hashCode());
-                            }
-//                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
-                        }
+//                        if (inside instanceof GreenHouse greenHouse) {
+//                            for (Player player : App.getCurrentGame().getPlayers()) {
+////                                System.out.println("yapperoni: " + player.getOwner().getUsername() +
+////                                    player.getMyFarm().getMyGreenHouse().isStatus() + " " +
+////                                    player.getMyFarm().getMyGreenHouse().hashCode());
+//                            }
+////                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+//                        }
                         if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
 //                            System.out.println("Probably not coming here?");
-                            texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGreenhouse());
+                            texture = GameAssetManager.getGameAssetManager().getGreenhouse();
                         }
+                        if (texture == null) {
+                            texture = GameAssetManager.getGameAssetManager().getGrass();
+                        }
+//                        if (inside instanceof BlackSmithMarket) {
+//                            System.out.println("are we even here?");
+//                        }
                         batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                     } else {
                         //this is for normal blocks
@@ -278,7 +306,7 @@ public class GameView {
                             if (tile.isShokhmZadeh()) {
                                 float drawX = x * tileSize;
                                 float drawY = y * tileSize;
-                                batch.draw(new TextureRegion(GameAssetManager.getGameAssetManager().getSoilTexture()), drawX, drawY, tileSize, tileSize);
+                                batch.draw(GameAssetManager.getGameAssetManager().getSoilTexture(), drawX, drawY, tileSize, tileSize);
                                 continue;
                             } else {
                                 continue;
@@ -290,6 +318,9 @@ public class GameView {
 
                         float drawX = x * tileSize;
                         float drawY = y * tileSize;
+                        if (texture == null) {
+                            texture = GameAssetManager.getGameAssetManager().getGrass();
+                        }
                         batch.draw(texture, drawX, drawY, tileSize, tileSize);
                     }
                 }
@@ -428,7 +459,7 @@ public class GameView {
 //                    Actions.fadeOut(0.5f),
 //                    Actions.run(() -> buff.remove())
 //                ));
-                batch.draw(buff,(float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE)+60);
+                batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
 
         }
 
@@ -602,7 +633,7 @@ public class GameView {
 
         // لود عکس
         TextureRegion buffTexture = new TextureRegion();
-        switch ( buff.getBuffSkillType()){
+        switch (buff.getBuffSkillType()) {
             case MiningSkill ->
                 buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getMiningTexture());
             case FarmingSkill ->
@@ -611,8 +642,7 @@ public class GameView {
                 buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getFishingTexture());
             case ForagingSkill ->
                 buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getForagingTexture());
-            default ->
-                buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getSlotTexture());
+            default -> buffTexture = new TextureRegion(GameAssetManager.getGameAssetManager().getSlotTexture());
         }
 //        try {
 //            buffTexture = GameAssetManager.getGameAssetManager().
@@ -627,7 +657,7 @@ public class GameView {
         // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
         buffImage.setSize(100, 100);
         buffImage.setPosition(
-            (Gdx.graphics.getWidth() - buffImage.getWidth()) / 2f ,
+            (Gdx.graphics.getWidth() - buffImage.getWidth()) / 2f,
             (Gdx.graphics.getHeight() - buffImage.getHeight()) / 2f + 50
         );
 

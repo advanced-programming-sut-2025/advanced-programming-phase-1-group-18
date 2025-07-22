@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class GameAssetManager {
@@ -25,13 +26,9 @@ public class GameAssetManager {
     Texture bgCraftingMenu = new Texture(Gdx.files.internal("craftingSpriteSheet/craftingMenu.png"));
     Texture bgCookingMenu = new Texture(Gdx.files.internal("cookingRecipes/cook menu.jpg"));
     Texture exitTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/exit.png"));
-    Texture greenhouseBroken = new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png"));
-    Texture grass = new Texture(Gdx.files.internal("game/tiles/grass.png"));
     Texture defaultInventoryItem = new Texture(Gdx.files.internal("Tools/Gold_Pan.png"));
-    Texture greenhouse = new Texture(Gdx.files.internal("Greenhouse/greenhouse.png"));
     Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
     Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
-    Texture soilTexture = new Texture(Gdx.files.internal("game/tiles/soil.png"));
     Texture scythe = new Texture(Gdx.files.internal("inventory/tools/Scythe.png"));
     Texture axe = new Texture(Gdx.files.internal("inventory/tools/Axe.png"));
     Texture pickaxe = new Texture(Gdx.files.internal("inventory/tools/Pickaxe.png"));
@@ -48,8 +45,13 @@ public class GameAssetManager {
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
     TextureAtlas cookingAtlas = new TextureAtlas(Gdx.files.internal("cookingRecipes/cooking.atlas"));
     TextureAtlas skillAtlas = new TextureAtlas(Gdx.files.internal("SkillsIcon/SkillIcons.atlas"));
-
     TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
+
+    TextureRegion grass = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png")));
+    TextureRegion greenhouseBroken = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png")));
+    TextureRegion greenhouse = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse.png")));
+    TextureRegion soilTexture = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/soil.png")));
+
 
     public static Texture defaultAvatar = new Texture(Gdx.files.internal("avatar.png"));
 
@@ -288,19 +290,19 @@ public class GameAssetManager {
         GameAssetManager.defaultAvatar = defaultAvatar;
     }
 
-    public Texture getGreenhouseBroken() {
+    public TextureRegion getGreenhouseBroken() {
         return greenhouseBroken;
     }
 
-    public void setGreenhouseBroken(Texture greenhouseBroken) {
+    public void setGreenhouseBroken(TextureRegion greenhouseBroken) {
         this.greenhouseBroken = greenhouseBroken;
     }
 
-    public Texture getGrass() {
+    public TextureRegion getGrass() {
         return grass;
     }
 
-    public void setGrass(Texture grass) {
+    public void setGrass(TextureRegion grass) {
         this.grass = grass;
     }
 
@@ -312,11 +314,11 @@ public class GameAssetManager {
         this.defaultInventoryItem = defaultInventoryItem;
     }
 
-    public Texture getGreenhouse() {
+    public TextureRegion getGreenhouse() {
         return greenhouse;
     }
 
-    public void setGreenhouse(Texture greenhouse) {
+    public void setGreenhouse(TextureRegion greenhouse) {
         this.greenhouse = greenhouse;
     }
 
@@ -336,11 +338,11 @@ public class GameAssetManager {
         this.slotTexture = slotTexture;
     }
 
-    public Texture getSoilTexture() {
+    public TextureRegion getSoilTexture() {
         return soilTexture;
     }
 
-    public void setSoilTexture(Texture soilTexture) {
+    public void setSoilTexture(TextureRegion soilTexture) {
         this.soilTexture = soilTexture;
     }
 

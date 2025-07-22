@@ -35,10 +35,10 @@ public class Game {
 
     protected static int BlackSmithTopLeftx = 75;
     protected static int BlackSmithTopLefty = 230;
-    protected static int BlackSmithWidth = 100;
-    protected static int BlackSmithHeight = 100;
-    protected static int BlackSmithEnterancex = 125;
-    protected static int BlackSmithEnterancey = 230;
+    protected static int BlackSmithWidth = 5;
+    protected static int BlackSmithHeight = 5;
+    protected static int BlackSmithEnterancex = 78;
+    protected static int BlackSmithEnterancey = 232;
 
     protected static int JojoMartTopLeftx = 200;
     protected static int JojoMartTopLefty = 230;
