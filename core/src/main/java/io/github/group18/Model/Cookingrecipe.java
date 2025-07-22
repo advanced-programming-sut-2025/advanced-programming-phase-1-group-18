@@ -64,6 +64,9 @@ public class Cookingrecipe {
             case "tortilla" -> {
                 cookedFood.setEnergy(50);
                 cookedFood.setSellPrice(50);
+                buff = new Buff();
+                buff.setBuffHours(5);
+                buff.setBuffSkillType(SkillEnum.FarmingSkill);
             }
             case "makiroll" -> {
                 cookedFood.setEnergy(100);

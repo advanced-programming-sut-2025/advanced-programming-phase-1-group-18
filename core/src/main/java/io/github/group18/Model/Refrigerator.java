@@ -1,48 +1,97 @@
 package io.github.group18.Model;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import io.github.group18.Model.Items.Item;
 
 public class Refrigerator
 {
-    protected HashMap<Item, Integer> Items = new HashMap<>();
-    public Map<Item, Integer> getItems() {
+    protected Map<Item, Pair<Integer, Integer>> Items = new HashMap<>();
+    public Map<Item, Pair<Integer, Integer>> getItems() {
         return Items;
     }
+    private Stack<Integer> freeIndexes = new Stack<>();
+    private int selectedSlot = -1;
+    protected int MaxQuantity = 9;
 
-    public boolean addItem(Item item, int quantity) {
-        if (quantity <= 0) return false;
-
-        int currentQuantity = Items.getOrDefault(item, 0);
-        int newQuantity = currentQuantity + quantity;
-
-        Items.put(item, newQuantity);
-        return true;
+    public Refrigerator(int maxQuantity) {
+        MaxQuantity = maxQuantity;
+        for (int i = MaxQuantity - 1; i >= 0; i--) {
+            freeIndexes.push(i);
+        }
     }
 
-    public boolean removeItem(Item item, int quantity) {
-        if (quantity <= 0) return false;
+//    public void setFreeIndexes(){
+//        for (int i = 9 - 1; i >= 0; i--) {
+//            freeIndexes.push(i);
+//        }
+//    }
 
-        int currentQuantity = Items.getOrDefault(item, 0);
-
-        if (currentQuantity < quantity) {
+//    public boolean addItem(Item item, int quantity) {
+//        if (quantity <= 0) return false;
+//
+//        int currentQuantity = Items.getOrDefault(item, 0);
+//        int newQuantity = currentQuantity + quantity;
+//
+//        Items.put(item, newQuantity);
+//        return true;
+//    }
+//
+//    public boolean removeItem(Item item, int quantity) {
+//        if (quantity <= 0) return false;
+//
+//        int currentQuantity = Items.getOrDefault(item, 0);
+//
+//        if (currentQuantity < quantity) {
+//            return false;
+//        }
+//
+//        int newQuantity = currentQuantity - quantity;
+//
+//        if (newQuantity == 0) {
+//            Items.remove(item);
+//        } else {
+//            Items.put(item, newQuantity);
+//        }
+//
+//        return true;
+//    }
+    public boolean addItem(Item itemId, int quantity) {
+        if (quantity <= 0 || freeIndexes.isEmpty()) {
             return false;
         }
-
-        int newQuantity = currentQuantity - quantity;
-
-        if (newQuantity == 0) {
-            Items.remove(item);
+        if (Items.containsKey(itemId)) {
+            Pair<Integer, Integer> existing = Items.get(itemId);
+            Items.put(itemId, new Pair<>(existing.first + quantity, existing.second));
+            return true;
         } else {
-            Items.put(item, newQuantity);
+            int slot = freeIndexes.pop();
+            Items.put(itemId, new Pair<>(quantity, slot));
+            return true;
+        }
+    }
+
+    public boolean removeItem(Item itemId, int quantity) {
+        if (!Items.containsKey(itemId) || quantity <= 0) return false;
+
+        Pair<Integer, Integer> pair = Items.get(itemId);
+        int currentQty = pair.first;
+
+        if (currentQty < quantity) return false;
+
+        int newQty = currentQty - quantity;
+        if (newQty == 0) {
+            freeIndexes.push(pair.second);
+            Items.remove(itemId);
+        } else {
+            Items.put(itemId, new Pair<>(newQty, pair.second));
         }
 
         return true;
     }
-
-    public int getItemQuantity(Item item) {
-        return Items.getOrDefault(item, 0);
+    public int getItemQuantity(Item itemId) {
+        return Items.getOrDefault(itemId, new Pair<>(0, -1)).first;
     }
 
     public boolean hasItem(Item item) {
@@ -54,7 +103,7 @@ public class Refrigerator
     }
 
     public int getTotalItemCount() {
-        return Items.values().stream().mapToInt(Integer::intValue).sum();
+        return Items.size();
     }
 
     public void clearInventory() {
@@ -64,5 +113,33 @@ public class Refrigerator
     public void adaptMap(HashMap<Integer ,Integer> LakeMap)
     {
 
+    }
+
+    public Stack<Integer> getFreeIndexes() {
+        return freeIndexes;
+    }
+
+    public void setFreeIndexes(Stack<Integer> freeIndexes) {
+        this.freeIndexes = freeIndexes;
+    }
+
+    public void setItems(Map<Item, Pair<Integer, Integer>> items) {
+        Items = items;
+    }
+
+    public int getSelectedSlot() {
+        return selectedSlot;
+    }
+
+    public void setSelectedSlot(int selectedSlot) {
+        this.selectedSlot = selectedSlot;
+    }
+
+    public int getMaxQuantity() {
+        return MaxQuantity;
+    }
+
+    public void setMaxQuantity(int maxQuantity) {
+        MaxQuantity = maxQuantity;
     }
 }

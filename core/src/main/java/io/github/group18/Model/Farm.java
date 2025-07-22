@@ -510,7 +510,7 @@ public class Farm {
                 new Cord(topleftx + 24, toplefty + 4)
         ));
         MyCottage = new Cottage();
-        MyCottage.setMyRefrigerator(new Refrigerator());
+        MyCottage.setMyRefrigerator(new Refrigerator(9));
         MyCottage.adaptMap(cords, topleftx + 22, toplefty + 4, topleftx + 20, toplefty + 0, topleftx + 24, toplefty + 4);
         occupiedPositions.addAll(cords);
 
@@ -656,7 +656,7 @@ public class Farm {
 
         // Cottage (5×5) stays static
         MyCottage = new Cottage();
-        MyCottage.setMyRefrigerator(new Refrigerator());
+        MyCottage.setMyRefrigerator(new Refrigerator(9));
         ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
                 new Cord(topleftx + 5, toplefty + 15),
                 new Cord(topleftx + 5, toplefty + 16),
@@ -787,7 +787,7 @@ public class Farm {
 
         // Cottage (5×5) in its usual size but placed differently
         MyCottage = new Cottage();
-        MyCottage.setMyRefrigerator(new Refrigerator());
+        MyCottage.setMyRefrigerator(new Refrigerator(9));
         ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
                 new Cord(topleftx + 18, toplefty + 10),
                 new Cord(topleftx + 18, toplefty + 11),
@@ -918,7 +918,7 @@ public class Farm {
 
         // Cottage (5×5) moved to a unique location
         MyCottage = new Cottage();
-        MyCottage.setMyRefrigerator(new Refrigerator());
+        MyCottage.setMyRefrigerator(new Refrigerator(9));
         ArrayList<Cord> cottageCords = new ArrayList<>(List.of(
                 new Cord(topleftx + 20, toplefty + 12),
                 new Cord(topleftx + 20, toplefty + 13),

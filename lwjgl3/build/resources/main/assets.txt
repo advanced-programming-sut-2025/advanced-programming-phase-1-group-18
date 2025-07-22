@@ -660,6 +660,12 @@ Mineral/Tigerseye.png
 Mineral/Topaz.png
 NPC.jpg
 RegisterImage.jpg
+SkillsIcon/FarmingSkill.png
+SkillsIcon/FishingSkill.png
+SkillsIcon/ForagingSkill.png
+SkillsIcon/MiningSkill.png
+SkillsIcon/SkillIcons.atlas
+SkillsIcon/SkillIcons.png
 Skin/1hoursheet.PNG
 Skin/font-export.fnt
 Skin/font-subtitle-export.fnt
@@ -667,6 +673,12 @@ Skin/font-title-export.fnt
 Skin/pixthulhu-ui.atlas
 Skin/pixthulhu-ui.json
 Skin/pixthulhu-ui.png
+SkillsIcon/FarmingSkill.png
+SkillsIcon/FishingSkill.png
+SkillsIcon/ForagingSkill.png
+SkillsIcon/MiningSkill.png
+SkillsIcon/SkillIcons.atlas
+SkillsIcon/SkillIcons.png
 Stone.png
 Store.png
 Tools/36_Backpack.png
@@ -896,6 +908,11 @@ Watering_Can/Steel_Watering_Can.png
 Watering_Can/Watering_Can.png
 avatar.png
 bullet.png
+cookingRecipes/cook menu.jpg
+cookingRecipes/cooking.atlas
+cookingRecipes/cooking.png
+cookingRecipes/inventoIcon.png
+cookingRecipes/refrIcon.png
 craftingSpriteSheet/crafting.atlas
 craftingSpriteSheet/crafting.png
 craftingSpriteSheet/craftingMenu.png
