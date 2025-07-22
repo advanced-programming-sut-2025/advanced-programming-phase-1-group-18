@@ -835,9 +835,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             //TreeSeed+
             //AllCrop+
             //AllCrop+
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + item.getCorrectPrice() * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            if (item.getCorrectPrice() <= 0) {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + 100 * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            } else {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + item.getCorrectPrice() * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            }
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-
 
         }
 
@@ -3457,52 +3460,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "artisan not found");
     }
 
-//    public Result sell(String productName, String count) {
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        try {
-//            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
-//
-//            } else {
-//                return new Result(false, "Please stand near a Satl");
-//            }
-//        } catch (Exception e) {
-//            return new Result(false, "Don't stand near the borders");
-//        }
-//        int quantity = -1;
-//        if (count == null) {
-//            quantity = 1;
-//        } else {
-//            quantity = Integer.parseInt(count);
-//        }
-//        boolean found = false;
-//        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//            if (item.getCorrectName().equalsIgnoreCase(productName.replace(" ", ""))) {
-//                found = true;
-//                if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
-//                    return new Result(true, "Sold" + quantity + " of " + productName);
-//                } else {
-//                    return new Result(false, "Not enough items in your inventory");
-//                }
-//            }
-//        }
-//        if (!found) {
-//            return new Result(false, "You don't have that item");
-//        }
-//
-//        return null;
-//    }
+    public static Result sell(Item item, int count) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+        try {
+            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
+
+            } else {
+                return new Result(false, "Please stand near a Satl" + currentPlayer.getX() + " " + currentPlayer.getY());
+            }
+        } catch (Exception e) {
+            return new Result(false, "Don't stand near the borders");
+        }
+
+        int quantity = count;
+
+        boolean found = false;
+        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item)) {
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+            return new Result(true, "Sold" + quantity + " of " + item);
+        } else {
+            return new Result(false, "Not enough items in your inventory");
+        }
+    }
 
     public Result friendships() {
         if (isFainted()) {

@@ -84,8 +84,8 @@ public class Player extends User {
         Scythe scythe = new Scythe();
         this.inventory.addItem(scythe, 1);
 
-        TrashCan trashCan = new TrashCan("initial");
-        this.inventory.addItem(trashCan, 1);
+//        TrashCan trashCan = new TrashCan("initial");
+//        this.inventory.addItem(trashCan, 1);
     }
 
     public int getWood() {
