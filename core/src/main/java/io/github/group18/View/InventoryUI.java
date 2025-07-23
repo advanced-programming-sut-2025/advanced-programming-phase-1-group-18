@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryUI {
-    private Skin skin; // لود شده قبلا
+    private Skin skin;
     private Window inventoryWindow;
-    private Map<Object, TextureRegion> textures; // مانند کد خودت
+    private Map<Object, TextureRegion> textures;
     private int SLOT_SIZE = 64;
     private boolean active = true;
 
@@ -96,7 +96,7 @@ public class InventoryUI {
                 }
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(pointer == -1) { // یعنی فقط hover بوده
+                    if(pointer == -1) {
                         slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
                             new Texture(Gdx.files.internal("game/tiles/slot.png")))));
                     }
