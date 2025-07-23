@@ -2,7 +2,7 @@ package io.github.group18.Model;
 
 import java.util.ArrayList;
 
-public class BigBarn implements Name
+public class BigBarn implements Name,PictureModel
 {
 
     protected final int MaxCapacity = 8;
@@ -96,5 +96,10 @@ public class BigBarn implements Name
     @Override
     public String getCorrectName() {
         return "bigbarn";
+    }
+
+    @Override
+    public String getPath() {
+        return "Buildings/BigBarn.png";
     }
 }

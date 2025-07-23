@@ -153,6 +153,8 @@ public class Game {
     private float plantx, planty;
     private float waterTimer = 0f;
 
+    private String pendingPlacementName;
+
     public Game() {
 
     }
@@ -1136,6 +1138,16 @@ public class Game {
 
             camera.update();
         }
+    }
+
+
+    //new
+    public void setPendingPlacementName(String name) {
+        this.pendingPlacementName = name;
+    }
+
+    public String getPendingPlacementName() {
+        return pendingPlacementName;
     }
 
 }

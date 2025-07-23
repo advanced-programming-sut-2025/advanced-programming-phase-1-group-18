@@ -1,7 +1,7 @@
 package io.github.group18.Model;
 import java.util.ArrayList;
 
-public class Tavileh implements Name
+public class Tavileh implements Name,PictureModel
 {
     protected final int MaxCapacity = 4;
     protected boolean Status = false;
@@ -92,5 +92,10 @@ public class Tavileh implements Name
     @Override
     public String getCorrectName() {
         return "barn";
+    }
+
+    @Override
+    public String getPath() {
+        return "Buildings/Barn.png";
     }
 }

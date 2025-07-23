@@ -378,4 +378,8 @@ public class GameMenu implements Screen {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    public InputMultiplexer getInputMultiplexer()
+    {
+        return inputMultiplexer;
+    }
 }

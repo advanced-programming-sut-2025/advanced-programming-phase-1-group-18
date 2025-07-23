@@ -18,16 +18,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.group18.Controller.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.enums.TavilehAnimalEnums;
 
 public class GameMenuInputAdapter extends InputAdapter {
     private final Game game;
     private final GameController gameController;
     private final Set<Integer> keysHeld = new HashSet<>();
+    private String input;
+    private boolean buildingPaceMode = false;
 
     public GameMenuInputAdapter(Game game, GameController gameController) {
         this.game = game;
@@ -79,6 +83,11 @@ public class GameMenuInputAdapter extends InputAdapter {
             handleInevtnoryView();
         }
 
+        if (keycode == Input.Keys.Z) {
+            handleBuildingView();
+        }
+
+
 
         return true;
     }
@@ -100,7 +109,12 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
         if (button == Input.Buttons.LEFT) {
+            if(buildingPaceMode)
+            {
+                buildDamdari(screenX,screenY);
+            }
             Game.getCurrentPlayer().pickSelectedItem();
             gotoMarket(screenX, screenY);
             return true;
@@ -109,6 +123,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             performAction(screenX, screenY);
             return true;
         }
+
         return false;
     }
 
@@ -284,6 +299,20 @@ public class GameMenuInputAdapter extends InputAdapter {
         game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
     }
 
+    private void handleBuildingView()
+    {
+        Stage stage = gameController.getGameMenu().getCheatCodeStage();
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        PlaceEntityDialog dialog = new PlaceEntityDialog(stage, skin, name -> {
+            game.setPendingPlacementName(name);
+            input = game.getPendingPlacementName();
+            inputBuilding(input);
+            Gdx.input.setInputProcessor(gameController.getGameMenu().getInputMultiplexer());
+        });
+        dialog.show(stage);
+        Gdx.input.setInputProcessor(stage);
+    }
     private void nextTurn() {
         GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
     }
@@ -424,6 +453,156 @@ public class GameMenuInputAdapter extends InputAdapter {
             GameAssetManager.getGameAssetManager().getSkin(), this, this.gameController);
         cheatDialog.show(stage);
         cheatDialog.setColor(Color.WHITE);
+    }
+
+
+    //for building
+    private void inputBuilding(String buildingName) {
+        if(buildingName == null) {
+            return;
+        }
+        if(buildingName.equals("barn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 350 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 6000 )
+            {
+                return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("bigBarn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 450 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("deluxeBarn"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 550 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("Coop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 300 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 4000 )
+            {
+                return;
+            }
+            else
+            {
+                buildingPaceMode= true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("bigCoop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 400 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000 )
+            {
+                return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
+        if(buildingName.equalsIgnoreCase("deluxeCoop"))
+        {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 500 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 20000)
+            {
+                return;
+            }
+            else {
+                buildingPaceMode = true;
+            }
+        }
+    }
+    private void buildDamdari(int screenX,int screenY)
+    {
+        Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+
+        int tileX = (int)(worldCoords.x / game.TILE_SIZE);
+        int tileY = (int)(worldCoords.y / game.TILE_SIZE);
+
+            if(input.equalsIgnoreCase("barn"))
+            {
+                CarpentersShopController.build("barn",tileX,tileY);
+//                for (int dx = -3; dx <= 3; dx++) {
+//                    for (int dy = -2; dy <= 1; dy++) {
+//                        int x = tileX + dx;
+//                        int y = tileY + dy;
+//                        System.out.println("khar"+ x);
+//                        System.out.println("nigga"+ y);
+//                          Tavileh tavileh=  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh();
+//                          game.getMap().get(x).get(y).setInside(tavileh);
+//                    }
+//                }
+            }
+            if(input.equalsIgnoreCase("bigbarn"))
+            {
+                CarpentersShopController.build("bigbarn",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("deluxebarn"))
+            {
+                CarpentersShopController.build("deluxebarn",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("coop"))
+            {
+                CarpentersShopController.build("coop",tileX,tileY);
+
+            }
+            if(input.equalsIgnoreCase("bigcoop"))
+            {
+                CarpentersShopController.build("bigcoop",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("deluxecoop"))
+            {
+                CarpentersShopController.build("deluxecoop",tileX,tileY);
+            }
+            if(input.equalsIgnoreCase("cow"))
+            {
+                TavilehAnimal animal = new TavilehAnimal();
+                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()== null
+                    && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()== null
+                    && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()== null)
+                {
+
+                }
+                else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
+                    //set animal pack
+                    System.exit(0);
+                    animal.setType((TavilehAnimalEnums.Cow));
+                    animal.setName("mammad");
+                    animal.setPrice(1500);
+                    animal.setOutside(false);
+                    animal.setXofAnimal(-1);
+                    animal.setYofAnimal(-1);
+                    animal.setWhereDoILive("barn");
+                    ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                    animals.add(animal);
+                    ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                    tavilehAnimals.add(animal);
+                    int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
+                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                }
+            }
+            buildingPaceMode = false;
+
+
     }
 
 }
