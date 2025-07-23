@@ -23,7 +23,7 @@ public class CheatCodeDialog extends Dialog {
         this.gameController = gameController;
         this.gameMenuInputAdapter = gameMenuInputAdapter;
         // ایجاد TextField برای ورودی چیت
-        cheatInput = new TextField("", skin);
+        cheatInput = new TextField("cheat add item -n copperOre -c 50", skin);
         cheatInput.setMessageText("Enter your cheat code here...");
 
         // افزودن به دیالوگ

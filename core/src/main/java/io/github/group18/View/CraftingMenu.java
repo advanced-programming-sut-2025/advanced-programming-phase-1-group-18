@@ -17,10 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.group18.Model.App;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Player;
-import io.github.group18.Model.Result;
+import io.github.group18.Model.*;
+import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
@@ -276,6 +274,12 @@ public class CraftingMenu {
                 Result result = App.getGameMenuController().craftingCraft(toolName);
                 if(result.isSuccessful()){
                     resultText.append(result.getMessage());
+                    if (info.isPlaceable()){
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .setPlacingItem(true);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .setCraftingInHand(new CraftingItem(info.name()));
+                    }
                 }else{
                     resultText.append("Error: "+result.getMessage());
                 }

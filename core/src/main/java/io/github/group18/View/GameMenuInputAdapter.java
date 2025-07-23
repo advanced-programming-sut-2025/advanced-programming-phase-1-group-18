@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.github.group18.Model.*;
+import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.enums.TavilehAnimalEnums;
 
@@ -67,11 +68,11 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
 
-        if (keycode == Input.Keys.C) {
+        if (keycode == Input.Keys.V) {
             Game.getCurrentPlayer().pickSelectedItem();
         }
 
-        if (keycode == Input.Keys.V) {
+        if (keycode == Input.Keys.C) {
             handleCookingMenu();
         }
 
@@ -109,19 +110,25 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        if (button == Input.Buttons.LEFT) {
-            if(buildingPaceMode)
+        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()){
+            if (button == Input.Buttons.LEFT) {
+                System.out.println("place ");
+                placeCrafting(screenX, screenY);
+                return true;
+            }
+        }else{
+            if (button == Input.Buttons.LEFT) {if(buildingPaceMode)
             {
                 buildDamdari(screenX,screenY);
             }
-            Game.getCurrentPlayer().pickSelectedItem();
-            gotoMarket(screenX, screenY);
-            return true;
-        }
-        if (button == Input.Buttons.RIGHT) {
-            performAction(screenX, screenY);
-            return true;
+                Game.getCurrentPlayer().pickSelectedItem();
+                gotoMarket(screenX, screenY);
+                return true;
+            }
+            if (button == Input.Buttons.RIGHT) {
+                performAction(screenX, screenY);
+                return true;
+            }
         }
 
         return false;
@@ -336,6 +343,27 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         Item item = Game.getCurrentPlayer().getInventory().getItemBySlot(game.getCurrentPlayer().getInventory().getSelectedSlot());
         gameController.useItem(item, tileX, tileY, game);
+    }
+    private void placeCrafting(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+//        int dx = tileX - Math.round(playerPos.first);
+//        int dy = tileY - Math.round(playerPos.second);
+        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() == null){
+            Player currentPlayer =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+            CraftingItem item = Game.getCurrentPlayer().getCraftingInHand();
+            App.getCurrentGame().getMap().get(tileX).get(tileY).setInside(item);
+            App.getCurrentGame().getMap().get(tileX).get(tileY).setWalkable(false);
+            currentPlayer.setCraftingInHand(null);
+            currentPlayer.setPlacingItem(false);
+        }
+//        gameController.useItem(item, tileX, tileY, game);
     }
 
 
