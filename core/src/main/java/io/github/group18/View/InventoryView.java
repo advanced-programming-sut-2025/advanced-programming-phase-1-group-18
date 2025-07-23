@@ -42,6 +42,7 @@ public class InventoryView {
     private int hoveredTabIndex = -1;
     private Image hoveredSkillIcon = null;
 
+   // private String mammad;
 
     //for Music
     private Music[] musicTracks;
