@@ -1,7 +1,7 @@
 package io.github.group18.Model;
 import java.util.ArrayList;
 
-public class Cage implements Name
+public class Cage implements Name,PictureModel
 {
 
     // make it true when Cage
@@ -99,5 +99,10 @@ public class Cage implements Name
     @Override
     public String getCorrectName() {
         return "cage";
+    }
+
+    @Override
+    public String getPath() {
+        return "Buildings/Coop.png";
     }
 }

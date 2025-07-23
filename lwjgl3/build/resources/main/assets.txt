@@ -1,4 +1,10 @@
 Bucket.jpg
+Buildings/Barn.png
+Buildings/BigBarn.png
+Buildings/BigCoop.png
+Buildings/Coop.png
+Buildings/DeluxeBarn.png
+Buildings/DeluxeCoop.png
 Chest.png
 Clock.png
 Cottage.jpg
