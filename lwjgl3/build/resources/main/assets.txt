@@ -879,6 +879,7 @@ craftingSpriteSheet/crafting.png
 craftingSpriteSheet/craftingMenu.png
 craftingSpriteSheet/exit.png
 default.vert
+fish.png
 font/stardew-valley.ttf
 game/character/faint.jpeg
 game/character/player.png

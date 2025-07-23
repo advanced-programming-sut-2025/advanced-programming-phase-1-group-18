@@ -12,13 +12,12 @@ public enum LegendaryFishesEnums {
     private final int basePrice;
     private final Seasons season;
 
-    // سازنده برای مقداردهی به ویژگی‌ها
     LegendaryFishesEnums(int value, Seasons season) {
         this.basePrice = value;
         this.season = season;
     }
 
-    // متدهای getter برای دسترسی به ویژگی‌ها
+
     public int getValue() {
         return basePrice;
     }
