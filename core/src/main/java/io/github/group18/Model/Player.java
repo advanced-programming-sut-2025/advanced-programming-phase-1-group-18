@@ -45,8 +45,10 @@ public class Player extends User {
     private int state = STATE_IDLE;
     private float faintTimer;
     private float eatingTimer;
+    private boolean isPlacingItem = false;
 
     protected Tool inMyHandTool;
+    protected CraftingItem craftingInHand;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -407,6 +409,9 @@ public class Player extends User {
     public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
         if (state == STATE_FAINTING) return false;
         else if (state == EATING_STATE) return false;
+        else if (isPlacingItem) {
+            return false;
+        }
 
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
@@ -439,13 +444,26 @@ public class Player extends User {
         }
     }
 
+    public boolean isPlacingItem() {
+        return isPlacingItem;
+    }
+
+    public void setPlacingItem(boolean placingItem) {
+        isPlacingItem = placingItem;
+    }
+
+    public CraftingItem getCraftingInHand() {
+        return craftingInHand;
+    }
+
+    public void setCraftingInHand(CraftingItem craftingInHand) {
+        this.craftingInHand = craftingInHand;
+    }
+
     public void pickSelectedItem() {
         Item item = getInventory().getItemBySlot(getInventory().getSelectedSlot());
         if (item instanceof Tool tool) {
             inMyHandTool = tool;
-//
-
-
         }
     }
 }
