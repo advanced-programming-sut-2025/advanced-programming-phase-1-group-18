@@ -16,12 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import io.github.group18.Controller.GameController;
+import io.github.group18.Controller.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
 
@@ -84,109 +83,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         return true;
     }
 
-    private void Sell() {
-        InputProcessor originalInputProcessor = Gdx.input.getInputProcessor();
-        Stage stage = gameController.getGameMenu().getStage();
-        Gdx.input.setInputProcessor(stage);
-        showNumberInputDialog(stage, "Enter Count: ", new NumberInputListener() {
-            @Override
-            public void onNumberEntered(int number) {
-                Result result = GameMenuController.sell(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemBySlot(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getSelectedSlot()), number);
-                System.out.println("Sell: " + result.getMessage());
-                Gdx.input.setInputProcessor(originalInputProcessor);
-            }
-
-            @Override
-            public void onCancel() {
-                Gdx.input.setInputProcessor(originalInputProcessor);
-            }
-        });
-    }
-
-    public void showNumberInputDialog(Stage stage, String title, NumberInputListener listener) {
-        // Create window
-        Window dialog = new Window(title, GameAssetManager.getGameAssetManager().getSkin());
-        dialog.setModal(true);
-        dialog.setMovable(false);
-
-        // Create text field (numbers only)
-        final TextField inputField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
-        inputField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
-        inputField.setMessageText("Enter number...");
-
-        // Create buttons
-        TextButton okButton = new TextButton("OK", GameAssetManager.getGameAssetManager().getSkin());
-        TextButton cancelButton = new TextButton("Cancel", GameAssetManager.getGameAssetManager().getSkin());
-
-        // Add listeners
-        okButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!inputField.getText().isEmpty()) {
-                    try {
-                        int number = Integer.parseInt(inputField.getText());
-                        listener.onNumberEntered(number);
-                    } catch (NumberFormatException e) {
-                        listener.onNumberEntered(0);  // Default value if parsing fails
-                    }
-                }
-                dialog.remove();
-            }
-        });
-
-        cancelButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                listener.onCancel();
-                dialog.remove();
-            }
-        });
-
-        // Layout
-        Table contentTable = new Table(GameAssetManager.getGameAssetManager().getSkin());
-        contentTable.add(inputField).width(400).pad(10).row();
-
-        Table buttonTable = new Table(GameAssetManager.getGameAssetManager().getSkin());
-        buttonTable.add(okButton).padRight(10);
-        buttonTable.add(cancelButton);
-
-        contentTable.add(buttonTable);
-        dialog.add(contentTable);
-
-        // Size and position
-        dialog.pack();
-        dialog.setSize(600, 300);
-        dialog.setPosition(
-            Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2
-        );
-
-        stage.addActor(dialog);
-        inputField.setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                // Auto-focus the field
-                stage.setKeyboardFocus(textField);
-            }
-        });
-        stage.setKeyboardFocus(inputField);
-    }
-
-    private void handleCookingMenu() {
-        App.getGameController().getGameMenu().getCookingMenu().setActive(true);
-        App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
-        Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
-    }
-
-    private void handleCheatCodeDialog() {
-        Stage stage = gameController.getGameMenu().getCheatCodeStage();
-        Gdx.input.setInputProcessor(stage);
-        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-            GameAssetManager.getGameAssetManager().getSkin(), this, this.gameController);
-        cheatDialog.show(stage);
-        cheatDialog.setColor(Color.WHITE);
-    }
-
     @Override
     public boolean keyUp(int keycode) {
         keysHeld.remove(keycode);
@@ -206,7 +102,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             Game.getCurrentPlayer().pickSelectedItem();
-//            performAction(screenX, screenY);
+            gotoMarket(screenX, screenY);
             return true;
         }
         if (button == Input.Buttons.RIGHT) {
@@ -312,6 +208,61 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
     }
 
+    private void gotoMarket(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+        int dx = tileX - Math.round(playerPos.first);
+        int dy = tileY - Math.round(playerPos.second);
+
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+            return;
+        }
+
+        Kashi kashi = App.getCurrentGame().getMap().get(tileX).get(tileY);
+        if (kashi.getInside() instanceof adaptMapMarket) {
+            if (kashi.getInside() instanceof NPC) {
+                //goto NPC
+            } else {
+                GameView gameView = gameController.getGameMenu().getGameView();
+                if (kashi.getInside() instanceof BlackSmithMarket) {
+                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getBlackSmith().getStage());
+                }
+                if (kashi.getInside() instanceof CarpentersShopMarket) {
+                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getCarpentersShop().getStage());
+                }
+                if (kashi.getInside() instanceof FishShopMarket) {
+                    gameView.setFishShop(new StoreUI(new FishShopController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
+                }
+                if (kashi.getInside() instanceof JojoMartMarket) {
+                    gameView.setJojaMart(new StoreUI(new JojaMartController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getJojaMart().getStage());
+                }
+                if (kashi.getInside() instanceof MarniesRanchMarket) {
+                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getMarniesRanch().getStage());
+                }
+                if (kashi.getInside() instanceof PierresGeneralStoreMarket) {
+                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getPirresGeneralStore().getStage());
+                }
+                if (kashi.getInside() instanceof TheStardropSaloonMarket) {
+                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(),Gdx.input.getInputProcessor()));
+                    Gdx.input.setInputProcessor(gameView.getTheStarDropSalooon().getStage());
+                }
+                //goto store
+            }
+        }
+
+    }
 
     private void handleInevtnoryView() {
         gameController.getGameMenu().getInventoryView().toggle();
@@ -369,6 +320,110 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     public Set<Integer> getKeysHeld() {
         return keysHeld;
+    }
+
+
+    private void Sell() {
+        InputProcessor originalInputProcessor = Gdx.input.getInputProcessor();
+        Stage stage = gameController.getGameMenu().getStage();
+        Gdx.input.setInputProcessor(stage);
+        showNumberInputDialog(stage, "Enter Count: ", new NumberInputListener() {
+            @Override
+            public void onNumberEntered(int number) {
+                Result result = GameMenuController.sell(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemBySlot(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getSelectedSlot()), number);
+                System.out.println("Sell: " + result.getMessage());
+                Gdx.input.setInputProcessor(originalInputProcessor);
+            }
+
+            @Override
+            public void onCancel() {
+                Gdx.input.setInputProcessor(originalInputProcessor);
+            }
+        });
+    }
+
+    public void showNumberInputDialog(Stage stage, String title, NumberInputListener listener) {
+        // Create window
+        Window dialog = new Window(title, GameAssetManager.getGameAssetManager().getSkin());
+        dialog.setModal(true);
+        dialog.setMovable(false);
+
+        // Create text field (numbers only)
+        final TextField inputField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        inputField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
+        inputField.setMessageText("Enter number...");
+
+        // Create buttons
+        TextButton okButton = new TextButton("OK", GameAssetManager.getGameAssetManager().getSkin());
+        TextButton cancelButton = new TextButton("Cancel", GameAssetManager.getGameAssetManager().getSkin());
+
+        // Add listeners
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!inputField.getText().isEmpty()) {
+                    try {
+                        int number = Integer.parseInt(inputField.getText());
+                        listener.onNumberEntered(number);
+                    } catch (NumberFormatException e) {
+                        listener.onNumberEntered(0);  // Default value if parsing fails
+                    }
+                }
+                dialog.remove();
+            }
+        });
+
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                listener.onCancel();
+                dialog.remove();
+            }
+        });
+
+        // Layout
+        Table contentTable = new Table(GameAssetManager.getGameAssetManager().getSkin());
+        contentTable.add(inputField).width(400).pad(10).row();
+
+        Table buttonTable = new Table(GameAssetManager.getGameAssetManager().getSkin());
+        buttonTable.add(okButton).padRight(10);
+        buttonTable.add(cancelButton);
+
+        contentTable.add(buttonTable);
+        dialog.add(contentTable);
+
+        // Size and position
+        dialog.pack();
+        dialog.setSize(600, 300);
+        dialog.setPosition(
+            Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2
+        );
+
+        stage.addActor(dialog);
+        inputField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                // Auto-focus the field
+                stage.setKeyboardFocus(textField);
+            }
+        });
+        stage.setKeyboardFocus(inputField);
+    }
+
+    private void handleCookingMenu() {
+        App.getGameController().getGameMenu().getCookingMenu().setActive(true);
+        App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
+    }
+
+    private void handleCheatCodeDialog() {
+        Stage stage = gameController.getGameMenu().getCheatCodeStage();
+        Gdx.input.setInputProcessor(stage);
+        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
+            GameAssetManager.getGameAssetManager().getSkin(), this, this.gameController);
+        cheatDialog.show(stage);
+        cheatDialog.setColor(Color.WHITE);
     }
 
 }

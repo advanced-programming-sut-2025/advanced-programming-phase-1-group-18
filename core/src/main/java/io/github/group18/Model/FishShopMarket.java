@@ -28,7 +28,7 @@ public class FishShopMarket implements adaptMapMarket ,PictureModel{
             if (currentQuantity > quantity) {
                 Stock.put(item, currentQuantity - quantity);
             } else {
-                Stock.remove(item);
+                Stock.put(item, 0);
             }
         }
     }
@@ -41,10 +41,6 @@ public class FishShopMarket implements adaptMapMarket ,PictureModel{
 
         CraftingItem craftingItem = new CraftingItem("FishSmoker");
         Stock.put(craftingItem, 1);
-
-
-        //TODO trout soup
-
 
         FishingPole f1 = new FishingPole();
         f1.setJens("Bamboo");

@@ -1,8 +1,9 @@
 package io.github.group18.Model.Items;
 
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 
-public class Food extends Item implements Name ,Price{
+public class Food extends Item implements Name, Price, PictureModel {
     private String name;
     private int price;
 
@@ -25,11 +26,16 @@ public class Food extends Item implements Name ,Price{
 
     @Override
     public String getCorrectName() {
-        return this.name.toLowerCase().replace(" ","");
+        return this.name.toLowerCase().replace(" ", "");
     }
 
     @Override
     public int getCorrectPrice() {
         return this.price;
+    }
+
+    @Override
+    public String getPath() {
+        return getCorrectName().replace(" ", "") + ".jpg";
     }
 }

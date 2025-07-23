@@ -26,7 +26,7 @@ public class BlackSmithMarket implements adaptMapMarket , PictureModel{
             if (currentQuantity > quantity) {
                 Stock.put(mineral, currentQuantity - quantity);
             } else {
-                Stock.remove(mineral);
+                Stock.put(mineral, 0);
             }
         }
     }

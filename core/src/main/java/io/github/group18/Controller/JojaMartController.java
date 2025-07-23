@@ -7,6 +7,7 @@ import io.github.group18.Model.Items.Food;
 import io.github.group18.Model.Items.ForagingSeed;
 import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
+import io.github.group18.enums.AllCropsEnums;
 import io.github.group18.enums.ForagingSeedsEnums;
 import io.github.group18.enums.Menu;
 
@@ -57,7 +58,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
         //System.out.println(name.toLowerCase() + "bache haye karaj");
         switch (name.toLowerCase()) {
             // General Items
-            case "joja cola":
+            case "jojacola":
                 boolean validquantity = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("Joja Cola") && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
@@ -76,7 +77,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "ancient seed":
+            case "ancientseeds":
                 boolean validquantity1 = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
                     if (item instanceof ForagingSeed && ((ForagingSeed) item).getType() == ForagingSeedsEnums.AncientSeeds && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
@@ -95,7 +96,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "grass starter":
+            case "grassstarter":
                 boolean validquantity2 = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
                     if (item instanceof Craftingrecipe && ((Craftingrecipe) item).getName().equals("Grass Starter") && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
@@ -136,7 +137,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "wheat flour":
+            case "wheat":
                 boolean validquantity4 = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
                     if ((item instanceof AllCrop && ((AllCrop) item).getCorrectName().equals("wheat") && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity)) {
@@ -156,10 +157,10 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "rice":
+            case "unmilledrice":
                 boolean validquantity5 = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
-                    if (item instanceof AllCrop && ((AllCrop) item).getName().equals("unmilledrice") && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
+                    if (item instanceof AllCrop && ((AllCrop) item).getType().equals(AllCropsEnums.UnmilledRice) && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
                         validquantity5 = true;
                         if (currentPlayer.getGold() >= ((AllCrop) item).getCorrectPrice()) {
                             currentPlayer.getInventory().addItem((AllCrop)item, quantity);
@@ -178,7 +179,7 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                 break;
 
             // Spring Seeds
-            case "parsnip seeds":
+            case "parsnipseeds":
                 boolean validquantity6 = false;
                 for (Object item : App.getCurrentGame().getJojoMartMarket().getStock().keySet()) {
                     if (item instanceof ForagingSeed && ((ForagingSeed) item).getType() == ForagingSeedsEnums.ParsnipSeeds && App.getCurrentGame().getJojoMartMarket().getStock().get(item) >= quantity) {
@@ -198,73 +199,73 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "bean starter":
+            case "beanstarter":
                 return handleSeedPurchase(ForagingSeedsEnums.BeanStarter, quantity);
-            case "cauliflower seeds":
+            case "cauliflowerseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CauliflowerSeeds, quantity);
-            case "potato seeds":
+            case "potatoseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PotatoSeeds, quantity);
-            case "strawberry seeds":
+            case "strawberryseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.StrawberrySeeds, quantity);
-            case "tulip bulb":
+            case "tulipbulb":
                 return handleSeedPurchase(ForagingSeedsEnums.TulipBulb, quantity);
-            case "kale seeds":
+            case "kaleseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.KaleSeeds, quantity);
-            case "coffee beans":
+            case "coffeebean":
                 return handleSeedPurchase(ForagingSeedsEnums.CoffeeBean, quantity);
-            case "carrot seeds":
+            case "carrotseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CarrotSeeds, quantity);
-            case "rhubarb seeds":
+            case "rhubarbseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.RhubarbSeeds, quantity);
-            case "jazz seeds":
+            case "jazzseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.JazzSeeds, quantity);
-            case "tomato seeds":
+            case "tomatoseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.TomatoSeeds, quantity);
-            case "pepper seeds":
+            case "pepperseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PepperSeeds, quantity);
-            case "wheat seeds":
+            case "wheatseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.WheatSeeds, quantity);
-            case "summer squash seeds":
+            case "summersquashseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.SummerSquashSeeds, quantity);
-            case "radish seeds":
+            case "radishseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.RadishSeeds, quantity);
-            case "melon seeds":
+            case "melonseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.MelonSeeds, quantity);
-            case "hops starter":
+            case "hopsstarter":
                 return handleSeedPurchase(ForagingSeedsEnums.HopsStarter, quantity);
-            case "poppy seeds":
+            case "poppyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PoppySeeds, quantity);
-            case "spangle seeds":
+            case "spangleseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.SpangleSeeds, quantity);
-            case "starfruit seeds":
+            case "starfruitseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.StarfruitSeeds, quantity);
-            case "sunflower seeds":
+            case "sunflowerseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.SunflowerSeeds, quantity);
-            case "corn seeds":
+            case "cornseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CornSeeds, quantity);
-            case "eggplant seeds":
+            case "eggplantseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.EggplantSeeds, quantity);
-            case "pumpkin seeds":
+            case "pumpkinseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PumpkinSeeds, quantity);
-            case "broccoli seeds":
+            case "broccoliseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.BroccoliSeeds, quantity);
-            case "amaranth seeds":
+            case "amaranthseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.AmaranthSeeds, quantity);
-            case "grape starter":
+            case "grapestarter":
                 return handleSeedPurchase(ForagingSeedsEnums.GrapeStarter, quantity);
-            case "beet seeds":
+            case "beetseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.BeetSeeds, quantity);
-            case "yam seeds":
+            case "yamseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.YamSeeds, quantity);
-            case "bok choy seeds":
+            case "bokchoyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.BokChoySeeds, quantity);
-            case "cranberry seeds":
+            case "cranberryseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CranberrySeeds, quantity);
-            case "fairy seeds":
+            case "fairyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.FairySeeds, quantity);
-            case "rare seed":
+            case "rareseed":
                 return handleSeedPurchase(ForagingSeedsEnums.RareSeed, quantity);
-            case "powdermelon seeds":
+            case "powdermelonseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PowdermelonSeeds, quantity);
             default:
                 return new Result(false, "Invalid productname");

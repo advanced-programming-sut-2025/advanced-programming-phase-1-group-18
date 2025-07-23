@@ -24,7 +24,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
         }
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         switch (name.toLowerCase()) {
-            case "fish smoker":
+            case "fishsmoker":
                 boolean validquantity = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
                     if (item.getCorrectName().equalsIgnoreCase("fishsmoker") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
@@ -48,7 +48,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                 // Handle trout soup logic
                 break;
 
-            case "bamboo pole":
+            case "bamboofishingpole":
                 boolean validquantity1 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
                     if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Bamboo") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
@@ -69,7 +69,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                 }
                 break;
 
-            case "training rod":
+            case "trainingfishingpole":
                 boolean validquantity2 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
                     if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Training") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {
@@ -90,7 +90,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                 }
                 break;
 
-            case "fiberglass rod":
+            case "fiberglassfishingpole":
                 boolean validquantity3 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
 //                    System.out.println(quantity + " " + item.getCorrectName());
@@ -112,7 +112,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
                 }
                 break;
 
-            case "iridium rod":
+            case "iridiumfishingpole":
                 boolean validquantity4 = false;
                 for (Item item : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
                     if (item instanceof FishingPole && ((FishingPole) item).getJens().equalsIgnoreCase("Iridium") && App.getCurrentGame().getFishShopMarket().getStock().get(item) >= quantity) {

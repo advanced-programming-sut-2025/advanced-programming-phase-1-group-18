@@ -48,4 +48,6 @@ public interface MarketController<T> {
         }
         return new Result(true, stringBuilder.toString());
     }
+
+    Result purchase(String name, String count);
 }

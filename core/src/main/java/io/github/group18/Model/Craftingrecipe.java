@@ -1,5 +1,5 @@
 package io.github.group18.Model;
-public class Craftingrecipe
+public class Craftingrecipe implements Name
 {
     protected String Name;
     protected int price;
@@ -20,4 +20,8 @@ public class Craftingrecipe
         this.Name = name;
     }
 
+    @Override
+    public String getCorrectName() {
+        return Name.replace(" ","");
+    }
 }

@@ -55,7 +55,7 @@ public class MarniesRanchMarket  implements adaptMapMarket,PictureModel{
             if (currentQuantity > quantity) {
                 AnimalStock.put(animal, currentQuantity - quantity);
             } else {
-                AnimalStock.remove(animal);
+                AnimalStock.put(animal,0);
             }
         }
     }

@@ -45,6 +45,14 @@ public class GameView {
     private boolean isFlashingRed = false;
     private boolean walking = false;
 
+    private StoreUI BlackSmith;
+    private StoreUI CarpentersShop;
+    private StoreUI FishShop;
+    private StoreUI JojaMart;
+    private StoreUI MarniesRanch;
+    private StoreUI PirresGeneralStore;
+    private StoreUI TheStarDropSalooon;
+
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
@@ -165,7 +173,11 @@ public class GameView {
         for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
             if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                try {
+                    textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                } catch (Exception e) {
+                    textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
+                }
             } else {
                 textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
             }
@@ -182,10 +194,35 @@ public class GameView {
         renderInventory();
         renderClock();
         energy.render(batch);
+        renderMarkets();
         renderKalagEffect(batch);
         renderBrightness();
         walking = false;
         batch.end();
+    }
+
+    private void renderMarkets() {
+        if (BlackSmith != null) {
+            BlackSmith.render();
+        }
+        if (CarpentersShop != null) {
+            CarpentersShop.render();
+        }
+        if (FishShop != null) {
+            FishShop.render();
+        }
+        if (JojaMart != null) {
+            JojaMart.render();
+        }
+        if (MarniesRanch != null) {
+            MarniesRanch.render();
+        }
+        if (PirresGeneralStore != null) {
+            PirresGeneralStore.render();
+        }
+        if (TheStarDropSalooon != null) {
+            TheStarDropSalooon.render();
+        }
     }
 
     private void renderInMyHandToolPlayer() {
@@ -697,5 +734,61 @@ public class GameView {
 
     public static TextureRegion getPlayerFrontImage() {
         return playerAnimations.get(0).getKeyFrame(0, false);
+    }
+
+    public StoreUI getBlackSmith() {
+        return BlackSmith;
+    }
+
+    public void setBlackSmith(StoreUI blackSmith) {
+        BlackSmith = blackSmith;
+    }
+
+    public StoreUI getCarpentersShop() {
+        return CarpentersShop;
+    }
+
+    public void setCarpentersShop(StoreUI carpentersShop) {
+        CarpentersShop = carpentersShop;
+    }
+
+    public StoreUI getFishShop() {
+        return FishShop;
+    }
+
+    public void setFishShop(StoreUI fishShop) {
+        FishShop = fishShop;
+    }
+
+    public StoreUI getJojaMart() {
+        return JojaMart;
+    }
+
+    public void setJojaMart(StoreUI jojaMart) {
+        JojaMart = jojaMart;
+    }
+
+    public StoreUI getMarniesRanch() {
+        return MarniesRanch;
+    }
+
+    public void setMarniesRanch(StoreUI marniesRanch) {
+        MarniesRanch = marniesRanch;
+    }
+
+    public StoreUI getPirresGeneralStore() {
+        return PirresGeneralStore;
+    }
+
+    public void setPirresGeneralStore(StoreUI pirresGeneralStore) {
+        PirresGeneralStore = pirresGeneralStore;
+    }
+
+    public StoreUI getTheStarDropSalooon() {
+        return TheStarDropSalooon;
+    }
+
+    public void setTheStarDropSalooon(StoreUI theStarDropSalooon) {
+        TheStarDropSalooon = theStarDropSalooon;
     }
 }

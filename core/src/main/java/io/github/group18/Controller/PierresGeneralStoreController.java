@@ -81,7 +81,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         return new Result(false, "Not enough money");
                     }
                 }
-            case "rice":
+            case "unmilledrice":
                 boolean validquantity = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("rice") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -101,7 +101,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "wheat flour":
+            case "wheat":
                 boolean validquantity1 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof AllCrop && ((AllCrop) item).getCorrectName().equalsIgnoreCase("wheatseeds") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -141,7 +141,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "wedding ring":
+            case "weddingring":
                 boolean validquantity3 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof MarketProducts && ((MarketProducts) item).getCorrectName().equals("weddingring") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -161,7 +161,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "dehydrator recipe":
+            case "dehydrator":
                 boolean validquantity40 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Craftingrecipe && ((Craftingrecipe) item).getName().equals("Dehydrator") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -183,7 +183,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "grass starter recipe":
+            case "grassstarter":
                 boolean validquantity4 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Craftingrecipe && ((Craftingrecipe) item).getName().equals("GrassStarter") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -225,7 +225,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "oil":
+            case "oilcorn":
                 boolean validquantity6 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof ArtisanGoods && ((ArtisanGoods) item).getCorrectName().equals("Oil_Corn") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -265,7 +265,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "deluxe retaining soil":
+            case "deluxeretainingsoil":
                 boolean validquantity8 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Deluxe Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -305,7 +305,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "apple sapling":
+            case "applesapling":
                 boolean validquantity10 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.AppleSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -325,7 +325,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "apricot sapling":
+            case "apricotsapling":
                 boolean validquantity11 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.ApricotSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -345,7 +345,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "cherry sapling":
+            case "cherrysapling":
                 boolean validquantity12 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.CherrySapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -365,7 +365,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "orange sapling":
+            case "orangesapling":
                 boolean validquantity13 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.OrangeSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -385,7 +385,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "peach sapling":
+            case "peachsapling":
                 boolean validquantity14 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.PeachSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -405,7 +405,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "pomegranate sapling":
+            case "pomegranatesapling":
                 boolean validquantity15 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.PomegranateSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -425,7 +425,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "basic retaining soil":
+            case "basicretainingsoil":
                 boolean validquantity16 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Basic Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -445,7 +445,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "quality retaining soil":
+            case "qualityretainingsoil":
                 boolean validquantity17 = false;
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Quality Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
@@ -465,65 +465,65 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "parsnip seeds":
+            case "parsnipseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.ParsnipSeeds, quantity);
-            case "bean starter":
+            case "beanstarter":
                 return handleSeedPurchase(ForagingSeedsEnums.BeanStarter, quantity);
-            case "cauliflower seeds":
+            case "cauliflowerseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CauliflowerSeeds, quantity);
-            case "potato seeds":
+            case "potatoseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PotatoSeeds, quantity);
-            case "tulip bulb":
+            case "tulipbulb":
                 return handleSeedPurchase(ForagingSeedsEnums.TulipBulb, quantity);
-            case "kale seeds":
+            case "kaleseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.KaleSeeds, quantity);
-            case "jazz seeds":
+            case "jazzseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.JazzSeeds, quantity);
-            case "garlic seeds":
+            case "garlicseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.GarlicSeeds, quantity);
-            case "rice shoot":
+            case "riceshoot":
                 return handleSeedPurchase(ForagingSeedsEnums.RiceShoot, quantity);
-            case "melon seeds":
+            case "melonseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.MelonSeeds, quantity);
-            case "tomato seeds":
+            case "tomatoseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.TomatoSeeds, quantity);
-            case "blueberry seeds":
+            case "blueberryseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.BlueberrySeeds, quantity);
-            case "pepper seeds":
+            case "pepperseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PepperSeeds, quantity);
-            case "wheat seeds":
+            case "wheatseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.WheatSeeds, quantity);
-            case "radish seeds":
+            case "radishseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.RadishSeeds, quantity);
-            case "poppy seeds":
+            case "poppyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PoppySeeds, quantity);
-            case "spangle seeds":
+            case "spangleseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.SpangleSeeds, quantity);
-            case "hops starter":
+            case "hopsstarter":
                 return handleSeedPurchase(ForagingSeedsEnums.HopsStarter, quantity);
-            case "corn seeds":
+            case "cornseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CornSeeds, quantity);
-            case "sunflower seeds":
+            case "sunflowerseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.SunflowerSeeds, quantity);
-            case "red cabbage seeds":
+            case "redcabbageseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.RedCabbageSeeds, quantity);
-            case "eggplant seeds":
+            case "eggplantseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.EggplantSeeds, quantity);
-            case "pumpkin seeds":
+            case "pumpkinseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.PumpkinSeeds, quantity);
-            case "bok choy seeds":
+            case "bokchoyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.BokChoySeeds, quantity);
-            case "yam seeds":
+            case "yamseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.YamSeeds, quantity);
-            case "cranberry seeds":
+            case "cranberryseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.CranberrySeeds, quantity);
-            case "fairy seeds":
+            case "fairyseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.FairySeeds, quantity);
-            case "amaranth seeds":
+            case "amaranthseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.AmaranthSeeds, quantity);
-            case "grape starter":
+            case "grapestarter":
                 return handleSeedPurchase(ForagingSeedsEnums.GrapeStarter, quantity);
-            case "artichoke seeds":
+            case "artichokeseeds":
                 return handleSeedPurchase(ForagingSeedsEnums.ArtichokeSeeds, quantity);
             default:
                 return new Result(false, "Invalid product name");
