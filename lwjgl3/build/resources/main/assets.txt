@@ -604,6 +604,7 @@ Foraging/Yellow_Juice.png
 Foraging/Yellow_Pickles.png
 Greenhouse/greenhouse-broken.png
 Greenhouse/greenhouse.png
+JojaCola.jpg
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
 Mineral/Aerinite.png

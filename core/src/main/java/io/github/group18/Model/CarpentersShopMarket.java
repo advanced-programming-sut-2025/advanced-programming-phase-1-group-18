@@ -80,7 +80,7 @@ public class CarpentersShopMarket implements adaptMapMarket ,PictureModel{
             if (currentQuantity > quantity) {
                 Stock.put(item, currentQuantity - quantity);
             } else {
-                Stock.remove(item);
+                Stock.put(item, 0);
             }
         }
     }

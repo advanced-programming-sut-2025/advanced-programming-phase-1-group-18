@@ -835,9 +835,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             //TreeSeed+
             //AllCrop+
             //AllCrop+
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + item.getCorrectPrice() * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            if (item.getCorrectPrice() <= 0) {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + 100 * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            } else {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + item.getCorrectPrice() * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            }
             App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
-
 
         }
 
@@ -1322,18 +1325,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         x, y);
 
                     if (result != null) {
-                        System.out.println("Way found!");
-                        for (int[] node : result.path) {
-                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
-                        }
 
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-                        System.out.printf("You need %d parts of energy to go there.\n", estimatedEnergy);
-                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
 
-                        Scanner sc = new Scanner(System.in);
+
                         while (true) {
-                            String input = sc.nextLine();
+                            String input = "yes";
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
@@ -1348,12 +1345,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     }
 
                                     int energyNeededSoFar = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
-                                    if (energyNeededSoFar > energyBefore) {
-                                        player.setEnergy(0);
-                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
-                                        player.setDaysAfterGash(0);
-                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
-                                    }
+//                                    if (energyNeededSoFar > energyBefore) {
+//                                        player.setEnergy(0);
+//                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
+//                                        player.setDaysAfterGash(0);
+//                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
+//                                    }
 
                                     player.setX(step[0]);
                                     player.setY(step[1]);
@@ -1361,8 +1358,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     tilesWalked++;
                                 }
 
-                                double finalEnergy = energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade);
-                                player.setEnergy(finalEnergy);
+//                                double finalEnergy = energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade);
+//                                player.setEnergy(finalEnergy);
 
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
@@ -1396,18 +1393,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         x, y);
 
                     if (result != null) {
-                        System.out.println("Way found!");
-                        for (int[] node : result.path) {
-                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
-                        }
+
 
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-                        System.out.printf("You need %d parts of energy to go there.\n", estimatedEnergy);
-                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
 
-                        Scanner sc = new Scanner(System.in);
                         while (true) {
-                            String input = sc.nextLine();
+                            String input = "yes";
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
@@ -1422,12 +1413,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     }
 
                                     int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
-                                    if (currentRequiredEnergy > energyBefore) {
-                                        player.setEnergy(0);
-                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
-                                        player.setDaysAfterGash(0);
-                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
-                                    }
+//                                    if (currentRequiredEnergy > energyBefore) {
+//                                        player.setEnergy(0);
+//                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
+//                                        player.setDaysAfterGash(0);
+//                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
+//                                    }
 
                                     player.setX(step[0]);
                                     player.setY(step[1]);
@@ -1436,7 +1427,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 }
 
                                 // مصرف انرژی نهایی
-                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
+//                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
 
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
@@ -1471,18 +1462,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         x, y);
 
                     if (result != null) {
-                        System.out.println("Way found!");
-                        for (int[] node : result.path) {
-                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
-                        }
+
 
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-                        System.out.printf("You need  %d parts of energy to go there.\n", estimatedEnergy);
-                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
 
-                        Scanner sc = new Scanner(System.in);
                         while (true) {
-                            String input = sc.nextLine();
+                            String input = "yes";
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
@@ -1497,12 +1482,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     }
 
                                     int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
-                                    if (currentRequiredEnergy > energyBefore) {
-                                        player.setEnergy(0);
-                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
-                                        player.setDaysAfterGash(0);
-                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
-                                    }
+//                                    if (currentRequiredEnergy > energyBefore) {
+//                                        player.setEnergy(0);
+//                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
+//                                        player.setDaysAfterGash(0);
+//                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
+//                                    }
 
                                     player.setX(step[0]);
                                     player.setY(step[1]);
@@ -1511,7 +1496,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 }
 
                                 // کم کردن نهایی انرژی بعد از طی کامل مسیر
-                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
+//                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
 
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
@@ -1525,62 +1510,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(false, "There is no valid path to your destination.");
                     }
                 }
-                //}
-            /*case 3:
-                if (x < 0 || y < 0 || (x < App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() && y < App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) || (x > App.getCurrentGame().getPlayer2TopLeftx() && y < App.getCurrentGame().getPlayer2TopLefty() + App.getCurrentGame().getPlayer2Height()) || (x < App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() && y > App.getCurrentGame().getPlayer3TopLefty())) {
-                    return new Result(false, "You destination is out of bounds");
-                } else {
-                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(listMap,
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX(),
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY(),
-                            x, y);
-
-                    if (result != null) {
-                        System.out.println("Way found!");
-                        for (int[] node : result.path) {
-                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
-                        }
-
-                        int requiredEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-                        System.out.printf("You need %d parts of energy to go there.\n", requiredEnergy);
-                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
-
-                        Scanner sc = new Scanner(System.in);
-                        while (true) {
-                            String input = sc.nextLine();
-                            if (input.equalsIgnoreCase("yes")) {
-                                int shomareh = App.getCurrentGame().getIndexPlayerinControl();
-                                Player player = App.getCurrentGame().getPlayers().get(shomareh);
-                                for (int[] step : result.path) {
-                                    if (player.getEnergy() <= 0) {
-                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
-                                    }
-                                    System.out.println(player.getEnergy());
-                                    player.setEnergy(player.getEnergy() - 1);
-                                    player.setX(step[0]);
-                                    player.setY(step[1]);
-                                    //set max energy for tomorrow
-                                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setMaxEnergy(150);
-                                }
-                                player.setEnergy(player.getEnergy() - requiredEnergy);
-                                player.setX(x);
-                                player.setY(y);
-                                return new Result(true, "You went to your destination successfully!");
-                            } else if (input.equalsIgnoreCase("no")) {
-                                return new Result(true, "Transportation canceled!");
-                            } else {
-                                return new Result(false, "Enter yes or no");
-                            }
-                        }
-                    } else {
-                        System.out.println("Way not found!");
-                        break;
-                    }
-                }
-                //}
-//               return new Result(true, "The walk section was done currectly!");
-*/
             case 3:
                 if (x < 0 || y < 0 ||
                     (x < App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() &&
@@ -1601,17 +1530,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
                     if (result != null) {
                         System.out.println("Way found!");
-                        for (int[] node : result.path) {
-                            System.out.println("  (" + node[0] + ", " + node[1] + ")");
-                        }
+
 
                         int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-                        System.out.printf("You need %d parts of energy to go there.\n", estimatedEnergy);
-                        System.out.println("Do you wanna go there or not? yes if you want and no if you don't want");
 
-                        Scanner sc = new Scanner(System.in);
                         while (true) {
-                            String input = sc.nextLine();
+                            String input = "yes";
                             if (input.equalsIgnoreCase("yes")) {
                                 int tilesWalked = 0;
                                 int turnsMade = 0;
@@ -1626,12 +1550,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     }
 
                                     int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
-                                    if (currentRequiredEnergy > energyBefore) {
-                                        player.setEnergy(0);
-                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
-                                        player.setDaysAfterGash(0);
-                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
-                                    }
+//                                    if (currentRequiredEnergy > energyBefore) {
+//                                        player.setEnergy(0);
+//                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
+//                                        player.setDaysAfterGash(0);
+//                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
+//                                    }
                                     player.setX(step[0]);
                                     player.setY(step[1]);
                                     lastDirection = direction;
@@ -1639,7 +1563,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 }
 
                                 // Energy consumption done after full traversal
-                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
+//                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
 
                                 return new Result(true, "You went to your destination successfully!");
                             } else if (input.equalsIgnoreCase("no")) {
@@ -3457,52 +3381,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "artisan not found");
     }
 
-//    public Result sell(String productName, String count) {
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        try {
-//            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
-//
-//            } else {
-//                return new Result(false, "Please stand near a Satl");
-//            }
-//        } catch (Exception e) {
-//            return new Result(false, "Don't stand near the borders");
-//        }
-//        int quantity = -1;
-//        if (count == null) {
-//            quantity = 1;
-//        } else {
-//            quantity = Integer.parseInt(count);
-//        }
-//        boolean found = false;
-//        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
-//            if (item.getCorrectName().equalsIgnoreCase(productName.replace(" ", ""))) {
-//                found = true;
-//                if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().get(item)) {
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
-//                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
-//                    return new Result(true, "Sold" + quantity + " of " + productName);
-//                } else {
-//                    return new Result(false, "Not enough items in your inventory");
-//                }
-//            }
-//        }
-//        if (!found) {
-//            return new Result(false, "You don't have that item");
-//        }
-//
-//        return null;
-//    }
+    public static Result sell(Item item, int count) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+        try {
+            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
+
+            } else {
+                return new Result(false, "Please stand near a Satl" + currentPlayer.getX() + " " + currentPlayer.getY());
+            }
+        } catch (Exception e) {
+            return new Result(false, "Don't stand near the borders");
+        }
+
+        int quantity = count;
+
+        boolean found = false;
+        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item)) {
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
+            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+            return new Result(true, "Sold" + quantity + " of " + item);
+        } else {
+            return new Result(false, "Not enough items in your inventory");
+        }
+    }
 
     public Result friendships() {
         if (isFainted()) {

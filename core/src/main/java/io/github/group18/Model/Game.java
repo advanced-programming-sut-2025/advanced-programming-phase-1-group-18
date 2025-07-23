@@ -35,52 +35,52 @@ public class Game {
 
     protected static int BlackSmithTopLeftx = 75;
     protected static int BlackSmithTopLefty = 230;
-    protected static int BlackSmithWidth = 100;
-    protected static int BlackSmithHeight = 100;
-    protected static int BlackSmithEnterancex = 125;
-    protected static int BlackSmithEnterancey = 230;
+    protected static int BlackSmithWidth = 5;
+    protected static int BlackSmithHeight = 5;
+    protected static int BlackSmithEnterancex = 78;
+    protected static int BlackSmithEnterancey = 232;
 
     protected static int JojoMartTopLeftx = 200;
     protected static int JojoMartTopLefty = 230;
-    protected static int JojoMartWidth = 100;
-    protected static int JojoMartHeight = 100;
-    protected static int JojoMartEnterancex = 250;
-    protected static int JojoMartEnterancey = 230;
+    protected static int JojoMartWidth = 5;
+    protected static int JojoMartHeight = 5;
+    protected static int JojoMartEnterancex = 202;
+    protected static int JojoMartEnterancey = 232;
 
     protected static int PierresGeneralStoreTopLeftx = 325;
     protected static int PierresGeneralStoreTopLefty = 230;
-    protected static int PierresGeneralStoreWidth = 100;
-    protected static int PierresGeneralStoreHeight = 100;
-    protected static int PierresGeneralStoreEnterancex = 375;
-    protected static int PierresGeneralStoreEnterancey = 230;
+    protected static int PierresGeneralStoreWidth = 5;
+    protected static int PierresGeneralStoreHeight = 5;
+    protected static int PierresGeneralStoreEnterancex = 327;
+    protected static int PierresGeneralStoreEnterancey = 232;
 
     protected static int CarpentersShopTopLeftx = 450;
     protected static int CarpentersShopTopLefty = 230;
-    protected static int CarpentersShopWidth = 100;
-    protected static int CarpentersShopHeight = 100;
-    protected static int CarpentersShopEnterancex = 500;
-    protected static int CarpentersShopEnterancey = 230;
+    protected static int CarpentersShopWidth = 5;
+    protected static int CarpentersShopHeight = 5;
+    protected static int CarpentersShopEnterancex = 452;
+    protected static int CarpentersShopEnterancey = 232;
 
     protected static int FishShopTopLeftx = 575;
     protected static int FishShopTopLefty = 230;
-    protected static int FishShopWidth = 100;
-    protected static int FishShopHeight = 100;
-    protected static int FishShopEnterancex = 625;
-    protected static int FishShopEnterancey = 230;
+    protected static int FishShopWidth = 5;
+    protected static int FishShopHeight = 5;
+    protected static int FishShopEnterancex = 577;
+    protected static int FishShopEnterancey = 232;
 
     protected static int MarniesRanchTopLeftx = 700;
     protected static int MarniesRanchTopLefty = 230;
-    protected static int MarniesRanchWidth = 100;
-    protected static int MarniesRanchHeight = 100;
-    protected static int MarniesRanchEnterancex = 750;
-    protected static int MarniesRanchEnterancey = 230;
+    protected static int MarniesRanchWidth = 5;
+    protected static int MarniesRanchHeight = 5;
+    protected static int MarniesRanchEnterancex = 702;
+    protected static int MarniesRanchEnterancey = 232;
 
     protected static int TheStardropSaloonTopLeftx = 825;
     protected static int TheStardropSaloonTopLefty = 230;
-    protected static int TheStardropSaloonWidth = 100;
-    protected static int TheStardropSaloonHeight = 100;
-    protected static int TheStardropSaloonEnterancex = 875;
-    protected static int TheStardropSaloonEnterancey = 230;
+    protected static int TheStardropSaloonWidth = 5;
+    protected static int TheStardropSaloonHeight = 5;
+    protected static int TheStardropSaloonEnterancex = 827;
+    protected static int TheStardropSaloonEnterancey = 232;
 
     // Sebastian
     protected static int NPCSEBASTIANTopLeftX = 480;

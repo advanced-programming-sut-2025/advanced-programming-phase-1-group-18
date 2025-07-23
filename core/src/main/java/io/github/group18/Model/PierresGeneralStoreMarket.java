@@ -47,7 +47,7 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
             if (currentQuantity > quantity) {
                 Stock.put(item, currentQuantity - quantity);
             } else {
-                Stock.remove(item);
+                Stock.put(item, 0);
             }
         }
     }
@@ -91,13 +91,13 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
         food2.setPrice(100);
         Stock.put(food2, Integer.MAX_VALUE);
 
-//        ArtisanGoods artisanGoods = new ArtisanGoods("Oil_Corn");
-//        artisanGoods.setPrice(200);
-//        Stock.put(artisanGoods, Integer.MAX_VALUE);
-//
-//        ArtisanGoods artisanGoods1 = new ArtisanGoods("Vinegar");
-//        artisanGoods1.setPrice(200);
-//        Stock.put(artisanGoods1, Integer.MAX_VALUE);
+        ArtisanGoods artisanGoods = new ArtisanGoods("Oil_Corn");
+        artisanGoods.setPrice(200);
+        Stock.put(artisanGoods, Integer.MAX_VALUE);
+
+        ArtisanGoods artisanGoods1 = new ArtisanGoods("Vinegar");
+        artisanGoods1.setPrice(200);
+        Stock.put(artisanGoods1, Integer.MAX_VALUE);
 
         Fertilizer fertilizer = new Fertilizer();
         fertilizer.setName("Deluxe Retaining Soil");

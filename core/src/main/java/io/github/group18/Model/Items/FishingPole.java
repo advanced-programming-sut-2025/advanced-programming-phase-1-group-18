@@ -220,7 +220,7 @@ public class FishingPole extends Tool implements Name, Price {
 
     @Override
     public String getCorrectName() {
-        return "fishingpole";
+        return Jens + "fishingpole";
     }
 
     @Override

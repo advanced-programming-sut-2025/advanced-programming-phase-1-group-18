@@ -356,4 +356,12 @@ public class GameMenu implements Screen {
     public void setShowBuff(boolean showBuff) {
         this.showBuff = showBuff;
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

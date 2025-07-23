@@ -50,7 +50,7 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "milk pail":
+            case "milkpail":
                 boolean validquantity1 = false;
                 for (Item item : App.getCurrentGame().getMarniesRanchMarket().getStock().keySet()) {
                     if (item instanceof MilkPail && App.getCurrentGame().getMarniesRanchMarket().getStock().get(item) >= quantity) {
@@ -70,7 +70,7 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "shears":
+            case "shear":
                 boolean validquantity2 = false;
                 for (Item item : App.getCurrentGame().getMarniesRanchMarket().getStock().keySet()) {
                     if (item instanceof Shear && App.getCurrentGame().getMarniesRanchMarket().getStock().get(item) >= quantity) {

@@ -84,8 +84,8 @@ public class Player extends User {
         Scythe scythe = new Scythe();
         this.inventory.addItem(scythe, 1);
 
-        TrashCan trashCan = new TrashCan("initial");
-        this.inventory.addItem(trashCan, 1);
+//        TrashCan trashCan = new TrashCan("initial");
+//        this.inventory.addItem(trashCan, 1);
     }
 
     public int getWood() {
@@ -418,7 +418,7 @@ public class Player extends User {
             y += dy;
             if (dx != 0 || dy != 0) {
                 gameView.setWalking(true);
-                Energy -= 25 * (dx * dx + dy * dy);
+                Energy -= 10 * (dx * dx + dy * dy);
                 Energy = Math.max(Energy, 0);
             }
             return true;

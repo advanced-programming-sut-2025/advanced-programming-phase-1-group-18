@@ -33,7 +33,7 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
         }
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         switch (name.toLowerCase()) {
-            case "copper ore":
+            case "copperore":
                 boolean validquantity = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
                     if (mineral.getType() == ForagingMineralsEnums.CopperOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
@@ -52,7 +52,7 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "iron ore":
+            case "ironore":
                 boolean validquantity1 = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
                     if (mineral.getType() == ForagingMineralsEnums.IronOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {
@@ -94,7 +94,7 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
-            case "gold ore":
+            case "goldore":
                 boolean validquantity3 = false;
                 for (Mineral mineral : App.getCurrentGame().getBlackSmithMarket().getStock().keySet()) {
                     if (mineral.getType() == ForagingMineralsEnums.GoldOre && App.getCurrentGame().getBlackSmithMarket().getStock().get(mineral) >= quantity) {

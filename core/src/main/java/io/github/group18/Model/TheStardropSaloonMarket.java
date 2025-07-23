@@ -6,7 +6,7 @@ import io.github.group18.enums.FoodCookingEnums;
 
 import java.util.HashMap;
 
-public class TheStardropSaloonMarket  implements adaptMapMarket{
+public class TheStardropSaloonMarket  implements adaptMapMarket,PictureModel{
     HashMap<Object, Integer> Stock = new HashMap<>();
 
     public HashMap<Object, Integer> getStock() {
@@ -27,7 +27,7 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
             if (currentQuantity > quantity) {
                 Stock.put(item, currentQuantity - quantity);
             } else {
-                Stock.remove(item);
+                Stock.put(item, 0);
             }
         }
     }
@@ -112,5 +112,10 @@ public class TheStardropSaloonMarket  implements adaptMapMarket{
         cookie.setPrice(300);
         Stock.put(cookie, 1);
 
+    }
+
+    @Override
+    public String getPath() {
+        return "Store.png";
     }
 }
