@@ -66,7 +66,7 @@ public class FishingMiniGame {
 
         switch (fishType) {
             case SMOOTH:
-                // حرکت سینوسی از بالا تا پایین
+
                 float sineValue = (float) Math.sin(fishTime * 2); // -1 تا 1
                 orangeBarY = minY + ((sineValue + 1) / 2f) * (maxY - minY);
                 break;
