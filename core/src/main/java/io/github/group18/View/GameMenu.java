@@ -1,6 +1,7 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,6 +24,7 @@ import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.enums.SkillEnum;
+import com.badlogic.gdx.InputMultiplexer;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -40,6 +42,8 @@ public class GameMenu implements Screen {
     private CookingMenu cookingMenu;
     private LightningEffect lightningEffect;
     private InventoryView inventoryView;
+    private InputMultiplexer inputMultiplexer;
+    private FishingMiniGame fishingMiniGame;
     private Stage stage;
     private Buff buff;
     private boolean showBuff = false;
@@ -50,6 +54,7 @@ public class GameMenu implements Screen {
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
         this.craftingMenu = new CraftingMenu();
+        this.fishingMiniGame = new FishingMiniGame();
         craftingMenu.setActive(false);
         this.cookingMenu = new CookingMenu();
         cookingMenu.setActive(false);
@@ -67,6 +72,12 @@ public class GameMenu implements Screen {
         stage.addActor(inventoryView.getWindow());
         stage.addActor(inventoryView.getTooltipLabel());
         stage.addActor(inventoryView.getSkillTooltipLabel());
+
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);               // UI first
+        inputMultiplexer.addProcessor(gameMenuInputAdapter); // then game input
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -92,6 +103,9 @@ public class GameMenu implements Screen {
         cookingMenu.render();
         stage.act(delta);
         stage.draw();
+
+        fishingMiniGame.update(delta);
+        fishingMiniGame.render();
     }
 
     private void handleNightSleepFade(float delta) {
