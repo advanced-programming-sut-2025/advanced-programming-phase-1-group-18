@@ -522,4 +522,9 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                 break;
         }
     }
+    @Override
+    public boolean isAnimalStore() {
+        return true;
+    }
+
 }

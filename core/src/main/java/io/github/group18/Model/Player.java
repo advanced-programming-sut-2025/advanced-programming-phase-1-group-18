@@ -416,7 +416,7 @@ public class Player extends User {
         if (!(tiles.get(newX).get(newY).getInside() instanceof Lake || tiles.get(newX).get(newY).getInside() instanceof Tavileh ||
             tiles.get(newX).get(newY).getInside() instanceof BigBarn || tiles.get(newX).get(newY).getInside() instanceof DeluxeBarn ||
             tiles.get(newX).get(newY).getInside() instanceof Cage || tiles.get(newX).get(newY).getInside() instanceof BigCoop || tiles.get(newX).get(newY).getInside() instanceof DeluxeCoop
-        || tiles.get(newX).get(newY).getInside() instanceof CarpentersShopMarket || tiles.get(newX).get(newY).getInside() instanceof MarniesRanchMarket ))
+        || tiles.get(newX).get(newY).getInside() instanceof CarpentersShopMarket || tiles.get(newX).get(newY).getInside() instanceof MarniesRanchMarket || tiles.get(newX).get(newY).getInside() instanceof PierresGeneralStoreMarket  || tiles.get(newX).get(newY).getInside() instanceof BlackSmithMarket || tiles.get(newX).get(newY).getInside() instanceof JojoMartMarket || tiles.get(newX).get(newY).getInside() instanceof TheStardropSaloonMarket ))
         {
             x += dx;
             y += dy;
