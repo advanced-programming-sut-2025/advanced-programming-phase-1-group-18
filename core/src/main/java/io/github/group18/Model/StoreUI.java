@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.MarketController;
+import io.github.group18.Controller.MarniesRanchController;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.Model.Items.Price;
+import io.github.group18.View.AnimalShopWindow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,9 +56,33 @@ public class StoreUI<T> {
 
         Label goldLabel = new Label("Gold: " + getPlayerGold(), skin);
 
+        TextButton animalShopButton = new TextButton("Animal Shop", skin);
+        animalShopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                AnimalShopWindow animalShopWindow = new AnimalShopWindow(skin, stage, (animalType, customName) -> {
+
+                    System.out.println("User selected: " + animalType + " with name: " + customName);
+
+                    Result result = MarniesRanchController.buyAnimal(animalType.toLowerCase(), customName);
+                    Dialog resultDialog = new Dialog(result.isSuccessful() ? "Success" : "Error", skin);
+                    resultDialog.text(result.getMessage());
+                    resultDialog.button("OK");
+                    resultDialog.show(stage);
+
+                    if (result.isSuccessful()) {
+                        refreshItemList();
+                    }
+                });
+
+                stage.addActor(animalShopWindow);
+            }
+        });
+
         Table headerTable = new Table(skin);
         headerTable.add(toggleButton).pad(20, 20, 20, 20);
-        headerTable.add(goldLabel).pad(20, 20, 20, 20);
+        headerTable.add(goldLabel).pad(20, 20, 20, 20).row();
+        headerTable.add(animalShopButton).pad(20, 20, 20, 20);
         storeWindow.add(headerTable).row();
 
         itemTable = new Table(skin);
@@ -144,7 +170,6 @@ public class StoreUI<T> {
                 }
                 row.add(label).width(80).pad(20,20,20,20);
             }
-
 
             if (quantity > 0) {
                 row.setColor(Color.WHITE);

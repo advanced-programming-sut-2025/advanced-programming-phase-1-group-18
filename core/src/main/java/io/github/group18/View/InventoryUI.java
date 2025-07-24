@@ -31,6 +31,7 @@ public class InventoryUI {
         this.skin = skin;
         createInventoryWindow();
     }
+
     private void loadInventoryItems() {
         for (Item item : App.getCurrentGame()
             .getCurrentPlayer().getInventory().getItems().keySet()) {

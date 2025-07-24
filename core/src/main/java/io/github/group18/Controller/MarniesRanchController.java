@@ -98,7 +98,7 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
         return null;
     }
 
-    public Result buyAnimal(String typeOfAnimal, String nameOfAnimal)
+    public static Result buyAnimal(String typeOfAnimal, String nameOfAnimal)
     {
         boolean uniqueName = IsAnimalNameUnique(nameOfAnimal);
         if(!uniqueName)

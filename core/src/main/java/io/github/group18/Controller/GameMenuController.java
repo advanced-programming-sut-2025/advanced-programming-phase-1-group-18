@@ -3033,9 +3033,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "You don't have that food");
     }
 
-    public Result buyAnimal(String animal, String name) {
-        return new Result(true, "");
-    }
 
     public Result pet(String name) {
         Animal animal = findAnimalByName(name);
