@@ -11,6 +11,11 @@ import io.github.group18.enums.TavilehAnimalEnums;
 import java.util.HashMap;
 
 public class MarniesRanchMarket  implements adaptMapMarket,PictureModel{
+   public MarniesRanchMarket()
+   {
+       fillStock();
+   }
+
     HashMap<Item, Integer> Stock = new HashMap<>();
     HashMap<Animal, Integer> AnimalStock = new HashMap<>();
 

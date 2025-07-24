@@ -413,7 +413,10 @@ public class Player extends User {
 
         if (newX < 1 || newX >= tiles.size() - 1 || newY < 1 || newY >= tiles.get(0).size() - 1) return false;
 
-        if (!(tiles.get(newX).get(newY).getInside() instanceof Lake)) {
+        if (!(tiles.get(newX).get(newY).getInside() instanceof Lake || tiles.get(newX).get(newY).getInside() instanceof Tavileh ||
+            tiles.get(newX).get(newY).getInside() instanceof BigBarn || tiles.get(newX).get(newY).getInside() instanceof DeluxeBarn ||
+            tiles.get(newX).get(newY).getInside() instanceof Cage || tiles.get(newX).get(newY).getInside() instanceof BigCoop || tiles.get(newX).get(newY).getInside() instanceof DeluxeCoop))
+        {
             x += dx;
             y += dy;
             if (dx != 0 || dy != 0) {
