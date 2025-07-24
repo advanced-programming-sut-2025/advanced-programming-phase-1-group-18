@@ -5,10 +5,7 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Model.User;
-import io.github.group18.View.LoginGDXView;
-import io.github.group18.View.MainMenu;
-import io.github.group18.View.RegisterGDXView;
-import io.github.group18.View.RegisterLoginGdxView;
+import io.github.group18.View.*;
 import io.github.group18.enums.Menu;
 
 public class RegisterGDXController
@@ -128,6 +125,11 @@ public class RegisterGDXController
                     RegisterMenuController.saveUsersToFile();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
                 }
+            }
+
+            if(view.getRandomPassButton().isChecked())
+            {
+                Main.getMain().setScreen(new RandomPassGDXView(new RandomPassGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
             }
 
         }
