@@ -30,6 +30,7 @@ public class RegisterGDXView implements Screen {
     private final TextButton verify;
     private final TextButton goBack;
     private final TextButton goToLogin;
+    private final TextButton randomPass;
     public Table table;
 
     private final RegisterGDXController controller;
@@ -58,6 +59,7 @@ public class RegisterGDXView implements Screen {
         this.gendererror = new Label("", skin);
         this.verify = new TextButton("Verify",skin);
         this.goBack = new TextButton("Go Back",skin);
+        this.randomPass = new TextButton("Random Password",skin);
         this.goToLogin = new TextButton("GoToLoginMenu",skin);
         this.table = new Table();
         controller.setView(this);
@@ -95,13 +97,11 @@ public class RegisterGDXView implements Screen {
         table.row().pad(1, 0, 10, 0);
         table.add(gender).width(600);
         table.row().pad(1, 0, 10, 0);
-        table.add(gendererror).width(600);
-        table.row().pad(1, 0, 10, 0);
         table.add(verify);
         table.row().pad(1, 0, 10, 0);
         table.add(goToLogin);
         table.row().pad(1, 0, 10, 0);
-        table.add(goBack);
+        table.add(randomPass);
 
         //for controlling by scroll
         ScrollPane scrollPane = new ScrollPane(table);
@@ -153,6 +153,9 @@ public class RegisterGDXView implements Screen {
     }
     public TextButton getGoToLoginButton() {
         return goToLogin;
+    }
+    public TextButton getRandomPassButton() {
+        return randomPass;
     }
     //Fields
     public TextField getUsernameField() {
