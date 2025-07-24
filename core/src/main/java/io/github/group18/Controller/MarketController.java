@@ -50,4 +50,8 @@ public interface MarketController<T> {
     }
 
     Result purchase(String name, String count);
+
+    default boolean isAnimalStore() {
+        return false;
+    }
 }

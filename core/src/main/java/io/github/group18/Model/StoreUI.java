@@ -56,33 +56,37 @@ public class StoreUI<T> {
 
         Label goldLabel = new Label("Gold: " + getPlayerGold(), skin);
 
-        TextButton animalShopButton = new TextButton("Animal Shop", skin);
-        animalShopButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                AnimalShopWindow animalShopWindow = new AnimalShopWindow(skin, stage, (animalType, customName) -> {
 
-                    System.out.println("User selected: " + animalType + " with name: " + customName);
-
-                    Result result = MarniesRanchController.buyAnimal(animalType.toLowerCase(), customName);
-                    Dialog resultDialog = new Dialog(result.isSuccessful() ? "Success" : "Error", skin);
-                    resultDialog.text(result.getMessage());
-                    resultDialog.button("OK");
-                    resultDialog.show(stage);
-
-                    if (result.isSuccessful()) {
-                        refreshItemList();
-                    }
-                });
-
-                stage.addActor(animalShopWindow);
-            }
-        });
 
         Table headerTable = new Table(skin);
         headerTable.add(toggleButton).pad(20, 20, 20, 20);
         headerTable.add(goldLabel).pad(20, 20, 20, 20).row();
-        headerTable.add(animalShopButton).pad(20, 20, 20, 20);
+
+        if (marketController.isAnimalStore()) {
+            TextButton animalShopButton = new TextButton("Animal Shop", skin);
+            animalShopButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    AnimalShopWindow animalShopWindow = new AnimalShopWindow(skin, stage, (animalType, customName) -> {
+                        System.out.println("User selected: " + animalType + " with name: " + customName);
+
+                        Result result = MarniesRanchController.buyAnimal(animalType.toLowerCase(), customName);
+                        Dialog resultDialog = new Dialog(result.isSuccessful() ? "Success" : "Error", skin);
+                        resultDialog.text(result.getMessage());
+                        resultDialog.button("OK");
+                        resultDialog.show(stage);
+
+                        if (result.isSuccessful()) {
+                            refreshItemList();
+                        }
+                    });
+
+                    stage.addActor(animalShopWindow);
+                }
+            });
+
+            headerTable.add(animalShopButton).pad(20, 20, 20, 20).row();
+        }
         storeWindow.add(headerTable).row();
 
         itemTable = new Table(skin);
