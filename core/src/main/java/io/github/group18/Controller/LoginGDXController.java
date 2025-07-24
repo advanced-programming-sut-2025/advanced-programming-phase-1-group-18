@@ -81,6 +81,11 @@ public class LoginGDXController {
             if (view.getForgotPasswordButton().isChecked()) {
                 Main.getMain().setScreen(new ForgotPasswordGDXView(new ForgotPasswordGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
+
+
+            if(view.getGoToRegisterMenuButton().isChecked()) {
+                Main.getMain().setScreen(new RegisterGDXView(new RegisterGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
+            }
         }
 
     }

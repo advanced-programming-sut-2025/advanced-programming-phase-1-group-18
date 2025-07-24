@@ -25,6 +25,7 @@ public class LoginGDXView implements Screen {
     private final Label stayLoggedinerror;
     private final TextButton Veirfy;
     private final TextButton goBack;
+    private final TextButton goToRegisterMenu;
     private final TextButton forgotPasswordButton;
 
 
@@ -49,6 +50,7 @@ public class LoginGDXView implements Screen {
         this.stayLoggedIn = new TextField("no", skin);
         stayLoggedIn.setMessageText("stay logged in:(Just 'Yes' or 'No')");
         this.stayLoggedinerror = new Label("", skin);
+        this.goToRegisterMenu = new TextButton("Go Back to Register Menu",skin);
         this.table = new Table();
         controller.setView(this);
     }
@@ -82,7 +84,8 @@ public class LoginGDXView implements Screen {
         table.row().pad(10, 0, 10, 0);
         table.add(forgotPasswordButton);
         table.row().pad(10, 0, 10, 0);
-
+        table.add(goToRegisterMenu);
+        table.row().pad(10, 0, 10, 0);
         table.add(goBack);
 
         //for controlling by scroll
@@ -139,6 +142,9 @@ public class LoginGDXView implements Screen {
     }
     public TextButton getForgotPasswordButton() {
         return forgotPasswordButton;
+    }
+    public TextButton getGoToRegisterMenuButton() {
+        return goToRegisterMenu;
     }
     //Fields
     public TextField getUsernameField() {

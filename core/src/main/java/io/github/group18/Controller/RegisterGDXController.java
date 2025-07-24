@@ -5,6 +5,8 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Model.User;
+import io.github.group18.View.LoginGDXView;
+import io.github.group18.View.MainMenu;
 import io.github.group18.View.RegisterGDXView;
 import io.github.group18.View.RegisterLoginGdxView;
 import io.github.group18.enums.Menu;
@@ -31,6 +33,10 @@ public class RegisterGDXController
             if(view.getGoBackButton().isChecked())
             {
                 Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(), GameAssetManager.getGameAssetManager().getSkin()));
+            }
+            if(view.getGoToLoginButton().isChecked())
+            {
+                Main.getMain().setScreen(new LoginGDXView(new LoginGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
             }
             if(view.getVerifyButton().isChecked())
             {
@@ -120,6 +126,7 @@ public class RegisterGDXController
                     App.setCurrentUser(newUser);
                     App.setCurrentMenu(Menu.MainMenu);
                     RegisterMenuController.saveUsersToFile();
+                    Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
                 }
             }
 
