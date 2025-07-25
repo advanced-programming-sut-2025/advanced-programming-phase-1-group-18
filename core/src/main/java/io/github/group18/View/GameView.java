@@ -167,7 +167,11 @@ public class GameView {
 
     private void loadInventoryItems() {
         for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof PictureModel pictureModel) {
+            if (item instanceof CraftingItem){
+                textures.put(item,new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                    findRegion(((CraftingItem) item).getCraftingItem().name())));
+            }
+            else if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
                 try {
                     textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
@@ -366,14 +370,36 @@ public class GameView {
                         TextureRegion texture = textures.get(inside);
                         float drawX = x * tileSize;
                         float drawY = y * tileSize;
-                        if (inside instanceof CraftingItem){
-                            texture = GameAssetManager.getGameAssetManager().getCraftingAtlas().
-                                findRegion(((CraftingItem) inside).getCraftingItem().name());
-                        }
                         if (texture == null) {
                             texture = GameAssetManager.getGameAssetManager().getGrass();
                         }
-                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        if (inside instanceof CraftingItem){
+                            texture = GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                                findRegion(((CraftingItem) inside).getCraftingItem().name());
+                            texture.setRegionWidth(tileSize);
+                            TextureRegion blueBar =new TextureRegion(GameAssetManager.getGameAssetManager().getBlueBarTexture());
+                            TextureRegion ready = new TextureRegion(GameAssetManager.getGameAssetManager().getReadyTexture());
+                            if (((CraftingItem) inside).isProcessing()){
+                                if (((CraftingItem) inside).getInsideArtisan() != null){
+                                    if(!((CraftingItem) inside).getInsideArtisan().
+                                        isProcessingDone(App.getCurrentGame().getCurrentDateTime())){
+                                        blueBar.setRegionWidth((int) (tileSize*(((CraftingItem) inside).getInsideArtisan()
+                                            .nesbatTime(App.getCurrentGame().getCurrentDateTime()))));
+                                        batch.draw(blueBar, drawX, drawY+texture.getRegionHeight()+10);
+                                    }else {
+                                        ((CraftingItem) inside).setReady(true);
+                                        ((CraftingItem) inside).setProcessing(false);
+                                    }
+                                }
+                            } else if (((CraftingItem) inside).isReady()){
+                                batch.draw(ready, drawX, drawY+texture.getRegionHeight()+10, tileSize, tileSize);
+                            }
+                            batch.draw(texture, drawX, drawY);
+//                            return;
+                        }else{
+                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        }
+
                     }
                 }
             }

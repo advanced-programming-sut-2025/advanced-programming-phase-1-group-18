@@ -9,7 +9,6 @@ import java.util.Stack;
 public class Inventory {
     protected int MaxQuantity;
     protected String Type;
-//    protected HashMap<Item, Integer> Items;
 
     private Map<Item, Pair<Integer, Integer>> Items;
     private Stack<Integer> freeIndexes;
@@ -30,8 +29,8 @@ public class Inventory {
     public boolean addItem(Item itemId, int quantity) {
         if (quantity <= 0 || freeIndexes.isEmpty()) return false;
 
-        if (Items.containsKey(itemId)) {
-            Pair<Integer, Integer> existing = Items.get(itemId);
+        if (Items.containsKey(itemId)||containsItem(itemId)) {
+            Pair<Integer, Integer> existing = existing(itemId);
             Items.put(itemId, new Pair<>(existing.first + quantity, existing.second));
             return true;
         } else {
@@ -39,6 +38,23 @@ public class Inventory {
             Items.put(itemId, new Pair<>(quantity, slot));
             return true;
         }
+    }
+    public boolean containsItem(Item itemId) {
+        for (Map.Entry<Item, Pair<Integer, Integer>> entry : Items.entrySet()) {
+            if (entry.getKey().getCorrectName().equalsIgnoreCase(itemId.getCorrectName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Pair<Integer,Integer> existing (Item itemId) {
+        for (Map.Entry<Item, Pair<Integer, Integer>> entry : Items.entrySet()) {
+            if (entry.getKey().getCorrectName().equalsIgnoreCase(itemId.getCorrectName())) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public boolean removeItem(Item itemId, int quantity) {

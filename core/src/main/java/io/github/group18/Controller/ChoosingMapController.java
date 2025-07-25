@@ -106,6 +106,7 @@ public class ChoosingMapController {
                         }
                     }catch (Exception e){
                         view.getNotif().setText(e.getMessage());
+                        e.printStackTrace();
                     }
                 }else {
                     view.getNotif().setText("Choose maps complete");

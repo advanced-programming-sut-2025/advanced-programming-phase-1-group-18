@@ -34,6 +34,10 @@ public class InventoryUI {
     private void loadInventoryItems() {
         for (Item item : App.getCurrentGame()
             .getCurrentPlayer().getInventory().getItems().keySet()) {
+            if (item instanceof CraftingItem){
+                textures.put(item,new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                    findRegion(((CraftingItem) item).getCraftingItem().name())));
+            }
             if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
                 textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
