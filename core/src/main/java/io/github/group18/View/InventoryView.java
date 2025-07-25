@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Model.App;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
 
 import javax.swing.event.ChangeEvent;
@@ -188,7 +189,7 @@ public class InventoryView {
 
         TextureRegion playerFrontFrame = GameView.getPlayerFrontImage();
         Image playerImage = new Image(new TextureRegionDrawable(playerFrontFrame));
-        Label nameLabel = new Label("Name: " + App.getCurrentUser().getUsername(), skin);
+        Label nameLabel = new Label("         Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
         nameLabel.setColor(Color.GOLD);
         nameLabel.setFontScale(0.75f);
 
