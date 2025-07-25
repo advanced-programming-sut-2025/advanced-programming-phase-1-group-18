@@ -38,6 +38,8 @@ public class GameAssetManager {
     Texture fishingTexture = new Texture(Gdx.files.internal("SkillsIcon/FishingSkill.png"));
     Texture foragingTexture = new Texture(Gdx.files.internal("SkillsIcon/ForagingSkill.png"));
     Texture miningTexture = new Texture(Gdx.files.internal("SkillsIcon/MiningSkill.png"));
+    Texture blueBarTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/blue.png"));
+    Texture readyTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/danger.png"));
 
 
 
@@ -354,6 +356,13 @@ public class GameAssetManager {
         return scythe;
     }
 
+    public Texture getBlueBarTexture() {
+        return blueBarTexture;
+    }
+
+    public Texture getReadyTexture() {
+        return readyTexture;
+    }
 
     public Texture getAxe() {
         return axe;

@@ -16,12 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Controller.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
@@ -334,6 +336,18 @@ public class GameMenuInputAdapter extends InputAdapter {
         int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
 
+        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() instanceof CraftingItem){
+            CraftingItem craft = (CraftingItem) App.getCurrentGame().getMap().get(tileX).get(tileY).getInside();
+            CraftingUI craftingUI = new CraftingUI(craft);
+            craftingUI.setCraftingItem(craft);
+            craftingUI.setActive(true);
+            craftingUI.setGameMenuInputAdapter(this);
+            System.out.println("clicked");
+            Gdx.input.setInputProcessor(craftingUI.getStage());
+            gameController.getGameMenu().setCraftingUI(craftingUI);
+//            gameController.getGameMenu().setCraftingUI(craftingUI);
+            return;
+        }
         int dx = tileX - Math.round(playerPos.first);
         int dy = tileY - Math.round(playerPos.second);
 
