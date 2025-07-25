@@ -23,6 +23,8 @@ import io.github.group18.Model.Buff;
 import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.Items.CraftingItem;
+import io.github.group18.enums.CraftingRecipesEnums;
 import io.github.group18.enums.SkillEnum;
 import com.badlogic.gdx.InputMultiplexer;
 
@@ -44,12 +46,14 @@ public class GameMenu implements Screen {
     private InventoryView inventoryView;
     private InputMultiplexer inputMultiplexer;
     private FishingMiniGame fishingMiniGame;
+    private CraftingUI craftingUI;
     private Stage stage;
     private Buff buff;
     private boolean showBuff = false;
 
 
     public GameMenu(GameController gameController, Game gameModel) {
+        this.stage = new Stage(new ScreenViewport());
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
         lightningEffect = new LightningEffect();
@@ -58,7 +62,8 @@ public class GameMenu implements Screen {
         craftingMenu.setActive(false);
         this.cookingMenu = new CookingMenu();
         cookingMenu.setActive(false);
-        this.stage = new Stage(new ScreenViewport());
+        this.craftingUI = new CraftingUI(new CraftingItem(CraftingRecipesEnums.Furnace.name()));
+        craftingUI.setActive(false);
         initializeGame(gameModel);
     }
 
@@ -101,6 +106,8 @@ public class GameMenu implements Screen {
         cheatCodeStage.draw();
         craftingMenu.render();
         cookingMenu.render();
+        craftingUI.render();
+
         stage.act(delta);
         stage.draw();
 
@@ -373,6 +380,14 @@ public class GameMenu implements Screen {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public CraftingUI getCraftingUI() {
+        return craftingUI;
+    }
+
+    public void setCraftingUI(CraftingUI craftingUI) {
+        this.craftingUI = craftingUI;
     }
 
     public void setStage(Stage stage) {

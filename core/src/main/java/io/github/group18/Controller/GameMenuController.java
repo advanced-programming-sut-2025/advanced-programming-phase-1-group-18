@@ -3279,84 +3279,77 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "You sell " + animal.getName() + " Successfully and " + priceOfSelling + " golds added to your golds!");
     }
 
-//    public Result fishing(String fishingPole) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Map<Item, Integer> inventory = player.getInventory().getItems();
-//        for (Item item : inventory.keySet()) {
-//            if (item instanceof FishingPole) {
-//                String type = ((FishingPole) item).getJens();
-//                if (type.equalsIgnoreCase(fishingPole)) {
-//                    return new Result(true, ((FishingPole) item).use());
-//                }
-//            }
-//        }
-//        return new Result(false, "Fishing pole not found");
-//    }
+    public Result fishing(String fishingPole) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
+        for (Item item : inventory.keySet()) {
+            if (item instanceof FishingPole) {
+                String type = ((FishingPole) item).getJens();
+                if (type.equalsIgnoreCase(fishingPole)) {
+                    return new Result(true, ((FishingPole) item).use());
+                }
+            }
+        }
+        return new Result(false, "Fishing pole not found");
+    }
+    public static boolean equalsIgnoreCase(Set<String> set1, Set<String> set2) {
+        if (set1.size() != set2.size()) {
+            return false;
+        }
 
-//    public Result artisanUse(String craftName, ArrayList<String> itemName) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        craftName = craftName.replace("_", "");
-//        Inventory inventory = player.getInventory();
-//        Map<Item, Integer> inventoryItems = inventory.getItems();
-//        boolean isEnoughIngredient = false;
-//        boolean foundInInventory = false;
-//        String artisanName = "";
-//        ArrayList<ArtisanGoodsEnums> artisanGoodsPossible = new ArrayList<>();
-//        for (Item item : inventoryItems.keySet()) {
-//            if (item instanceof CraftingItem) {
-//                if (((CraftingItem) item).getCraftingItem().name().equalsIgnoreCase(craftName)) {
-//                    for (ArtisanGoodsEnums goods : ArtisanGoodsEnums.values()) {
-//                        if (goods.getProducer().name().equals(craftName)) {
-//                            artisanGoodsPossible.add(goods);
-//                            foundInInventory = true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        if (!foundInInventory) {
-//            return new Result(false, "craft not found in inventory");
-//        }
-//        for (ArtisanGoodsEnums goods : artisanGoodsPossible) {
-//            Set<String> mapKeys = new HashSet<>(goods.getIngredients().keySet());
-//            Set<String> listItems = new HashSet<>(itemName);
-//            if (mapKeys.equals(listItems)) {
-//                isEnoughIngredient = true;
-//                artisanName = goods.name();
-//                break;
-//            }
+        Set<String> lowerSet1 = new HashSet<>();
+        for (String s : set1) {
+            lowerSet1.add(s.toLowerCase());
+        }
 
-    /// /            for(String ingredient: itemName){
-    /// /                for(String ingredient1 : goods.getIngredients().keySet()){
-    /// /                    if(goods.getIngredients().equals(ingredient)){
-    /// /                        itemCount++;
-    /// /                    }
-    /// /                    isEnoughIngredient = goods.getProducer().getIngredients().size() == itemCount || itemName.size() == itemCount;
-    /// /                    if(isEnoughIngredient){
-    /// /                        artisanName = goods.getProducer().name();
-    /// /                    }
-    /// /                }
-    /// /            }
-    /// /            if(isEnoughIngredient){
-    /// /                break;
-    /// /            }
-    /// /            itemCount=0;
-//        }
-//        if (isEnoughIngredient) {
-//            ArtisanGoods artisanGood = new ArtisanGoods(artisanName);
-//            artisanGood.startProcessing(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour(), App.getCurrentGame().getCurrentDateTime().getDay()));
-//            player.getArtisansInProduce().add(artisanGood);
-//            return new Result(true, "artisan: " + artisanName + " start to produce");
-//        }
-//        return new Result(false, "ingredients and crafting does not match");
-//    }
-    public Result artisanGet(String artisanName) {
+        Set<String> lowerSet2 = new HashSet<>();
+        for (String s : set2) {
+            lowerSet2.add(s.toLowerCase());
+        }
+
+        return lowerSet1.equals(lowerSet2);
+    }
+    public Result artisanUse(String craftName, ArrayList<String> itemName,CraftingItem craftingIte) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+        CraftingItem craftingItem = craftingIte;
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        craftName = craftName.replace("_", "");
+        Inventory inventory = player.getInventory();
+        Map<Item, Pair<Integer, Integer>> inventoryItems = inventory.getItems();
+        boolean isEnoughIngredient = false;
+        String artisanName = "";
+        ArrayList<ArtisanGoodsEnums> artisanGoodsPossible = new ArrayList<>();
+        for (ArtisanGoodsEnums goods : ArtisanGoodsEnums.values()) {
+            if (goods.getProducer().name().equalsIgnoreCase(craftName)) {
+                artisanGoodsPossible.add(goods);
+            }
+        }
+        for (ArtisanGoodsEnums goods : artisanGoodsPossible) {
+            Set<String> mapKeys = new HashSet<>(goods.getIngredients().keySet());
+            Set<String> listItems = new HashSet<>(itemName);
+            if (equalsIgnoreCase(mapKeys,listItems)) {
+                isEnoughIngredient = true;
+                artisanName = goods.name();
+                break;
+            }
+        }
+        if (isEnoughIngredient) {
+            ArtisanGoods artisanGood = new ArtisanGoods(artisanName);
+            artisanGood.startProcessing(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour(),
+                App.getCurrentGame().getCurrentDateTime().getDay()));
+            player.getArtisansInProduce().add(artisanGood);
+            craftingItem.setInsideArtisan(artisanGood);
+            craftingItem.setProcessing(true);
+            return new Result(true, "artisan: " + artisanName + " start to produce");
+        }
+        return new Result(false, "ingredients and crafting does not match");
+    }
+    public Result artisanGet(String artisanName,CraftingItem craftingItem) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3364,16 +3357,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Inventory inventory = player.getInventory();
         ArrayList<ArtisanGoods> artisanGoods = new ArrayList<>();
         artisanGoods = player.getArtisansInProduce();
-        for (ArtisanGoods goods : artisanGoods) {
-            if (goods.getArtisanGoods().name().equalsIgnoreCase(artisanName)) {
-                if (goods.isProcessingDone(App.getCurrentGame().getCurrentDateTime())) {
-                    inventory.addItem(goods, inventory.getItemQuantity(goods) + 1);
-                    player.getArtisansInProduce().remove(goods);
-                    return new Result(true, "artisan: " + artisanName + " added to artisans");
-                } else {
-                    return new Result(false, "artisan isn't ready.");
-                }
-            }
+        if (craftingItem.isReady()){
+            inventory.addItem(craftingItem.getInsideArtisan(), inventory.getItemQuantity(craftingItem.getInsideArtisan()) + 1);
+            player.getArtisansInProduce().remove(craftingItem.getInsideArtisan());
+            return new Result(true, "artisan: " + artisanName + " added to artisans");
         }
         return new Result(false, "artisan not found");
     }

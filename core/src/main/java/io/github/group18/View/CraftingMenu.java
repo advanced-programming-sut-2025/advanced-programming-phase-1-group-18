@@ -17,10 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.group18.Model.App;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Player;
-import io.github.group18.Model.Result;
+import io.github.group18.Model.*;
+import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
@@ -71,25 +69,25 @@ public class CraftingMenu {
                 setActive(false);
             }
         });
-        ImageButton.ImageButtonStyle Bee_House = createStyle("Bee_House");
+        ImageButton.ImageButtonStyle Bee_House = createStyle("BeeHouse");
         ImageButton.ImageButtonStyle Bomb = createStyle("Bomb");
-        ImageButton.ImageButtonStyle Charcoal_Kiln = createStyle("Charcoal_Kiln");
-        ImageButton.ImageButtonStyle Cheese_Press = createStyle("Cheese_Press");
-        ImageButton.ImageButtonStyle Cherry_Bomb = createStyle("Cherry_Bomb");
+        ImageButton.ImageButtonStyle Charcoal_Kiln = createStyle("CharcoalKiln");
+        ImageButton.ImageButtonStyle Cheese_Press = createStyle("CheesePress");
+        ImageButton.ImageButtonStyle Cherry_Bomb = createStyle("CherryBomb");
         ImageButton.ImageButtonStyle Dehydrator = createStyle("Dehydrator");
-        ImageButton.ImageButtonStyle Deluxe_Scarecrow = createStyle("Deluxe_Scarecrow");
-        ImageButton.ImageButtonStyle Fish_Smoker = createStyle("Fish_Smoker");
+        ImageButton.ImageButtonStyle Deluxe_Scarecrow = createStyle("DeluxeScarecrow");
+        ImageButton.ImageButtonStyle Fish_Smoker = createStyle("FishSmoker");
         ImageButton.ImageButtonStyle Furnace = createStyle("Furnace");
-        ImageButton.ImageButtonStyle Grass_Starter = createStyle("Grass_Starter");
-        ImageButton.ImageButtonStyle Iridium_Sprinkler = createStyle("Iridium_Sprinkler");
+        ImageButton.ImageButtonStyle Grass_Starter = createStyle("GrassStarter");
+        ImageButton.ImageButtonStyle Iridium_Sprinkler = createStyle("IridiumSprinkler");
         ImageButton.ImageButtonStyle Keg = createStyle("Keg");
         ImageButton.ImageButtonStyle Loom = createStyle("Loom");
-        ImageButton.ImageButtonStyle Mayonnaise_Machine = createStyle("Mayonnaise_Machine");
-        ImageButton.ImageButtonStyle Mega_Bomb = createStyle("Mega_Bomb");
-        ImageButton.ImageButtonStyle Mystic_Tree_Seed = createStyle("Mystic_Tree_Seed");
-        ImageButton.ImageButtonStyle Oil_Maker = createStyle("Oil_Maker");
-        ImageButton.ImageButtonStyle Preserves_Jar = createStyle("Preserves_Jar");
-        ImageButton.ImageButtonStyle Quality_Sprinkler = createStyle("Quality_Sprinkler");
+        ImageButton.ImageButtonStyle Mayonnaise_Machine = createStyle("MayonnaiseMachine");
+        ImageButton.ImageButtonStyle Mega_Bomb = createStyle("MegaBomb");
+        ImageButton.ImageButtonStyle Mystic_Tree_Seed = createStyle("MysticTreeSeed");
+        ImageButton.ImageButtonStyle Oil_Maker = createStyle("OilMaker");
+        ImageButton.ImageButtonStyle Preserves_Jar = createStyle("PreservesJar");
+        ImageButton.ImageButtonStyle Quality_Sprinkler = createStyle("QualitySprinkler");
         ImageButton.ImageButtonStyle Scarecrow = createStyle("Scarecrow");
         ImageButton.ImageButtonStyle Sprinkler = createStyle("Sprinkler");
 
@@ -276,6 +274,12 @@ public class CraftingMenu {
                 Result result = App.getGameMenuController().craftingCraft(toolName);
                 if(result.isSuccessful()){
                     resultText.append(result.getMessage());
+                    if (info.isPlaceable()){
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .setPlacingItem(true);
+                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+                            .setCraftingInHand(new CraftingItem(info.name()));
+                    }
                 }else{
                     resultText.append("Error: "+result.getMessage());
                 }

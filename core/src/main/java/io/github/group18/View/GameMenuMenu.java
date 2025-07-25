@@ -227,7 +227,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
             String menuName = LoginMenuCommands.MenuEnter.getMather(input).group(1);
             controller.menuEnter(menuName);
         } else if (GameMenuCommands.ArtisanGet.getMather(input) != null) {
-            System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
+//            System.out.println(controller.artisanGet(GameMenuCommands.ArtisanGet.getMather(input).group(1)));
 
         } else if (GameMenuCommands.WHOAMI.getMather(input) != null) {
             System.out.println(controller.whoAmI());

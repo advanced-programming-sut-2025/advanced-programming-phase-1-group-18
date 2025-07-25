@@ -12,6 +12,9 @@ public class CraftingItem extends Item implements Name,Price
     protected HashMap<String,Integer> Ingredients ;
     protected int SellPrice;
     protected int price;
+    protected boolean isProcessing;
+    protected ArtisanGoods insideArtisan;
+    protected boolean isReady;
 
     public CraftingItem(String name) {
         for(CraftingRecipesEnums craft : CraftingRecipesEnums.values()){
@@ -57,5 +60,29 @@ public class CraftingItem extends Item implements Name,Price
     @Override
     public int getCorrectPrice() {
         return SellPrice;
+    }
+
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+
+    public void setProcessing(boolean processing) {
+        isProcessing = processing;
+    }
+
+    public ArtisanGoods getInsideArtisan() {
+        return insideArtisan;
+    }
+
+    public void setInsideArtisan(ArtisanGoods insideArtisan) {
+        this.insideArtisan = insideArtisan;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
     }
 }

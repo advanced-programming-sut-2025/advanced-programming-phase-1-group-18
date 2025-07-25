@@ -10,7 +10,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.MiningSkill,
             1,
-            50
+            50,
+            false
     ),
 
     Bomb(
@@ -20,7 +21,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.MiningSkill,
             2,
-            50
+            50,
+        false
     ),
 
     MegaBomb(
@@ -30,7 +32,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.MiningSkill,
             3,
-            50
+            50,
+        false
     ),
     Sprinkler(
             new HashMap<>() {{
@@ -39,7 +42,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             1,
-            0
+            0,
+        false
     ),
     QualitySprinkler(
             new HashMap<>() {{
@@ -48,7 +52,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             2,
-            0
+            0,
+        false
     ),
 
     IridiumSprinkler(
@@ -58,7 +63,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             3,
-            0
+            0,
+        false
     ),
 
     CharcoalKiln(
@@ -68,7 +74,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.ForagingSkill,
             1,
-            0
+            0,
+        true
     ),
 
     Furnace(
@@ -78,7 +85,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        true
     ),
 
     Scarecrow(
@@ -89,7 +97,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        false
     ),
 
     DeluxeScarecrow(
@@ -101,7 +110,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             2,
-            0
+            0,
+        false
     ),
 
     BeeHouse(
@@ -112,7 +122,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             1,
-            0
+            0,
+        true
     ),
 
     CheesePress(
@@ -123,7 +134,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             2,
-            0
+            0,
+        true
     ),
 
     Keg(
@@ -134,7 +146,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             3,
-            0
+            0,
+        true
     ),
 
     Loom(
@@ -144,7 +157,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             3,
-            0
+            0,
+        true
     ),
 
     MayonnaiseMachine(
@@ -155,7 +169,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        true
     ),
 
     OilMaker(
@@ -166,7 +181,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             3,
-            0
+            0,
+        true
     ),
 
     PreservesJar(
@@ -177,7 +193,8 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.FarmingSkill,
             2,
-            0
+            0,
+        true
     ),
 
     Dehydrator(
@@ -188,7 +205,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        true
     ),
 
     GrassStarter(
@@ -198,7 +216,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        false
     ),
 
     FishSmoker(
@@ -209,7 +228,8 @@ public enum CraftingRecipesEnums {
             }},
             null,
             0,
-            0
+            0,
+        true
     ),
 
     MysticTreeSeed(
@@ -221,18 +241,21 @@ public enum CraftingRecipesEnums {
             }},
             SkillEnum.ForagingSkill,
             4,
-            100
+            100,
+        false
     );
     private final HashMap<String, Integer> ingredients;
     private final SkillEnum skill;
     private final int level;
     private final int price;
+    private final boolean isPlaceable;
 
-    CraftingRecipesEnums(HashMap<String, Integer> ingredients, SkillEnum skill, int level, int price) {
+    CraftingRecipesEnums(HashMap<String, Integer> ingredients, SkillEnum skill, int level, int price,boolean isPlaceable) {
         this.level = level;
         this.price = price;
         this.skill = skill;
         this.ingredients = ingredients;
+        this.isPlaceable = isPlaceable;
     }
 
     public static boolean containsCraft(String itemName) {
@@ -259,5 +282,9 @@ public enum CraftingRecipesEnums {
 
     public int getPrice() {
         return price;
+    }
+
+    public boolean isPlaceable() {
+        return isPlaceable;
     }
 }

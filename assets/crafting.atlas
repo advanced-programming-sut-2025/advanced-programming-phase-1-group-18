@@ -1,0 +1,50 @@
+crafting.png
+size: 48, 1728
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+BeeHouse
+  bounds: 0, 0, 48, 96
+Bomb
+  bounds: 0, 96, 48, 48
+CharcoalKiln
+  bounds: 0, 144, 48, 96
+CheesePress
+  bounds: 0, 240, 48, 96
+CherryBomb
+  bounds: 0, 336, 48, 48
+Dehydrator
+  bounds: 0, 384, 48, 96
+DeluxeScarecrow
+  bounds: 0, 480, 48, 96
+FishSmoker
+  bounds: 0, 576, 48, 96
+Furnace
+  bounds: 0, 672, 48, 96
+FurnaceOn
+  bounds: 0, 768, 48, 96
+GrassStarter
+  bounds: 0, 864, 48, 48
+IridiumSprinkler
+  bounds: 0, 912, 48, 48
+Keg
+  bounds: 0, 960, 48, 96
+Loom
+  bounds: 0, 1056, 48, 96
+MayonnaiseMachine
+  bounds: 0, 1152, 48, 96
+MegaBomb
+  bounds: 0, 1248, 48, 48
+MysticTreeSeed
+  bounds: 0, 1296, 48, 48
+OilMaker
+  bounds: 0, 1344, 48, 96
+PreservesJar
+  bounds: 0, 1440, 48, 96
+QualitySprinkler
+  bounds: 0, 1536, 48, 48
+Scarecrow
+  bounds: 0, 1584, 48, 96
+Sprinkler
+  bounds: 0, 1680, 48, 48

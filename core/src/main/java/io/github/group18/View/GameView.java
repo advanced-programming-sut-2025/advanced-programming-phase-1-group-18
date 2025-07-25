@@ -20,10 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
 import io.github.group18.Model.*;
-import io.github.group18.Model.Items.AllCrop;
-import io.github.group18.Model.Items.ForagingCrop;
-import io.github.group18.Model.Items.Item;
-import io.github.group18.Model.Items.Tool;
+import io.github.group18.Model.Items.*;
 
 public class GameView {
 
@@ -133,7 +130,6 @@ public class GameView {
         int debigniggers = 0;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-//                System.out.println("loadTiles: " + x + " " + y);
                 Kashi tile = tiles.get(x).get(y);
                 if (tile == null) continue;
 
@@ -171,7 +167,11 @@ public class GameView {
 
     private void loadInventoryItems() {
         for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof PictureModel pictureModel) {
+            if (item instanceof CraftingItem){
+                textures.put(item,new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                    findRegion(((CraftingItem) item).getCraftingItem().name())));
+            }
+            else if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
                 try {
                     textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
@@ -276,7 +276,17 @@ public class GameView {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
-                batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                if ( tiles.get(x).get(y).getInside() == null ) {
+                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()){
+                        batch.setColor(0, 1, 0, 0.5f);
+                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        batch.setColor(Color.WHITE);
+                    }else{
+                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                    }
+                }else {
+                    batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                }
             }
         }
     }
@@ -317,11 +327,16 @@ public class GameView {
                         float drawY = y * tileSize;
 //                        if (inside instanceof GreenHouse greenHouse) {
 //                            for (Player player : App.getCurrentGame().getPlayers()) {
-////                                System.out.println("yapperoni: " + player.getOwner().getUsername() +
-////                                    player.getMyFarm().getMyGreenHouse().isStatus() + " " +
-////                                    player.getMyFarm().getMyGreenHouse().hashCode());
+//                                System.out.println("yapperoni: " + player.getOwner().getUsername() +
+//                                    player.getMyFarm().getMyGreenHouse().isStatus() + " " +
+//                                    player.getMyFarm().getMyGreenHouse().hashCode());
 //                            }
-////                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+//                            System.out.println(greenHouse.isStatus() + " " + greenHouse.hashCode());
+//                        }
+//                        if (inside instanceof CraftingItem){
+//                            texture = GameAssetManager.getGameAssetManager().getCraftingAtlas().
+//                                findRegion(((CraftingItem) inside).getCraftingItem().name());
+//                            System.out.println("CraftingItem: " + ((CraftingItem) inside).getCraftingItem().name());
 //                        }
                         if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
 //                            System.out.println("Probably not coming here?");
@@ -333,7 +348,8 @@ public class GameView {
 //                        if (inside instanceof BlackSmithMarket) {
 //                            System.out.println("are we even here?");
 //                        }
-                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(), tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
+                        batch.draw(texture, drawX, drawY, tileSize * bottomLeft.getWidth(),
+                            tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                     } else {
                         //this is for normal blocks
                         Kashi tile = tiles.get(x).get(y);
@@ -352,13 +368,38 @@ public class GameView {
 
 
                         TextureRegion texture = textures.get(inside);
-
                         float drawX = x * tileSize;
                         float drawY = y * tileSize;
                         if (texture == null) {
                             texture = GameAssetManager.getGameAssetManager().getGrass();
                         }
-                        batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        if (inside instanceof CraftingItem){
+                            texture = GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                                findRegion(((CraftingItem) inside).getCraftingItem().name());
+                            texture.setRegionWidth(tileSize);
+                            TextureRegion blueBar =new TextureRegion(GameAssetManager.getGameAssetManager().getBlueBarTexture());
+                            TextureRegion ready = new TextureRegion(GameAssetManager.getGameAssetManager().getReadyTexture());
+                            if (((CraftingItem) inside).isProcessing()){
+                                if (((CraftingItem) inside).getInsideArtisan() != null){
+                                    if(!((CraftingItem) inside).getInsideArtisan().
+                                        isProcessingDone(App.getCurrentGame().getCurrentDateTime())){
+                                        blueBar.setRegionWidth((int) (tileSize*(((CraftingItem) inside).getInsideArtisan()
+                                            .nesbatTime(App.getCurrentGame().getCurrentDateTime()))));
+                                        batch.draw(blueBar, drawX, drawY+texture.getRegionHeight()+10);
+                                    }else {
+                                        ((CraftingItem) inside).setReady(true);
+                                        ((CraftingItem) inside).setProcessing(false);
+                                    }
+                                }
+                            } else if (((CraftingItem) inside).isReady()){
+                                batch.draw(ready, drawX, drawY+texture.getRegionHeight()+10, tileSize, tileSize);
+                            }
+                            batch.draw(texture, drawX, drawY);
+//                            return;
+                        }else{
+                            batch.draw(texture, drawX, drawY, tileSize, tileSize);
+                        }
+
                     }
                 }
             }

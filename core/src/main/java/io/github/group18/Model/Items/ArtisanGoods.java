@@ -52,6 +52,13 @@ public class ArtisanGoods extends Item implements Name, Price {
         return (currentTotal - startTotal) >= required;
     }
 
+    public float nesbatTime(DateTime currentTime) {
+        int startTotal = startTime.getDay() * 24 + startTime.getHour();
+        int currentTotal = currentTime.getDay() * 24 + currentTime.getHour();
+        int required = timeToProduce.getDay() * 24 + timeToProduce.getHour();
+        return (currentTotal - startTotal) / (float) required;
+    }
+
     public ArtisanGoodsEnums getArtisanGoods() {
         return artisanGoods;
     }
@@ -97,5 +104,33 @@ public class ArtisanGoods extends Item implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return price;
+    }
+
+    public void setArtisanGoods(ArtisanGoodsEnums artisanGoods) {
+        this.artisanGoods = artisanGoods;
+    }
+
+    public void setProducer(CraftingRecipesEnums producer) {
+        this.producer = producer;
+    }
+
+    public void setEnergyUsage(int energyUsage) {
+        this.energyUsage = energyUsage;
+    }
+
+    public void setTimeToProduce(DateTime timeToProduce) {
+        this.timeToProduce = timeToProduce;
+    }
+
+    public void setIngredients(HashMap<Item, Integer> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }
