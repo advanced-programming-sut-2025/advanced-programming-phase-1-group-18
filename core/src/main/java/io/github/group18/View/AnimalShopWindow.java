@@ -23,6 +23,7 @@ public class AnimalShopWindow extends Window {
     public AnimalShopWindow(Skin skin, Stage stage, AnimalSelectionHandler handler) {
         super("Choose Your Animal", skin);
 
+        //salam
         this.setModal(true);
         this.setMovable(true);
         this.setResizable(false);
