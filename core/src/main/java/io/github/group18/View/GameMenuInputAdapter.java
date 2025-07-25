@@ -57,6 +57,24 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
 
+        if (keycode == Input.Keys.F) {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getCurrentPlayer();
+            ArrayList<Player> friends = game.getFriendsOf(currentPlayer); // فرض بر این که این متد وجود داره
+
+            FriendsWindow friendsWindow = new FriendsWindow(
+                GameAssetManager.getGameAssetManager().getSkin(),
+                currentPlayer,
+                friends
+            );
+
+            gameController.getGameMenu().getStage().addActor(friendsWindow);
+            return true;
+        }
+
+
+
+
         if (keycode == Input.Keys.I) {
             handleInventoryVisibility();
         }

@@ -1150,4 +1150,16 @@ public class Game {
         return pendingPlacementName;
     }
 
+    public static ArrayList<Player> getFriendsOf(Player player) {
+        ArrayList<Player> friends = new ArrayList<>();
+        for (Friendship f : App.getCurrentGame().getFriendships()) {
+            if (f.getPlayer1() == player) {
+                friends.add(f.getPlayer2());
+            } else if (f.getPlayer2() == player) {
+                friends.add(f.getPlayer1());
+            }
+        }
+        return friends;
+    }
+
 }

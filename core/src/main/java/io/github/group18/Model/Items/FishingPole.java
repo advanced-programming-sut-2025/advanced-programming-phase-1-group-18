@@ -10,7 +10,7 @@ import io.github.group18.enums.SkillEnum;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FishingPole extends Tool implements Name, Price {
+public class FishingPole extends Tool implements Name, Price,PictureModel {
     private static final int MAX_LEVEL = 5;
     protected String Jens;
     protected int EnergyUsage;
@@ -226,5 +226,16 @@ public class FishingPole extends Tool implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return getPrice();
+    }
+
+    @Override
+    public String getPath() {
+        return switch (getJens().toLowerCase()) {
+            case "training" -> "poles/Training_Rod.png";
+            case "bamboo" -> "poles/Bamboo_Pole.png";
+            case "fiberglass" -> "poles/Fiberglass_Rod.png";
+            case "iridium" -> "poles/Iridium_Rod.png";
+            default -> "poles/default_pole.png";
+        };
     }
 }

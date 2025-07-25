@@ -3740,45 +3740,45 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //    }
 
-//    public Result askMarriage(String userName, String ringName) {
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
-//
-//        if (destinationPlayer == null) {
-//            return new Result(false, "Player not found");
-//        }
-//        int dx = (int) Math.abs(currentPlayer.getX() - destinationPlayer.getX());
-//        int dy = (int) Math.abs(currentPlayer.getY() - destinationPlayer.getY());
-//
-//        if (!(dx <= 1 && dy <= 1)) {
-//            return new Result(false, "Be more near than her/him");
-//        }
-//
-//        if (Objects.equals(destinationPlayer.getOwner().getGender(), currentPlayer.getOwner().getGender())) {
-//
-//            return new Result(false, "Your genders should be different!");
-//        }
-//        if (currentPlayer.getOwner().getGender().equalsIgnoreCase("female") && currentPlayer.getOwner().getGender().equalsIgnoreCase("male")) {
-//            return new Result(false, "Wait! You are female and he is male!!!!");
-//        }
-//
-//        Item ring = null;
-//        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//            if (item.getCorrectName().equalsIgnoreCase(ringName.replace(" ", ""))) {
-//                ring = item;
-//                break;
-//            }
-//        }
-//
-//        if (ring == null) {
-//            return new Result(false, "You don't have such a ring!");
-//        }
-//
-//
-//        MarriageProposal proposal = new MarriageProposal(currentPlayer, destinationPlayer, ring);
-//        App.getCurrentGame().addMarriageProposal(proposal);
-//        return new Result(true, "Marriage proposal sent to " + userName + " with a " + ring.getCorrectName() + ".");
-//    }
+    public Result askMarriage(String userName, String ringName) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
+
+        if (destinationPlayer == null) {
+            return new Result(false, "Player not found");
+        }
+        int dx = (int) Math.abs(currentPlayer.getX() - destinationPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - destinationPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "Be more near than her/him");
+        }
+
+        if (Objects.equals(destinationPlayer.getOwner().getGender(), currentPlayer.getOwner().getGender())) {
+
+            return new Result(false, "Your genders should be different!");
+        }
+        if (currentPlayer.getOwner().getGender().equalsIgnoreCase("female") && currentPlayer.getOwner().getGender().equalsIgnoreCase("male")) {
+            return new Result(false, "Wait! You are female and he is male!!!!");
+        }
+
+        Item ring = null;
+        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+            if (item.getCorrectName().equalsIgnoreCase(ringName.replace(" ", ""))) {
+                ring = item;
+                break;
+            }
+        }
+
+        if (ring == null) {
+            return new Result(false, "You don't have such a ring!");
+        }
+
+
+        MarriageProposal proposal = new MarriageProposal(currentPlayer, destinationPlayer, ring);
+        App.getCurrentGame().addMarriageProposal(proposal);
+        return new Result(true, "Marriage proposal sent to " + userName + " with a " + ring.getCorrectName() + ".");
+    }
 
     public Result response(String acceptOrReject, String userName) {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());

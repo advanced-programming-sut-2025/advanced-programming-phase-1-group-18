@@ -17,10 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import io.github.group18.Model.App;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
 
 import javax.swing.event.ChangeEvent;
 
+
+import java.util.Objects;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -153,6 +156,7 @@ public class InventoryView {
         tooltipLabel.setVisible(false);
 
         skillTooltipLabel = new Label("", skin);
+        inventoryWindow.addActor(skillTooltipLabel);
         skillTooltipLabel.setColor(Color.WHITE);
         skillTooltipLabel.setFontScale(0.6f);
         skillTooltipLabel.setVisible(false);
@@ -188,7 +192,7 @@ public class InventoryView {
 
         TextureRegion playerFrontFrame = GameView.getPlayerFrontImage();
         Image playerImage = new Image(new TextureRegionDrawable(playerFrontFrame));
-        Label nameLabel = new Label("Name: " + App.getCurrentUser().getUsername(), skin);
+        Label nameLabel = new Label("     Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
         nameLabel.setColor(Color.GOLD);
         nameLabel.setFontScale(0.75f);
 
@@ -276,11 +280,11 @@ public class InventoryView {
 
     private int getSkillValue(int idx) {
         return switch (idx) {
-            case 0 -> 40;
-            case 1 -> 25;
-            case 2 -> 8;
-            case 3 -> 0;
-            case 4 -> 33;
+            case 0 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFarmingSkill().getLevel();
+            case 1 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFishingSkill().getLevel();
+            case 2 -> Objects.requireNonNull(Game.getCurrentPlayer()).getForagingSkill().getLevel();
+            case 3 -> Objects.requireNonNull(Game.getCurrentPlayer()).getMiningSkill().getLevel();
+            case 4 -> 0;
             default -> 0;
         };
     }
@@ -501,7 +505,7 @@ public class InventoryView {
             tooltipLabel.setVisible(false);
         }
 
-        if (hoveredSkillIcon != null && System.currentTimeMillis() - skillTooltipStartTime > 1000) {
+        if (hoveredSkillIcon != null && System.currentTimeMillis() - skillTooltipStartTime > 100) {
             Vector2 pos = hoveredSkillIcon.localToStageCoordinates(new Vector2(0, 0));
             float x = pos.x + hoveredSkillIcon.getWidth() + 10;
             float y = pos.y + hoveredSkillIcon.getHeight() / 2-40;

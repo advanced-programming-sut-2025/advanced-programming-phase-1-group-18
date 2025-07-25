@@ -986,6 +986,10 @@ mapDeafult.png
 menu_bg.png
 music/theme1.mp3
 music/theme2.mp3
+poles/Bamboo_Pole.png
+poles/Fiberglass_Rod.png
+poles/Iridium_Rod.png
+poles/Training_Rod.png
 testSpriteSheet/clockAtlas.atlas
 testSpriteSheet/clockAtlas.png
 ui/font-list.fnt

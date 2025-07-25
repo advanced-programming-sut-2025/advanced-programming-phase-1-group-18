@@ -104,6 +104,7 @@ public class GameMenu implements Screen {
         stage.act(delta);
         stage.draw();
 
+        inventoryView.update();
         fishingMiniGame.update(delta);
         fishingMiniGame.render();
     }
