@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 
 import java.util.ArrayList;
 
+import io.github.group18.Model.Friendship;
 import io.github.group18.Model.Player;
 
 public class FriendsWindow extends Window {
@@ -31,7 +32,9 @@ public class FriendsWindow extends Window {
 
 
         for (Player friend : friends) {
-            Label nameLabel = new Label("- " + friend.getOwner().getUsername(), skin);
+            Friendship friendship = Friendship.getFriendshipBetween(currentPlayer, friend);
+            int level = (friendship != null) ? friendship.getLevel() : 0;
+            Label nameLabel = new Label("- " + friend.getOwner().getUsername() + " | Level: " + level, skin);
             add(nameLabel).left().padBottom(5).row();
         }
 
