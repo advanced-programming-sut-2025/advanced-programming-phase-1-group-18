@@ -3457,7 +3457,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().getCurrentDateTime().getDay() + " : " + App.getCurrentGame().getCurrentDateTime().getHour()
             + ")";
         friendship.getTalkHistory().add(addressedMessage);
-        return new Result(true, "messege sent successfully");
+        return new Result(true, "message sent successfully");
     }
 
     public static  Result talkHistory(String username) {
@@ -3486,66 +3486,91 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-//    public Result gift(String userName, int amount, String item) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        item = item.replaceAll(" ", "");
-//        Item gift = null;
-//        Gift newGift = null;
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Inventory inventory = currentPlayer.getInventory();
-//        Map<Item, Integer> itemInventory = inventory.getItems();
-//        Game currentGame = App.getCurrentGame();
-//        if (App.getCurrentGame().getPlayerByUsername(userName) == null) {
-//            return new Result(false, "Player not found");
-//        }
-//        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(userName);
-//        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
-//        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
-//        if (!(dx <= 1 && dy <= 1)) {
-//            return new Result(false, "You are not near to talk");
-//        }
-//        Friendship friendship = null;
-//        friendship = getFriendship(targetPlayer, currentPlayer);
-//        assert friendship != null;
-//        if (friendship.getLevel() == 0) {
-//            return new Result(false, "your friendship level is not enough to gift");
-//        }
-//        boolean found5 = false;
-//        for (Item items : itemInventory.keySet()) {
-//            if (items.getCorrectName().equalsIgnoreCase(item)) {
-//                if (itemInventory.get(items) >= amount) {
-//                    if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getTotalItemCount() < amount) {
-//                        return new Result(false, "target player does not have enough space in inventory");
-//                    }
-//                    itemInventory.put(items, itemInventory.get(items) - amount);
-//                    found5 = true;
-//                    gift = items;
-//                    newGift = new Gift(items, amount, currentPlayer, targetPlayer);
-//                } else {
-//                    return new Result(false, "You don't have enough items in your inventory");
-//                }
-//            }
-//        }
-//        if (!found5) {
-//            return new Result(false, "No such item in your inventory");
-//        } else {
-//            boolean found6 = false;
-//            App.getCurrentGame().getGifts().add(newGift);
-//            for (Item items : targetPlayer.getInventory().getItems().keySet()) {
-//                if (items.getCorrectName().equals(item)) {
-//                    found6 = true;
-//                    targetPlayer.getInventory().getItems().put(items, targetPlayer.getInventory().getItems().get(items) + amount);
-//                }
-//            }
-//            if (!found6) {
-//                targetPlayer.getInventory().getItems().put(gift, amount);
-//            }
-//            //todo if gift is flower increase leve
-//            return new Result(true, "gift sent successfully");
-//        }
-//    }
+    public static Result gift(String userName, int amount, String item) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
+
+        item = item.replaceAll(" ", "");
+        Item gift = null;
+        Gift newGift = null;
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Inventory inventory = currentPlayer.getInventory();
+        Map<Item, Pair<Integer, Integer>> itemInventory = inventory.getItems();
+        Game currentGame = App.getCurrentGame();
+
+        Player targetPlayer = currentGame.getPlayerByUsername(userName);
+        if (targetPlayer == null) {
+            return new Result(false, "Player not found");
+        }
+
+        int dx = (int)Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy =(int)Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+
+        Friendship friendship = getFriendship(targetPlayer, currentPlayer);
+        for (Friendship friendships :currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+                    friendship = friendships;
+                }
+            }
+        }
+        if (friendship == null || friendship.getLevel() == 0) {
+            return new Result(false, "Your friendship level is not enough to gift");
+        }
+
+        boolean foundItem = false;
+
+        for (Map.Entry<Item, Pair<Integer, Integer>> entry : itemInventory.entrySet()) {
+            Item currentItem = entry.getKey();
+            Pair<Integer, Integer> itemData = entry.getValue(); // (quantity, slot)
+
+            if (currentItem.getCorrectName().equalsIgnoreCase(item)) {
+                int currentQuantity = itemData.first;
+
+                if (currentQuantity < amount) {
+                    return new Result(false, "You don't have enough items in your inventory");
+                }
+
+                if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getItems().size() <= 0) {
+                    return new Result(false, "Target player does not have enough space in inventory");
+                }
+
+
+                if (currentQuantity - amount == 0) {
+                    inventory.removeItem(currentItem, amount);
+                } else {
+                    inventory.getItems().put(currentItem, new Pair<>(currentQuantity - amount, itemData.second));
+                }
+
+                foundItem = true;
+                gift = currentItem;
+                newGift = new Gift(currentItem, amount, currentPlayer, targetPlayer);
+                break;
+            }
+        }
+
+        if (!foundItem) {
+            return new Result(false, "No such item in your inventory");
+        }
+
+
+        Inventory targetInventory = targetPlayer.getInventory();
+        if (targetInventory.containsItem(gift)) {
+            Pair<Integer, Integer> existing = targetInventory.existing(gift);
+            targetInventory.getItems().put(gift, new Pair<>(existing.first + amount, existing.second));
+        } else {
+            targetInventory.addItem(gift, amount);
+        }
+
+        currentGame.getGifts().add(newGift);
+
+        return new Result(true, "Gift sent successfully");
+    }
+
 
     private static Friendship getFriendship(Player targetPlayer, Player currentPlayer) {
         Game currentGame = App.getCurrentGame();

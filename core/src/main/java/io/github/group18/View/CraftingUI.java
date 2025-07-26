@@ -243,7 +243,8 @@ public class CraftingUI {
         window.setPosition(100, 100);
         window.setMovable(true);
         window.setResizable(false);
-        Gdx.input.setInputProcessor(window.getStage());
+        //Gdx.input.setInputProcessor(window.getStage());
+        Gdx.input.setInputProcessor(stage);
         loadInventoryItems();
         Table slotsTable = new Table();
         slotsTable.defaults().size(SLOT_SIZE).pad(0);
@@ -397,7 +398,9 @@ public class CraftingUI {
         window.setPosition(100, 100);
         window.setMovable(true);
         window.setResizable(false);
-        Gdx.input.setInputProcessor(window.getStage());
+        //Gdx.input.setInputProcessor(window.getStage());
+        Gdx.input.setInputProcessor(stage);
+
         loadInventoryItems();
         Table slotsTable = new Table();
         slotsTable.defaults().size(SLOT_SIZE).pad(0);
@@ -466,7 +469,9 @@ public class CraftingUI {
         window.setPosition(100, 100);
         window.setMovable(true);
         window.setResizable(false);
-        Gdx.input.setInputProcessor(window.getStage());
+       // Gdx.input.setInputProcessor(window.getStage());
+        Gdx.input.setInputProcessor(stage);
+
         loadInventoryItems();
         Table slotsTable = new Table();
         slotsTable.defaults().size(SLOT_SIZE).pad(0);
