@@ -3295,6 +3295,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         return new Result(false, "Fishing pole not found");
     }
+
     public static boolean equalsIgnoreCase(Set<String> set1, Set<String> set2) {
         if (set1.size() != set2.size()) {
             return false;
@@ -3312,7 +3313,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         return lowerSet1.equals(lowerSet2);
     }
-    public Result artisanUse(String craftName, ArrayList<String> itemName,CraftingItem craftingIte) {
+
+    public Result artisanUse(String craftName, ArrayList<String> itemName, CraftingItem craftingIte) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3332,7 +3334,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         for (ArtisanGoodsEnums goods : artisanGoodsPossible) {
             Set<String> mapKeys = new HashSet<>(goods.getIngredients().keySet());
             Set<String> listItems = new HashSet<>(itemName);
-            if (equalsIgnoreCase(mapKeys,listItems)) {
+            if (equalsIgnoreCase(mapKeys, listItems)) {
                 isEnoughIngredient = true;
                 artisanName = goods.name();
                 break;
@@ -3349,7 +3351,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         return new Result(false, "ingredients and crafting does not match");
     }
-    public Result artisanGet(String artisanName,CraftingItem craftingItem) {
+
+    public Result artisanGet(String artisanName, CraftingItem craftingItem) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3357,7 +3360,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Inventory inventory = player.getInventory();
         ArrayList<ArtisanGoods> artisanGoods = new ArrayList<>();
         artisanGoods = player.getArtisansInProduce();
-        if (craftingItem.isReady()){
+        if (craftingItem.isReady()) {
             inventory.addItem(craftingItem.getInsideArtisan(), inventory.getItemQuantity(craftingItem.getInsideArtisan()) + 1);
             player.getArtisansInProduce().remove(craftingItem.getInsideArtisan());
             return new Result(true, "artisan: " + artisanName + " added to artisans");
@@ -3900,10 +3903,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result meetNPC(String npcName) {
-        if (isFainted()) {
-            return new Result(false, "You are fainted!");
-        }
+    public static Result meetNPC(NPC npc) {
+
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
         int friendshipLevel = -1;
@@ -3912,8 +3913,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 friendshipLevel = friendship.getFriendshipLevel();
             }
         }
-        switch (npcName.toUpperCase()) {
-            case "SEBASTIAN":
+        switch (npc.getName()) {
+            case SEBASTIAN:
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
                         if (!App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday()) {
@@ -3967,7 +3968,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case "ABIGAIL":
+            case ABIGAIL:
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
                         if (!App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday()) {
@@ -4020,7 +4021,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case "HARVEY":
+            case HARVEY:
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
                         if (!App.getCurrentGame().getNPCHARVEY().isTalkedWithToday()) {
@@ -4073,7 +4074,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case "LEAH":
+            case LEAH:
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
                         if (!App.getCurrentGame().getNPCLEAH().isTalkedWithToday()) {
@@ -4127,7 +4128,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case "ROBIN":
+            case ROBIN:
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
                         if (!App.getCurrentGame().getNPCROBIN().isTalkedWithToday()) {
@@ -4186,662 +4187,239 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-//    public Result giftNPC(String npcName, String item) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        switch (npcName.toUpperCase()) {
-//            case "SEBASTIAN":
-////                try {
-////                    Class<?> clazz = Class.forName(item);
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                } catch (Exception e) {
-////                    if (item.replace(" ", "").equalsIgnoreCase("pumpkinpie")) {
-////                        boolean found = false;
-////                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                            if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.pumpkinpie) {
-////                                found = true;
-////                                currentPlayer.getInventory().removeItem(itm, 1);
-////                                if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                    App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                    for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                        if (friendship.getPlayer() == currentPlayer) {
-////                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                            return new Result(true, "Gifted successfully");
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                        }
-////                        if (!found) {
-////                            return new Result(false, "No item found with that name");
-////                        }
-////                    } else {
-////                        if (item.replace(" ", "").equalsIgnoreCase("pizza")) {
-////                            boolean found = false;
-////                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                                if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.pizza) {
-////                                    found = true;
-////                                    currentPlayer.getInventory().removeItem(itm, 1);
-////                                    if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                        App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                        for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                            if (friendship.getPlayer() == currentPlayer) {
-////                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                                return new Result(true, "Gifted successfully");
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                            if (!found) {
-////                                return new Result(false, "No item found with that name");
-////                            }
-////                        } else {
-////                            return new Result(false, "This item in not effective");
-////                        }
-////                    }
-////                }
-////                //pashm-->??????
-////                //pumkinpie-->FoodCooking
-////                //pizza--?FoodCooking
-//                boolean found = false;
-//                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-//                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
-//                        found = true;
-//                        if (!(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-//                            if (item.toLowerCase().replace(" ", "").equalsIgnoreCase("wool") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("pumpkinpie") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("pizza")) {
-//                                currentPlayer.getInventory().removeItem(itm, 1);
-//                                if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-//                                }
-//                                for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-//                                    if (friendship.getPlayer() == currentPlayer) {
-//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                        return new Result(true, "Gifted successfully");
-//                                    }
-//                                }
-//                            } else {
-//                                if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-//                                    return new Result(false, "NPC got " + item);
-//                                } else {
-//                                    return new Result(false, "NPC doesn't like " + item);
-//                                }
-//                            }
-//                        } else {
-//                            return new Result(false, "You can't gift tools");
-//                        }
-//                    }
-//                }
-//                if (!found) {
-//                    return new Result(false, "You don't have that item in your inventory");
-//                }
-//                break;
-//
-//            case "ABIGAIL":
-////                try {
-////                    Class<?> clazz = Class.forName(item);
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                } catch (Exception e) {
-////                    if (item.replace(" ", "").equalsIgnoreCase("stone")) {
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (itm instanceof Stone && ((FoodCooking) itm).getName() == FoodCookingEnums.pumpkinpie) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                    } else {
-////                        if (item.replace(" ", "").equalsIgnoreCase("iron")) {
-////                            boolean found = false;
-////                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                                if (itm instanceof Mineral
-////                                        && ((Mineral) itm).getType() == ForagingMineralsEnums.Iron) {
-////                                    found = true;
-////                                    currentPlayer.getInventory().removeItem(itm, 1);
-////                                    if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                        App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                        for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                            if (friendship.getPlayer() == currentPlayer) {
-////                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                                return new Result(true, "Gifted successfully");
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                            if (!found) {
-////                                return new Result(false, "No item found with that name");
-////                            }
-////                        } else {
-////                            if (item.replace(" ", "").equalsIgnoreCase("coffeebean")) {
-////                                boolean found = false;
-////                                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                                    if (itm instanceof AllCrop
-////                                            && ((AllCrop) itm).getType() == AllCropsEnums.CoffeeBean) {
-////                                        found = true;
-////                                        currentPlayer.getInventory().removeItem(itm, 1);
-////                                        if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
-////                                            App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
-////                                            for (Friendship friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-////                                                if (friendship.getPlayer() == currentPlayer) {
-////                                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                                    return new Result(true, "Gifted successfully");
-////                                                }
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                                if (!found) {
-////                                    return new Result(false, "No item found with that name");
-////                                }
-////                            } else {
-////                                return new Result(false, "This item in not effective");
-////                            }
-////                        }
-////                    }
-////                }
-////                //Stone-->stone
-////                //kani ahan-->mineral
-////                //AllCrops-->Coffee
-//                boolean found1 = false;
-//                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-//                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
-//                        found1 = true;
-//                        if (!(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-//                            if (item.toLowerCase().replace(" ", "").equalsIgnoreCase("stone") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("iron") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("coffee")) {
-//                                currentPlayer.getInventory().removeItem(itm, 1);
-//                                if (!App.getCurrentGame().getNPCABIGAIL().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCABIGAIL().setGiftedToday(true);
-//                                }
-//                                for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-//                                    if (friendship.getPlayer() == currentPlayer) {
-//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                        return new Result(true, "Gifted successfully");
-//                                    }
-//                                }
-//                            } else {
-//                                if (!App.getCurrentGame().getNPCABIGAIL().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCABIGAIL().setGiftedToday(true);
-//                                    return new Result(false, "NPC got " + item);
-//                                } else {
-//                                    return new Result(false, "NPC doesn't like " + item);
-//                                }
-//                            }
-//                        } else {
-//                            return new Result(false, "You can't gift tools");
-//                        }
-//                    }
-//                }
-//                if (!found1) {
-//                    return new Result(false, "You don't have that item in your inventory");
-//                }
-//                break;
-//
-//            case "HARVEY":
-////                try {
-////                    Class<?> clazz = Class.forName(item);
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                } catch (Exception e) {
-////                    if (item.replace(" ", "").equalsIgnoreCase("coffeebean")) {
-////                        boolean found = false;
-////                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                            if (itm instanceof AllCrop
-////                                    && ((AllCrop) itm).getType() == AllCropsEnums.CoffeeBean) {
-////                                found = true;
-////                                currentPlayer.getInventory().removeItem(itm, 1);
-////                                if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
-////                                    App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
-////                                    for (Friendship friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-////                                        if (friendship.getPlayer() == currentPlayer) {
-////                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                            return new Result(true, "Gifted successfully");
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                        }
-////                        if (!found) {
-////                            return new Result(false, "No item found with that name");
-////                        }
-////                    } else {
-////                        return new Result(false, "This item in not effective");
-////                    }
-////                }
-////                //AllCrops-->Coffee
-////                //torshi-->???????
-////                //sharab-->???????
-//                boolean found2 = false;
-//                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-//                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
-//                        found2 = true;
-//                        if (!(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-//                            if (item.toLowerCase().replace(" ", "").equalsIgnoreCase("coffee") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("torshi") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("wine")) {
-//                                currentPlayer.getInventory().removeItem(itm, 1);
-//                                if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
-//                                }
-//                                for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-//                                    if (friendship.getPlayer() == currentPlayer) {
-//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                        return new Result(true, "Gifted successfully");
-//                                    }
-//                                }
-//                            } else {
-//                                if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
-//                                    return new Result(false, "NPC got " + item);
-//                                } else {
-//                                    return new Result(false, "NPC doesn't like " + item);
-//                                }
-//                            }
-//                        } else {
-//                            return new Result(false, "You can't gift tools");
-//                        }
-//                    }
-//                }
-//                if (!found2) {
-//                    return new Result(false, "You don't have that item in your inventory");
-//                }
-//                break;
-//
-//            case "LEAH":
-////                try {
-////                    Class<?> clazz = Class.forName(item);
-////                    boolean found = false;
-////                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-////                            found = true;
-////                            currentPlayer.getInventory().removeItem(itm, 1);
-////                            if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
-////                                App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
-////                                for (Friendship friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-////                                    if (friendship.getPlayer() == currentPlayer) {
-////                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-////                                        return new Result(true, "Gifted successfully");
-////                                    }
-////                                }
-////                            }
-////                        }
-////                    }
-////                    if (!found) {
-////                        return new Result(false, "No item found with that name");
-////                    }
-////                } catch (Exception e) {
-////                    if (item.equalsIgnoreCase("salad")) {
-////                        boolean found = false;
-////                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                            if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.Salad) {
-////                                found = true;
-////                                currentPlayer.getInventory().removeItem(itm, 1);
-////                                if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
-////                                    App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
-////                                    for (Friendship friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-////                                        if (friendship.getPlayer() == currentPlayer) {
-////                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                            return new Result(true, "Gifted successfully");
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                        }
-////                        if (!found) {
-////                            return new Result(false, "No item found with that name");
-////                        }
-////                    } else {
-////                        if (item.equalsIgnoreCase("grape")) {
-////                            boolean found = false;
-////                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-////                                if ((itm instanceof ForagingCrop && ((ForagingCrop) itm).getType() == ForagingCropsEnums.Grape) ||
-////                                        (itm instanceof AllCrop && ((AllCrop) itm).getType() == AllCropsEnums.Grape)) {
-////                                    found = true;
-////                                    currentPlayer.getInventory().removeItem(itm, 1);
-////                                    if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
-////                                        App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
-////                                        for (Friendship friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-////                                            if (friendship.getPlayer() == currentPlayer) {
-////                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-////                                                return new Result(true, "Gifted successfully");
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                            }
-////                            if (!found) {
-////                                return new Result(false, "No item found with that name");
-////                            }
-////                        } else {
-////                            return new Result(false, "This item in not effective");
-////                        }
-////                    }
-////                }
-////                //salad-->Foodcooking
-////                //grape -->ForagingCrop,AllCrop
-////                //sharab-->???????
-////                break;
-//                boolean found3 = false;
-//                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-//                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
-//                        found3 = true;
-//                        if (!(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-//                            if (item.toLowerCase().replace(" ", "").equalsIgnoreCase("salad") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("grape") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("wine")) {
-//                                currentPlayer.getInventory().removeItem(itm, 1);
-//                                if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
-//                                }
-//                                for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-//                                    if (friendship.getPlayer() == currentPlayer) {
-//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                        return new Result(true, "Gifted successfully");
-//                                    }
-//                                }
-//                            } else {
-//                                if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
-//                                    return new Result(false, "NPC got " + item);
-//                                } else {
-//                                    return new Result(false, "NPC doesn't like " + item);
-//                                }
-//                            }
-//                        } else {
-//                            return new Result(false, "You can't gift tools");
-//                        }
-//                    }
-//                }
-//                if (!found3) {
-//                    return new Result(false, "You don't have that item in your inventory");
-//                }
-//                break;
-//            case "ROBIN":
+    public static Result giftNPC(NPC npcName, Item item, int count) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        switch (npcName.getName()) {
+            case SEBASTIAN:
+//                //pashm-->??????
+//                //pumkinpie-->FoodCooking
+//                //pizza--?FoodCooking
+                if (!(item instanceof Tool)) {
+                    if (item instanceof FoodCooking foodCooking && (foodCooking.getNamee() == FoodCookingEnums.PumpkinPie || foodCooking.getNamee() == FoodCookingEnums.Pizza)) {
+                        currentPlayer.getInventory().removeItem(item, count);
+                        if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
+                        }
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                return new Result(true, "Gifted successfully");
+                            }
+                        }
+                    } else {
+                        if (!App.getCurrentGame().getNPCSEBASTIAN().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCSEBASTIAN().setGiftedToday(true);
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC got " + item.getCorrectName());
+                        } else {
+                            return new Result(false, "NPC doesn't like " + item.getCorrectName());
+                        }
+                    }
+                } else {
+                    return new Result(false, "You can't gift tools");
+                }
+                break;
 
-    /// /                try {
-    /// /                    Class<?> clazz = Class.forName(item);
-    /// /                    boolean found = false;
-    /// /                    for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-    /// /                        if (clazz.isInstance(itm) && !(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-    /// /                            found = true;
-    /// /                            currentPlayer.getInventory().removeItem(itm, 1);
-    /// /                            if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-    /// /                                App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-    /// /                                for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-    /// /                                    if (friendship.getPlayer() == currentPlayer) {
-    /// /                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-    /// /                                        return new Result(true, "Gifted successfully");
-    /// /                                    }
-    /// /                                }
-    /// /                            }
-    /// /                        }
-    /// /                    }
-    /// /                    if (!found) {
-    /// /                        return new Result(false, "No item found with that name");
-    /// /                    }
-    /// /                } catch (Exception e) {
-    /// /                    if (item.equalsIgnoreCase("spaghetti")) {
-    /// /                        boolean found = false;
-    /// /                        for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-    /// /                            if (itm instanceof FoodCooking && ((FoodCooking) itm).getName() == FoodCookingEnums.spaghetti) {
-    /// /                                found = true;
-    /// /                                currentPlayer.getInventory().removeItem(itm, 1);
-    /// /                                if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-    /// /                                    App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-    /// /                                    for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-    /// /                                        if (friendship.getPlayer() == currentPlayer) {
-    /// /                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-    /// /                                            return new Result(true, "Gifted successfully");
-    /// /                                        }
-    /// /                                    }
-    /// /                                }
-    /// /                            }
-    /// /                        }
-    /// /                        if (!found) {
-    /// /                            return new Result(false, "No item found with that name");
-    /// /                        }
-    /// /                    } else {
-    /// /                        if (item.equalsIgnoreCase("iron")) {
-    /// /                            boolean found = false;
-    /// /                            for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-    /// /                                if (itm instanceof Mineral && ((Mineral) itm).getType() == ForagingMineralsEnums.Iron) {
-    /// /                                    found = true;
-    /// /                                    currentPlayer.getInventory().removeItem(itm, 1);
-    /// /                                    if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-    /// /                                        App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-    /// /                                        for (Friendship friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-    /// /                                            if (friendship.getPlayer() == currentPlayer) {
-    /// /                                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-    /// /                                                return new Result(true, "Gifted successfully");
-    /// /                                            }
-    /// /                                        }
-    /// /                                    }
-    /// /                                }
-    /// /                            }
-    /// /                            if (!found) {
-    /// /                                return new Result(false, "No item found with that name");
-    /// /                            }
-    /// /                        } else {
-    /// /                            return new Result(false, "This item in not effective");
-    /// /                        }
-    /// /                    }
-    /// /                }
-    /// /                //spaghetti-->FoodCooking
-    /// /                //choob-->???????
-    /// /                //shemsh ahan-->mineral
-    /// /                break;
-//                boolean found4 = false;
-//                for (Item itm : currentPlayer.getInventory().getItems().keySet()) {
-//                    if (itm.getCorrectName().equalsIgnoreCase(item.replace(" ", ""))) {
-//                        found4 = true;
-//                        if (!(itm instanceof Axe) && !(itm instanceof Hoe) && !(itm instanceof MilkPail) && !(itm instanceof Pickaxe) && !(itm instanceof Scythe) && !(itm instanceof Shear) && !(itm instanceof WateringCan)) {
-//                            if (item.toLowerCase().replace(" ", "").equalsIgnoreCase("spaghetti") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("wood") ||
-//                                item.toLowerCase().replace(" ", "").equalsIgnoreCase("iron")) {
-//                                currentPlayer.getInventory().removeItem(itm, 1);
-//                                if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-//                                }
-//                                for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-//                                    if (friendship.getPlayer() == currentPlayer) {
-//                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                        return new Result(true, "Gifted successfully");
-//                                    }
-//                                }
-//                            } else {
-//                                if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
-//                                    for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-//                                        if (friendship.getPlayer() == currentPlayer) {
-//                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
-//                                            break;
-//                                        }
-//                                    }
-//                                    currentPlayer.getInventory().removeItem(itm, 1);
-//                                    App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
-//                                    return new Result(false, "NPC got " + item);
-//                                } else {
-//                                    currentPlayer.getInventory().removeItem(itm, 1);
-//                                    return new Result(false, "NPC doesn't like " + item);
-//                                }
-//                            }
-//                        } else {
-//                            return new Result(false, "You can't gift tools");
-//                        }
-//                    }
-//                }
-//                if (!found4) {
-//                    return new Result(false, "You don't have that item in your inventory");
-//                }
+            case ABIGAIL:
+//                //Stone-->stone
+//                //kani ahan-->mineral
+//                //AllCrops-->Coffee
+                if (!(item instanceof Tool)) {
+                    if (item instanceof StoneItem || (item instanceof Mineral mineral && mineral.getType() == ForagingMineralsEnums.IronOre) ||
+                        (item instanceof AllCrop allCrop && allCrop.getType() == AllCropsEnums.CoffeeBean)) {
+                        currentPlayer.getInventory().removeItem(item, count);
+                        if (!App.getCurrentGame().getNPCABIGAIL().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCABIGAIL().setGiftedToday(true);
+                        }
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                return new Result(true, "Gifted successfully");
+                            }
+                        }
+                    } else {
+                        if (!App.getCurrentGame().getNPCABIGAIL().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCABIGAIL().setGiftedToday(true);
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC got " + item.getCorrectName());
+                        } else {
+                            return new Result(false, "NPC doesn't like " + item.getCorrectName());
+                        }
+                    }
+                } else {
+                    return new Result(false, "You can't gift tools");
+                }
+                break;
+
+            case HARVEY:
+//                //AllCrops-->Coffee
+//                //torshi-->???????
+//                //sharab-->wine
+                if (!(item instanceof Tool)) {
+                    if ((item instanceof ArtisanGoods artisanGoods && artisanGoods.getArtisanGoods() == ArtisanGoodsEnums.Wine) ||
+                        (item instanceof AllCrop allCrop && allCrop.getType() == AllCropsEnums.CoffeeBean)) {
+                        currentPlayer.getInventory().removeItem(item, count);
+                        if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
+                        }
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                return new Result(true, "Gifted successfully");
+                            }
+                        }
+                    } else {
+                        if (!App.getCurrentGame().getNPCHARVEY().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCHARVEY().setGiftedToday(true);
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC got " + item.getCorrectName());
+                        } else {
+                            return new Result(false, "NPC doesn't like " + item.getCorrectName());
+                        }
+                    }
+                } else {
+                    return new Result(false, "You can't gift tools");
+                }
+                break;
+
+            case LEAH:
+//                //salad-->Foodcooking
+//                //grape -->ForagingCrop,AllCrop
+//                //sharab-->wine
 //                break;
-//            default:
-//                //System.out.println(npcName);
-//                return new Result(false, "Invalid NPC name.");
-//        }
-//        return null;
-//    }
-    public Result friendshipList() {
-        if (isFainted()) {
-            return new Result(false, "You are fainted!");
+                if (!(item instanceof Tool)) {
+                    if ((item instanceof FoodCooking foodCooking && foodCooking.getNamee() == FoodCookingEnums.Salad) ||
+                        (item instanceof ForagingCrop foragingCrop && foragingCrop.getType() == ForagingCropsEnums.Grape) ||
+                        (item instanceof AllCrop allCrop && allCrop.getType() == AllCropsEnums.Grape) ||
+                        (item instanceof ArtisanGoods artisanGoods && artisanGoods.getArtisanGoods() == ArtisanGoodsEnums.Wine)) {
+                        currentPlayer.getInventory().removeItem(item, count);
+                        if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
+                        }
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                return new Result(true, "Gifted successfully");
+                            }
+                        }
+                    } else {
+                        if (!App.getCurrentGame().getNPCLEAH().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCLEAH().setGiftedToday(true);
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC got " + item.getCorrectName());
+                        } else {
+                            return new Result(false, "NPC doesn't like " + item.getCorrectName());
+                        }
+                    }
+                } else {
+                    return new Result(false, "You can't gift tools");
+                }
+                break;
+            case ROBIN:
+                //spaghetti-->FoodCooking
+                //choob-->???????
+                //shemsh ahan-->Artisan goods
+                if (!(item instanceof Tool)) {
+                    if ((item instanceof FoodCooking foodCooking && foodCooking.getNamee() == FoodCookingEnums.Spaghetti) ||
+                        (item instanceof ArtisanGoods artisanGoods && artisanGoods.getArtisanGoods() == ArtisanGoodsEnums.IronBar)) {
+                        currentPlayer.getInventory().removeItem(item, count);
+                        if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+                        }
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                return new Result(true, "Gifted successfully");
+                            }
+                        }
+                    } else {
+                        if (!App.getCurrentGame().getNPCROBIN().isGiftedToday()) {
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 50);
+                                    break;
+                                }
+                            }
+                            currentPlayer.getInventory().removeItem(item, count);
+                            App.getCurrentGame().getNPCROBIN().setGiftedToday(true);
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC got " + item.getCorrectName());
+                        } else {
+                            currentPlayer.getInventory().removeItem(item, count);
+                            return new Result(false, "NPC doesn't like " + item.getCorrectName());
+                        }
+                    }
+                } else {
+                    return new Result(false, "You can't gift tools");
+                }
+                break;
+            default:
+                //System.out.println(npcName);
+                return new Result(false, "Invalid NPC name.");
         }
+        return null;
+    }
+
+    public static Result friendshipList(NPC npc) {
         StringBuilder result = new StringBuilder();
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+        for (Friendshipali friendship : npc.getFriendships()) {
             if (friendship.getPlayer() == currentPlayer) {
-                result.append("SEBASTIAN: ");
-                result.append("Score: ").append(friendship.getFriendshipLevel()).append(" Level: ").append(friendship.getFriendshipLevel() / 200);
-                result.append("\n");
-            }
-        }
-        for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                result.append("ABIGAIL: ");
-                result.append("Score: ").append(friendship.getFriendshipLevel()).append(" Level: ").append(friendship.getFriendshipLevel() / 200);
-                result.append("\n");
-            }
-        }
-        for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                result.append("HARVEY: ");
-                result.append("Score: ").append(friendship.getFriendshipLevel()).append(" Level: ").append(friendship.getFriendshipLevel() / 200);
-                result.append("\n");
-            }
-        }
-        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                result.append("LEAH: ");
-                result.append("Score: ").append(friendship.getFriendshipLevel()).append(" Level: ").append(friendship.getFriendshipLevel() / 200);
-                result.append("\n");
-            }
-        }
-        for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                result.append("ROBIN: ");
+                result.append(npc.getName());
                 result.append("Score: ").append(friendship.getFriendshipLevel()).append(" Level: ").append(friendship.getFriendshipLevel() / 200);
                 result.append("\n");
             }
@@ -4849,464 +4427,370 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public Result questsList() {
-        if (isFainted()) {
-            return new Result(false, "You are fainted!");
-        }
+    public static Result questsList(NPC npc) {
         StringBuilder result = new StringBuilder();
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         int friendshipLVL = -1;
 
-        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+        for (Friendshipali friendship : npc.getFriendships()) {
             if (friendship.getPlayer() == currentPlayer) {
                 friendshipLVL = friendship.getFriendshipLevel() / 200;
                 break;
             }
         }
-        result.append("SEBASTIAN\n");
-        for (Object object : App.getCurrentGame().getNPCSEBASTIAN().getQuests().keySet()) {
-            NPCItem npcItem = App.getCurrentGame().getNPCSEBASTIAN().getQuests().get(object);
+        result.append(npc.getName() + "\n");
+        int counter = 1;
+        for (Item item : npc.getQuests().keySet()) {
+            NPCItem npcItem = npc.getQuests().get(item);
             if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                if (npcItem.getRequiredLevel() == 2) {
-                    if (App.getCurrentGame().getCurrentDateTime().getHour() >= 12 && App.getCurrentGame().getCurrentDateTime().getHour() <= 24) {
-                        result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                    }
-                } else {
-                    result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                }
-            }
-        }
-
-        for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                friendshipLVL = friendship.getFriendshipLevel() / 200;
-                break;
-            }
-        }
-        result.append("ABIGAIL\n");
-        for (Object object : App.getCurrentGame().getNPCABIGAIL().getQuests().keySet()) {
-            NPCItem npcItem = App.getCurrentGame().getNPCABIGAIL().getQuests().get(object);
-            if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                if (npcItem.getRequiredLevel() == 2) {
-                    if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN) {
-                        result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                    }
-                } else {
-                    result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                }
-            }
-        }
-
-        for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                friendshipLVL = friendship.getFriendshipLevel() / 200;
-                break;
-            }
-        }
-        result.append("HARVEY\n");
-        for (Object object : App.getCurrentGame().getNPCHARVEY().getQuests().keySet()) {
-            NPCItem npcItem = App.getCurrentGame().getNPCHARVEY().getQuests().get(object);
-            if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                if (npcItem.getRequiredLevel() == 2) {
-                    if (App.getCurrentGame().getCurrentSeason() == Seasons.Spring) {
-                        result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                    }
-                } else {
-                    result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                }
-            }
-        }
-
-        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                friendshipLVL = friendship.getFriendshipLevel() / 200;
-                break;
-            }
-        }
-        result.append("LEAH\n");
-        for (Object object : App.getCurrentGame().getNPCLEAH().getQuests().keySet()) {
-            NPCItem npcItem = App.getCurrentGame().getNPCLEAH().getQuests().get(object);
-            if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                if (npcItem.getRequiredLevel() == 2) {
-                    if (App.getCurrentGame().getCurrentSeason() == Seasons.Fall || App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
-                        result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                    }
-                } else {
-                    result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                }
-            }
-        }
-
-        for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                friendshipLVL = friendship.getFriendshipLevel() / 200;
-                break;
-            }
-        }
-        result.append("ROBIN\n");
-        for (Object object : App.getCurrentGame().getNPCROBIN().getQuests().keySet()) {
-            NPCItem npcItem = App.getCurrentGame().getNPCROBIN().getQuests().get(object);
-            if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                if (npcItem.getRequiredLevel() == 2) {
-                    if (App.getCurrentGame().getCurrentDateTime().getDay() >= 20 || App.getCurrentGame().getCurrentDateTime().getDay() <= 25) {
-                        result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                    }
-                } else {
-                    result.append(npcItem.getRequiredLevel() + " " + npcItem.getQuantity() + " " + object.toString() + "\n");
-                }
+                result.append(counter++).append("- ").append("Your quest is to get ").append(npcItem.getQuantity()).append(" of ").append(item.getCorrectName()).append("\n");
             }
         }
 
         return new Result(true, result.toString());
     }
 
-//    public Result questsFinish(int index) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        if (validNPCPlace(NPCEnums.SEBASTIAN)) {
-//            System.out.println("SEBASTIAN");
-//
-//            int friendshipLVL = -1;
-//            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-//                if (friendship.getPlayer() == currentPlayer) {
-//                    friendshipLVL = friendship.getFriendshipLevel() / 200;
-//                    break;
-//                }
-//            }
-//            boolean flag = false;
-//            for (Item object : App.getCurrentGame().getNPCSEBASTIAN().getQuests().keySet()) {
-//                NPCItem npcItem = App.getCurrentGame().getNPCSEBASTIAN().getQuests().get(object);
-//                if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
-//                    flag = true;
-//                    boolean found = false;
-//                    for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//                        if (object.getCorrectName().toLowerCase().replace(" ", "").equals(item.getCorrectName())) {
-//                            if (currentPlayer.getInventory().getItems().get(item) < npcItem.getQuantity()) {
-//                                return new Result(false, "You don't have enough resources");
-//                            } else {
-//                                found = true;
-//                                currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
-//                                switch (object.getCorrectName()) {
-//                                    case "ironore":
-//                                        Mineral diamond = new Mineral();
-//                                        diamond.setType(ForagingMineralsEnums.Diamond);
-//                                        diamond.setPrice(750);
-//                                        if (friendshipLVL == 2) {
-//                                            currentPlayer.getInventory().addItem(diamond, 4);
-//                                        } else {
-//                                            currentPlayer.getInventory().addItem(diamond, 2);
-//                                        }
-//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
-//                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
-//                                    case "pumpkinpie":
-//                                        if (friendshipLVL == 2) {
-//                                            currentPlayer.setGold(currentPlayer.getGold() + 10000);
-//                                        } else {
-//                                            currentPlayer.setGold(currentPlayer.getGold() + 5000);
-//                                        }
-//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
-//                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
-//                                    case "stone":
-//                                        Mineral quartz = new Mineral();
-//                                        quartz.setType(ForagingMineralsEnums.Quartz);
-//                                        quartz.setPrice(25);
-//                                        if (friendshipLVL == 2) {
-//                                            currentPlayer.getInventory().addItem(quartz, 100);
-//                                        } else {
-//                                            currentPlayer.getInventory().addItem(quartz, 50);
-//                                        }
-//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
-//                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
-//                                }
-//                            }
-//                        }
-//                    }
-//                    if (!found) {
-//                        return new Result(false, "You don't have enough resources");
-//                    }
-//                }
-//            }
-//            if (!flag) {
-//                return new Result(false, "You can't do the selected quest right now");
-//            }
-//        } else {
-//            if (validNPCPlace(NPCEnums.ABIGAIL)) {
-//                System.out.println("ABIGAIL");
-//
-//                int friendshipLVL = -1;
-//                for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-//                    if (friendship.getPlayer() == currentPlayer) {
-//                        friendshipLVL = friendship.getFriendshipLevel() / 200;
-//                        break;
-//                    }
-//                }
-//                boolean flag = false;
-//                for (Item object : App.getCurrentGame().getNPCABIGAIL().getQuests().keySet()) {
-//                    NPCItem npcItem = App.getCurrentGame().getNPCABIGAIL().getQuests().get(object);
-//                    if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
-//                        flag = true;
-//
-//                        boolean found = false;
-//
-//                        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//
-//                            if (item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
-//                                if (currentPlayer.getInventory().getItems().get(item) < npcItem.getQuantity()) {
-//                                    return new Result(false, "You don't have enough resources");
-//                                } else {
-//                                    found = true;
-//                                    currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
-//                                    switch (object.getCorrectName()) {
-//                                        case "goldbar":
-//                                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-//                                                if (friendship.getPlayer() == currentPlayer) {
-//                                                    if (friendshipLVL == 2) {
-//                                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 400);
-//                                                    } else {
-//                                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                                    }
-//                                                    break;
-//                                                }
-//                                            }
-//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
-//                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
-//                                        case "pumpkin":
-//                                            if (friendshipLVL == 2) {
-//                                                currentPlayer.setGold(currentPlayer.getGold() + 1000);
-//                                            } else {
-//                                                currentPlayer.setGold(currentPlayer.getGold() + 500);
-//                                            }
-//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
-//                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
-//                                        case "wheat":
-//                                            CraftingItem abpash = new CraftingItem((CraftingRecipesEnums.IridiumSprinkler).toString());
-//                                            currentPlayer.getInventory().addItem(abpash, 1);
-//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
-//                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        if (!found) {
-//                            return new Result(false, "You don't have enough resources");
-//                        }
-//                    }
-//                }
-//                if (!flag) {
-//                    return new Result(false, "You can't do the selected quest right now");
-//                }
-//            } else {
-//                if (validNPCPlace(NPCEnums.HARVEY)) {
-//                    int friendshipLVL = -1;
-//                    for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-//                        if (friendship.getPlayer() == currentPlayer) {
-//                            friendshipLVL = friendship.getFriendshipLevel() / 200;
-//                            break;
-//                        }
-//                    }
-//                    boolean flag = false;
-//                    for (Item object : App.getCurrentGame().getNPCHARVEY().getQuests().keySet()) {
-//                        NPCItem npcItem = App.getCurrentGame().getNPCHARVEY().getQuests().get(object);
-//                        if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
-//                            flag = true;
-//
-//                            boolean found = false;
-//
-//                            for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//
-//                                if ((object.getCorrectName().equalsIgnoreCase("allcrop") && item instanceof AllCrop) || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
-//                                    if (currentPlayer.getInventory().getItems().get(item) < npcItem.getQuantity()) {
-//                                        return new Result(false, "You don't have enough resources");
-//                                    } else {
-//                                        found = true;
-//                                        currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
-//                                        switch (object.getCorrectName()) {
-//                                            case "allcrop":
-//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
-//                                                if (friendshipLVL == 2) {
-//                                                    currentPlayer.setGold(currentPlayer.getGold() + 1500);
-//                                                } else {
-//                                                    currentPlayer.setGold(currentPlayer.getGold() + 750);
-//                                                    System.out.println("added 750 gold");
-//                                                }
-//                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
-//                                            case "salmon":
-//                                                for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-//                                                    if (friendship.getPlayer() == currentPlayer) {
-//                                                        if (friendshipLVL == 2) {
-//                                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 400);
-//                                                        } else {
-//                                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
-//                                                        }
-//                                                        break;
-//                                                    }
-//                                                }
-//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
-//                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
-//                                            case "wine":
-//                                                FoodCooking foodCooking = new FoodCooking();
-//                                                foodCooking.setName(FoodCookingEnums.Salad);
-//                                                foodCooking.setEnergy(113);
-//                                                foodCooking.setSellPrice(110);
-//                                                if (friendshipLVL == 2) {
-//                                                    currentPlayer.getInventory().addItem(foodCooking, 10);
-//                                                } else {
-//                                                    currentPlayer.getInventory().addItem(foodCooking, 5);
-//                                                }
-//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
-//                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                            if (!found) {
-//                                System.out.println(object.getCorrectName() + " " + npcItem.getQuantity());
-//                                return new Result(false, "You don't have enough resources");
-//                            }
-//                        }
-//                    }
-//                    if (!flag) {
-//                        return new Result(false, "You can't do the selected quest right now");
-//                    }
-//                } else {
-//                    if (validNPCPlace(NPCEnums.LEAH)) {
-//                        int friendshipLVL = -1;
-//                        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-//                            if (friendship.getPlayer() == currentPlayer) {
-//                                friendshipLVL = friendship.getFriendshipLevel() / 200;
-//                                break;
-//                            }
-//                        }
-//                        boolean flag = false;
-//                        for (Item object : App.getCurrentGame().getNPCLEAH().getQuests().keySet()) {
-//                            NPCItem npcItem = App.getCurrentGame().getNPCLEAH().getQuests().get(object);
-//                            if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
-//                                flag = true;
-//
-//                                boolean found = false;
-//
-//                                for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//
-//                                    if (object.getCorrectName().equalsIgnoreCase("wood") || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
-//                                        if ((currentPlayer.getInventory().getItems().get(item) < npcItem.getQuantity()) && !(object.getCorrectName().equalsIgnoreCase("wood") && currentPlayer.getWood() >= npcItem.getQuantity())) {
-//                                            return new Result(false, "You don't have enough resources");
-//                                        } else {
-//                                            found = true;
-//                                            currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
-//                                            switch (object.getCorrectName()) {
-//                                                case "wood":
-//                                                    if (npcItem.getRequiredLevel() == 0) {
-//                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
-//                                                        if (friendshipLVL == 2) {
-//                                                            currentPlayer.setGold(currentPlayer.getGold() + 1000);
-//                                                        } else {
-//                                                            currentPlayer.setGold(currentPlayer.getGold() + 500);
-//                                                            System.out.println("added 500 gold");
-//                                                        }
-//                                                        return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
-//                                                    } else {
-//                                                        CraftingItem matarsak = new CraftingItem(CraftingRecipesEnums.DeluxeScarecrow.toString());
-//                                                        currentPlayer.getInventory().addItem(matarsak, 3);
-//                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
-//                                                        return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
-//                                                    }
-//                                                case "salmon":
-//                                                    Cookingrecipe cookingrecipe = new Cookingrecipe();
-//                                                    cookingrecipe.setFood(FoodCookingEnums.SalmonDinner);
-//                                                    cookingrecipe.setPrice(100);
-//                                                    if (friendshipLVL == 2) {
-//                                                        cookingrecipe.setPrice(600);
-//                                                    } else {
-//                                                        cookingrecipe.setPrice(300);
-//                                                    }
-//                                                    currentPlayer.getCookingRecipes().add(cookingrecipe);
-//                                                    App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
-//                                                    return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                                if (!found) {
-//                                    return new Result(false, "You don't have enough resources");
-//                                }
-//                            }
-//                        }
-//                        if (!flag) {
-//                            return new Result(false, "You can't do the selected quest right now");
-//                        }
-//                    } else {
-//                        if (validNPCPlace(NPCEnums.ROBIN)) {
-//                            int friendshipLVL = -1;
-//                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-//                                if (friendship.getPlayer() == currentPlayer) {
-//                                    friendshipLVL = friendship.getFriendshipLevel() / 200;
-//                                    break;
-//                                }
-//                            }
-//                            boolean flag = false;
-//                            for (Item object : App.getCurrentGame().getNPCROBIN().getQuests().keySet()) {
-//                                NPCItem npcItem = App.getCurrentGame().getNPCROBIN().getQuests().get(object);
-//                                if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
-//                                    flag = true;
-//
-//                                    boolean found = false;
-//
-//                                    for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//
-//                                        if (object.getCorrectName().equalsIgnoreCase("wood") || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
-//                                            if (currentPlayer.getInventory().getItems().get(item) < npcItem.getQuantity() && !(object.getCorrectName().equalsIgnoreCase("wood") && currentPlayer.getWood() >= npcItem.getQuantity())) {
-//                                                return new Result(false, "You don't have enough resources");
-//                                            } else {
-//                                                found = true;
-//                                                currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
-//                                                switch (object.getCorrectName()) {
-//                                                    case "wood":
-//                                                        if (npcItem.getRequiredLevel() == 0) {
-//                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
-//                                                            if (friendshipLVL == 2) {
-//                                                                currentPlayer.setGold(currentPlayer.getGold() + 2000);
-//                                                            } else {
-//                                                                currentPlayer.setGold(currentPlayer.getGold() + 1000);
-//                                                                System.out.println("added 1000 gold");
-//                                                            }
-//                                                            return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
-//                                                        } else {
-//                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
-//                                                            if (friendshipLVL == 2) {
-//                                                                currentPlayer.setGold(currentPlayer.getGold() + 50000);
-//                                                            } else {
-//                                                                currentPlayer.setGold(currentPlayer.getGold() + 25000);
-//                                                            }
-//                                                            return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
-//                                                        }
-//                                                    case "ironbar":
-//                                                        CraftingItem zanboor = new CraftingItem(CraftingRecipesEnums.BeeHouse.toString());
-//                                                        currentPlayer.getInventory().addItem(zanboor, 3);
-//                                                        App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
-//                                                        return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                    if (!found) {
-//                                        return new Result(false, "You don't have enough resources");
-//                                    }
-//                                }
-//                            }
-//                            if (!flag) {
-//                                return new Result(false, "You can't do the selected quest right now");
-//                            }
-//                        } else {
-//                            return new Result(false, "No NPC found nearby");
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    public static Result questsFinish(NPC npc, int index) {
+        index--;
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (npc.getName() == NPCEnums.SEBASTIAN) {
+            int friendshipLVL = -1;
+            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                if (friendship.getPlayer() == currentPlayer) {
+                    friendshipLVL = friendship.getFriendshipLevel() / 200;
+                    break;
+                }
+            }
+            boolean flag = false;
+            for (Item object : App.getCurrentGame().getNPCSEBASTIAN().getQuests().keySet()) {
+                NPCItem npcItem = App.getCurrentGame().getNPCSEBASTIAN().getQuests().get(object);
+                if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
+                    flag = true;
+                    boolean found = false;
+                    for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+                        if (object.getCorrectName().toLowerCase().replace(" ", "").equals(item.getCorrectName())) {
+                            if (currentPlayer.getInventory().getItemQuantity(item) < npcItem.getQuantity()) {
+                                return new Result(false, "You don't have enough resources");
+                            } else {
+                                found = true;
+                                currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
+                                switch (object.getCorrectName()) {
+                                    case "ironore":
+                                        Mineral diamond = new Mineral();
+                                        diamond.setType(ForagingMineralsEnums.Diamond);
+                                        diamond.setPrice(750);
+                                        if (friendshipLVL == 2) {
+                                            currentPlayer.getInventory().addItem(diamond, 4);
+                                        } else {
+                                            currentPlayer.getInventory().addItem(diamond, 2);
+                                        }
+                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
+                                    case "pumpkinpie":
+                                        if (friendshipLVL == 2) {
+                                            currentPlayer.setGold(currentPlayer.getGold() + 10000);
+                                        } else {
+                                            currentPlayer.setGold(currentPlayer.getGold() + 5000);
+                                        }
+                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
+                                    case "stone":
+                                        Mineral quartz = new Mineral();
+                                        quartz.setType(ForagingMineralsEnums.Quartz);
+                                        quartz.setPrice(25);
+                                        if (friendshipLVL == 2) {
+                                            currentPlayer.getInventory().addItem(quartz, 100);
+                                        } else {
+                                            currentPlayer.getInventory().addItem(quartz, 50);
+                                        }
+                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
+                                }
+                            }
+                        }
+                    }
+                    if (!found) {
+                        return new Result(false, "You don't have enough resources");
+                    }
+                }
+            }
+            if (!flag) {
+                return new Result(false, "You can't do the selected quest right now");
+            }
+        } else {
+            if (npc.getName() == NPCEnums.ABIGAIL) {
+                int friendshipLVL = -1;
+                for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                    if (friendship.getPlayer() == currentPlayer) {
+                        friendshipLVL = friendship.getFriendshipLevel() / 200;
+                        break;
+                    }
+                }
+                boolean flag = false;
+                for (Item object : App.getCurrentGame().getNPCABIGAIL().getQuests().keySet()) {
+                    NPCItem npcItem = App.getCurrentGame().getNPCABIGAIL().getQuests().get(object);
+                    if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
+                        flag = true;
+
+                        boolean found = false;
+
+                        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+
+                            if (item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
+                                if (currentPlayer.getInventory().getItemQuantity(item) < npcItem.getQuantity()) {
+                                    return new Result(false, "You don't have enough resources");
+                                } else {
+                                    found = true;
+                                    currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
+                                    switch (object.getCorrectName()) {
+                                        case "goldbar":
+                                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                                                if (friendship.getPlayer() == currentPlayer) {
+                                                    if (friendshipLVL == 2) {
+                                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 400);
+                                                    } else {
+                                                        friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
+                                        case "pumpkin":
+                                            if (friendshipLVL == 2) {
+                                                currentPlayer.setGold(currentPlayer.getGold() + 1000);
+                                            } else {
+                                                currentPlayer.setGold(currentPlayer.getGold() + 500);
+                                            }
+                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
+                                        case "wheat":
+                                            CraftingItem abpash = new CraftingItem((CraftingRecipesEnums.IridiumSprinkler).toString());
+                                            currentPlayer.getInventory().addItem(abpash, 1);
+                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
+                                    }
+                                }
+                            }
+                        }
+                        if (!found) {
+                            return new Result(false, "You don't have enough resources");
+                        }
+                    }
+                }
+                if (!flag) {
+                    return new Result(false, "You can't do the selected quest right now");
+                }
+            } else {
+                if (npc.getName() == NPCEnums.HARVEY) {
+                    int friendshipLVL = -1;
+                    for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                        if (friendship.getPlayer() == currentPlayer) {
+                            friendshipLVL = friendship.getFriendshipLevel() / 200;
+                            break;
+                        }
+                    }
+                    boolean flag = false;
+                    for (Item object : App.getCurrentGame().getNPCHARVEY().getQuests().keySet()) {
+                        NPCItem npcItem = App.getCurrentGame().getNPCHARVEY().getQuests().get(object);
+                        if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
+                            flag = true;
+
+                            boolean found = false;
+
+                            for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+
+                                if ((object.getCorrectName().equalsIgnoreCase("allcrop") && item instanceof AllCrop) || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
+                                    if (currentPlayer.getInventory().getItemQuantity(item) < npcItem.getQuantity()) {
+                                        return new Result(false, "You don't have enough resources");
+                                    } else {
+                                        found = true;
+                                        currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
+                                        switch (object.getCorrectName()) {
+                                            case "allcrop":
+                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+                                                if (friendshipLVL == 2) {
+                                                    currentPlayer.setGold(currentPlayer.getGold() + 1500);
+                                                } else {
+                                                    currentPlayer.setGold(currentPlayer.getGold() + 750);
+                                                    System.out.println("added 750 gold");
+                                                }
+                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
+                                            case "salmon":
+                                                for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                                                    if (friendship.getPlayer() == currentPlayer) {
+                                                        if (friendshipLVL == 2) {
+                                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 400);
+                                                        } else {
+                                                            friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 200);
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
+                                            case "wine":
+                                                FoodCooking foodCooking = new FoodCooking();
+                                                foodCooking.setName(FoodCookingEnums.Salad);
+                                                foodCooking.setEnergy(113);
+                                                foodCooking.setSellPrice(110);
+                                                if (friendshipLVL == 2) {
+                                                    currentPlayer.getInventory().addItem(foodCooking, 10);
+                                                } else {
+                                                    currentPlayer.getInventory().addItem(foodCooking, 5);
+                                                }
+                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+                                                return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
+                                        }
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                System.out.println(object.getCorrectName() + " " + npcItem.getQuantity());
+                                return new Result(false, "You don't have enough resources");
+                            }
+                        }
+                    }
+                    if (!flag) {
+                        return new Result(false, "You can't do the selected quest right now");
+                    }
+                } else {
+                    if (npc.getName() == NPCEnums.LEAH) {
+                        int friendshipLVL = -1;
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                            if (friendship.getPlayer() == currentPlayer) {
+                                friendshipLVL = friendship.getFriendshipLevel() / 200;
+                                break;
+                            }
+                        }
+                        boolean flag = false;
+                        for (Item object : App.getCurrentGame().getNPCLEAH().getQuests().keySet()) {
+                            NPCItem npcItem = App.getCurrentGame().getNPCLEAH().getQuests().get(object);
+                            if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
+                                flag = true;
+
+                                boolean found = false;
+
+                                for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+
+                                    if (object.getCorrectName().equalsIgnoreCase("wood") || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
+                                        if ((currentPlayer.getInventory().getItemQuantity(item) < npcItem.getQuantity()) && !(object.getCorrectName().equalsIgnoreCase("wood") && currentPlayer.getWood() >= npcItem.getQuantity())) {
+                                            return new Result(false, "You don't have enough resources");
+                                        } else {
+                                            found = true;
+                                            currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
+                                            switch (object.getCorrectName()) {
+                                                case "wood":
+                                                    if (npcItem.getRequiredLevel() == 0) {
+                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+                                                        if (friendshipLVL == 2) {
+                                                            currentPlayer.setGold(currentPlayer.getGold() + 1000);
+                                                        } else {
+                                                            currentPlayer.setGold(currentPlayer.getGold() + 500);
+                                                            System.out.println("added 500 gold");
+                                                        }
+                                                        return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
+                                                    } else {
+                                                        CraftingItem matarsak = new CraftingItem(CraftingRecipesEnums.DeluxeScarecrow.toString());
+                                                        currentPlayer.getInventory().addItem(matarsak, 3);
+                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+                                                        return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
+                                                    }
+                                                case "salmon":
+                                                    Cookingrecipe cookingrecipe = new Cookingrecipe();
+                                                    cookingrecipe.setFood(FoodCookingEnums.SalmonDinner);
+                                                    cookingrecipe.setPrice(100);
+                                                    if (friendshipLVL == 2) {
+                                                        cookingrecipe.setPrice(600);
+                                                    } else {
+                                                        cookingrecipe.setPrice(300);
+                                                    }
+                                                    currentPlayer.getCookingRecipes().add(cookingrecipe);
+                                                    App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+                                                    return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
+                                            }
+                                        }
+                                    }
+                                }
+                                if (!found) {
+                                    return new Result(false, "You don't have enough resources");
+                                }
+                            }
+                        }
+                        if (!flag) {
+                            return new Result(false, "You can't do the selected quest right now");
+                        }
+                    } else {
+                        if (npc.getName() == NPCEnums.ROBIN) {
+                            int friendshipLVL = -1;
+                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                                if (friendship.getPlayer() == currentPlayer) {
+                                    friendshipLVL = friendship.getFriendshipLevel() / 200;
+                                    break;
+                                }
+                            }
+                            boolean flag = false;
+                            for (Item object : App.getCurrentGame().getNPCROBIN().getQuests().keySet()) {
+                                NPCItem npcItem = App.getCurrentGame().getNPCROBIN().getQuests().get(object);
+                                if (friendshipLVL >= npcItem.getRequiredLevel() && npcItem.getRequiredLevel() == index) {
+                                    flag = true;
+
+                                    boolean found = false;
+
+                                    for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+
+                                        if (object.getCorrectName().equalsIgnoreCase("wood") || item.getCorrectName().toLowerCase().replace(" ", "").equals(object.getCorrectName())) {
+                                            if (currentPlayer.getInventory().getItemQuantity(item) < npcItem.getQuantity() && !(object.getCorrectName().equalsIgnoreCase("wood") && currentPlayer.getWood() >= npcItem.getQuantity())) {
+                                                return new Result(false, "You don't have enough resources");
+                                            } else {
+                                                found = true;
+                                                currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
+                                                switch (object.getCorrectName()) {
+                                                    case "wood":
+                                                        if (npcItem.getRequiredLevel() == 0) {
+                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+                                                            if (friendshipLVL == 2) {
+                                                                currentPlayer.setGold(currentPlayer.getGold() + 2000);
+                                                            } else {
+                                                                currentPlayer.setGold(currentPlayer.getGold() + 1000);
+                                                                System.out.println("added 1000 gold");
+                                                            }
+                                                            return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
+                                                        } else {
+                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+                                                            if (friendshipLVL == 2) {
+                                                                currentPlayer.setGold(currentPlayer.getGold() + 50000);
+                                                            } else {
+                                                                currentPlayer.setGold(currentPlayer.getGold() + 25000);
+                                                            }
+                                                            return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
+                                                        }
+                                                    case "ironbar":
+                                                        CraftingItem zanboor = new CraftingItem(CraftingRecipesEnums.BeeHouse.toString());
+                                                        currentPlayer.getInventory().addItem(zanboor, 3);
+                                                        App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+                                                        return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (!found) {
+                                        return new Result(false, "You don't have enough resources");
+                                    }
+                                }
+                            }
+                            if (!flag) {
+                                return new Result(false, "You can't do the selected quest right now");
+                            }
+                        } else {
+                            return new Result(false, "No NPC found nearby");
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public void menuEnter(String menuName) {
