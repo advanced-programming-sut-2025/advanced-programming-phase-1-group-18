@@ -15,7 +15,6 @@ gradle-app.setting
 /shared/build/
 
 ## Java:
-*.html
 *.class
 *.war
 *.ear
