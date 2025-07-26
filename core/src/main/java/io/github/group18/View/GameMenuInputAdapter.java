@@ -106,6 +106,35 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
 
+        if (keycode == Input.Keys.H) {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+
+            TalkHistoryWindow talkHistoryWindow = new TalkHistoryWindow(
+                GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage(),
+                currentPlayer
+            );
+
+            gameController.getGameMenu().getStage().addActor(talkHistoryWindow);
+            return true;
+        }
+
+
+        if (keycode == Input.Keys.T) {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getCurrentPlayer();
+
+            TalkWindow talkWindow = new TalkWindow(
+                GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage(),
+                currentPlayer
+            );
+
+            gameController.getGameMenu().getStage().addActor(talkWindow);
+            return true;
+        }
+
+
         return true;
     }
 
@@ -504,12 +533,13 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void handleCheatCodeDialog() {
         Stage stage = gameController.getGameMenu().getCheatCodeStage();
-        Gdx.input.setInputProcessor(stage);
-        CheatCodeDialog cheatDialog = new CheatCodeDialog(stage,
-            GameAssetManager.getGameAssetManager().getSkin(), this, this.gameController);
-        cheatDialog.show(stage);
-        cheatDialog.setColor(Color.WHITE);
+        CheatCodeDialog cheatWindow = new CheatCodeDialog(
+            GameAssetManager.getGameAssetManager().getSkin(),
+            this.gameController
+        );
+        gameController.getGameMenu().getStage().addActor(cheatWindow);
     }
+
 
 
     //for building

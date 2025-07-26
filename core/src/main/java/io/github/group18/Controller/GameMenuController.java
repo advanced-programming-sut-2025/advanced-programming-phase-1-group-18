@@ -352,7 +352,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "Player: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername() + " " + Playerindex);
     }
 
-    public boolean isFainted() {
+    public static boolean isFainted() {
         if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() == 0) {
             return true;
         }
@@ -3422,7 +3422,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public Result talk(String username, String message) {
+    public static Result talk(String username, String message) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3441,18 +3441,18 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
 
-//        for (Friendship friendships :currentGame.getFriendships()){
-//            for(Player player : App.getCurrentGame().getPlayers()){
-//                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
-//                    friendship = friendships;
-//                }
-//            }
-//
-//        }
+        for (Friendship friendships :currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+                    friendship = friendships;
+                }
+            }
+
+        }
         assert friendship != null;
         friendship.interact(20);
 
-        // ذخیره پیام
+
         String addressedMessage = currentPlayer.getOwner().getUsername() + " : " + message + "(" +
             App.getCurrentGame().getCurrentDateTime().getDay() + " : " + App.getCurrentGame().getCurrentDateTime().getHour()
             + ")";
@@ -3460,7 +3460,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "messege sent successfully");
     }
 
-    public Result talkHistory(String username) {
+    public static  Result talkHistory(String username) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3470,17 +3470,19 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         StringBuilder result = new StringBuilder();
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
-//        for (Friendship friendships :currentGame.getFriendships()){
-//            for(Player player : App.getCurrentGame().getPlayers()){
-//                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
-//                    friendship = friendships;
-//                }
-//            }
-//        }
+        for (Friendship friendships :currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+                    friendship = friendships;
+                }
+            }
+        }
         assert friendship != null;
         for (String message : friendship.getTalkHistory()) {
             result.append(message).append("\n");
         }
+        friendship.getTalkHistory().clear();
+
         return new Result(true, result.toString());
     }
 

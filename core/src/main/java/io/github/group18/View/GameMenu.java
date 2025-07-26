@@ -99,7 +99,6 @@ public class GameMenu implements Screen {
         gameView.render();
         lightningEffect.render(Main.getBatch());
         gameMenuInputAdapter.update(delta,gameView.getBatch());
-
         handleNightSleepFade(delta);
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -110,6 +109,8 @@ public class GameMenu implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        inventoryView.update();
 
         fishingMiniGame.update(delta);
         fishingMiniGame.render();
