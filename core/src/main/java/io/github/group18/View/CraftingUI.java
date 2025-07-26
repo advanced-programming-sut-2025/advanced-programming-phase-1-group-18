@@ -382,7 +382,6 @@ public class CraftingUI {
                 craftingItem.setProcessing(true);
                 errorDialog.text(result.getMessage());
                 errorDialog.show(window.getStage());
-                active =false;
             }
         });
 //        slotsTable.row();
@@ -431,6 +430,7 @@ public class CraftingUI {
                 errorDialog.text("Preparing Stopped by YOU");
                 errorDialog.show(window.getStage());
                 active =false;
+                Gdx.input.setInputProcessor(gameMenuInputAdapter);
             }
         });
 //        slotsTable.row();
@@ -493,14 +493,15 @@ public class CraftingUI {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                System.out.println(App.getGameMenuController().artisanGet(craftingItem.getInsideArtisan().getCorrectName(),craftingItem));
                 craftingItem.setProcessing(false);
                 craftingItem.setReady(false);
                 errorDialog.getContentTable().clear();
                 errorDialog.text("Artisan Collected");
-                System.out.println(App.getGameMenuController().artisanGet(craftingItem.getInsideArtisan().getCorrectName(),craftingItem));
                 errorDialog.show(window.getStage());
                 craftingItem.setInsideArtisan(null);
                 active =false;
+                Gdx.input.setInputProcessor(gameMenuInputAdapter);
             }
         });
 
