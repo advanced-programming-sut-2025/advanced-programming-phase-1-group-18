@@ -7,16 +7,20 @@ import java.util.HashMap;
 import io.github.group18.Model.Items.*;
 import io.github.group18.enums.*;
 
-public class NPC implements adaptMapMarket ,PictureModel{
+public class NPC implements PictureModel {
+    private int x;
+    private int y;
     private NPCEnums name;
     private String job;
     private boolean talkedWithToday;
     private boolean giftedToday;
-    private ArrayList<Item> favorites;
     private ArrayList<Friendshipali> friendships;
     private HashMap<Item, NPCItem> quests;
 
-    public NPC(NPCEnums name) {
+    public NPC(NPCEnums name, int x, int y) {
+
+        this.x = x;
+        this.y = y;
 
         friendships = new ArrayList<>();
 
@@ -180,25 +184,20 @@ public class NPC implements adaptMapMarket ,PictureModel{
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
 
-    public Result meetNPC(String npcName) {
-        return new Result(true, "");
+    public int getX() {
+        return x;
     }
 
-    public Result giftNPC(String npcName, String item) {
-        return new Result(true, "");
+    public void setX(int x) {
+        this.x = x;
     }
 
-
-    public void friendshipList() {
-
+    public int getY() {
+        return y;
     }
 
-    public void questsList() {
-
-    }
-
-    public Result questsFinish(int index) {
-        return new Result(true, "");
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override

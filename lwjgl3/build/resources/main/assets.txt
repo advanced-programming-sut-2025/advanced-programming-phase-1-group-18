@@ -683,6 +683,13 @@ SkillsIcon/ForagingSkill.png
 SkillsIcon/MiningSkill.png
 SkillsIcon/SkillIcons.atlas
 SkillsIcon/SkillIcons.png
+Skin/1hoursheet.PNG
+Skin/font-export.fnt
+Skin/font-subtitle-export.fnt
+Skin/font-title-export.fnt
+Skin/pixthulhu-ui.atlas
+Skin/pixthulhu-ui.json
+Skin/pixthulhu-ui.png
 Stone.png
 Store.png
 Tools/36_Backpack.png
@@ -983,13 +990,6 @@ mapDeafult.png
 menu_bg.png
 music/theme1.mp3
 music/theme2.mp3
-skin/1hoursheet.PNG
-skin/font-export.fnt
-skin/font-subtitle-export.fnt
-skin/font-title-export.fnt
-skin/pixthulhu-ui.atlas
-skin/pixthulhu-ui.json
-skin/pixthulhu-ui.png
 testSpriteSheet/clockAtlas.atlas
 testSpriteSheet/clockAtlas.png
 ui/font-list.fnt
