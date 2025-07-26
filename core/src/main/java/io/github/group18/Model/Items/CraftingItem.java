@@ -53,7 +53,7 @@ public class CraftingItem extends Item implements Name,Price
     }
     @Override
     public String getCorrectName() {
-        return craftingItem.name().toLowerCase().replace(" ", "");
+        return craftingItem.name();
     }
 
 
