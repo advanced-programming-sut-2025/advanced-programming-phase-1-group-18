@@ -269,6 +269,6 @@ public class JojoMartMarket implements adaptMapMarket ,PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "Market/Jojamart.png";
     }
 }

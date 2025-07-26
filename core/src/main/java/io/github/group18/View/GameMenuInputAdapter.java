@@ -166,19 +166,21 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()){
+        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()) {
             if (button == Input.Buttons.LEFT) {
                 System.out.println("place ");
                 placeCrafting(screenX, screenY);
                 return true;
             }
-        }else{
-            if (button == Input.Buttons.LEFT) {if(buildingPaceMode)
-            {
-                buildDamdari(screenX,screenY);
-            }
+        } else {
+            if (button == Input.Buttons.LEFT) {
+                if (buildingPaceMode) {
+                    buildDamdari(screenX, screenY);
+                }
                 Game.getCurrentPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
+                openNpcDialog(screenX, screenY);
+                openNpcPage(screenX,screenY);
                 return true;
             }
             if (button == Input.Buttons.RIGHT) {
@@ -188,6 +190,106 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         return false;
+    }
+
+    private void openNpcPage(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+        int dx = tileX - Math.round(playerPos.first);
+        int dy = tileY - Math.round(playerPos.second);
+
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+            return;
+        }
+        Game currentGame = App.getCurrentGame();
+        NPC sebastian = currentGame.getNPCSEBASTIAN();
+        NPC abigail = currentGame.getNPCABIGAIL();
+        NPC harvey = currentGame.getNPCHARVEY();
+        NPC leah = currentGame.getNPCLEAH();
+        NPC robin = currentGame.getNPCROBIN();
+
+        if (tileX == sebastian.getX() && (tileY == sebastian.getY() || tileY == sebastian.getY() + 1)) {
+            currentGame.setSebastian_view(true);
+            openNPCViewPage(sebastian);
+        }
+        if (tileX == abigail.getX() && (tileY == abigail.getY() || tileY == abigail.getY() + 1)) {
+            currentGame.setAbigail_view(true);
+            openNPCViewPage(abigail);
+        }
+        if (tileX == harvey.getX() && (tileY == harvey.getY() || tileY == harvey.getY() + 1)) {
+            currentGame.setHarvey_view(true);
+            openNPCViewPage(harvey);
+        }
+        if (tileX == leah.getX() && (tileY == leah.getY() || tileY == leah.getY() + 1)) {
+            currentGame.setLeah_view(true);
+            openNPCViewPage(leah);
+        }
+        if (tileX == robin.getX() && (tileY == robin.getY() || tileY == robin.getY() + 1)) {
+            currentGame.setRobin_view(true);
+            openNPCViewPage(robin);
+        }
+    }
+
+    private void openNPCViewPage(NPC npc) {
+        GameView gameView = gameController.getGameMenu().getGameView();
+        gameView.setNpcView(new NPCView(Gdx.input.getInputProcessor(), npc));
+        Gdx.input.setInputProcessor(gameView.getNpcView().getStage());
+    }
+
+    private void openNpcDialog(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+        int dx = tileX - Math.round(playerPos.first);
+        int dy = tileY - Math.round(playerPos.second);
+
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+            return;
+        }
+        Game currentGame = App.getCurrentGame();
+        NPC sebastian = currentGame.getNPCSEBASTIAN();
+        NPC abigail = currentGame.getNPCABIGAIL();
+        NPC harvey = currentGame.getNPCHARVEY();
+        NPC leah = currentGame.getNPCLEAH();
+        NPC robin = currentGame.getNPCROBIN();
+
+        if (tileX == sebastian.getX() && tileY == sebastian.getY() + 2) {
+            currentGame.setSebastian_dialog(true);
+            openDialogPage(sebastian);
+        }
+        if (tileX == abigail.getX() && tileY == abigail.getY() + 2) {
+            currentGame.setAbigail_dialog(true);
+            openDialogPage(abigail);
+        }
+        if (tileX == harvey.getX() && tileY == harvey.getY() + 2) {
+            currentGame.setHarvey_dialog(true);
+            openDialogPage(harvey);
+        }
+        if (tileX == leah.getX() && tileY == leah.getY() + 2) {
+            currentGame.setLeah_dialog(true);
+            openDialogPage(leah);
+        }
+        if (tileX == robin.getX() && tileY == robin.getY() + 2) {
+            currentGame.setRobin_dialog(true);
+            openDialogPage(robin);
+        }
+    }
+
+    private void openDialogPage(NPC npc) {
+        GameView gameView = gameController.getGameMenu().getGameView();
+        gameView.setNpcDialogView(new NPCDialogView(Gdx.input.getInputProcessor(), npc));
+        Gdx.input.setInputProcessor(gameView.getNpcDialogView().getStage());
     }
 
     public void update(float delta, Batch batch) {
@@ -309,31 +411,31 @@ public class GameMenuInputAdapter extends InputAdapter {
             } else {
                 GameView gameView = gameController.getGameMenu().getGameView();
                 if (kashi.getInside() instanceof BlackSmithMarket) {
-                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(),Gdx.input.getInputProcessor()));
+                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getBlackSmith().getStage());
                 }
                 if (kashi.getInside() instanceof CarpentersShopMarket) {
-                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(),Gdx.input.getInputProcessor()));
+                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getCarpentersShop().getStage());
                 }
                 if (kashi.getInside() instanceof FishShopMarket) {
-                    gameView.setFishShop(new StoreUI(new FishShopController(),Gdx.input.getInputProcessor()));
+                    gameView.setFishShop(new StoreUI(new FishShopController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
                 }
                 if (kashi.getInside() instanceof JojoMartMarket) {
-                    gameView.setJojaMart(new StoreUI(new JojaMartController(),Gdx.input.getInputProcessor()));
+                    gameView.setJojaMart(new StoreUI(new JojaMartController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getJojaMart().getStage());
                 }
                 if (kashi.getInside() instanceof MarniesRanchMarket) {
-                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(),Gdx.input.getInputProcessor()));
+                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getMarniesRanch().getStage());
                 }
                 if (kashi.getInside() instanceof PierresGeneralStoreMarket) {
-                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(),Gdx.input.getInputProcessor()));
+                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getPirresGeneralStore().getStage());
                 }
                 if (kashi.getInside() instanceof TheStardropSaloonMarket) {
-                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(),Gdx.input.getInputProcessor()));
+                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(), Gdx.input.getInputProcessor()));
                     Gdx.input.setInputProcessor(gameView.getTheStarDropSalooon().getStage());
                 }
                 //goto store
@@ -362,8 +464,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
     }
 
-    private void handleBuildingView()
-    {
+    private void handleBuildingView() {
         Stage stage = gameController.getGameMenu().getCheatCodeStage();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
@@ -376,6 +477,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         dialog.show(stage);
         Gdx.input.setInputProcessor(stage);
     }
+
     private void nextTurn() {
         GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
     }
@@ -390,7 +492,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
 
-        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() instanceof CraftingItem){
+        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() instanceof CraftingItem) {
             CraftingItem craft = (CraftingItem) App.getCurrentGame().getMap().get(tileX).get(tileY).getInside();
             CraftingUI craftingUI = new CraftingUI(craft);
             craftingUI.setCraftingItem(craft);
@@ -412,6 +514,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         Item item = Game.getCurrentPlayer().getInventory().getItemBySlot(game.getCurrentPlayer().getInventory().getSelectedSlot());
         gameController.useItem(item, tileX, tileY, game);
     }
+
     private void placeCrafting(int screenX, int screenY) {
         OrthographicCamera camera = game.getCamera();
         camera.update();
@@ -423,8 +526,8 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 //        int dx = tileX - Math.round(playerPos.first);
 //        int dy = tileY - Math.round(playerPos.second);
-        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() == null){
-            Player currentPlayer =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() == null) {
+            Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
             CraftingItem item = Game.getCurrentPlayer().getCraftingInHand();
             App.getCurrentGame().getMap().get(tileX).get(tileY).setInside(item);
             App.getCurrentGame().getMap().get(tileX).get(tileY).setWalkable(false);
@@ -555,89 +658,67 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     //for building
     private void inputBuilding(String buildingName) {
-        if(buildingName == null) {
+        if (buildingName == null) {
             return;
         }
-        if(buildingName.equals("barn"))
-        {
+        if (buildingName.equals("barn")) {
             if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 350 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 6000 )
-            {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 6000) {
                 return;
-            }
-            else {
+            } else {
                 buildingPaceMode = true;
             }
         }
-        if(buildingName.equalsIgnoreCase("bigBarn"))
-        {
+        if (buildingName.equalsIgnoreCase("bigBarn")) {
             if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 450 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12000 )
-            {
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12000) {
                 return;
-            }
-            else
-            {
-                buildingPaceMode= true;
-            }
-        }
-        if(buildingName.equalsIgnoreCase("deluxeBarn"))
-        {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 550 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000 )
-            {
-                return;
-            }
-            else
-            {
-                buildingPaceMode= true;
-            }
-        }
-        if(buildingName.equalsIgnoreCase("Coop"))
-        {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 300 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 4000 )
-            {
-                return;
-            }
-            else
-            {
-                buildingPaceMode= true;
-            }
-        }
-        if(buildingName.equalsIgnoreCase("bigCoop"))
-        {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 400 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000 )
-            {
-                return;
-            }
-            else {
+            } else {
                 buildingPaceMode = true;
             }
         }
-        if(buildingName.equalsIgnoreCase("deluxeCoop"))
-        {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 500 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 20000)
-            {
+        if (buildingName.equalsIgnoreCase("deluxeBarn")) {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 550 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
                 return;
+            } else {
+                buildingPaceMode = true;
             }
-            else {
+        }
+        if (buildingName.equalsIgnoreCase("Coop")) {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 300 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 4000) {
+                return;
+            } else {
+                buildingPaceMode = true;
+            }
+        }
+        if (buildingName.equalsIgnoreCase("bigCoop")) {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 400 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                return;
+            } else {
+                buildingPaceMode = true;
+            }
+        }
+        if (buildingName.equalsIgnoreCase("deluxeCoop")) {
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 500 ||
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 20000) {
+                return;
+            } else {
                 buildingPaceMode = true;
             }
         }
     }
-    private void buildDamdari(int screenX,int screenY)
-    {
+
+    private void buildDamdari(int screenX, int screenY) {
         Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
 
-        int tileX = (int)(worldCoords.x / game.TILE_SIZE);
-        int tileY = (int)(worldCoords.y / game.TILE_SIZE);
+        int tileX = (int) (worldCoords.x / game.TILE_SIZE);
+        int tileY = (int) (worldCoords.y / game.TILE_SIZE);
 
-            if(input.equalsIgnoreCase("barn"))
-            {
-                CarpentersShopController.build("barn",tileX,tileY);
+        if (input.equalsIgnoreCase("barn")) {
+            CarpentersShopController.build("barn", tileX, tileY);
 //                for (int dx = -3; dx <= 3; dx++) {
 //                    for (int dy = -2; dy <= 1; dy++) {
 //                        int x = tileX + dx;
@@ -648,56 +729,48 @@ public class GameMenuInputAdapter extends InputAdapter {
 //                          game.getMap().get(x).get(y).setInside(tavileh);
 //                    }
 //                }
-            }
-            if(input.equalsIgnoreCase("bigbarn"))
-            {
-                CarpentersShopController.build("bigbarn",tileX,tileY);
-            }
-            if(input.equalsIgnoreCase("deluxebarn"))
-            {
-                CarpentersShopController.build("deluxebarn",tileX,tileY);
-            }
-            if(input.equalsIgnoreCase("coop"))
-            {
-                CarpentersShopController.build("coop",tileX,tileY);
+        }
+        if (input.equalsIgnoreCase("bigbarn")) {
+            CarpentersShopController.build("bigbarn", tileX, tileY);
+        }
+        if (input.equalsIgnoreCase("deluxebarn")) {
+            CarpentersShopController.build("deluxebarn", tileX, tileY);
+        }
+        if (input.equalsIgnoreCase("coop")) {
+            CarpentersShopController.build("coop", tileX, tileY);
 
-            }
-            if(input.equalsIgnoreCase("bigcoop"))
-            {
-                CarpentersShopController.build("bigcoop",tileX,tileY);
-            }
-            if(input.equalsIgnoreCase("deluxecoop"))
-            {
-                CarpentersShopController.build("deluxecoop",tileX,tileY);
-            }
-            if(input.equalsIgnoreCase("cow"))
-            {
-                TavilehAnimal animal = new TavilehAnimal();
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()== null
-                    && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()== null
-                    && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()== null)
-                {
+        }
+        if (input.equalsIgnoreCase("bigcoop")) {
+            CarpentersShopController.build("bigcoop", tileX, tileY);
+        }
+        if (input.equalsIgnoreCase("deluxecoop")) {
+            CarpentersShopController.build("deluxecoop", tileX, tileY);
+        }
+        if (input.equalsIgnoreCase("cow")) {
+            TavilehAnimal animal = new TavilehAnimal();
+            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh() == null
+                && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn() == null
+                && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn() == null) {
 
-                }
-                else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
-                    //set animal pack
-                    System.exit(0);
-                    animal.setType((TavilehAnimalEnums.Cow));
-                    animal.setName("mammad");
-                    animal.setPrice(1500);
-                    animal.setOutside(false);
-                    animal.setXofAnimal(-1);
-                    animal.setYofAnimal(-1);
-                    animal.setWhereDoILive("barn");
-                    ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
-                    animals.add(animal);
-                    ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
-                    tavilehAnimals.add(animal);
-                    int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
-                }
+            } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh() != null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
+                //set animal pack
+                System.exit(0);
+                animal.setType((TavilehAnimalEnums.Cow));
+                animal.setName("mammad");
+                animal.setPrice(1500);
+                animal.setOutside(false);
+                animal.setXofAnimal(-1);
+                animal.setYofAnimal(-1);
+                animal.setWhereDoILive("barn");
+                ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                animals.add(animal);
+                ArrayList<TavilehAnimal> tavilehAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                tavilehAnimals.add(animal);
+                int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
+                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
             }
-            buildingPaceMode = false;
+        }
+        buildingPaceMode = false;
 
 
     }

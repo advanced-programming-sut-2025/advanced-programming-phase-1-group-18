@@ -47,6 +47,10 @@ public class GameView {
     private StoreUI PirresGeneralStore;
     private StoreUI TheStarDropSalooon;
 
+    private NPCDialogView npcDialogView;
+
+    private NPCView npcView;
+
     public GameView(Game game) {
         this.game = game;
         batch = new SpriteBatch();
@@ -164,11 +168,10 @@ public class GameView {
 
     private void loadInventoryItems() {
         for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof CraftingItem){
-                textures.put(item,new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+            if (item instanceof CraftingItem) {
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
                     findRegion(((CraftingItem) item).getCraftingItem().name())));
-            }
-            else if (item instanceof PictureModel pictureModel) {
+            } else if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
                 try {
                     textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
@@ -196,6 +199,62 @@ public class GameView {
         renderBrightness();
         walking = false;
         batch.end();
+    }
+
+    private void renderNPC(int startx, int starty, int endx, int endy) {
+        Game currentGame = App.getCurrentGame();
+        GameAssetManager gameAssetManager = GameAssetManager.getGameAssetManager();
+        Texture triangle = gameAssetManager.getUpsidedownredtriangle();
+        NPC sebastian = currentGame.getNPCSEBASTIAN();
+        NPC abigail = currentGame.getNPCABIGAIL();
+        NPC harvey = currentGame.getNPCHARVEY();
+        NPC leah = currentGame.getNPCLEAH();
+        NPC robin = currentGame.getNPCROBIN();
+
+        if (sebastian.getX() >= startx && sebastian.getX() <= endx &&
+            sebastian.getY() >= starty && sebastian.getY() <= endy) {
+            Texture npc = gameAssetManager.getSebastian_NPC();
+            batch.draw(npc, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
+            batch.draw(triangle, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+        }
+
+        if (abigail.getX() >= startx && abigail.getX() <= endx &&
+            abigail.getY() >= starty && abigail.getY() <= endy) {
+            Texture npc = gameAssetManager.getAbigail_NPC();
+            batch.draw(npc, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
+            batch.draw(triangle, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+        }
+
+        if (harvey.getX() >= startx && harvey.getX() <= endx &&
+            harvey.getY() >= starty && harvey.getY() <= endy) {
+            Texture npc = gameAssetManager.getHarvey_NPC();
+            batch.draw(npc, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
+            batch.draw(triangle, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+        }
+
+        if (leah.getX() >= startx && leah.getX() <= endx &&
+            leah.getY() >= starty && leah.getY() <= endy) {
+            Texture npc = gameAssetManager.getLeah_NPC();
+            batch.draw(npc, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
+            batch.draw(triangle, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+        }
+
+        if (robin.getX() >= startx && robin.getX() <= endx &&
+            robin.getY() >= starty && robin.getY() <= endy) {
+            Texture npc = gameAssetManager.getRobin_NPC();
+            batch.draw(npc, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
+            batch.draw(triangle, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+        }
+
+        if (currentGame.isSebastian_dialog() || currentGame.isAbigail_dialog()
+            || currentGame.isHarvey_dialog() || currentGame.isLeah_dialog() || currentGame.isRobin_dialog()) {
+            npcDialogView.render();
+        }
+
+        if (currentGame.isSebastian_view() || currentGame.isHarvey_view() ||
+        currentGame.isLeah_view() || currentGame.isRobin_view() || currentGame.isAbigail_view()) {
+            npcView.render();
+        }
     }
 
     private void renderMarkets() {
@@ -264,6 +323,7 @@ public class GameView {
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
+        renderNPC(startX, startY, endX, endY);
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
@@ -273,15 +333,15 @@ public class GameView {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
-                if ( tiles.get(x).get(y).getInside() == null ) {
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()){
+                if (tiles.get(x).get(y).getInside() == null) {
+                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()) {
                         batch.setColor(0, 1, 0, 0.5f);
                         batch.draw(texture, drawX, drawY, tileSize, tileSize);
                         batch.setColor(Color.WHITE);
-                    }else{
+                    } else {
                         batch.draw(texture, drawX, drawY, tileSize, tileSize);
                     }
-                }else {
+                } else {
                     batch.draw(texture, drawX, drawY, tileSize, tileSize);
                 }
             }
@@ -370,30 +430,30 @@ public class GameView {
                         if (texture == null) {
                             texture = GameAssetManager.getGameAssetManager().getGrass();
                         }
-                        if (inside instanceof CraftingItem){
+                        if (inside instanceof CraftingItem) {
                             texture = GameAssetManager.getGameAssetManager().getCraftingAtlas().
                                 findRegion(((CraftingItem) inside).getCraftingItem().name());
                             texture.setRegionWidth(tileSize);
-                            TextureRegion blueBar =new TextureRegion(GameAssetManager.getGameAssetManager().getBlueBarTexture());
+                            TextureRegion blueBar = new TextureRegion(GameAssetManager.getGameAssetManager().getBlueBarTexture());
                             TextureRegion ready = new TextureRegion(GameAssetManager.getGameAssetManager().getReadyTexture());
-                            if (((CraftingItem) inside).isProcessing()){
-                                if (((CraftingItem) inside).getInsideArtisan() != null){
-                                    if(!((CraftingItem) inside).getInsideArtisan().
-                                        isProcessingDone(App.getCurrentGame().getCurrentDateTime())){
-                                        blueBar.setRegionWidth((int) (tileSize*(((CraftingItem) inside).getInsideArtisan()
+                            if (((CraftingItem) inside).isProcessing()) {
+                                if (((CraftingItem) inside).getInsideArtisan() != null) {
+                                    if (!((CraftingItem) inside).getInsideArtisan().
+                                        isProcessingDone(App.getCurrentGame().getCurrentDateTime())) {
+                                        blueBar.setRegionWidth((int) (tileSize * (((CraftingItem) inside).getInsideArtisan()
                                             .nesbatTime(App.getCurrentGame().getCurrentDateTime()))));
-                                        batch.draw(blueBar, drawX, drawY+texture.getRegionHeight()+10);
-                                    }else {
+                                        batch.draw(blueBar, drawX, drawY + texture.getRegionHeight() + 10);
+                                    } else {
                                         ((CraftingItem) inside).setReady(true);
                                         ((CraftingItem) inside).setProcessing(false);
                                     }
                                 }
-                            } else if (((CraftingItem) inside).isReady()){
-                                batch.draw(ready, drawX, drawY+texture.getRegionHeight()+10, tileSize, tileSize);
+                            } else if (((CraftingItem) inside).isReady()) {
+                                batch.draw(ready, drawX, drawY + texture.getRegionHeight() + 10, tileSize, tileSize);
                             }
                             batch.draw(texture, drawX, drawY);
 //                            return;
-                        }else{
+                        } else {
                             batch.draw(texture, drawX, drawY, tileSize, tileSize);
                         }
 
@@ -825,5 +885,21 @@ public class GameView {
 
     public void setTheStarDropSalooon(StoreUI theStarDropSalooon) {
         TheStarDropSalooon = theStarDropSalooon;
+    }
+
+    public NPCDialogView getNpcDialogView() {
+        return npcDialogView;
+    }
+
+    public void setNpcDialogView(NPCDialogView npcDialogView) {
+        this.npcDialogView = npcDialogView;
+    }
+
+    public NPCView getNpcView() {
+        return npcView;
+    }
+
+    public void setNpcView(NPCView npcView) {
+        this.npcView = npcView;
     }
 }

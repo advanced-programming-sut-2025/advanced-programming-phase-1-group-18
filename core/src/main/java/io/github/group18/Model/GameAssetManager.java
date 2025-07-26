@@ -41,7 +41,12 @@ public class GameAssetManager {
     Texture blueBarTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/blue.png"));
     Texture readyTexture = new Texture(Gdx.files.internal("craftingSpriteSheet/danger.png"));
 
-
+    Texture sebastian_NPC = new Texture(Gdx.files.internal("NPC/SEBASTIAN.jpeg"));
+    Texture abigail_NPC = new Texture(Gdx.files.internal("NPC/ABIGAIL.jpeg"));
+    Texture harvey_NPC = new Texture(Gdx.files.internal("NPC/HARVEY.jpeg"));
+    Texture leah_NPC = new Texture(Gdx.files.internal("NPC/LEAH.jpeg"));
+    Texture robin_NPC = new Texture(Gdx.files.internal("NPC/ROBIN.png"));
+    Texture upsidedownredtriangle = new Texture(Gdx.files.internal("upsidedownredtriangle.png"));
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
@@ -366,5 +371,81 @@ public class GameAssetManager {
 
     public Texture getAxe() {
         return axe;
+    }
+
+    public void setScythe(Texture scythe) {
+        this.scythe = scythe;
+    }
+
+    public void setAxe(Texture axe) {
+        this.axe = axe;
+    }
+
+    public void setPickaxe(Texture pickaxe) {
+        this.pickaxe = pickaxe;
+    }
+
+    public void setInventoryIconTexture(Texture inventoryIconTexture) {
+        this.inventoryIconTexture = inventoryIconTexture;
+    }
+
+    public void setRefrigeratorIconTexture(Texture refrigeratorIconTexture) {
+        this.refrigeratorIconTexture = refrigeratorIconTexture;
+    }
+
+    public void setBlueBarTexture(Texture blueBarTexture) {
+        this.blueBarTexture = blueBarTexture;
+    }
+
+    public void setReadyTexture(Texture readyTexture) {
+        this.readyTexture = readyTexture;
+    }
+
+    public Texture getSebastian_NPC() {
+        return sebastian_NPC;
+    }
+
+    public void setSebastian_NPC(Texture sebastian_NPC) {
+        this.sebastian_NPC = sebastian_NPC;
+    }
+
+    public Texture getAbigail_NPC() {
+        return abigail_NPC;
+    }
+
+    public void setAbigail_NPC(Texture abigail_NPC) {
+        this.abigail_NPC = abigail_NPC;
+    }
+
+    public Texture getHarvey_NPC() {
+        return harvey_NPC;
+    }
+
+    public void setHarvey_NPC(Texture harvey_NPC) {
+        this.harvey_NPC = harvey_NPC;
+    }
+
+    public Texture getLeah_NPC() {
+        return leah_NPC;
+    }
+
+    public void setLeah_NPC(Texture leah_NPC) {
+        this.leah_NPC = leah_NPC;
+    }
+
+    public Texture getRobin_NPC() {
+        return robin_NPC;
+    }
+
+    public void setRobin_NPC(Texture robin_NPC) {
+        this.robin_NPC = robin_NPC;
+    }
+
+    public Texture getUpsidedownredtriangle() {
+        return upsidedownredtriangle;
+    }
+
+    public void setUpsidedownredtriangle(Texture upsidedownredtriangle) {
+        this.upsidedownredtriangle = upsidedownredtriangle;
     }
 }

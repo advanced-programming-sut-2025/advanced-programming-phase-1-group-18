@@ -60,7 +60,7 @@ public class BlackSmithMarket implements adaptMapMarket , PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "Market/Blacksmith.png";
     }
 }
 

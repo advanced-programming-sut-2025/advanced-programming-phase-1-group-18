@@ -613,6 +613,13 @@ Greenhouse/greenhouse.png
 JojaCola.jpg
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
+Market/Blacksmith.png
+Market/Carpenter's_Shop.png
+Market/Fish_Shop.png
+Market/Jojamart.png
+Market/Ranch.png
+Market/Saloon.png
+Market/Store.png
 Mineral/Aerinite.png
 Mineral/Alamite.png
 Mineral/Amethyst.png
@@ -675,7 +682,11 @@ Mineral/Star_Shards.png
 Mineral/Thunder_Egg.png
 Mineral/Tigerseye.png
 Mineral/Topaz.png
-NPC.jpg
+NPC/ABIGAIL.jpeg
+NPC/HARVEY.jpeg
+NPC/LEAH.jpeg
+NPC/ROBIN.png
+NPC/SEBASTIAN.jpeg
 RegisterImage.jpg
 SkillsIcon/FarmingSkill.png
 SkillsIcon/FishingSkill.png
@@ -691,7 +702,6 @@ Skin/pixthulhu-ui.atlas
 Skin/pixthulhu-ui.json
 Skin/pixthulhu-ui.png
 Stone.png
-Store.png
 Tools/36_Backpack.png
 Tools/Auto-Grabber.png
 Tools/Auto-Grabber_Full.png
@@ -1003,3 +1013,4 @@ ui/font.fnt
 ui/uiskin.atlas
 ui/uiskin.json
 ui/uiskin.png
+upsidedownredtriangle.png
