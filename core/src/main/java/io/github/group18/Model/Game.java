@@ -137,7 +137,17 @@ public class Game {
     protected NPC NPCHARVEY;
     protected NPC NPCLEAH;
     protected NPC NPCROBIN;
+    private boolean sebastian_dialog = false;
+    private boolean abigail_dialog = false;
+    private boolean harvey_dialog = false;
+    private boolean leah_dialog = false;
+    private boolean robin_dialog = false;
 
+    private boolean sebastian_view = false;
+    private boolean abigail_view = false;
+    private boolean harvey_view = false;
+    private boolean leah_view = false;
+    private boolean robin_view = false;
 
     private OrthographicCamera camera;
     public static final int mapWidth = 1000;
@@ -1163,4 +1173,84 @@ public class Game {
         return friends;
     }
 
+
+    public boolean isSebastian_dialog() {
+        return sebastian_dialog;
+    }
+
+    public void setSebastian_dialog(boolean sebastian_dialog) {
+        this.sebastian_dialog = sebastian_dialog;
+    }
+
+    public boolean isAbigail_dialog() {
+        return abigail_dialog;
+    }
+
+    public void setAbigail_dialog(boolean abigail_dialog) {
+        this.abigail_dialog = abigail_dialog;
+    }
+
+    public boolean isHarvey_dialog() {
+        return harvey_dialog;
+    }
+
+    public void setHarvey_dialog(boolean harvey_dialog) {
+        this.harvey_dialog = harvey_dialog;
+    }
+
+    public boolean isLeah_dialog() {
+        return leah_dialog;
+    }
+
+    public void setLeah_dialog(boolean leah_dialog) {
+        this.leah_dialog = leah_dialog;
+    }
+
+    public boolean isRobin_dialog() {
+        return robin_dialog;
+    }
+
+    public void setRobin_dialog(boolean robin_dialog) {
+        this.robin_dialog = robin_dialog;
+    }
+
+    public boolean isSebastian_view() {
+        return sebastian_view;
+    }
+
+    public void setSebastian_view(boolean sebastian_view) {
+        this.sebastian_view = sebastian_view;
+    }
+
+    public boolean isAbigail_view() {
+        return abigail_view;
+    }
+
+    public void setAbigail_view(boolean abigail_view) {
+        this.abigail_view = abigail_view;
+    }
+
+    public boolean isLeah_view() {
+        return leah_view;
+    }
+
+    public void setLeah_view(boolean leah_view) {
+        this.leah_view = leah_view;
+    }
+
+    public boolean isRobin_view() {
+        return robin_view;
+    }
+
+    public void setRobin_view(boolean robin_view) {
+        this.robin_view = robin_view;
+    }
+
+    public boolean isHarvey_view() {
+        return harvey_view;
+    }
+
+    public void setHarvey_view(boolean harvey_view) {
+        this.harvey_view = harvey_view;
+    }
 }

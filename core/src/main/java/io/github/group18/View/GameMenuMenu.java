@@ -155,13 +155,13 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.SELL.getMather(input) != null) {
 //            System.out.println(controller.sell(GameMenuCommands.SELL.getMather(input).group(1), GameMenuCommands.SELL.getMather(input).group(2)));
         } else if (GameMenuCommands.MEETNPC.getMather(input) != null) {
-            System.out.println(controller.meetNPC(GameMenuCommands.MEETNPC.getMather(input).group(1)));
+//            System.out.println(controller.meetNPC(GameMenuCommands.MEETNPC.getMather(input).group(1)));
         } else if (GameMenuCommands.GIFTNPC.getMather(input) != null) {
 //            System.out.println(controller.giftNPC(GameMenuCommands.GIFTNPC.getMather(input).group(1), GameMenuCommands.GIFTNPC.getMather(input).group(2)));
         } else if (GameMenuCommands.FRIENDSHIPNPCLIST.getMather(input) != null) {
-            System.out.println(controller.friendshipList());
+//            System.out.println(controller.friendshipList());
         } else if (GameMenuCommands.QUESTSLIST.getMather(input) != null) {
-            System.out.println(controller.questsList());
+//            System.out.println(controller.questsList());
         } else if (GameMenuCommands.QUESTSFINISH.getMather(input) != null) {
 //            System.out.println(controller.questsFinish(Integer.parseInt(GameMenuCommands.QUESTSFINISH.getMather(input).group(1))));
         } else if (GameMenuCommands.FriendShip.getMather(input) != null) {
