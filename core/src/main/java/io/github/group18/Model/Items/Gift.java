@@ -11,7 +11,7 @@ public class Gift extends Item implements Name, Price{
     protected boolean isRated = false;
     protected String name;
     protected int amount;
-    private static int nextId = 1; // شمارنده استاتیک
+    private static int nextId = 1;
     private final int id;
 
     public Gift(Item giftItem,int amount, Player sender, Player receiver) {

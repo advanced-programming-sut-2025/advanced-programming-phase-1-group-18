@@ -246,6 +246,7 @@ public class CraftingMenu {
             }
         }
     }
+
     public void addToolButtonListener( ImageButton button,  String toolName,  Skin skin,  Stage stage) {
         CraftingRecipesEnums info = CraftingRecipesEnums.valueOf(toolName);
         Dialog infoDialog = new Dialog("craft info\n", skin);

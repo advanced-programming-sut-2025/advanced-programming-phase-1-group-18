@@ -133,6 +133,17 @@ public class GameMenuInputAdapter extends InputAdapter {
             gameController.getGameMenu().getStage().addActor(talkWindow);
             return true;
         }
+        //gift Window
+        if(keycode == Input.Keys.G)
+        {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getCurrentPlayer();
+            GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage(),
+                currentPlayer);
+            gameController.getGameMenu().getStage().addActor(giftWindow);
+            return true;
+        }
 
 
         return true;
