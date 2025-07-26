@@ -2,63 +2,73 @@ package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 
 import java.util.Scanner;
 
-public class CheatCodeDialog extends Dialog {
+public class CheatCodeDialog extends Window {
 
     private TextField cheatInput;
-    private GameMenuInputAdapter gameMenuInputAdapter;
     private GameController gameController;
 
-    public CheatCodeDialog(Stage stage, Skin skin, GameMenuInputAdapter gameMenuInputAdapter,GameController gameController) {
+    public CheatCodeDialog(Skin skin, GameController gameController) {
         super("Enter Cheat Code", skin);
         this.gameController = gameController;
-        this.gameMenuInputAdapter = gameMenuInputAdapter;
-        // ایجاد TextField برای ورودی چیت
+
+        setSize(1000, 400);
+        setMovable(true);
+        pad(10);
+
         cheatInput = new TextField("cheat add item -n copperOre -c 50", skin);
         cheatInput.setMessageText("Enter your cheat code here...");
 
-        // افزودن به دیالوگ
-        Table content = getContentTable();
-        content.add(cheatInput).width(800).pad(10);
+        TextButton sendButton = new TextButton("Send", skin);
+        sendButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String code = cheatInput.getText().trim();
+                processCheatCode(code);
+                remove();  // بستن پنجره
+                // بعد از بستن، ورودی رو به استیج بازگردان
+                if (getStage() != null) {
+                    Gdx.input.setInputProcessor(getStage());
+                }
+            }
+        });
 
-        // افزودن دکمه تایید
-        button("OK", true);
-        button("Cancel", false);
-//        stage.addActor(content);
-        // نمایش دیالوگ
-//        show(stage);
-        System.out.println("Cheat Code: " + cheatInput.getText());
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                remove();
+                if (getStage() != null) {
+                    Gdx.input.setInputProcessor(getStage());
+                }
+            }
+        });
+
+        // اضافه کردن ویجت‌ها به لایه
+        add(cheatInput).width(460).row();
+        add(sendButton).padTop(10).left();
+        add(closeButton).padTop(10).left();
+
+        // مرکز کردن پنجره
+        setPosition(
+            (Gdx.graphics.getWidth() - getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - getHeight()) / 2f
+        );
     }
 
-    @Override
-    protected void result(Object object) {
-        boolean confirmed = (Boolean) object;
-        if (confirmed) {
-            String code = cheatInput.getText();
-//            System.out.println("Cheat Code Entered: " + code);
-
-            processCheatCode(code,gameController);
-
-        } else {
-            System.out.println("Cheat Code entry cancelled.");
-        }
-        Gdx.input.setInputProcessor(gameMenuInputAdapter);
-    }
-
-    private void processCheatCode(String code, GameController gameController) {
-        // ✅ این متد را مطابق با سیستم چیت بازی‌ات پیاده‌سازی کن
+    private void processCheatCode(String code) {
         Scanner scanner = new Scanner(System.in);
         GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
             GameAssetManager.getGameAssetManager().getSkin());
-        gameMenuMenu.check(code,scanner,gameController);
+        gameMenuMenu.check(code, scanner, gameController);
     }
 }
