@@ -113,4 +113,13 @@ public class Friendship
         this.lastInteractionDate = lastInteractionDate;
     }
 
+    public static Friendship getFriendshipBetween(Player a, Player b) {
+        for (Friendship f : App.getCurrentGame().getFriendships()) {
+            if (f.isBetween(a, b)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
 }

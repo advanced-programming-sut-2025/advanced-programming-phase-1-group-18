@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -508,40 +505,37 @@ public class GameView {
     }
 
     private void renderPlayer() {
-        Player player = game.getCurrentPlayer();
-        double first = player.getX();
-        double second = player.getY();
+        List<Player> players = game.getPlayers();
 
-        moveDirection = player.getMovingDirection();
+        for (Player player : players) {
+            double first = player.getX();
+            double second = player.getY();
 
-        stateTime += Gdx.graphics.getDeltaTime();
+            moveDirection = player.getMovingDirection();
+            stateTime += Gdx.graphics.getDeltaTime();
 
-        TextureRegion currentFrame = new TextureRegion();
+            TextureRegion currentFrame = new TextureRegion();
 
-        switch (player.getState()) {
-            case Player.STATE_FAINTING:
-                currentFrame = playerAnimations.get(5)
-                    .getKeyFrame(player.getFaintTimer(), false);
-                break;
-            case Player.STATE_IDLE:
-                currentFrame = playerAnimations.get(player.getMovingDirection())
-                    .getKeyFrame(stateTime, true);
-                break;
-            case Player.EATING_STATE:
-                currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
-                Texture buff = showBuffEffect(App.getCurrentGame().getCurrentPlayer().getFoodBuff());
-//                buff.draw(batch,buff.getColor().a);
-//                buff.addAction(Actions.sequence(
-//                    Actions.fadeIn(0.5f),
-//                    Actions.delay(1.5f),
-//                    Actions.fadeOut(0.5f),
-//                    Actions.run(() -> buff.remove())
-//                ));
-                batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
+            switch (player.getState()) {
+                case Player.STATE_FAINTING:
+                    currentFrame = playerAnimations.get(5)
+                        .getKeyFrame(player.getFaintTimer(), false);
+                    break;
+                case Player.STATE_IDLE:
+                    currentFrame = playerAnimations.get(player.getMovingDirection())
+                        .getKeyFrame(stateTime, true);
+                    break;
+                case Player.EATING_STATE:
+                    currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
+                    Texture buff = showBuffEffect(player.getFoodBuff());
+                    batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
+                    break;
+            }
 
+            batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE),
+                game.TILE_SIZE, game.TILE_SIZE * 2);
         }
-
-        batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE), game.TILE_SIZE, game.TILE_SIZE * 2);
+        
     }
 
     private void renderBrightness() {
