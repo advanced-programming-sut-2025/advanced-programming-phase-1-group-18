@@ -145,6 +145,32 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
+        if (keycode == Input.Keys.R) {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getCurrentPlayer();
+            GiftViewWindow giftViewWindow = new GiftViewWindow(
+                game,
+                GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage()
+            );
+            return true;
+        }
+
+        if(keycode == Input.Keys.J)
+        {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+            Stage stage = gameController.getGameMenu().getStage();
+
+            GiftHistoryWindow giftHistoryWindow = new GiftHistoryWindow(game, skin);
+            stage.addActor(giftHistoryWindow);
+
+            return true;
+        }
+
+
+
 
         return true;
     }

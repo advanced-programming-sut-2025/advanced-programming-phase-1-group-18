@@ -23,7 +23,7 @@ public class Gift extends Item implements Name, Price{
         this.receiver = receiver;
         this.rate = 0;
         this.isRated = false;
-        this.name = giftItem.getName();
+        this.name = giftItem.getCorrectName();
     }
 
     public Item getGiftItem() {
