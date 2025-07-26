@@ -189,6 +189,7 @@ public class GameView {
         renderPlayer();
         renderInMyHandToolPlayer();
         renderInventory();
+        renderNPC();
         renderClock();
         energy.render(batch);
         renderMarkets();
@@ -196,6 +197,13 @@ public class GameView {
         renderBrightness();
         walking = false;
         batch.end();
+    }
+
+    private void renderNPC()
+    {
+//        Game currentGame = App.getCurrentGame();
+//        NPC sebastian = currentGame.getNPCSEBASTIAN();
+
     }
 
     private void renderMarkets() {

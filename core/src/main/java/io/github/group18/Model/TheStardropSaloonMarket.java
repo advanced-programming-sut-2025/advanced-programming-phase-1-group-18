@@ -116,6 +116,6 @@ public class TheStardropSaloonMarket  implements adaptMapMarket,PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "Market/Saloon.png";
     }
 }
