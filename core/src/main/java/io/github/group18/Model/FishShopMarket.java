@@ -64,6 +64,6 @@ public class FishShopMarket implements adaptMapMarket ,PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "Market/Fish_Shop.png";
     }
 }

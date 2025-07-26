@@ -112,6 +112,6 @@ public class CarpentersShopMarket implements adaptMapMarket ,PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "Market/Carpenter's_Shop.png";
     }
 }
