@@ -3575,7 +3575,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    private static Friendship getFriendship(Player targetPlayer, Player currentPlayer) {
+    public static Friendship getFriendship(Player targetPlayer, Player currentPlayer) {
         Game currentGame = App.getCurrentGame();
         for (Friendship friendships : currentGame.getFriendships()) {
             if (friendships.isBetween(currentPlayer, targetPlayer)) {
