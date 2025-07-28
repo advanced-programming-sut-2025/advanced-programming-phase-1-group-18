@@ -124,7 +124,7 @@ public class ServerConnectionController {
         }
         HashMap<String,Object> message = new HashMap<>();
         message.put("isUnique", unique);
-        return new Message(message, Message.Type.Is_Unique);
+        return new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
     }
     public static Message registerUser (User newUser) {
         System.out.println("Received (register user) request");
@@ -134,6 +134,6 @@ public class ServerConnectionController {
         RegisterMenuController.saveUsersToFile();
         HashMap<String,Object> message = new HashMap<>();
         message.put("register", true);
-        return new Message(message, Message.Type.Register);
+        return new Message(message, Message.Type.Register, Message.Menu.Register);
     }
 }

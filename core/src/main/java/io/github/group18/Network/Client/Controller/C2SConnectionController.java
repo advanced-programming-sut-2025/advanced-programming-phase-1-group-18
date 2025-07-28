@@ -110,7 +110,7 @@ public class C2SConnectionController {
             HashMap<String, Object> body = new HashMap<>();
             body.put("command", "status");
             body.put("response", "ok");
-            Message res = new Message(body, Message.Type.response);
+            Message res = new Message(body, Message.Type.response, Message.Menu.Basic);
             return res;
         } catch (Exception e) {
             e.printStackTrace();

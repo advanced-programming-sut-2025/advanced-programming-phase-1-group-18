@@ -306,7 +306,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         }
         HashMap<String,Object> message = new HashMap<>();
         message.put("username", username);
-        Message msg = new Message(message, Message.Type.Is_Unique);
+        Message msg = new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
         Message res = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
         if (res.getFromBody("isUnique")){
             return false;

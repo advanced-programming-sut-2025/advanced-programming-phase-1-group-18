@@ -137,7 +137,7 @@ public class RegisterGDXController
                     fld.put("email", email);
                     fld.put("gender", gender);
 
-                    Message msg = new Message(fld, Message.Type.Register);
+                    Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
                     Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
                     System.out.println((boolean)res1.getFromBody("register"));
 //                    App.getUsers_List().add(newUser);
