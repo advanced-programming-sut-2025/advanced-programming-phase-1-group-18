@@ -21,7 +21,7 @@
 //
 //    @Test
 //    void testRegisterSuccess() {
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "user123", "Password1!", "Password1!", "nickname", "user@example.com", "male");
 //
 //        assertTrue(result.isSuccessful());
@@ -30,7 +30,7 @@
 //
 //    @Test
 //    void testRegisterWithEmptyUsername() {
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "", "Password1!", "Password1!", "nickname", "user@example.com", "male");
 //
 //        assertFalse(result.isSuccessful());
@@ -39,7 +39,7 @@
 //
 //    @Test
 //    void testRegisterWithMismatchedPasswords() {
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "user123", "Password1!", "Password2!", "nickname", "user@example.com", "male");
 //
 //        assertFalse(result.isSuccessful());
@@ -48,7 +48,7 @@
 //
 //    @Test
 //    void testRegisterWithWeakPassword() {
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "user123", "pass", "pass", "nickname", "user@example.com", "male");
 //
 //        assertFalse(result.isSuccessful());
@@ -57,7 +57,7 @@
 //
 //    @Test
 //    void testRegisterWithInvalidEmail() {
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "user123", "Password1!", "Password1!", "nickname", "bademail", "male");
 //
 //        assertFalse(result.isSuccessful());
@@ -70,7 +70,7 @@
 //        App.getUsers_List().add(new User("user123", "Password1!", "nickname", "user@example.com", "male"));
 //
 //
-//        Result result = controller.register(
+//        Result result = controller.Is_Unique(
 //                "user123", "Password1!", "Password1!", "nickname2", "user2@example.com", "female");
 //
 //        assertFalse(result.isSuccessful());
