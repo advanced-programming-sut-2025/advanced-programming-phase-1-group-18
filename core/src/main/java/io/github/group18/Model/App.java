@@ -39,6 +39,7 @@ public class App {
         try (Reader reader = new FileReader(file)) {
             Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
             Users_List = new Gson().fromJson(reader, userListType);
+            System.out.println("Loaded " + Users_List.size() + " users");
         } catch (IOException e) {
             System.err.println("Failed to load users: " + e.getMessage());
         }
