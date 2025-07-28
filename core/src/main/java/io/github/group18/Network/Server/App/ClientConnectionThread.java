@@ -17,6 +17,7 @@ public class ClientConnectionThread extends ConnectionThread {
         super(socket);
     }
 
+
     @Override
     public boolean initialHandshake() {
         try {
@@ -39,7 +40,7 @@ public class ClientConnectionThread extends ConnectionThread {
         // then update peer's IP and port
         HashMap<String, Object> body = new HashMap<>();
         body.put("command", "status");
-        Message res = sendAndWaitForResponse(new Message(body, Message.Type.command), TIMEOUT_MILLIS);
+        Message res = sendAndWaitForResponse(new Message(body, Message.Type.command, Message.Menu.Basic), TIMEOUT_MILLIS);
         assert res != null;
 //		throw new UnsupportedOperationException("Status refresh not implemented yet");
     }

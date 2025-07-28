@@ -5,15 +5,17 @@ import java.util.HashMap;
 public class Message {
 	private Type type;
 	private HashMap<String, Object> body;
+    private Menu menu;
 
 	/*
 	 * Empty constructor needed for JSON Serialization/Deserialization
 	 */
 	public Message() {}
 
-	public Message(HashMap<String, Object> body, Type type) {
+	public Message(HashMap<String, Object> body, Type type, Menu menu) {
 		this.body = body;
 		this.type = type;
+        this.menu = menu;
 	}
 
 	public Type getType() {
@@ -48,4 +50,9 @@ public class Message {
 		file_request,
 		download_request
 	}
+    public enum Menu {
+        Basic,
+        Register,
+        download_request
+    }
 }
