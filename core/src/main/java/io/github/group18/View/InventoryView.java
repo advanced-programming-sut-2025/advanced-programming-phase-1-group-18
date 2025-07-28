@@ -191,7 +191,7 @@ public class InventoryView {
 
         TextureRegion playerFrontFrame = GameView.getPlayerFrontImage();
         Image playerImage = new Image(new TextureRegionDrawable(playerFrontFrame));
-        Label nameLabel = new Label("      Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
+        Label nameLabel = new Label("     Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
         nameLabel.setColor(Color.GOLD);
         nameLabel.setFontScale(0.75f);
 

@@ -234,7 +234,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.ASKMARRIAGE.getMather(input) != null) {
             String username = GameMenuCommands.ASKMARRIAGE.getMather(input).group(1);
             String ring = GameMenuCommands.ASKMARRIAGE.getMather(input).group(2);
-//            System.out.println(controller.askMarriage(username, ring));
+            System.out.println(controller.askMarriage(username, ring));
         } else if (GameMenuCommands.RESPOND.getMather(input) != null) {
             String acceptOrReject = GameMenuCommands.RESPOND.getMather(input).group(1);
             String username = GameMenuCommands.RESPOND.getMather(input).group(2);
