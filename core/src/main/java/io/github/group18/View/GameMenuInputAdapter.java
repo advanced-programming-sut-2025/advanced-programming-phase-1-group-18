@@ -169,6 +169,44 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
+        if (keycode == Input.Keys.X)
+        {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+            Stage stage = gameController.getGameMenu().getStage();
+
+            FlowerSendWindow flowerSendWindow = new FlowerSendWindow(skin, stage, currentPlayer);
+            stage.addActor(flowerSendWindow);
+
+            return true;
+        }
+
+        if (keycode == Input.Keys.M) {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+            Stage stage = gameController.getGameMenu().getStage();
+
+            MarriageProposalWindow proposalWindow = new MarriageProposalWindow(skin, stage, currentPlayer);
+            stage.addActor(proposalWindow);
+            return true;
+        }
+
+        if (keycode == Input.Keys.K) {
+            Game game = App.getCurrentGame();
+            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+            Stage stage = gameController.getGameMenu().getStage();
+
+            MarriageResponseWindow window = new MarriageResponseWindow(skin, stage, currentPlayer);
+            stage.addActor(window);
+
+            return true;
+        }
+
+
+
 
 
 

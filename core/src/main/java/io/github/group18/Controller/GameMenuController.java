@@ -3700,104 +3700,137 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "You hug " + userName + " successfully");
     }
 
-//    public Result flower(String username) {
-//        if (isFainted()) {
-//            return new Result(false, "You are fainted!");
-//        }
-//        Item gift = null;
-//        Gift newGift = null;
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Inventory inventory = currentPlayer.getInventory();
-//        Map<Item, Integer> itemInventory = inventory.getItems();
-//        Game currentGame = App.getCurrentGame();
-//        if (App.getCurrentGame().getPlayerByUsername(username) == null) {
-//            return new Result(false, "Player not found");
-//        }
-//        Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
-//        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
-//        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
-//
-//        if (!(dx <= 1 && dy <= 1)) {
-//            return new Result(false, "You are not near to talk");
-//        }
-//        Friendship friendship = null;
-//        friendship = getFriendship(targetPlayer, currentPlayer);
-//        assert friendship != null;
-//        if (friendship.getLevel() != 2) {
-//            return new Result(false, "You can send flower in level 2");
-//        }
-//        boolean found5 = false;
-//        for (Item items : itemInventory.keySet()) {
-//            if (items.getCorrectName().equalsIgnoreCase("flower")) {
-//                if (itemInventory.get(items) >= 1) {
-//                    if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getTotalItemCount() < 1) {
-//                        return new Result(false, "target player does not have enough space in inventory");
-//                    }
-//                    if (itemInventory.get(items) - 1 == 0) {
-//                        itemInventory.remove(items);
-//                    } else {
-//                        itemInventory.put(items, itemInventory.get(items) - 1);
-//                    }
-//                    found5 = true;
-//                } else {
-//                    return new Result(false, "You don't have flower in your inventory");
-//                }
-//            }
-//        }
-//        if (!found5) {
-//            return new Result(false, "No such flower is in your inventory");
-//        } else {
-//            boolean found6 = false;
-//            targetPlayer.getInventory().addItem(new Flower(), 1);
-//
-//            if (friendship.getLevel() < 3) {
-//                friendship.setLevel(3);
-//            }
-//            return new Result(true, "flower sent successfully");
-//        }
-//    }
+    public static Result flower(String username) {
+        if (isFainted()) {
+            return new Result(false, "You are fainted!");
+        }
 
-//    public Result askMarriage(String userName, String ringName) {
-//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-//        Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
-//
-//        if (destinationPlayer == null) {
-//            return new Result(false, "Player not found");
-//        }
-//        int dx = (int) Math.abs(currentPlayer.getX() - destinationPlayer.getX());
-//        int dy = (int) Math.abs(currentPlayer.getY() - destinationPlayer.getY());
-//
-//        if (!(dx <= 1 && dy <= 1)) {
-//            return new Result(false, "Be more near than her/him");
-//        }
-//
-//        if (Objects.equals(destinationPlayer.getOwner().getGender(), currentPlayer.getOwner().getGender())) {
-//
-//            return new Result(false, "Your genders should be different!");
-//        }
-//        if (currentPlayer.getOwner().getGender().equalsIgnoreCase("female") && currentPlayer.getOwner().getGender().equalsIgnoreCase("male")) {
-//            return new Result(false, "Wait! You are female and he is male!!!!");
-//        }
-//
-//        Item ring = null;
-//        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
-//            if (item.getCorrectName().equalsIgnoreCase(ringName.replace(" ", ""))) {
-//                ring = item;
-//                break;
-//            }
-//        }
-//
-//        if (ring == null) {
-//            return new Result(false, "You don't have such a ring!");
-//        }
-//
-//
-//        MarriageProposal proposal = new MarriageProposal(currentPlayer, destinationPlayer, ring);
-//        App.getCurrentGame().addMarriageProposal(proposal);
-//        return new Result(true, "Marriage proposal sent to " + userName + " with a " + ring.getCorrectName() + ".");
-//    }
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Inventory inventory = currentPlayer.getInventory();
+        Map<Item, Pair<Integer, Integer>> itemInventory = inventory.getItems();
+        Game currentGame = App.getCurrentGame();
 
-    public Result response(String acceptOrReject, String userName) {
+        Player targetPlayer = currentGame.getPlayerByUsername(username);
+        if (targetPlayer == null) {
+            return new Result(false, "Player not found");
+        }
+
+        int dx = (int)Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int)Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "You are not near to talk");
+        }
+
+        Friendship friendship = getFriendship(targetPlayer, currentPlayer);
+        if (friendship == null || friendship.getLevel() != 2) {
+            return new Result(false, "You can send flower only in friendship level 2");
+        }
+
+
+        Item flowerItem = null;
+        for (Item item : itemInventory.keySet()) {
+            if (item.getCorrectName().equalsIgnoreCase("flower")) {
+                flowerItem = item;
+                break;
+            }
+        }
+
+        if (flowerItem == null) {
+            return new Result(false, "You don't have a flower in your inventory");
+        }
+
+        Pair<Integer, Integer> flowerData = itemInventory.get(flowerItem);
+        int currentQty = flowerData.first;
+
+        if (currentQty < 1) {
+            return new Result(false, "You don't have enough flowers");
+        }
+
+        if (targetPlayer.getInventory().getMaxQuantity() - targetPlayer.getInventory().getItems().size() <= 0) {
+            return new Result(false, "Target player does not have enough space in inventory");
+        }
+
+
+        if (currentQty == 1) {
+            inventory.removeItem(flowerItem, 1);
+        } else {
+            inventory.getItems().put(flowerItem, new Pair<>(currentQty - 1, flowerData.second));
+        }
+
+
+        Flower flowerForTarget = new Flower();
+
+        Inventory targetInventory = targetPlayer.getInventory();
+        if (targetInventory.containsItem(flowerForTarget)) {
+            Pair<Integer, Integer> existing = targetInventory.existing(flowerForTarget);
+            targetInventory.getItems().put(flowerForTarget, new Pair<>(existing.first + 1, existing.second));
+        } else {
+            targetInventory.addItem(flowerForTarget, 1);
+        }
+
+
+        if (friendship.getLevel() < 3) {
+            friendship.setLevel(3);
+        }
+
+        return new Result(true, "Flower sent successfully");
+    }
+
+
+    public static  Result askMarriage(String userName, String ringName) {
+        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
+
+        if (destinationPlayer == null) {
+            return new Result(false, "Player not found");
+        }
+        int dx = (int) Math.abs(currentPlayer.getX() - destinationPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - destinationPlayer.getY());
+
+        if (!(dx <= 1 && dy <= 1)) {
+            return new Result(false, "Be more near than her/him");
+        }
+
+        if (Objects.equals(destinationPlayer.getOwner().getGender(), currentPlayer.getOwner().getGender())) {
+
+            return new Result(false, "Your genders should be different!");
+        }
+        if (currentPlayer.getOwner().getGender().equalsIgnoreCase("female") && currentPlayer.getOwner().getGender().equalsIgnoreCase("male")) {
+            return new Result(false, "Wait! You are female and he is male!!!!");
+        }
+
+        Friendship friendship = getFriendship(destinationPlayer, currentPlayer);
+        Game currentGame = App.getCurrentGame();
+        for (Friendship friendships :currentGame.getFriendships()){
+            for(Player player : App.getCurrentGame().getPlayers()){
+                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+                    friendship = friendships;
+                }
+            }
+        }
+        if (friendship == null || friendship.getLevel() < 3) {
+            return new Result(false, "Your friendship level is not enough(3) to ask Marriage");
+        }
+
+        Item ring = null;
+        for (Item item : currentPlayer.getInventory().getItems().keySet()) {
+            if (item.getCorrectName().equalsIgnoreCase(ringName.replace(" ", ""))) {
+                ring = item;
+                break;
+            }
+        }
+
+        if (ring == null) {
+            return new Result(false, "You don't have such a ring!");
+        }
+
+
+        MarriageProposal proposal = new MarriageProposal(currentPlayer, destinationPlayer, ring);
+        App.getCurrentGame().addMarriageProposal(proposal);
+        return new Result(true, "Marriage proposal sent to " + userName + " with a " + ring.getCorrectName() + ".");
+    }
+
+    public static Result response(String acceptOrReject, String userName) {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         List<MarriageProposal> proposals = App.getCurrentGame().getMarriageProposals();
 
