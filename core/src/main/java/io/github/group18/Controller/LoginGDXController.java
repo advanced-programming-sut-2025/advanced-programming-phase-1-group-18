@@ -38,7 +38,7 @@ public class LoginGDXController {
 
                 //TODO
                 //delete this later
-                App.loadUsersFromFile();
+//                App.loadUsersFromFile();
 
 
 
@@ -86,7 +86,7 @@ public class LoginGDXController {
                     HashMap<String,Object> body = new HashMap<>();
                     body.put("user", user);
                     Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers);
-                    ServerConnectionThread.sendMessage(message);
+//                    ServerConnectionThread.sendMessage(message);
                     Main.getMain().getScreen().dispose();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }

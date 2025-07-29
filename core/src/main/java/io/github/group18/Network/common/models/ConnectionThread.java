@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
 	protected final DataInputStream dataInputStream;
-	protected static DataOutputStream dataOutputStream;
+	protected final DataOutputStream dataOutputStream;
 	protected final BlockingQueue<Message> receivedMessagesQueue;
 	protected String otherSideIP;
 	protected int otherSidePort;
@@ -48,7 +48,7 @@ abstract public class ConnectionThread extends Thread {
 
 	abstract protected boolean handleMessage(Message message);
 
-	public static synchronized void sendMessage(Message message) {
+	public synchronized void sendMessage(Message message) {
 		String JSONString = JSONUtils.toJson(message);
 
 		try {
