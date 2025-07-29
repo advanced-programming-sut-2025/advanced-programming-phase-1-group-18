@@ -1,5 +1,7 @@
 package io.github.group18.Network.Server.App;
 
+import io.github.group18.Model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class ServerModel {
     private static ListenerThread listenerThread;
     private static boolean isRunning = false;
 
-
+    private static ArrayList<User> onlineUsers = new ArrayList<>();
 
     public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
         for (ClientConnectionThread connection : connections) {
@@ -71,5 +73,13 @@ public class ServerModel {
 
     public static void setIsRunning(boolean isRunning) {
         ServerModel.isRunning = isRunning;
+    }
+
+    public static ArrayList<User> getOnlineUsers() {
+        return onlineUsers;
+    }
+
+    public static void setOnlineUsers(ArrayList<User> onlineUsers) {
+        ServerModel.onlineUsers = onlineUsers;
     }
 }

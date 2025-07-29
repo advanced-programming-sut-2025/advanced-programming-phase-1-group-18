@@ -28,6 +28,7 @@ public class ListenerThread extends Thread {
         while (!ServerModel.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
+                System.out.println("someone is trying to connect to server");
                 handleConnection(socket);
 
             } catch (Exception e) {

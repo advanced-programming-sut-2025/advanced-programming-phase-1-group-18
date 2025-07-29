@@ -23,10 +23,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
-import io.github.group18.View.GameMenu;
-import io.github.group18.View.GameMenuMenu;
-import io.github.group18.View.GameView;
-import io.github.group18.View.StartNewGame;
+import io.github.group18.View.*;
 import io.github.group18.enums.*;
 import io.github.group18.enums.Menu;
 
@@ -56,7 +53,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 loadGame();
             } else if (view.getStartNewGame().isPressed()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
+                Main.getMain().setScreen(new LobbyView(new LobbyController(),view.getSkin(),this));
+//                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
 
             }
         }

@@ -22,6 +22,7 @@ public class MainMenu extends AppMenu implements Screen {
     private Stage stage;
     private final TextButton profileMenuButton;
     private final TextButton gameMenuButton;
+    private final TextButton onlinePlayers;
     private final TextButton logoutButton;
     private final TextButton exitButton;
     public Table table;
@@ -29,26 +30,31 @@ public class MainMenu extends AppMenu implements Screen {
 
 
     public MainMenu(MainMenuController mainMenuController, Skin skin) {
+//        System.out.println("niggger1");
         this.mainMenuController = mainMenuController;
         this.profileMenuButton = new TextButton("Profile Menu", skin);
         this.gameMenuButton = new TextButton("Game Menu", skin);
+        this.onlinePlayers = new TextButton("Online Players", skin);
         this.logoutButton = new TextButton("Logout", skin);
         this.exitButton = new TextButton("EXIT", skin);
         this.table = new Table();
 
         mainMenuController.setView(this);
-
+//        System.out.println("niggger2");
     }
 
     @Override
     public void show() {
+//        System.out.println("niggger3");
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
+//        System.out.println("niggger3.05");
         Texture bgTexture = new Texture(Gdx.files.internal("MainMenuBackground.jpg"));
+//        System.out.println("niggger3.06");
         Image background = new Image(bgTexture);
+//        System.out.println("niggger3.08");
         stage.addActor(background);
-
+//        System.out.println("niggger3.1");
         background.setFillParent(true);
         table.setFillParent(true);
         table.center();
@@ -58,6 +64,7 @@ public class MainMenu extends AppMenu implements Screen {
         Label nicknigga = new Label("Hello " + App.getCurrentUser().getNickName(), GameAssetManager.getGameAssetManager().getSkin());
         table.add(nicknigga);
         table.row();
+//        System.out.println("niggger3.2");
         Texture currentAvatar = GameAssetManager.getUserAvatar(App.getCurrentUser().getAvatar());
         Image avatarImage = new Image(new TextureRegionDrawable(new TextureRegion(currentAvatar)));
         avatarImage.setSize(128, 128);
@@ -67,16 +74,20 @@ public class MainMenu extends AppMenu implements Screen {
         table.row().pad(20, 20, 20, 20);
         table.add(gameMenuButton).width((float) Main.ScreenWidth / 3);
         table.row().pad(20, 20, 20, 20);
+        table.add(onlinePlayers).width((float) Main.ScreenWidth / 3);
+        table.row().pad(20, 20, 20, 20);
         table.add(logoutButton).width((float) Main.ScreenWidth / 3);
         table.row().pad(10, 0 , 10 , 0);
         table.add(exitButton);
         table.row().pad(10, 0 , 10 , 0);
-
+//        System.out.println("niggger3.5");
         stage.addActor(table);
+//        System.out.println("niggger4");
     }
 
     @Override
     public void render(float v) {
+//        System.out.println("niggger5");
         ScreenUtils.clear(0,0,0,1);
         Main.getBatch().begin();
         Main.getBatch().end();
@@ -124,6 +135,10 @@ public class MainMenu extends AppMenu implements Screen {
 
     public TextButton getGameMenuButton() {
         return gameMenuButton;
+    }
+
+    public TextButton getOnlinePlayers() {
+        return onlinePlayers;
     }
 
     public TextButton getLogoutButton() {

@@ -4,6 +4,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Client.App.RegisterMessageHandler;
 import io.github.group18.View.*;
 import io.github.group18.Network.common.models.Message;

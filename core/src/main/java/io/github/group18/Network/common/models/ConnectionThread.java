@@ -31,10 +31,10 @@ abstract public class ConnectionThread extends Thread {
 	}
 
 	public Message sendAndWaitForResponse(Message message, int timeoutMilli) {
-		sendMessage(message);
+        sendMessage(message);
 		try {
 			if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
-			socket.setSoTimeout(timeoutMilli);
+            socket.setSoTimeout(timeoutMilli);
 			var result = JSONUtils.fromJson(dataInputStream.readUTF());
 			socket.setSoTimeout(0);
 			return result;
