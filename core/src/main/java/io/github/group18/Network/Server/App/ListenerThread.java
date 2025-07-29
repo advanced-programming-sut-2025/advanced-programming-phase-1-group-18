@@ -25,7 +25,7 @@ public class ListenerThread extends Thread {
 
     @Override
     public void run() {
-        while (!ServerApp.isEnded()) {
+        while (!ServerModel.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
                 handleConnection(socket);

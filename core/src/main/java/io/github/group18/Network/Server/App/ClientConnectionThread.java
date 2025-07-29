@@ -1,7 +1,6 @@
 package io.github.group18.Network.Server.App;
 
 import io.github.group18.Network.Server.Controllers.RegisterNetworkController;
-import io.github.group18.Network.Server.Controllers.ServerConnectionController;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
 
@@ -9,7 +8,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 
-import static io.github.group18.Network.Server.App.ServerApp.TIMEOUT_MILLIS;
+import static io.github.group18.Network.Server.App.ServerModel.TIMEOUT_MILLIS;
 
 public class ClientConnectionThread extends ConnectionThread {
 
@@ -21,26 +20,32 @@ public class ClientConnectionThread extends ConnectionThread {
     @Override
     public boolean initialHandshake() {
         try {
-            // TODO: Implement initial handshake
-            refreshStatus();
-            ServerApp.addClientConnection(this);
-            return true;
+            boolean init = refreshStatus();
+            if (init) {
+                ServerModel.addClientConnection(this);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public void refreshStatus() {
+    public boolean refreshStatus() {
         HashMap<String, Object> body = new HashMap<>();
         body.put("command", "status");
         Message res = sendAndWaitForResponse(new Message(body, Message.Type.command, Message.Menu.Basic), TIMEOUT_MILLIS);
-        assert res != null;
+        if (res.getFromBody("response") == "ok") {
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected boolean handleMessage(Message message) {
-        switch (message.getMenu()){
+        switch (message.getMenu()) {
             case Register:
                 sendMessage(RegisterNetworkController.handleMessage(message));
                 return true;
@@ -54,6 +59,6 @@ public class ClientConnectionThread extends ConnectionThread {
     @Override
     public void run() {
         super.run();
-        ServerApp.removeClientConnection(this);
+        ServerModel.removeClientConnection(this);
     }
 }
