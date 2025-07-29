@@ -3,10 +3,14 @@ package io.github.group18.Controller;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Result;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Client.App.ClientApp;
+import io.github.group18.Network.Client.App.RegisterMessageHandler;
 import io.github.group18.View.*;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.Menu;
+
+import java.util.HashMap;
 
 public class RegisterGDXController
 {
@@ -37,14 +41,21 @@ public class RegisterGDXController
             }
             if(view.getVerifyButton().isChecked())
             {
+                Message res = new Message();
                 String username = view.getUsernameField().getText();
                 String password = view.getPasswordField().getText();
                 String repassword = view.getRepasswordField().getText();
                 String nickname = view.getNicknameField().getText();
                 String email  = view.getEmailField().getText();
                 String gender = view.getGenderField().getText();
+                HashMap <String,Object> message = new HashMap<>();
 
-
+                message.put("username", username);
+                message.put("password", password);
+                message.put("repassword", repassword);
+                message.put("nickname", nickname);
+                message.put("email", email);
+                message.put("gender", gender);
 
                 //errors/////
                 boolean isOkay = true;
@@ -119,10 +130,22 @@ public class RegisterGDXController
                 if(isOkay) {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
                     User newUser = new User(username, hashedPassword, nickname, email, gender);
-                    App.getUsers_List().add(newUser);
+                    RegisterMessageHandler.register(username,hashedPassword,nickname,email,gender);
+//                    HashMap<String,Object> fld = new HashMap<>();
+//
+//                    fld.put("username", username);
+//                    fld.put("password", hashedPassword);
+//                    fld.put("nickname", nickname);
+//                    fld.put("email", email);
+//                    fld.put("gender", gender);
+//
+//                    Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
+//                    Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+//                    System.out.println((boolean)res1.getFromBody("register"));
+//                    App.getUsers_List().add(newUser);
                     App.setCurrentUser(newUser);
                     App.setCurrentMenu(Menu.MainMenu);
-                    RegisterMenuController.saveUsersToFile();
+//                    RegisterMenuController.saveUsersToFile();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
                 }
             }

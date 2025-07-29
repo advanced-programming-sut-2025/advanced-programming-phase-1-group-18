@@ -1,16 +1,17 @@
 package io.github.group18.Controller;
 
 
+import com.badlogic.gdx.utils.Json;
+import com.google.gson.GsonBuilder;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Result;
+import io.github.group18.Network.Client.App.ClientApp;
+import io.github.group18.Network.Client.App.RegisterMessageHandler;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.Menu;
 
-import java.util.Scanner;
+import java.util.*;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 import io.github.group18.Model.User;
 import com.google.gson.Gson;
@@ -39,7 +40,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         }
     }
 
-    //first part of controller: Register
+    //first part of controller: Is_Unique
     public Result register(String username, String password, String repassword, String nickname, String email,
                            String gender) {
         App.loadUsersFromFile();
@@ -270,8 +271,8 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         System.exit(0);
     }
 
-    protected static void saveUsersToFile() {
-        Gson gson = new Gson();
+    public static void saveUsersToFile() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("users.json")) {
             gson.toJson(App.getUsers_List(), writer);
             System.out.println("Users saved to users.json");
@@ -301,15 +302,19 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
 
     //check the username is Unique
     public static boolean isUsernameUnique(String username) {
-        if (App.getUsers_List() == null) {
-            return false;
-        }
-        for (User user : App.getUsers_List()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+//        for (User user : App.getUsers_List()) {
+//            if (user.getUsername().equals(username)) {
+//                return true;
+//            }
+//        }
+//        HashMap<String,Object> message = new HashMap<>();
+//        message.put("username", username);
+//        Message msg = new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
+//        Message res = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+        return !RegisterMessageHandler.isUsernameUnique(username);
+//        Main.getGameClient()
+//        Main.getGameClient().s
+
     }
 
     public String usernamegenerator(String username) {

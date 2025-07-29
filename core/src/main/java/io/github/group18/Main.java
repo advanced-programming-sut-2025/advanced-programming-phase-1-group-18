@@ -1,24 +1,16 @@
 package io.github.group18;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.gson.Gson;
 import io.github.group18.Controller.MainMenuController;
 import io.github.group18.Controller.RegisterLoginGdxController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Client.ClientManager;
 import io.github.group18.View.MainMenu;
 import io.github.group18.View.RegisterLoginGdxView;
-import io.github.group18.enums.Menu;
 
 import java.io.File;
 import java.io.FileReader;
@@ -29,10 +21,13 @@ public class Main extends Game {
     public static int ScreenWidth = 1920, ScreenHeight= 1080;
     private static Main main;
     private static SpriteBatch batch;
+    private static ClientManager gameClient;
     @Override
     public void create() {
         main = this;
         batch = new SpriteBatch();
+        String[] argumentsForA = {"arg1", "arg2"};
+        ClientManager.startInThread();
         App.loadUsersFromFile();
         File loggedInUserFile = new File("loggedInUser.json");
         if (loggedInUserFile.exists() && loggedInUserFile.length() > 0) {
@@ -48,6 +43,7 @@ public class Main extends Game {
                 System.err.println("Failed to read logged-in user: " + e.getMessage());
             }
         }
+
         getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
@@ -92,4 +88,12 @@ public class Main extends Game {
     public static void setScreenHeight(int screenHeight) {
         ScreenHeight = screenHeight;
     }
+
+//    public static GameClient getGameClient() {
+//        return gameClient;
+//    }
+//
+//    public static void setGameClient(GameClient gameClient) {
+//        Main.gameClient = gameClient;
+//    }
 }
