@@ -5,6 +5,7 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Client.App.ClientApp;
+import io.github.group18.Network.Client.App.RegisterMessageHandler;
 import io.github.group18.View.*;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.Menu;
@@ -129,17 +130,18 @@ public class RegisterGDXController
                 if(isOkay) {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
                     User newUser = new User(username, hashedPassword, nickname, email, gender);
-                    HashMap<String,Object> fld = new HashMap<>();
-
-                    fld.put("username", username);
-                    fld.put("password", hashedPassword);
-                    fld.put("nickname", nickname);
-                    fld.put("email", email);
-                    fld.put("gender", gender);
-
-                    Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
-                    Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
-                    System.out.println((boolean)res1.getFromBody("register"));
+                    RegisterMessageHandler.register(username,hashedPassword,nickname,email,gender);
+//                    HashMap<String,Object> fld = new HashMap<>();
+//
+//                    fld.put("username", username);
+//                    fld.put("password", hashedPassword);
+//                    fld.put("nickname", nickname);
+//                    fld.put("email", email);
+//                    fld.put("gender", gender);
+//
+//                    Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
+//                    Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+//                    System.out.println((boolean)res1.getFromBody("register"));
 //                    App.getUsers_List().add(newUser);
                     App.setCurrentUser(newUser);
                     App.setCurrentMenu(Menu.MainMenu);

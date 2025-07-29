@@ -1,9 +1,12 @@
 package io.github.group18.Controller;
 
 
+import com.badlogic.gdx.utils.Json;
+import com.google.gson.GsonBuilder;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ClientApp;
+import io.github.group18.Network.Client.App.RegisterMessageHandler;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.Menu;
 
@@ -269,7 +272,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
     }
 
     public static void saveUsersToFile() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("users.json")) {
             gson.toJson(App.getUsers_List(), writer);
             System.out.println("Users saved to users.json");
@@ -299,21 +302,18 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
 
     //check the username is Unique
     public static boolean isUsernameUnique(String username) {
-        for (User user : App.getUsers_List()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        HashMap<String,Object> message = new HashMap<>();
-        message.put("username", username);
-        Message msg = new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
-        Message res = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
-        if (res.getFromBody("isUnique")){
-            return false;
-        }
+//        for (User user : App.getUsers_List()) {
+//            if (user.getUsername().equals(username)) {
+//                return true;
+//            }
+//        }
+//        HashMap<String,Object> message = new HashMap<>();
+//        message.put("username", username);
+//        Message msg = new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
+//        Message res = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+        return !RegisterMessageHandler.isUsernameUnique(username);
 //        Main.getGameClient()
 //        Main.getGameClient().s
-        return true;
 
     }
 

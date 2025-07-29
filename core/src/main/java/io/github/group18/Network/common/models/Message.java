@@ -26,6 +26,14 @@ public class Message {
         this.type = type;
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
     public HashMap<String, Object> getBody() {
         return body;
     }

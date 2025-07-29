@@ -25,11 +25,5 @@ public class ServerMain {
             System.err.println("Error starting Server: " + e.getMessage());
             return;
         }
-
-        while (!ServerApp.isEnded()) {
-//            String result = ServerCLIController.processCommand(scanner.nextLine().trim());
-//            System.out.println(result);
-        }
-//        scanner.close();
     }
 }

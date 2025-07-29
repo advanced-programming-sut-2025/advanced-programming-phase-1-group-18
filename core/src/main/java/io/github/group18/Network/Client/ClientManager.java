@@ -9,19 +9,9 @@ public class ClientManager implements Runnable {
             ClientApp.initFromArgs();
             ClientApp.connectServer();
             System.out.println("Connected to server");
-//            ClientApp.startListening();  // اگر شنود بلادرنگ داری
         } catch (Exception e) {
             System.err.println("Error initializing peer: " + e.getMessage());
             return;
-        }
-
-        while (!ClientApp.isEnded()) {
-            // منتظر پیام یا دستور جدید
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                break;
-            }
         }
     }
 
