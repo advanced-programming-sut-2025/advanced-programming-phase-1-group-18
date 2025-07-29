@@ -15,10 +15,10 @@ public class ClientMain {
             return;
         }
 
-        while (!ClientApp.isEnded()) {
-//            String result = PeerCLIController.processCommand(scanner.nextLine().trim());
-//            System.out.println(result);
-        }
+//        while (!ClientApp.isEnded()) {
+////            String result = PeerCLIController.processCommand(scanner.nextLine().trim());
+////            System.out.println(result);
+//        }
 //        scanner.close();
     }
 }

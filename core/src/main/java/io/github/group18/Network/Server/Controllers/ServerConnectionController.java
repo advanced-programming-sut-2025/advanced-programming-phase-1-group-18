@@ -9,8 +9,13 @@ import io.github.group18.enums.Menu;
 import java.util.*;
 
 public class ServerConnectionController {
+    //==============================
+    // Don't use this class,
+    // Create Class for each Menu,
+    // It's just example
+    //==============================
+
     public static Message handleCommand(Message message) {
-        // TODO: Handle incoming peer-to-tracker commands
         // 1. Validate message type and content
         // 2. Find peers having the requested file
         // 3. Check for hash consistency
