@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
 	protected final DataInputStream dataInputStream;
-	protected final DataOutputStream dataOutputStream;
+	protected static DataOutputStream dataOutputStream;
 	protected final BlockingQueue<Message> receivedMessagesQueue;
 	protected String otherSideIP;
 	protected int otherSidePort;
@@ -31,10 +31,10 @@ abstract public class ConnectionThread extends Thread {
 	}
 
 	public Message sendAndWaitForResponse(Message message, int timeoutMilli) {
-		sendMessage(message);
+        sendMessage(message);
 		try {
 			if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
-			socket.setSoTimeout(timeoutMilli);
+            socket.setSoTimeout(timeoutMilli);
 			var result = JSONUtils.fromJson(dataInputStream.readUTF());
 			socket.setSoTimeout(0);
 			return result;
@@ -48,7 +48,7 @@ abstract public class ConnectionThread extends Thread {
 
 	abstract protected boolean handleMessage(Message message);
 
-	public synchronized void sendMessage(Message message) {
+	public static synchronized void sendMessage(Message message) {
 		String JSONString = JSONUtils.toJson(message);
 
 		try {

@@ -1,10 +1,12 @@
 package io.github.group18.Controller;
 
-
+import com.badlogic.gdx.utils.Json;
 import com.google.gson.GsonBuilder;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Result;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Client.App.RegisterMessageHandler;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.Menu;
 
 import java.util.*;

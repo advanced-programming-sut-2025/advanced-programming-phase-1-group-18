@@ -2,15 +2,16 @@ package io.github.group18.Controller;
 
 import com.google.gson.Gson;
 import io.github.group18.Main;
-import io.github.group18.Model.App;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Result;
+import io.github.group18.Model.*;
 import io.github.group18.Controller.LoginMenuController;
-import io.github.group18.Model.User;
+import io.github.group18.Network.Client.App.ServerConnectionThread;
+import io.github.group18.Network.Client.Controller.C2SConnectionController;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.*;
 import io.github.group18.enums.Menu;
 
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import static io.github.group18.Controller.LoginMenuController.findUserByUsername;
 
@@ -22,6 +23,7 @@ public class LoginGDXController {
     }
 
     public void handleLoginGDXButtons() {
+
         if (view != null) {
             view.setPasswordErrorLabel("");
             view.setStayLoggedInErrorLabel("");
@@ -32,6 +34,14 @@ public class LoginGDXController {
                 Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
             if (view.getVerifyButton().isChecked()) {
+
+
+                //TODO
+                //delete this later
+                App.loadUsersFromFile();
+
+
+
                 String username = view.getUsernameField().getText();
                 String password = view.getPasswordField().getText();
                 String stayLoggedIn = view.getStayLoggedInField().getText();
@@ -73,6 +83,10 @@ public class LoginGDXController {
                         }
                     }
                     App.setCurrentUser(user);
+                    HashMap<String,Object> body = new HashMap<>();
+                    body.put("user", user);
+                    Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers);
+                    ServerConnectionThread.sendMessage(message);
                     Main.getMain().getScreen().dispose();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }
