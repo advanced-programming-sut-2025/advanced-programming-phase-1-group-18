@@ -51,6 +51,13 @@ public class ClientConnectionThread extends ConnectionThread {
             case OnlinePlayers:
                 sendMessage(OnlinePlayersNetworkController.handleMessage(message));
                 return true;
+            case OnlinePlayers1:
+                System.out.println("3" + message.getBody().toString());
+                User user = message.getFromBody("user");
+                System.out.println("3.5");
+                ServerModel.getOnlineUsers().add(user);
+                System.out.println("4");
+                return true;
             case Basic:
                 sendMessage(RegisterNetworkController.handleMessage(message));
                 return true;

@@ -17,9 +17,6 @@ public class OnlinePlayersNetworkController {
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("onlineUsers", onlinePlayers);
                 return new Message(body, Message.Type.get_online_players, Message.Menu.OnlinePlayers);
-            case add_to_online_players:
-                ServerModel.getOnlineUsers().add(message.getFromBody("user"));
-                return new Message();
             default:
                 return new Message();
         }

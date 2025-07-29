@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Controller.LoginMenuController;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Client.App.ServerConnectionThread;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.common.models.Message;
@@ -85,8 +86,10 @@ public class LoginGDXController {
                     App.setCurrentUser(user);
                     HashMap<String,Object> body = new HashMap<>();
                     body.put("user", user);
-                    Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers);
-//                    ServerConnectionThread.sendMessage(message);
+                    Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers1);
+                    System.out.println("1" + message.getBody().toString());
+                    ClientModel.getServerConnectionThread().sendMessage(message);
+                    System.out.println("2");
                     Main.getMain().getScreen().dispose();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }
