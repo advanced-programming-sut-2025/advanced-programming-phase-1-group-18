@@ -7,7 +7,7 @@ import io.github.group18.Network.common.models.Message;
 import java.io.IOException;
 import java.net.Socket;
 
-import static io.github.group18.Network.Client.App.ClientApp.TIMEOUT_MILLIS;
+import static io.github.group18.Network.Client.App.ClientModel.TIMEOUT_MILLIS;
 
 public class ServerConnectionThread extends ConnectionThread {
 
@@ -23,10 +23,6 @@ public class ServerConnectionThread extends ConnectionThread {
             dataInputStream.readUTF();
             Message message1 = C2SConnectionController.status();
             sendMessage(message1);
-
-//            dataInputStream.readUTF();
-//            Message message2 = C2SConnectionController.getFilesList();
-//            sendMessage(message2);
 
             socket.setSoTimeout(0);
             return true;
@@ -48,6 +44,6 @@ public class ServerConnectionThread extends ConnectionThread {
     @Override
     public void run() {
         super.run();
-        ClientApp.endAll();
+        ClientModel.endAll();
     }
 }

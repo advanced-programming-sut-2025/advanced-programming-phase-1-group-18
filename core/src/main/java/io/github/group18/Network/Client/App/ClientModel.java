@@ -1,19 +1,8 @@
 package io.github.group18.Network.Client.App;
 
-import io.github.group18.Network.common.models.Message;
-
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
 
-public class ClientApp {
+public class ClientModel {
     public static final int TIMEOUT_MILLIS = 500;
 
     public static String SERVER_HOST = "127.0.0.1"; // آدرس IP ترکر
@@ -27,7 +16,7 @@ public class ClientApp {
     }
 
     public static void initFromArgs() throws Exception {
-        // TODO: Initialize peer with command line arguments
+
         try {
 
             SERVER_PORT = 12345;

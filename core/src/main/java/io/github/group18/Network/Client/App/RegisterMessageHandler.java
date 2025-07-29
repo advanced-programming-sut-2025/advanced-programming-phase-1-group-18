@@ -9,7 +9,7 @@ public class RegisterMessageHandler {
         HashMap<String,Object> message = new HashMap<>();
         message.put("username", username);
         Message msg = new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
-        Message res = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
         return res.getFromBody("isUnique");
     }
     public static void register(String username, String hashedPassword,String nickname , String email, String gender) {
@@ -22,7 +22,7 @@ public class RegisterMessageHandler {
         fld.put("gender", gender);
 
         Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
-        Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
+        Message res1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
         System.out.println((boolean)res1.getFromBody("register"));
     }
 }
