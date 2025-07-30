@@ -54,6 +54,7 @@ public class Message {
     public enum Type {
         command,
         Register,
+        Login,
         Is_Unique,
         get_online_players,
         add_to_online_players,
@@ -63,6 +64,7 @@ public class Message {
     public enum Menu {
         Basic,
         Register,
+        Login,
         OnlinePlayers,
         OnlinePlayers1,
         download_request

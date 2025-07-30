@@ -38,14 +38,15 @@ public class RegisterNetworkController {
         message.put("isUnique", unique);
         return new Message(message, Message.Type.Is_Unique, Message.Menu.Register);
     }
-    public static Message registerUser (User newUser) {
-        System.out.println("Received (register user) request");
+    public static Message registerUser(User newUser) {
         App.getUsers_List().add(newUser);
-//        App.setCurrentUser(newUser);
-//        App.setCurrentMenu(Menu.MainMenu);
         RegisterMenuController.saveUsersToFile();
-        HashMap<String,Object> message = new HashMap<>();
+
+        HashMap<String, Object> message = new HashMap<>();
         message.put("register", true);
-        return new Message(message, Message.Type.Register,Message.Menu.Register);
+        message.put("user", newUser);
+
+        return new Message(message, Message.Type.Register, Message.Menu.Register);
     }
+
 }
