@@ -64,6 +64,7 @@ public class Message {
         Basic,
         Register,
         OnlinePlayers,
+        OnlinePlayers1,
         download_request
     }
 }

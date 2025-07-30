@@ -2,6 +2,7 @@ package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,7 +27,7 @@ public class OnlinePlayersMenu implements Screen {
 
     public OnlinePlayersMenu(OnlinePlayersController onlinePlayersController, Skin skin) {
         controller = onlinePlayersController;
-        this.skin = skin;
+        this.skin = skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         this.backButton = new TextButton("Back", skin);
         this.table = new Table();
 
@@ -38,24 +39,25 @@ public class OnlinePlayersMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        table.setFillParent(true);
         table.center();
-        StringBuilder sb = new StringBuilder();
-        for(User user : controller.getOnlinePlayers()) {
-            sb.append(user.getUsername()).append("\n");
-        }
+        String sb = controller.getOnlinePlayers();
+        System.out.println(sb);
         Label title = new Label(sb, skin);
-        table.add(title);
+        table.add(title).width(Main.ScreenWidth / 2);
         table.row();
+        table.add(backButton).width(Main.ScreenWidth / 2);
+        table.row();
+        table.setBackground(skin.newDrawable("white", Color.DARK_GRAY));
         stage.addActor(table);
     }
 
     @Override
     public void render(float v) {
-        ScreenUtils.clear(0,0,0,1);
-        Main.getBatch().begin();
-        Main.getBatch().end();
+        ScreenUtils.clear(0, 0, 0, 1);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        controller.handleButtons();
     }
 
     @Override
