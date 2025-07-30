@@ -9,18 +9,31 @@ import java.util.HashMap;
 
 public class RegisterNetworkController {
     public static Message handleMessage(Message message) {
-        switch (message.getType()) {
-            case Is_Unique :
+        switch (message.getType())
+        {
+
+            case Is_Unique:
+
                 String username = message.getFromBody("username");
+
                 return isUsernameUnique(username);
+
             case Register:
+
                 String username1 = message.getFromBody("username");
+
                 String password = message.getFromBody("password");
+
                 String nickname = message.getFromBody("nickname");
+
                 String email = message.getFromBody("email");
+
                 String gender = message.getFromBody("gender");
+
                 User user = new User(username1, password, nickname, email, gender);
+
                 return RegisterNetworkController.registerUser(user);
+
             default :
                 return message;
         }
@@ -48,4 +61,5 @@ public class RegisterNetworkController {
         message.put("register", true);
         return new Message(message, Message.Type.Register,Message.Menu.Register);
     }
+
 }

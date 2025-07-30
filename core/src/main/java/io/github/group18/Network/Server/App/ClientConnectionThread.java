@@ -1,7 +1,5 @@
 package io.github.group18.Network.Server.App;
 
-import io.github.group18.Model.User;
-import io.github.group18.Network.Server.Controllers.OnlinePlayersNetworkController;
 import io.github.group18.Network.Server.Controllers.RegisterNetworkController;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
@@ -39,7 +37,10 @@ public class ClientConnectionThread extends ConnectionThread {
         HashMap<String, Object> body = new HashMap<>();
         body.put("command", "status");
         Message res = sendAndWaitForResponse(new Message(body, Message.Type.command, Message.Menu.Basic), TIMEOUT_MILLIS);
-        return ((String) res.getFromBody("response")).equalsIgnoreCase("ok");
+        if (res.getFromBody("response") == "ok") {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -47,13 +48,6 @@ public class ClientConnectionThread extends ConnectionThread {
         switch (message.getMenu()) {
             case Register:
                 sendMessage(RegisterNetworkController.handleMessage(message));
-                return true;
-            case OnlinePlayers:
-                sendMessage(OnlinePlayersNetworkController.handleMessage(message));
-                return true;
-            case OnlinePlayers1:
-//                System.out.println("handling the message via onlineplayer1");
-                sendMessage(OnlinePlayersNetworkController.handleMessage(message));
                 return true;
             case Basic:
                 sendMessage(RegisterNetworkController.handleMessage(message));

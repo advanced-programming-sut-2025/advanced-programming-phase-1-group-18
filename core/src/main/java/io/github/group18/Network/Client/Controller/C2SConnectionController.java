@@ -1,10 +1,8 @@
 package io.github.group18.Network.Client.Controller;
 
-import io.github.group18.Model.App;
-import io.github.group18.Model.Player;
-import io.github.group18.Model.User;
 import io.github.group18.Network.common.models.Message;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class C2SConnectionController {
@@ -34,8 +32,7 @@ public class C2SConnectionController {
             HashMap<String, Object> body = new HashMap<>();
             body.put("command", "status");
             body.put("response", "ok");
-
-            Message res = new Message(body, Message.Type.status, Message.Menu.Basic);
+            Message res = new Message(body, Message.Type.response, Message.Menu.Basic);
             return res;
         } catch (Exception e) {
             e.printStackTrace();

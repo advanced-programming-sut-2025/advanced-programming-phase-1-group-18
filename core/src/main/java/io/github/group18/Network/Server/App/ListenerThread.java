@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ListenerThread extends Thread {
+
     private final ServerSocket serverSocket;
 
     public ListenerThread(int port) throws IOException {
@@ -18,7 +19,10 @@ public class ListenerThread extends Thread {
         } catch (IOException e) {
             try {
                 socket.close();
-            } catch (IOException ex) {
+            }
+
+            catch (IOException ex) {
+
             }
         }
     }
@@ -28,7 +32,6 @@ public class ListenerThread extends Thread {
         while (!ServerModel.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("someone is trying to connect to server");
                 handleConnection(socket);
 
             } catch (Exception e) {
@@ -39,7 +42,9 @@ public class ListenerThread extends Thread {
         try {
             serverSocket.close();
             System.out.println("Server closed");
-        } catch (Exception ignored) {
+        } catch (Exception ignored)
+        {
+
         }
     }
 }

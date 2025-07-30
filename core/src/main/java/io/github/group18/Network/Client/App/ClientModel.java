@@ -8,7 +8,6 @@ public class ClientModel {
     public static String SERVER_HOST = "127.0.0.1"; // آدرس IP ترکر
     public static int SERVER_PORT = 12345;          // پورت ترکر (مثلاً 8080)
     public static ServerConnectionThread SERVER_CONNECTION_THREAD;
-    public static Socket trackerSocket;
 
     private static boolean exitFlag = false;
 
@@ -23,7 +22,7 @@ public class ClientModel {
             SERVER_PORT = 12345;
 
             // 4. Create tracker connection thread
-            trackerSocket = new Socket(SERVER_HOST, SERVER_PORT);
+            Socket trackerSocket = new Socket(SERVER_HOST, SERVER_PORT);
             SERVER_CONNECTION_THREAD = new ServerConnectionThread(trackerSocket);
 
             // 5. Create peer listener thread
@@ -175,7 +174,7 @@ public class ClientModel {
 //    public static ServerConnectionThread getP2TConnection() {
 //        // TODO: Get Server connection thread
 //        return SERVER_CONNECTION_THREAD;
-////		throw new UnsupportedOperationException("Server connection not implemented yet");
+    ////		throw new UnsupportedOperationException("Server connection not implemented yet");
 //    }
 //
 //    public static void requestDownload(String ip, int port, String filename, String md5) throws Exception {

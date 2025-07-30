@@ -1,11 +1,8 @@
 package io.github.group18.Network.common.models;
 
-
-import io.github.group18.Network.common.utils.JSONUtils;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,8 +10,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-    protected final DataInputStream dataInputStream;
-    protected final DataOutputStream dataOutputStream;
+
+    protected final ObjectInputStream objectInputStream;
+    protected final ObjectOutputStream objectOutputStream;
+
     protected final BlockingQueue<Message> receivedMessagesQueue;
     protected String otherSideIP;
     protected int otherSidePort;
@@ -24,32 +23,28 @@ abstract public class ConnectionThread extends Thread {
 
     protected ConnectionThread(Socket socket) throws IOException {
         this.socket = socket;
-        this.dataInputStream = new DataInputStream(socket.getInputStream());
-        this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.objectOutputStream.flush();
+        this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.receivedMessagesQueue = new LinkedBlockingQueue<>();
         this.end = new AtomicBoolean(false);
     }
 
     public Message sendAndWaitForResponse(Message message, int timeoutMilli) {
-//        System.out.println("2(in sendAndWaitForResponse)");
         sendMessage(message);
         try {
-//            System.out.println("2.2(we have sent the message)");
-            if (initialized) {
-                Message msg = receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
-//                System.out.println("2.3(checking the message)" + msg.getBody().toString());
-                return msg;
-            }
-//            System.out.println("2.5(not initialized)");
+            if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
             socket.setSoTimeout(timeoutMilli);
-//            System.out.println("3");
-            var result = JSONUtils.fromJson(dataInputStream.readUTF());
-//            System.out.println("4");
+            Object obj = objectInputStream.readObject();
             socket.setSoTimeout(0);
-            return result;
+            if (obj instanceof Message) {
+                return (Message) obj;
+            } else {
+                System.err.println("Received object is not a Message");
+                return null;
+            }
         } catch (Exception e) {
-//            System.out.println("5");
-            System.err.println("Request Timed out.");
+            System.err.println("Request Timed out or error: " + e.getMessage());
             return null;
         }
     }
@@ -59,10 +54,9 @@ abstract public class ConnectionThread extends Thread {
     abstract protected boolean handleMessage(Message message);
 
     public synchronized void sendMessage(Message message) {
-        String JSONString = JSONUtils.toJson(message);
-
         try {
-            dataOutputStream.writeUTF(JSONString);
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +66,7 @@ abstract public class ConnectionThread extends Thread {
     public void run() {
         initialized = false;
         if (!initialHandshake()) {
-            System.err.println("Inital HandShake failed with remote device.");
+            System.err.println("Initial HandShake failed with remote device.");
             end();
             return;
         }
@@ -80,14 +74,19 @@ abstract public class ConnectionThread extends Thread {
         initialized = true;
         while (!end.get()) {
             try {
-                String receivedStr = dataInputStream.readUTF();
-                Message message = JSONUtils.fromJson(receivedStr);
-//                System.out.println("(someone has send a message to server and now server is checking the msg)");
+                Object obj = objectInputStream.readObject();
+                if (!(obj instanceof Message)) {
+                    System.err.println("Received unknown object type.");
+                    continue;
+                }
+                Message message = (Message) obj;
                 boolean handled = handleMessage(message);
-//                System.out.println("(handled)" + handled);
-                if (!handled) try {
-                    receivedMessagesQueue.put(message);
-                } catch (InterruptedException e) {
+                if (!handled) {
+                    try {
+                        receivedMessagesQueue.put(message);
+                    } catch (InterruptedException e) {
+                        // ignore
+                    }
                 }
             } catch (Exception e) {
                 break;
@@ -116,7 +115,6 @@ abstract public class ConnectionThread extends Thread {
         end.set(true);
         try {
             socket.close();
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 }

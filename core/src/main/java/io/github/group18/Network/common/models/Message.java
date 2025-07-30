@@ -1,17 +1,21 @@
+
 package io.github.group18.Network.common.models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Message {
+public class Message implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Type type;
     private HashMap<String, Object> body;
     private Menu menu;
 
     /*
      * Empty constructor needed for JSON Serialization/Deserialization
+     * الان هم لازمه برای سازگاری با قبلی‌ها، ولی تو ارسال آبجکت نیازی به JSON نیست.
      */
-    public Message() {
-    }
+    public Message() {}
 
     public Message(HashMap<String, Object> body, Type type, Menu menu) {
         this.body = body;
@@ -54,6 +58,8 @@ public class Message {
     public enum Type {
         command,
         Register,
+        Login,
+        response,
         Is_Unique,
         get_online_players,
         add_to_online_players,
