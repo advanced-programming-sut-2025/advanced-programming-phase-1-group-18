@@ -1,6 +1,7 @@
 package io.github.group18.Network.Server.App;
 
 import io.github.group18.Model.User;
+import io.github.group18.Network.Server.Controllers.LoginNetworkController;
 import io.github.group18.Network.Server.Controllers.OnlinePlayersNetworkController;
 import io.github.group18.Network.Server.Controllers.RegisterNetworkController;
 import io.github.group18.Network.common.models.ConnectionThread;
@@ -55,8 +56,8 @@ public class ClientConnectionThread extends ConnectionThread {
 //                System.out.println("handling the message via onlineplayer1");
                 sendMessage(OnlinePlayersNetworkController.handleMessage(message));
                 return true;
-            case Basic:
-                sendMessage(RegisterNetworkController.handleMessage(message));
+            case Login:
+                sendMessage(LoginNetworkController.handleMessage(message));
                 return true;
         }
         return false;

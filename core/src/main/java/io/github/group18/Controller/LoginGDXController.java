@@ -5,6 +5,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Controller.LoginMenuController;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.Client.App.LoginMessageHandler;
 import io.github.group18.Network.Client.App.ServerConnectionThread;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.common.models.Message;
@@ -34,66 +35,62 @@ public class LoginGDXController {
             if (view.getGoBackButton().isChecked()) {
                 Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
+
             if (view.getVerifyButton().isChecked()) {
-
-
-                //TODO
-                //delete this later
-//                App.loadUsersFromFile();
-
-
-
                 String username = view.getUsernameField().getText();
                 String password = view.getPasswordField().getText();
                 String stayLoggedIn = view.getStayLoggedInField().getText();
 
-                //errors//
                 boolean isOkay = true;
-                //first:
-                if (findUserByUsername(username) == null) {
-                    view.setUsernameErrorLabel("incorrect username!");
-                    isOkay = false;
-                }
 
-                //second:
-                if (!(stayLoggedIn.toLowerCase().equals("yes") || stayLoggedIn.toLowerCase().equals("no"))) {
+                if (!(stayLoggedIn.equalsIgnoreCase("yes") || stayLoggedIn.equalsIgnoreCase("no"))) {
                     view.setStayLoggedInErrorLabel("You should enter 'YES' or 'NO'");
                     isOkay = false;
                 }
 
-                //third:
-                User user = findUserByUsername(username);
-                String hashedInput = RegisterMenuController.hashPasswordSHA256(password);
-                if (user != null && !user.getPassword().equals(hashedInput) && user.getPassword() != null) {
-                    view.setPasswordErrorLabel("Wrong Password!");
-                    isOkay = false;
-                }
                 if (isOkay) {
-                    boolean stayin = false;
-                    if (stayLoggedIn.equalsIgnoreCase("yes")) {
-                        stayin = true;
-                    }
-                    user.setStayLoggedIn(stayin);
-                    if (user.isStayLoggedIn()) {
+                    String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
+
+                    Message res = LoginMessageHandler.login(username, hashedPassword);
+                    System.out.println("Raw login response: " + new Gson().toJson(res));
+
+                    Boolean success = (Boolean) res.getFromBody("loginSuccess");
+                    if (success != null && success) {
                         Gson gson = new Gson();
-                        try (FileWriter writer = new FileWriter("loggedInUser.json")) {
-                            gson.toJson(user, writer);
-                            System.out.println("User info saved to loggedInUser.json");
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+                        Object userObj = res.getFromBody("user");
+
+                        String userJson = gson.toJson(userObj);
+                        User user = gson.fromJson(userJson, User.class);
+
+
+                        App.setCurrentUser(user);
+
+                        if (stayLoggedIn.equalsIgnoreCase("yes")) {
+                            user.setStayLoggedIn(true);
+                            try (FileWriter writer = new FileWriter("loggedInUser.json")) {
+                                gson.toJson(user, writer);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+
+                        Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                     }
-                    App.setCurrentUser(user);
-                    HashMap<String,Object> body = new HashMap<>();
-                    body.put("user", user.getUsername());
-                    Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers1);
-//                    System.out.println("1(Before sendinig the add me to online players request)");
-                    ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
-//                    System.out.println("10(after sendinig the add me to online players request)");
-                    Main.getMain().getScreen().dispose();
+
+
+
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+
+                    } else {
+                        // لاگین ناموفق: پیام خطا نمایش بده
+                        view.setUsernameErrorLabel("Username or password is incorrect!");
+                    }
                 }
             }
+
+
+
 
             if (view.getForgotPasswordButton().isChecked()) {
                 Main.getMain().setScreen(new ForgotPasswordGDXView(new ForgotPasswordGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
@@ -107,4 +104,4 @@ public class LoginGDXController {
 
     }
 
-}
+

@@ -1,5 +1,6 @@
 package io.github.group18.Controller;
 
+import com.google.gson.Gson;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
@@ -21,8 +22,7 @@ public class RegisterGDXController
     }
 
     public void handleRegisterGDXButtons() {
-        if (view != null)
-        {
+        if (view != null) {
 
             view.setUsernameErrorLabel("");
             view.setPasswordErrorLabel("");
@@ -31,24 +31,20 @@ public class RegisterGDXController
             view.setGenderErrorLabel("");
 
 
-            if(view.getGoBackButton().isChecked())
-            {
+            if (view.getGoBackButton().isChecked()) {
                 Main.getMain().setScreen(new RegisterLoginGdxView(new RegisterLoginGdxController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
-            if(view.getGoToLoginButton().isChecked())
-            {
-                Main.getMain().setScreen(new LoginGDXView(new LoginGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
+            if (view.getGoToLoginButton().isChecked()) {
+                Main.getMain().setScreen(new LoginGDXView(new LoginGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
-            if(view.getVerifyButton().isChecked())
-            {
-                Message res = new Message();
+            if (view.getVerifyButton().isChecked()) {
                 String username = view.getUsernameField().getText();
                 String password = view.getPasswordField().getText();
                 String repassword = view.getRepasswordField().getText();
                 String nickname = view.getNicknameField().getText();
-                String email  = view.getEmailField().getText();
+                String email = view.getEmailField().getText();
                 String gender = view.getGenderField().getText();
-                HashMap <String,Object> message = new HashMap<>();
+                HashMap<String, Object> message = new HashMap<>();
 
                 message.put("username", username);
                 message.put("password", password);
@@ -67,7 +63,7 @@ public class RegisterGDXController
                 }
 
                 //second
-                if(!password.matches(repassword)) {
+                if (!password.matches(repassword)) {
                     view.setRepasswordErrorLabel("Passwords do not match!");
                     isOkay = false;
 
@@ -111,8 +107,7 @@ public class RegisterGDXController
                 }
 
                 String[] parts = email.split("@");
-                if (parts.length != 2)
-                {
+                if (parts.length != 2) {
                     view.setEmailErrorLabel("Email format is incorrect");
                     isOkay = false;
                 }
@@ -122,40 +117,33 @@ public class RegisterGDXController
                     view.setEmailErrorLabel("Email contains illegal characters");
                 }
 
-                if(!((gender.toLowerCase().equals("male")) || (gender.toLowerCase().equals("female"))))
-                {
+                if (!((gender.toLowerCase().equals("male")) || (gender.toLowerCase().equals("female")))) {
                     view.setGenderErrorLabel("Your gender is not Okay!");
                 }
 
-                if(isOkay) {
+                if (isOkay) {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
+
+
                     User newUser = new User(username, hashedPassword, nickname, email, gender);
-                    RegisterMessageHandler.register(username,hashedPassword,nickname,email,gender);
-//                    HashMap<String,Object> fld = new HashMap<>();
-//
-//                    fld.put("username", username);
-//                    fld.put("password", hashedPassword);
-//                    fld.put("nickname", nickname);
-//                    fld.put("email", email);
-//                    fld.put("gender", gender);
-//
-//                    Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
-//                    Message res1 = ClientApp.getServerConnectionThread().sendAndWaitForResponse(msg,ClientApp.TIMEOUT_MILLIS);
-//                    System.out.println((boolean)res1.getFromBody("register"));
-//                    App.getUsers_List().add(newUser);
+
+
+                    RegisterMessageHandler.register(username, hashedPassword, nickname, email, gender);
+
+
                     App.setCurrentUser(newUser);
                     App.setCurrentMenu(Menu.MainMenu);
-//                    RegisterMenuController.saveUsersToFile();
-                    Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
+
+                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }
-            }
 
-            if(view.getRandomPassButton().isChecked())
-            {
-                Main.getMain().setScreen(new RandomPassGDXView(new RandomPassGDXController(),GameAssetManager.getGameAssetManager().getSkin()));
-            }
 
+
+                if (view.getRandomPassButton().isChecked()) {
+                    Main.getMain().setScreen(new RandomPassGDXView(new RandomPassGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
+                }
+
+            }
         }
     }
-
 }
