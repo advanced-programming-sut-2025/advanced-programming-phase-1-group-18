@@ -12,7 +12,7 @@ public class RegisterMessageHandler {
         Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
         return res.getFromBody("isUnique");
     }
-    public static void register(String username, String hashedPassword,String nickname , String email, String gender) {
+    public static Message register(String username, String hashedPassword,String nickname , String email, String gender) {
         HashMap<String,Object> fld = new HashMap<>();
 
         fld.put("username", username);
@@ -22,7 +22,8 @@ public class RegisterMessageHandler {
         fld.put("gender", gender);
 
         Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
-        Message res1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
-        System.out.println((boolean)res1.getFromBody("register"));
+        return ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
     }
+
+
 }

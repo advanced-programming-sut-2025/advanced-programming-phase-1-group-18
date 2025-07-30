@@ -1,11 +1,8 @@
 package io.github.group18.Network.common.models;
 
-
-import io.github.group18.Network.common.utils.JSONUtils;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,96 +10,111 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-	protected final DataInputStream dataInputStream;
-	protected final DataOutputStream dataOutputStream;
-	protected final BlockingQueue<Message> receivedMessagesQueue;
-	protected String otherSideIP;
-	protected int otherSidePort;
-	protected Socket socket;
-	protected AtomicBoolean end;
-	protected boolean initialized = false;
 
-	protected ConnectionThread(Socket socket) throws IOException {
-		this.socket = socket;
-		this.dataInputStream = new DataInputStream(socket.getInputStream());
-		this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-		this.receivedMessagesQueue = new LinkedBlockingQueue<>();
-		this.end = new AtomicBoolean(false);
-	}
+    protected final ObjectInputStream objectInputStream;
+    protected final ObjectOutputStream objectOutputStream;
 
-	public Message sendAndWaitForResponse(Message message, int timeoutMilli) {
-		sendMessage(message);
-		try {
-			if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
-			socket.setSoTimeout(timeoutMilli);
-			var result = JSONUtils.fromJson(dataInputStream.readUTF());
-			socket.setSoTimeout(0);
-			return result;
-		} catch (Exception e) {
-			System.err.println("Request Timed out.");
-			return null;
-		}
-	}
+    protected final BlockingQueue<Message> receivedMessagesQueue;
+    protected String otherSideIP;
+    protected int otherSidePort;
+    protected Socket socket;
+    protected AtomicBoolean end;
+    protected boolean initialized = false;
 
-	abstract public boolean initialHandshake();
+    protected ConnectionThread(Socket socket) throws IOException {
+        this.socket = socket;
+        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.objectOutputStream.flush();
+        this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+        this.receivedMessagesQueue = new LinkedBlockingQueue<>();
+        this.end = new AtomicBoolean(false);
+    }
 
-	abstract protected boolean handleMessage(Message message);
+    public Message sendAndWaitForResponse(Message message, int timeoutMilli) {
+        sendMessage(message);
+        try {
+            if (initialized) return receivedMessagesQueue.poll(timeoutMilli, TimeUnit.MILLISECONDS);
+            socket.setSoTimeout(timeoutMilli);
+            Object obj = objectInputStream.readObject();
+            socket.setSoTimeout(0);
+            if (obj instanceof Message) {
+                return (Message) obj;
+            } else {
+                System.err.println("Received object is not a Message");
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Request Timed out or error: " + e.getMessage());
+            return null;
+        }
+    }
 
-	public synchronized void sendMessage(Message message) {
-		String JSONString = JSONUtils.toJson(message);
+    abstract public boolean initialHandshake();
 
-		try {
-			dataOutputStream.writeUTF(JSONString);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    abstract protected boolean handleMessage(Message message);
 
-	@Override
-	public void run() {
-		initialized = false;
-		if (!initialHandshake()) {
-			System.err.println("Inital HandShake failed with remote device.");
-			end();
-			return;
-		}
+    public synchronized void sendMessage(Message message) {
+        try {
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		initialized = true;
-		while (!end.get()) {
-			try {
-				String receivedStr = dataInputStream.readUTF();
-				Message message = JSONUtils.fromJson(receivedStr);
-				boolean handled = handleMessage(message);
-				if (!handled) try {
-					receivedMessagesQueue.put(message);
-				} catch (InterruptedException e) {}
-			} catch (Exception e) {
-				break;
-			}
-		}
-		end();
-	}
+    @Override
+    public void run() {
+        initialized = false;
+        if (!initialHandshake()) {
+            System.err.println("Initial HandShake failed with remote device.");
+            end();
+            return;
+        }
 
-	public String getOtherSideIP() {
-		return otherSideIP;
-	}
+        initialized = true;
+        while (!end.get()) {
+            try {
+                Object obj = objectInputStream.readObject();
+                if (!(obj instanceof Message)) {
+                    System.err.println("Received unknown object type.");
+                    continue;
+                }
+                Message message = (Message) obj;
+                boolean handled = handleMessage(message);
+                if (!handled) {
+                    try {
+                        receivedMessagesQueue.put(message);
+                    } catch (InterruptedException e) {
+                        // ignore
+                    }
+                }
+            } catch (Exception e) {
+                break;
+            }
+        }
+        end();
+    }
 
-	public void setOtherSideIP(String otherSideIP) {
-		this.otherSideIP = otherSideIP;
-	}
+    public String getOtherSideIP() {
+        return otherSideIP;
+    }
 
-	public int getOtherSidePort() {
-		return otherSidePort;
-	}
+    public void setOtherSideIP(String otherSideIP) {
+        this.otherSideIP = otherSideIP;
+    }
 
-	public void setOtherSidePort(int otherSidePort) {
-		this.otherSidePort = otherSidePort;
-	}
+    public int getOtherSidePort() {
+        return otherSidePort;
+    }
 
-	public void end() {
-		end.set(true);
-		try {
-			socket.close();
-		} catch (IOException e) {}
-	}
+    public void setOtherSidePort(int otherSidePort) {
+        this.otherSidePort = otherSidePort;
+    }
+
+    public void end() {
+        end.set(true);
+        try {
+            socket.close();
+        } catch (IOException e) {}
+    }
 }

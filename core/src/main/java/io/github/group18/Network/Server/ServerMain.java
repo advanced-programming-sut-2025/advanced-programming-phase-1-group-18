@@ -12,7 +12,7 @@ public class ServerMain {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Silent Mode");
-        config.setIdleFPS(1); // مصرف کم
+        config.setIdleFPS(1);
 
         new Lwjgl3Application(new SetupServer(), config);
         App.loadUsersFromFile();

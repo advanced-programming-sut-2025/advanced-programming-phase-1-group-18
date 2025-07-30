@@ -219,20 +219,31 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
             int questionNumber = Integer.parseInt(voroodi.split("\\s+")[3]);
             int answer = Integer.parseInt(voroodi.split("\\s+")[5]);
             int answerconfirm = Integer.parseInt(voroodi.split("\\s+")[7]);
+
             if (answerconfirm != answer) {
                 return new Result(false, "They are not same!");
             }
+
             switch (questionNumber) {
                 case 1:
-                    if (answer == random1 + random2) {
+                    if (answer == random1 + random2)
+                    {
+                        //
                         User newUser = new User(username, generatedpassword, nickname, email, gender);
+                        //
                         App.getUsers_List().add(newUser);
+                        //
                         App.setCurrentUser(newUser);
+                        //
                         App.setCurrentMenu(Menu.MainMenu);
+                        //
                         return new Result(true, "You Registered Successfully");
-                    } else {
+
+                    }
+                    else {
                         return new Result(false, "Your answer is incorrect!");
                     }
+
                 case 2:
                     if (answer == random3 + random4) {
                         User newUser = new User(username, generatedpassword, nickname, email, gender);
@@ -258,10 +269,9 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
                 default: {
                     return new Result(false, "Your entered number is not between 1 and 4!");
                 }
-
             }
         }
-        /// //////
+
     }
 
     public void exit() {

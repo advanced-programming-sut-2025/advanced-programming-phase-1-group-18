@@ -20,7 +20,14 @@ public class ServerConnectionThread extends ConnectionThread {
         try {
             socket.setSoTimeout(TIMEOUT_MILLIS);
 
-            dataInputStream.readUTF();
+
+            Object obj = objectInputStream.readObject();
+            if (!(obj instanceof Message)) {
+                System.err.println("Handshake: received object is not a Message.");
+                return false;
+            }
+
+
             Message message1 = C2SConnectionController.status();
             sendMessage(message1);
 
@@ -40,6 +47,7 @@ public class ServerConnectionThread extends ConnectionThread {
         }
         return false;
     }
+
 
     @Override
     public void run() {
