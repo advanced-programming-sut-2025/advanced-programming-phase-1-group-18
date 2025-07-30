@@ -41,9 +41,12 @@ public class OnlinePlayersMenu implements Screen {
 
         table.setFillParent(true);
         table.center();
-        String sb = controller.getOnlinePlayers();
-        System.out.println(sb);
-        Label title = new Label(sb, skin);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (User user : controller.getOnlinePlayers()) {
+            stringBuilder.append(user.getUsername()).append("\n");
+        }
+        System.out.println(stringBuilder.toString());
+        Label title = new Label(stringBuilder.toString(), skin);
         table.add(title).width(Main.ScreenWidth / 2);
         table.row();
         table.add(backButton).width(Main.ScreenWidth / 2);

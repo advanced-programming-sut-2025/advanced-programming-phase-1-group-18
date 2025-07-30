@@ -52,10 +52,6 @@ public class ClientConnectionThread extends ConnectionThread {
             case OnlinePlayers:
                 sendMessage(OnlinePlayersNetworkController.handleMessage(message));
                 return true;
-            case OnlinePlayers1:
-//                System.out.println("handling the message via onlineplayer1");
-                sendMessage(OnlinePlayersNetworkController.handleMessage(message));
-                return true;
             case Login:
                 sendMessage(LoginNetworkController.handleMessage(message));
                 return true;

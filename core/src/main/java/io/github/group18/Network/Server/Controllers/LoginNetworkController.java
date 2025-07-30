@@ -3,6 +3,7 @@ package io.github.group18.Network.Server.Controllers;
 import io.github.group18.Controller.RegisterMenuController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class LoginNetworkController {
                 HashMap<String, Object> response = new HashMap<>();
                 response.put("loginSuccess", true);
                 response.put("user", user); // 👈 اینو اضافه کن
+                ServerModel.getOnlineUsers().add(user);
                 return new Message(response, Message.Type.Login, Message.Menu.Login);
             }
         }

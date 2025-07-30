@@ -52,7 +52,7 @@ public class LoginGDXController {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
 
                     Message res = LoginMessageHandler.login(username, hashedPassword);
-                    System.out.println("Raw login response: " + new Gson().toJson(res));
+//                    System.out.println("Raw login response: " + new Gson().toJson(res));
 
                     Boolean success = (Boolean) res.getFromBody("loginSuccess");
                     if (success != null && success) {

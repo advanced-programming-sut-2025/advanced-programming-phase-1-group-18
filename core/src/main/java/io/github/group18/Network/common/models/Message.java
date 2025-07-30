@@ -57,7 +57,7 @@ public class Message {
         Login,
         Is_Unique,
         get_online_players,
-        add_to_online_players,
+        remove_from_online_players,
         status,
     }
 
@@ -66,7 +66,6 @@ public class Message {
         Register,
         Login,
         OnlinePlayers,
-        OnlinePlayers1,
         download_request
     }
 }
