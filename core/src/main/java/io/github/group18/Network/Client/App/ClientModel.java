@@ -8,6 +8,7 @@ public class ClientModel {
     public static String SERVER_HOST = "127.0.0.1"; // آدرس IP ترکر
     public static int SERVER_PORT = 12345;          // پورت ترکر (مثلاً 8080)
     public static ServerConnectionThread SERVER_CONNECTION_THREAD;
+    public static Socket trackerSocket;
 
     private static boolean exitFlag = false;
 
@@ -22,7 +23,7 @@ public class ClientModel {
             SERVER_PORT = 12345;
 
             // 4. Create tracker connection thread
-            Socket trackerSocket = new Socket(SERVER_HOST, SERVER_PORT);
+            trackerSocket = new Socket(SERVER_HOST, SERVER_PORT);
             SERVER_CONNECTION_THREAD = new ServerConnectionThread(trackerSocket);
 
             // 5. Create peer listener thread

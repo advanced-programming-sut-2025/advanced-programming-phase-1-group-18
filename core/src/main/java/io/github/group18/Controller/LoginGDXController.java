@@ -85,11 +85,11 @@ public class LoginGDXController {
                     }
                     App.setCurrentUser(user);
                     HashMap<String,Object> body = new HashMap<>();
-                    body.put("user", user);
+                    body.put("user", user.getUsername());
                     Message message = new Message(body, Message.Type.add_to_online_players, Message.Menu.OnlinePlayers1);
-                    System.out.println("1" + message.getBody().toString());
-                    ClientModel.getServerConnectionThread().sendMessage(message);
-                    System.out.println("2");
+//                    System.out.println("1(Before sendinig the add me to online players request)");
+                    ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
+//                    System.out.println("10(after sendinig the add me to online players request)");
                     Main.getMain().getScreen().dispose();
                     Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }
