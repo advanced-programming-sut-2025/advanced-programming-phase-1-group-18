@@ -24,6 +24,7 @@ public class OnlinePlayersMenu implements Screen {
     private Stage stage;
     private final TextButton backButton;
     public Table table;
+    StringBuilder stringBuilder;
 
     public OnlinePlayersMenu(OnlinePlayersController onlinePlayersController, Skin skin) {
         controller = onlinePlayersController;
@@ -38,10 +39,23 @@ public class OnlinePlayersMenu implements Screen {
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        createUI();
+    }
 
+    @Override
+    public void render(float v) {
+        ScreenUtils.clear(0, 0, 0, 1);
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+        controller.handleButtons();
+        createUI();
+    }
+
+    public void createUI() {
+        this.table = new Table();
         table.setFillParent(true);
         table.center();
-        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder = new StringBuilder();
         try {
             for (User user : controller.getOnlinePlayers()) {
                 stringBuilder.append(user.getUsername()).append("\n");
@@ -57,14 +71,6 @@ public class OnlinePlayersMenu implements Screen {
         table.row();
         table.setBackground(skin.newDrawable("white", Color.DARK_GRAY));
         stage.addActor(table);
-    }
-
-    @Override
-    public void render(float v) {
-        ScreenUtils.clear(0, 0, 0, 1);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-        controller.handleButtons();
     }
 
     @Override
