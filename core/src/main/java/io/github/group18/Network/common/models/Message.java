@@ -58,6 +58,9 @@ public class Message {
         Is_Unique,
         get_online_players,
         remove_from_online_players,
+        add_user_to_lobby,
+        create_lobby,
+        get_all_lobbies,
         status,
     }
 
@@ -66,6 +69,7 @@ public class Message {
         Register,
         Login,
         OnlinePlayers,
+        lobby,
         download_request
     }
 }

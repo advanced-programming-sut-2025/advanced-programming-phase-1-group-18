@@ -42,10 +42,14 @@ public class OnlinePlayersMenu implements Screen {
         table.setFillParent(true);
         table.center();
         StringBuilder stringBuilder = new StringBuilder();
-        for (User user : controller.getOnlinePlayers()) {
-            stringBuilder.append(user.getUsername()).append("\n");
+        try {
+            for (User user : controller.getOnlinePlayers()) {
+                stringBuilder.append(user.getUsername()).append("\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println(stringBuilder.toString());
+//        System.out.println(stringBuilder.toString());
         Label title = new Label(stringBuilder.toString(), skin);
         table.add(title).width(Main.ScreenWidth / 2);
         table.row();

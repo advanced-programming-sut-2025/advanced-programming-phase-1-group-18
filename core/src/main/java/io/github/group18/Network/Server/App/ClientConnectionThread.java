@@ -1,6 +1,7 @@
 package io.github.group18.Network.Server.App;
 
 import io.github.group18.Model.User;
+import io.github.group18.Network.Server.Controllers.LobbyNetworkController;
 import io.github.group18.Network.Server.Controllers.LoginNetworkController;
 import io.github.group18.Network.Server.Controllers.OnlinePlayersNetworkController;
 import io.github.group18.Network.Server.Controllers.RegisterNetworkController;
@@ -50,10 +51,13 @@ public class ClientConnectionThread extends ConnectionThread {
                 sendMessage(RegisterNetworkController.handleMessage(message));
                 return true;
             case OnlinePlayers:
-                sendMessage(OnlinePlayersNetworkController.handleMessage(message));
+                OnlinePlayersNetworkController.handleMessage(message,this);
                 return true;
             case Login:
                 sendMessage(LoginNetworkController.handleMessage(message));
+                return true;
+            case lobby:
+                LobbyNetworkController.handleMessage(message,this);
                 return true;
         }
         return false;
