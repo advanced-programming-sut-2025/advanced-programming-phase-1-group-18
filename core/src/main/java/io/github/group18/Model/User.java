@@ -1,5 +1,7 @@
 package io.github.group18.Model;
 
+import io.github.group18.Controller.RegisterMenuController;
+
 public class User {
 
     protected String Username;
@@ -11,6 +13,7 @@ public class User {
     protected int timesPlayed;
     protected int highestGold;
     protected String avatar;
+    protected int ID;
 
     public String getUsername() {
         return Username;
@@ -97,5 +100,16 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+//    public String getHashedPassword() {
+//        return RegisterMenuController.hashPasswordSHA256(Password);
+//    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }

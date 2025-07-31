@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
+import io.github.group18.Database.DataManager.UserDataManager;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
@@ -26,6 +27,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 
 public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
     private ProfileMenu profileMenu;
@@ -85,6 +87,11 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             // Save changes
             file.writeString(jsonData.toJson(JsonWriter.OutputType.json), false);
             App.getCurrentUser().setAvatar(newAvatarPath);
+            try {
+                UserDataManager.updateUser(App.getCurrentUser());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } catch (Exception e) {
             Gdx.app.error("JSON", "Failed to update avatar path", e);
         }
@@ -113,6 +120,12 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             }
         }
         App.getCurrentUser().setUsername(newUsername);
+        try {
+            UserDataManager.updateUser(App.getCurrentUser());
+            App.loadUsersFromFile();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return new Result(true, "Username changed successfully");
     }
 
@@ -124,6 +137,11 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             return new Result(false, "Nickname is already taken");
         }
         App.getCurrentUser().setNickName(newNickname);
+        try {
+            UserDataManager.updateUser(App.getCurrentUser());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return new Result(true, "Nickname changed successfully");
     }
 
@@ -162,6 +180,11 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             return new Result(false, "Email contains illegal characters");
         }
         App.getCurrentUser().setEmail(newEmail);
+        try {
+            UserDataManager.updateUser(App.getCurrentUser());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return new Result(true, "Email changed successfully");
     }
 
@@ -202,7 +225,14 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             issues = issues.substring(0, issues.length() - 2);
             return new Result(false, "Weak password: must contain " + issues);
         }
-        App.getCurrentUser().setPassword(newPassword);
+        App.getCurrentUser().setPassword(RegisterMenuController.hashPasswordSHA256(newPassword));
+        RegisterMenuController.saveUsersToFile();
+        try {
+            UserDataManager.updateUser(App.getCurrentUser());
+            App.loadUsersFromFile();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return new Result(true, "Password changed successfully");
     }
 

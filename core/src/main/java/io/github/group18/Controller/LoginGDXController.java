@@ -52,7 +52,7 @@ public class LoginGDXController {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
 
                     Message res = LoginMessageHandler.login(username, hashedPassword);
-                    System.out.println("Raw login response: " + new Gson().toJson(res));
+//                    System.out.println("Raw login response: " + new Gson().toJson(res));
 
                     Boolean success = (Boolean) res.getFromBody("loginSuccess");
                     if (success != null && success) {
@@ -76,11 +76,14 @@ public class LoginGDXController {
                         }
 
                         Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                    } else {
+                        // لاگین ناموفق: پیام خطا نمایش بده
+                        view.setUsernameErrorLabel("Username or password is incorrect!");
                     }
 
 
 
-                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+//                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
 
                     } else {
                         // لاگین ناموفق: پیام خطا نمایش بده
