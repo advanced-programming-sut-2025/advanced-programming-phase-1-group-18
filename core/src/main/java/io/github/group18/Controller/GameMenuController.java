@@ -53,9 +53,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 loadGame();
             } else if (view.getStartNewGame().isPressed()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new LobbyView(new LobbyController(),view.getSkin(),this));
-//                Main.getMain().setScreen(new StartNewGame(new StartNewGameController(), view.getSkin(), this));
-
+                Main.getMain().setScreen(new LobbyView(new LobbyController(),view.getSkin()));
             }
         }
     }

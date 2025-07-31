@@ -14,27 +14,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class OnlinePlayersNetworkController {
-    public static Message handleMessage(Message message) {
-//        System.out.println("server is gonna handle message");
+    public static void handleMessage(Message message, ClientConnectionThread clientConnectionThread) {
+
         switch (message.getType()) {
             case get_online_players:
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("onlineUsers", ServerModel.getOnlineUsers());
-                return new Message(body, Message.Type.get_online_players, Message.Menu.OnlinePlayers);
+                clientConnectionThread.sendMessage(new Message(body, Message.Type.get_online_players, Message.Menu.OnlinePlayers));
+                break;
             case remove_from_online_players:
                 Gson gson = new Gson();
                 Object userObj = message.getFromBody("user");
                 String userJson = gson.toJson(userObj);
                 User user = gson.fromJson(userJson, User.class);
                 for (User u : ServerModel.getOnlineUsers()) {
-                    if(u.getUsername().equals(user.getUsername())) {
+                    if (u.getUsername().equals(user.getUsername())) {
                         ServerModel.getOnlineUsers().remove(u);
                         break;
                     }
                 }
-                return new Message();
-            default:
-                return new Message();
         }
     }
 }

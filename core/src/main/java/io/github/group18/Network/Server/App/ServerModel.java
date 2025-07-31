@@ -1,5 +1,6 @@
 package io.github.group18.Network.Server.App;
 
+import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ public class ServerModel {
     private static boolean isRunning = false;
 
     private static ArrayList<User> onlineUsers = new ArrayList<>();
+    private static ArrayList<Lobby> lobbies = new ArrayList<>();
+
 
     public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
         for (ClientConnectionThread connection : connections) {
@@ -81,5 +84,25 @@ public class ServerModel {
 
     public static void setOnlineUsers(ArrayList<User> onlineUsers) {
         ServerModel.onlineUsers = onlineUsers;
+    }
+
+    public static boolean isExitFlag() {
+        return exitFlag;
+    }
+
+    public static void setExitFlag(boolean exitFlag) {
+        ServerModel.exitFlag = exitFlag;
+    }
+
+    public static ListenerThread getListenerThread() {
+        return listenerThread;
+    }
+
+    public static ArrayList<Lobby> getLobbies() {
+        return lobbies;
+    }
+
+    public static void setLobbies(ArrayList<Lobby> lobbies) {
+        ServerModel.lobbies = lobbies;
     }
 }
