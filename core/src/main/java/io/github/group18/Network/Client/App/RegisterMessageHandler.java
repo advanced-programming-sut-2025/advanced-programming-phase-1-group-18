@@ -24,5 +24,4 @@ public class RegisterMessageHandler {
         Message msg = new Message(fld, Message.Type.Register, Message.Menu.Register);
         return ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
     }
-
 }

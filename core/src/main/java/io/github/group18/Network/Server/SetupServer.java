@@ -11,7 +11,7 @@ public class SetupServer extends Game {
     @Override
     public void create() {
         System.out.println("Gdx initialized.");
-        App.loadUsersFromFile();
+        App.loadUsersFromDatabase();
         try {
             ServerModel.setListenerThread(new ListenerThread(serverPort));
             ServerModel.startListening();

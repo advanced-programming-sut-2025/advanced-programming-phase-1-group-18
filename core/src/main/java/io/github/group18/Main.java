@@ -30,7 +30,7 @@ public class Main extends Game {
         String[] argumentsForA = {"arg1", "arg2"};
 
         SetupClient.startClientConnectionThread();
-        App.loadUsersFromFile();
+        App.loadUsersFromDatabase();
 
 //        there is no longer a logged in user in phase 3
         File loggedInUserFile = new File("loggedInUser.json");
