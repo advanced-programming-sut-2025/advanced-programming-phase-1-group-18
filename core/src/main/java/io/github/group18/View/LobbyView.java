@@ -275,14 +275,31 @@ public class LobbyView implements Screen {
 
     private void showLobbyInfo(Lobby lobby) {
         String info = controller.getLobbyInfo(lobby);
-        Dialog dialog = new Dialog("Lobby Info", skin);
+
+        Dialog dialog = new Dialog("Lobby Info", skin) {
+            @Override
+            protected void result(Object object) {
+                if ("createGame".equals(object)) {
+//                    controller.createGame(lobby);
+                } else if ("leave".equals(object)) {
+                    controller.leaveLobby(lobby, App.getCurrentUser());
+                    updateLobbyList();
+                }
+            }
+        };
+
         dialog.text(info);
+
         if (controller.isAdmin(App.getCurrentUser(), lobby)) {
             dialog.button("Create Game", "createGame");
         }
+
+        dialog.button("Leave Lobby", "leave");
         dialog.button("Back", "back");
+
         dialog.show(stage);
     }
+
 
     private void updateLobbyList() {
         lobbyList = controller.getAllLobbies();

@@ -61,6 +61,7 @@ public class Message {
         add_user_to_lobby,
         create_lobby,
         get_all_lobbies,
+        remove_user_to_lobby,
         status,
     }
 

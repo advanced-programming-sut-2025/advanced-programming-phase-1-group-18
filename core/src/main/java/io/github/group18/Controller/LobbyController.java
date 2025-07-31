@@ -128,4 +128,12 @@ public class LobbyController {
         lobbies = gson.fromJson(lobbyArraylist, lobbyListType);
         return lobbies;
     }
+
+    public void leaveLobby(Lobby lobby, User currentUser) {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user", currentUser);
+        body.put("lobby", lobby);
+        Message message = new Message(body, Message.Type.remove_user_to_lobby, Message.Menu.lobby);
+        ClientModel.getServerConnectionThread().sendMessage(message);
+    }
 }
