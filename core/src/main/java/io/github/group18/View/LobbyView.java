@@ -290,7 +290,7 @@ public class LobbyView implements Screen {
 
         dialog.text(info);
 
-        if (controller.isAdmin(App.getCurrentUser(), lobby)) {
+        if (controller.isAdmin(App.getCurrentUser(), lobby) && lobby.getUsers().size() > 1) {
             dialog.button("Create Game", "createGame");
         }
 
