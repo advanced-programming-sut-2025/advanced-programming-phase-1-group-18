@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.GameMenuController;
+import io.github.group18.Database.DataManager.UserDataManager;
 import io.github.group18.enums.Menu;
 
 import java.io.*;
@@ -33,16 +34,32 @@ public class App {
 
     // Load users from users.json
     public static void loadUsersFromFile() {
-        File file = new File(USER_FILE);
-        if (!file.exists()) return;
-
-        try (Reader reader = new FileReader(file)) {
-            Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
-            Users_List = new Gson().fromJson(reader, userListType);
-            System.out.println("Loaded " + Users_List.size() + " users");
-        } catch (IOException e) {
-            System.err.println("Failed to load users: " + e.getMessage());
-        }
+        Users_List = UserDataManager.loadAllUsers();
+        System.out.println("Loaded " + Users_List.size() + " users");
+//        File file = new File(USER_FILE);
+//        if (!file.exists()) return;
+//
+//        try (Reader reader = new FileReader(file)) {
+//            Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
+//            Users_List = new Gson().fromJson(reader, userListType);
+//            System.out.println("Loaded " + Users_List.size() + " users");
+//        } catch (IOException e) {
+//            System.err.println("Failed to load users: " + e.getMessage());
+//        }
+    }
+    public static void loadUsersFromDatabase() {
+        Users_List = UserDataManager.loadAllUsers();
+        System.out.println("Loaded " + Users_List.size() + " users");
+//        File file = new File(USER_FILE);
+//        if (!file.exists()) return;
+//
+//        try (Reader reader = new FileReader(file)) {
+//            Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
+//            Users_List = new Gson().fromJson(reader, userListType);
+//            System.out.println("Loaded " + Users_List.size() + " users");
+//        } catch (IOException e) {
+//            System.err.println("Failed to load users: " + e.getMessage());
+//        }
     }
 
     // Save users to users.json

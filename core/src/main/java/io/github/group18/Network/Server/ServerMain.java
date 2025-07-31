@@ -15,7 +15,7 @@ public class ServerMain {
         config.setIdleFPS(1); // مصرف کم
 
         new Lwjgl3Application(new SetupServer(), config);
-        App.loadUsersFromFile();
+        App.loadUsersFromDatabase();
         try {
             int port = 12345;
             ServerModel.setIsRunning(true);

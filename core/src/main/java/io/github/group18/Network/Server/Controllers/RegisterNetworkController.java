@@ -1,10 +1,12 @@
 package io.github.group18.Network.Server.Controllers;
 
 import io.github.group18.Controller.RegisterMenuController;
+import io.github.group18.Database.DataManager.UserDataManager;
 import io.github.group18.Model.App;
 import io.github.group18.Model.User;
 import io.github.group18.Network.common.models.Message;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class RegisterNetworkController {
@@ -41,7 +43,11 @@ public class RegisterNetworkController {
     public static Message registerUser(User newUser) {
         App.getUsers_List().add(newUser);
         RegisterMenuController.saveUsersToFile();
-
+        try {
+            UserDataManager.saveUsers(App.getUsers_List());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         HashMap<String, Object> message = new HashMap<>();
         message.put("register", true);
         message.put("user", newUser);

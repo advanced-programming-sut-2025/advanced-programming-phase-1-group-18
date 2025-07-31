@@ -76,11 +76,14 @@ public class LoginGDXController {
                         }
 
                         Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                    } else {
+                        // لاگین ناموفق: پیام خطا نمایش بده
+                        view.setUsernameErrorLabel("Username or password is incorrect!");
                     }
 
 
 
-                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+//                    Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
 
                     } else {
                         // لاگین ناموفق: پیام خطا نمایش بده
