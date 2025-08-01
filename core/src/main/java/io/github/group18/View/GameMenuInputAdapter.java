@@ -30,15 +30,14 @@ import io.github.group18.Model.Items.Item;
 import io.github.group18.enums.TavilehAnimalEnums;
 
 public class GameMenuInputAdapter extends InputAdapter {
-    private final Game game;
     private final GameController gameController;
     private final Set<Integer> keysHeld = new HashSet<>();
     private String input;
     private boolean buildingPaceMode = false;
 
-    public GameMenuInputAdapter(Game game, GameController gameController) {
-        this.game = game;
+    public GameMenuInputAdapter(GameController gameController) {
         this.gameController = gameController;
+        Game game = gameController.getGame();
         game.getCurrentPlayer().setShowInventory(true);
     }
 
@@ -221,6 +220,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        Game game = gameController.getGame();
         int current = game.getCurrentPlayer().getInventory().getSelectedSlot();
         int size = game.getCurrentPlayer().getInventory().getMaxQuantity();
         int next = (current + (amountY > 0 ? 1 : -1) + size) % size;
@@ -257,6 +257,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void openNpcPage(int screenX, int screenY) {
+        Game game = gameController.getGame();
         OrthographicCamera camera = game.getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -307,6 +308,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void openNpcDialog(int screenX, int screenY) {
+        Game game = gameController.getGame();
         OrthographicCamera camera = game.getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -357,8 +359,8 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     public void update(float delta, Batch batch) {
+        Game game = gameController.getGame();
         Player player = game.getCurrentPlayer();
-        Game game = gameController.getGameMenu().getGameModel();
         float vx = 0, vy = 0;
         int dir = 0;
 
@@ -453,6 +455,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void gotoMarket(int screenX, int screenY) {
+        Game game = gameController.getGame();
         OrthographicCamera camera = game.getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -520,15 +523,18 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void handleInventoryVisibility() {
+        Game game = gameController.getGame();
         game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
     }
 
     private void switchInventorySlot(int keycode) {
+        Game game = gameController.getGame();
         int selectedSlot = keycode - Input.Keys.NUM_1;
         game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
     }
 
     private void handleBuildingView() {
+        Game game = gameController.getGame();
         Stage stage = gameController.getGameMenu().getCheatCodeStage();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
@@ -548,6 +554,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
     private void performAction(int screenX, int screenY) {
+        Game game = gameController.getGame();
         OrthographicCamera camera = game.getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -580,6 +587,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void placeCrafting(int screenX, int screenY) {
+        Game game = gameController.getGame();
         OrthographicCamera camera = game.getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -599,11 +607,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             currentPlayer.setPlacingItem(false);
         }
 //        gameController.useItem(item, tileX, tileY, game);
-    }
-
-
-    public Game getGame() {
-        return game;
     }
 
     public GameController getGameController() {
@@ -776,6 +779,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void buildDamdari(int screenX, int screenY) {
+        Game game = gameController.getGame();
         Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
 
         int tileX = (int) (worldCoords.x / game.TILE_SIZE);
