@@ -62,6 +62,11 @@ public class Message {
         create_lobby,
         get_all_lobbies,
         remove_user_to_lobby,
+        change_menu,
+        choose_map,
+        refresh_maps,
+        select_map,
+        start_game,
         status,
     }
 
@@ -71,6 +76,8 @@ public class Message {
         Login,
         OnlinePlayers,
         lobby,
+        choosing_map,
+        CHANGE_MENU,
         download_request
     }
 }

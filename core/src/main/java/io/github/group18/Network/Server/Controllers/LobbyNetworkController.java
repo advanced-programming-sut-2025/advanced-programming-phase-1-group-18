@@ -1,8 +1,10 @@
 package io.github.group18.Network.Server.Controllers;
 
 import com.google.gson.Gson;
+import io.github.group18.Model.App;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Server.App.ChangeScreenMsgHandler;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
@@ -67,6 +69,45 @@ public class LobbyNetworkController {
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("lobbies", ServerModel.getLobbies());
                 clientConnectionThread.sendMessage(new Message(body, Message.Type.get_all_lobbies, Message.Menu.lobby));
+                break;
+            case choose_map:
+                userObj = message.getFromBody("user");
+                gson = new Gson();
+                userjson = gson.toJson(userObj);
+                User user1 = gson.fromJson(userjson, User.class);
+                HashMap<String, Object> body2 = new HashMap<>();
+                boolean flag = false;
+                boolean success = false;
+                for (Lobby lobby : ServerModel.getLobbies()) {
+                    if (lobby.getUsers().contains(user1)){
+                        flag = true;
+                        if(lobby.getAdmin().equals(user1)){
+                            if (lobby.getUsers().size()>1){
+                                body2.put("success", true);
+                                clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
+                                success = true;
+                                ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
+                                lobby.initMaps();
+                                break;
+                            }else {
+                                body2.put("error", "Number of User not enough");
+                                break;
+                            }
+                        }else{
+                            body2.put("error", "Admin can start choosing");
+                            break;
+                        }
+                    }
+                }
+                if (!flag){
+                    body2.put("error", "No lobby found for the user");
+                }
+                if (!success){
+                    body2.put("success", false);
+                }
+                System.out.println(body2);
+                clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
+//                ChangeScreenMsgHandler.ChangeScreenToMap(ServerModel.getOnlineUsers());
                 break;
             case remove_user_to_lobby:
                 gson = new Gson();

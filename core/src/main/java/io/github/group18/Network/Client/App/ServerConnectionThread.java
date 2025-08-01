@@ -1,6 +1,7 @@
 package io.github.group18.Network.Client.App;
 
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
+import io.github.group18.Network.Client.Controller.ChangeMenuController;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
 
@@ -36,6 +37,9 @@ public class ServerConnectionThread extends ConnectionThread {
     protected boolean handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             sendMessage(C2SConnectionController.handleCommand(message));
+            return true;
+        }else if (message.getMenu()== Message.Menu.CHANGE_MENU){
+            sendMessage(ChangeMenuController.handleMessage(message));
             return true;
         }
         return false;

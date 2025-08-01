@@ -1,13 +1,19 @@
 package io.github.group18.Controller;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.github.group18.Main;
+import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
+import io.github.group18.Network.Client.App.ChangeMenuHandler;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.View.ChoosingMapView;
 import io.github.group18.View.MainMenu;
 import io.github.group18.View.RegisterLoginGdxView;
 
@@ -38,6 +44,7 @@ public class LobbyController {
         }
         if (!lobby.getPassword().equals(password)) return;
         addUsertoLobby(lobby, user);
+        System.out.println("joined lobby");
     }
 
     private void addUsertoLobby(Lobby lobby, User user) {
@@ -53,6 +60,24 @@ public class LobbyController {
         Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
+    public void chooseMap(User user, Stage stage) {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user", user);
+        Message message = new Message(body, Message.Type.choose_map, Message.Menu.lobby);
+        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
+//        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message,ClientModel.TIMEOUT_MILLIS);
+        if (res==null) return;
+        if(res.getFromBody("success")){
+//            Main.getMain().getScreen().dispose();
+//            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
+            ChangeMenuHandler.changeMenu(App.getCurrentUser());
+        }else{
+            Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
+            error.text((String) res.getFromBody("error"));
+            error.button("close");
+            error.show(stage);
+        }
+    }
     public String showInvisibleLobbyInfo(int id) {
         List<Lobby> lobbies = getAllLobbies();
         for (Lobby lobby : lobbies) {
