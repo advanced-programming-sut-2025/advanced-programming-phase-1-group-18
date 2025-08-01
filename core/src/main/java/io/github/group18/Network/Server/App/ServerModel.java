@@ -17,9 +17,9 @@ public class ServerModel {
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
 
-    public static ClientConnectionThread getConnectionByIpPort(String ip, int port) {
+    public static ClientConnectionThread getConnectionByUser(User user) {
         for (ClientConnectionThread connection : connections) {
-            if (connection.getOtherSideIP().equalsIgnoreCase(ip) && connection.getOtherSidePort() == port) { //other side ?
+            if (connection.getUser().getID()== user.getID()) { //other side ?
                 return connection;
             }
         }
@@ -104,5 +104,14 @@ public class ServerModel {
 
     public static void setLobbies(ArrayList<Lobby> lobbies) {
         ServerModel.lobbies = lobbies;
+    }
+
+    public static Lobby getLobbyByUser(User user) {
+        for (Lobby lobby : lobbies) {
+            if (lobby.getUsers().contains(user)) {
+                return lobby;
+            }
+        }
+        return null;
     }
 }

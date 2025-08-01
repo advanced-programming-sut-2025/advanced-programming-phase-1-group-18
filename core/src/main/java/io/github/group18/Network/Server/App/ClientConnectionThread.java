@@ -1,10 +1,7 @@
 package io.github.group18.Network.Server.App;
 
 import io.github.group18.Model.User;
-import io.github.group18.Network.Server.Controllers.LobbyNetworkController;
-import io.github.group18.Network.Server.Controllers.LoginNetworkController;
-import io.github.group18.Network.Server.Controllers.OnlinePlayersNetworkController;
-import io.github.group18.Network.Server.Controllers.RegisterNetworkController;
+import io.github.group18.Network.Server.Controllers.*;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
 
@@ -15,7 +12,7 @@ import java.util.HashMap;
 import static io.github.group18.Network.Server.App.ServerModel.TIMEOUT_MILLIS;
 
 public class ClientConnectionThread extends ConnectionThread {
-
+    User user = new User();
     public ClientConnectionThread(Socket socket) throws IOException {
         super(socket);
     }
@@ -54,10 +51,16 @@ public class ClientConnectionThread extends ConnectionThread {
                 OnlinePlayersNetworkController.handleMessage(message,this);
                 return true;
             case Login:
-                sendMessage(LoginNetworkController.handleMessage(message));
+                sendMessage(LoginNetworkController.handleMessage(message,this));
                 return true;
             case lobby:
                 LobbyNetworkController.handleMessage(message,this);
+                return true;
+            case choosing_map:
+                ChooseMapNetworkController.handleMessage(message,this);
+                return true;
+            case CHANGE_MENU:
+                ChangeScreenNetController.handleMessage(message);
                 return true;
         }
         return false;
@@ -67,5 +70,13 @@ public class ClientConnectionThread extends ConnectionThread {
     public void run() {
         super.run();
         ServerModel.removeClientConnection(this);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
