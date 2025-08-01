@@ -4,6 +4,7 @@ package io.github.group18.Model;
 import io.github.group18.enums.ppEnum;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ public class Lobby {
     private String password;
     private final long creationTime;
     private final List<User> users = new ArrayList<>();
+    private ArrayList<Integer>choseMap;
     private User admin;
 
     public Lobby(String name, ppEnum accessLevel, boolean isVisible, User creator) {
@@ -90,5 +92,19 @@ public class Lobby {
 
     public void setAdmin(User admin) {
         this.admin = admin;
+    }
+    public void initMaps(){
+        choseMap = new ArrayList<>();
+        for (User user : users) {
+            choseMap.add(0);
+        }
+    }
+
+    public ArrayList<Integer> getChoseMap() {
+        return choseMap;
+    }
+
+    public void setChoseMap(ArrayList<Integer> choseMap) {
+        this.choseMap = choseMap;
     }
 }

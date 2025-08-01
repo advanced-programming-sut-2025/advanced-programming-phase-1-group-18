@@ -31,6 +31,7 @@ public class LobbyView implements Screen {
     private TextButton joinLobbyButton;
     private TextButton createLobbyButton;
     private TextButton backButton;
+    private TextButton chooseMapButton;
 
     private Lobby selectedLobby;
 
@@ -56,6 +57,7 @@ public class LobbyView implements Screen {
         joinLobbyButton = new TextButton("Join Lobby", skin);
         createLobbyButton = new TextButton("Create Lobby", skin);
         backButton = new TextButton("Back", skin);
+        chooseMapButton = new TextButton("Choose Map", skin);
 
         lobbyList = controller.getAllLobbies();
 
@@ -88,6 +90,7 @@ public class LobbyView implements Screen {
         mainTable.add(bottomButtons).expandX().fillX().row();
 
         mainTable.add(backButton).left().pad(10);
+        mainTable.add(chooseMapButton).right().pad(10);
 
         setupListeners();
         updateLobbyList();
@@ -167,6 +170,12 @@ public class LobbyView implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 controller.goBack();
             }
+        });
+        chooseMapButton.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               controller.chooseMap(App.getCurrentUser(),stage);
+           }
         });
 
         visibleLobbiesUI.addListener(new ClickListener() {

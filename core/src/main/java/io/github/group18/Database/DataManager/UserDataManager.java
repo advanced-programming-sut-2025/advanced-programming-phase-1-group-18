@@ -5,7 +5,21 @@ import io.github.group18.Model.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//===========================================
+//CREATE TABLE users (
+//    id INT AUTO_INCREMENT PRIMARY KEY,
+//    username VARCHAR(50) NOT NULL UNIQUE,
+//    hashed_password VARCHAR(255) NOT NULL,
+//    email VARCHAR(100),
+//    gender VARCHAR(10),
+//    nickname VARCHAR(50),
+//    stay_logged_in BOOLEAN DEFAULT FALSE,
+//    times_played INT DEFAULT 0,
+//    highest_gold INT DEFAULT 0,
+//    avatar VARCHAR(255),
+//    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//);
+//===========================================
 public class UserDataManager {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/mygamedb";
     private static final String DB_USER = "root";

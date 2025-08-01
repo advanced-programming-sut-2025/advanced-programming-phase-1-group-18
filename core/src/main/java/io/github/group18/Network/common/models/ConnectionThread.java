@@ -88,8 +88,10 @@ abstract public class ConnectionThread extends Thread {
                 if (!handled) try {
                     receivedMessagesQueue.put(message);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
         }

@@ -18,14 +18,14 @@ public class ChoosingMapView implements Screen{
     private StartNewGameController startNewGameController;
     private Stage stage;
     private TextButton selectMapButton1;
-    private TextButton selectMapButton2;
-    private TextButton selectMapButton3;
-    private TextButton selectMapButton4;
+//    private TextButton selectMapButton2;
+//    private TextButton selectMapButton3;
+//    private TextButton selectMapButton4;
 
     private SelectBox<Integer> chooseMapBox1;
-    private SelectBox<Integer> chooseMapBox2;
-    private SelectBox<Integer> chooseMapBox3;
-    private SelectBox<Integer> chooseMapBox4;
+//    private SelectBox<Integer> chooseMapBox2;
+//    private SelectBox<Integer> chooseMapBox3;
+//    private SelectBox<Integer> chooseMapBox4;
 
     private Texture wholeMap;
     private Texture map1;
@@ -50,18 +50,16 @@ public class ChoosingMapView implements Screen{
         this.notif = new Label("", skin);
         this.menuTitle = new Label("Choose Map", skin,"title");
         this.selectMapButton1 = new TextButton("Select Map", skin);
-        this.selectMapButton2 = new TextButton("Select Map", skin);
-        this.selectMapButton3 = new TextButton("Select Map", skin);
-        this.selectMapButton4 = new TextButton("Select Map", skin);
+
         this.chooseMapBox1=new SelectBox<>(skin);
-        this.chooseMapBox2=new SelectBox<>(skin);
-        this.chooseMapBox3=new SelectBox<>(skin);
-        this.chooseMapBox4=new SelectBox<>(skin);
+//        this.chooseMapBox2=new SelectBox<>(skin);
+//        this.chooseMapBox3=new SelectBox<>(skin);
+//        this.chooseMapBox4=new SelectBox<>(skin);
 
         this.chooseMapBox1.setItems(1,2,3,4);
-        this.chooseMapBox2.setItems(1,2,3,4);
-        this.chooseMapBox3.setItems(1,2,3,4);
-        this.chooseMapBox4.setItems(1,2,3,4);
+//        this.chooseMapBox2.setItems(1,2,3,4);
+//        this.chooseMapBox3.setItems(1,2,3,4);
+//        this.chooseMapBox4.setItems(1,2,3,4);
 
         this.map1 = GameAssetManager.getGameAssetManager().getMapDeafultTexture();
         this.map2 = GameAssetManager.getGameAssetManager().getMapDeafultTexture();
@@ -84,15 +82,15 @@ public class ChoosingMapView implements Screen{
         table.add(chooseMapBox1);
         table.add(selectMapButton1);
         table.row();
-        table.add(chooseMapBox2);
-        table.add(selectMapButton2);
-        table.row();
-        table.add(chooseMapBox3);
-        table.add(selectMapButton3);
-        table.row();
-        table.add(chooseMapBox4);
-        table.add(selectMapButton4);
-        table.row();
+//        table.add(chooseMapBox2);
+//        table.add(selectMapButton2);
+//        table.row();
+//        table.add(chooseMapBox3);
+//        table.add(selectMapButton3);
+//        table.row();
+//        table.add(chooseMapBox4);
+//        table.add(selectMapButton4);
+//        table.row();
         table.add(playButton);
         table.add(backButton);
         table.row();
@@ -239,29 +237,29 @@ public class ChoosingMapView implements Screen{
         this.selectMapButton1 = selectMapButton1;
     }
 
-    public TextButton getSelectMapButton2() {
-        return selectMapButton2;
-    }
-
-    public void setSelectMapButton2(TextButton selectMapButton2) {
-        this.selectMapButton2 = selectMapButton2;
-    }
-
-    public TextButton getSelectMapButton3() {
-        return selectMapButton3;
-    }
-
-    public void setSelectMapButton3(TextButton selectMapButton3) {
-        this.selectMapButton3 = selectMapButton3;
-    }
-
-    public TextButton getSelectMapButton4() {
-        return selectMapButton4;
-    }
-
-    public void setSelectMapButton4(TextButton selectMapButton4) {
-        this.selectMapButton4 = selectMapButton4;
-    }
+//    public TextButton getSelectMapButton2() {
+//        return selectMapButton2;
+//    }
+//
+//    public void setSelectMapButton2(TextButton selectMapButton2) {
+//        this.selectMapButton2 = selectMapButton2;
+//    }
+//
+//    public TextButton getSelectMapButton3() {
+//        return selectMapButton3;
+//    }
+//
+//    public void setSelectMapButton3(TextButton selectMapButton3) {
+//        this.selectMapButton3 = selectMapButton3;
+//    }
+//
+//    public TextButton getSelectMapButton4() {
+//        return selectMapButton4;
+//    }
+//
+//    public void setSelectMapButton4(TextButton selectMapButton4) {
+//        this.selectMapButton4 = selectMapButton4;
+//    }
 
     public SelectBox<Integer> getChooseMapBox1() {
         return chooseMapBox1;
@@ -271,29 +269,29 @@ public class ChoosingMapView implements Screen{
         this.chooseMapBox1 = chooseMapBox1;
     }
 
-    public SelectBox<Integer> getChooseMapBox2() {
-        return chooseMapBox2;
-    }
-
-    public void setChooseMapBox2(SelectBox<Integer> chooseMapBox2) {
-        this.chooseMapBox2 = chooseMapBox2;
-    }
-
-    public SelectBox<Integer> getChooseMapBox3() {
-        return chooseMapBox3;
-    }
-
-    public void setChooseMapBox3(SelectBox<Integer> chooseMapBox3) {
-        this.chooseMapBox3 = chooseMapBox3;
-    }
-
-    public SelectBox<Integer> getChooseMapBox4() {
-        return chooseMapBox4;
-    }
-
-    public void setChooseMapBox4(SelectBox<Integer> chooseMapBox4) {
-        this.chooseMapBox4 = chooseMapBox4;
-    }
+//    public SelectBox<Integer> getChooseMapBox2() {
+//        return chooseMapBox2;
+//    }
+//
+//    public void setChooseMapBox2(SelectBox<Integer> chooseMapBox2) {
+//        this.chooseMapBox2 = chooseMapBox2;
+//    }
+//
+//    public SelectBox<Integer> getChooseMapBox3() {
+//        return chooseMapBox3;
+//    }
+//
+//    public void setChooseMapBox3(SelectBox<Integer> chooseMapBox3) {
+//        this.chooseMapBox3 = chooseMapBox3;
+//    }
+//
+//    public SelectBox<Integer> getChooseMapBox4() {
+//        return chooseMapBox4;
+//    }
+//
+//    public void setChooseMapBox4(SelectBox<Integer> chooseMapBox4) {
+//        this.chooseMapBox4 = chooseMapBox4;
+//    }
 
     public Texture getWholeMap() {
         return wholeMap;
