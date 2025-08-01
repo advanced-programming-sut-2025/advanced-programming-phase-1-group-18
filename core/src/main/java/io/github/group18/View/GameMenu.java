@@ -29,8 +29,8 @@ import io.github.group18.enums.SkillEnum;
 import com.badlogic.gdx.InputMultiplexer;
 
 public class GameMenu implements Screen {
+
     private GameView gameView;
-    public Game gameModel;
     private GameMenuInputAdapter gameMenuInputAdapter;
     private GameController gameController;
     private boolean isSleeping = false;
@@ -52,7 +52,7 @@ public class GameMenu implements Screen {
     private boolean showBuff = false;
 
 
-    public GameMenu(GameController gameController, Game gameModel) {
+    public GameMenu(GameController gameController) {
         this.stage = new Stage(new ScreenViewport());
         this.cheatCodeStage = new Stage();
         this.gameController = gameController;
@@ -64,13 +64,12 @@ public class GameMenu implements Screen {
         cookingMenu.setActive(false);
         this.craftingUI = new CraftingUI(new CraftingItem(CraftingRecipesEnums.Furnace.name()));
         craftingUI.setActive(false);
-        initializeGame(gameModel);
+        initializeGame();
     }
 
-    private void initializeGame(Game gameModel) {
-        this.gameModel = gameModel;
-        gameView = new GameView(gameModel);
-        gameMenuInputAdapter = new GameMenuInputAdapter(gameModel, gameController);
+    private void initializeGame() {
+        gameView = new GameView(gameController);
+        gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
         inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
 
@@ -80,8 +79,8 @@ public class GameMenu implements Screen {
 
 
         inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(stage);               // UI first
-        inputMultiplexer.addProcessor(gameMenuInputAdapter); // then game input
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(gameMenuInputAdapter);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
@@ -94,7 +93,7 @@ public class GameMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        gameModel.update(delta);
+        gameController.getGame().update(delta);
         lightningEffect.update(delta);
         gameView.render();
         lightningEffect.render(Main.getBatch());
@@ -248,14 +247,6 @@ public class GameMenu implements Screen {
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
-    }
-
-    public Game getGameModel() {
-        return gameModel;
-    }
-
-    public void setGameModel(Game gameModel) {
-        this.gameModel = gameModel;
     }
 
     public GameMenuInputAdapter getGameMenuInputAdapter() {

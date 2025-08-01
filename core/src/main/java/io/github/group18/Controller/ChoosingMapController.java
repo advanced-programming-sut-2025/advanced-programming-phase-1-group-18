@@ -95,14 +95,14 @@ public class ChoosingMapController {
                             App.setGameMenuController(gameMenuController);
                             GameController gameController = new GameController(Main.getMain());
                             App.setGameController(gameController);
-                            gameController.init(App.getCurrentGame());
-                            gameController.run();
-//                            mainMenu.hide();
 
-//                            GameView gameView = new GameView(new GameController(),view.getSkin());
-//                            gameView.setMenuController(gameMenuController);
-//                            Main.getMain().getScreen().dispose();
-//                            Main.getMain().setScreen(gameView);
+
+                            //ino bayad as server gereft
+                            //App.getcurrentgame()
+                            gameController.init(App.getCurrentGame());
+
+
+                            gameController.run();
                         }
                     }catch (Exception e){
                         view.getNotif().setText(e.getMessage());

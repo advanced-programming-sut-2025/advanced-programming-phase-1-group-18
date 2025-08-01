@@ -11,7 +11,7 @@ import io.github.group18.View.GameMenu;
 import java.awt.*;
 
 public class GameController {
-    private boolean escapePressed = false;
+    private Game game;
     private final Main main;
     private GameMenu gameMenu;
 
@@ -20,7 +20,8 @@ public class GameController {
     }
 
     public void init(Game gameModel) {
-        gameMenu = new GameMenu(this, gameModel);
+        game = gameModel;
+        gameMenu = new GameMenu(this);
     }
 
     public void run() {
@@ -29,6 +30,22 @@ public class GameController {
 
     public GameMenu getGameMenu() {
         return gameMenu;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+
+    public void setGameMenu(GameMenu gameMenu) {
+        this.gameMenu = gameMenu;
     }
 
     public void useItem(Item selectedItem, int x, int y, Game game) {
@@ -66,7 +83,7 @@ public class GameController {
                 String result = fishingPole.use();
                 System.out.println(result);
             } else if (tool instanceof WateringCan wateringCan) {
-                String result = wateringCan.use(kashi,x,y);
+                String result = wateringCan.use(kashi, x, y);
                 System.out.println(result);
             }
         }
