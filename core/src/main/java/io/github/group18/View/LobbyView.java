@@ -309,7 +309,6 @@ public class LobbyView implements Screen {
         dialog.show(stage);
     }
 
-
     private void updateLobbyList() {
         lobbyList = controller.getAllLobbies();
         Array<String> visibleLobbyNames = new Array<>();

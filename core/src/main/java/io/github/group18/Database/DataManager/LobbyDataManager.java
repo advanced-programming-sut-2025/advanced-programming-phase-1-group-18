@@ -27,7 +27,7 @@ public class LobbyDataManager {
 //===========================================
 
     private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/mygamedb", "root", "computer@");
     }
 
     public static void saveLobby(Lobby lobby) {
