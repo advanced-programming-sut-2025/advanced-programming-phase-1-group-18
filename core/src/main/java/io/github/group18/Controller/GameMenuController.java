@@ -365,7 +365,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return field.getInt(gameInstance);
     }
 
-    public void setMapp(Game game) {
+    public static void setMapp(Game game) {
         ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
         int columns = Game.mapHeight; // Define the number of columns
 
@@ -387,8 +387,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result gameNew(ArrayList<String> users, ArrayList<Integer> maps) throws NoSuchFieldException, IllegalAccessException {
-
+    public static Result gameNew(ArrayList<String> users, ArrayList<Integer> maps,User currentUser) throws NoSuchFieldException, IllegalAccessException {
+        App.setCurrentUser(currentUser);
         String[] usernames = users.toArray(new String[0]);
 
         if (usernames.length > 3) {
@@ -396,9 +396,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         for (String username : usernames) {
             boolean check = false;
-            if (username.equals(App.getCurrentUser().getUsername())) {
-                return new Result(false, "Can't choose yourself");
-            }
+//            if (username.equals(App.getCurrentUser().getUsername())) {
+//                return new Result(false, "Can't choose yourself");
+//            }
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     check = true;

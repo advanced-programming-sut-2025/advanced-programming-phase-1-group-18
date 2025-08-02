@@ -11,6 +11,7 @@ import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Client.App.ChangeMenuHandler;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.Client.App.GameMessageHandler;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.ChoosingMapView;
@@ -68,9 +69,15 @@ public class LobbyController {
 //        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message,ClientModel.TIMEOUT_MILLIS);
         if (res==null) return;
         if(res.getFromBody("success")){
+
 //            Main.getMain().getScreen().dispose();
 //            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
-            ChangeMenuHandler.changeMenu(App.getCurrentUser());
+//            ChangeMenuHandler.changeMenu(App.getCurrentUser());
+            String res1 = GameMessageHandler.startNewGame(App.getCurrentUser());
+            Dialog error = new Dialog("result",GameAssetManager.getGameAssetManager().getSkin());
+            error.text(res1);
+            error.button("close");
+            error.show(stage);
         }else{
             Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
             error.text((String) res.getFromBody("error"));
