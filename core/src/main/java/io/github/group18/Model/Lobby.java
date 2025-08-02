@@ -96,7 +96,7 @@ public class Lobby {
     public void initMaps(){
         choseMap = new ArrayList<>();
         for (User user : users) {
-            choseMap.add(0);
+            choseMap.add(1);
         }
     }
 

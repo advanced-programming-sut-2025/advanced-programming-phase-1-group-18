@@ -72,12 +72,7 @@ public class LobbyController {
 
 //            Main.getMain().getScreen().dispose();
 //            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
-//            ChangeMenuHandler.changeMenu(App.getCurrentUser());
-            String res1 = GameMessageHandler.startNewGame(App.getCurrentUser());
-            Dialog error = new Dialog("result",GameAssetManager.getGameAssetManager().getSkin());
-            error.text(res1);
-            error.button("close");
-            error.show(stage);
+            ChangeMenuHandler.changeMenu(App.getCurrentUser());
         }else{
             Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
             error.text((String) res.getFromBody("error"));

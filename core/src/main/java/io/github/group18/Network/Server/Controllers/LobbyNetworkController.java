@@ -1,7 +1,6 @@
 package io.github.group18.Network.Server.Controllers;
 
 import com.google.gson.Gson;
-import io.github.group18.Model.App;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Server.App.ChangeScreenMsgHandler;
@@ -86,8 +85,8 @@ public class LobbyNetworkController {
                                 body2.put("success", true);
                                 clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
                                 success = true;
+                                lobby.initMaps();
 //                                ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
-//                                lobby.initMaps();
                                 break;
                             }else {
                                 body2.put("error", "Number of User not enough");

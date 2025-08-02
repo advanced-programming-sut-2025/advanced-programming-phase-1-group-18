@@ -57,7 +57,7 @@ public class ClientConnectionThread extends ConnectionThread {
                 LobbyNetworkController.handleMessage(message,this);
                 return true;
             case choosing_map:
-                ChooseMapNetworkController.handleMessage(message,this);
+                sendMessage(ChooseMapNetworkController.handleMessage(message,this));
                 return true;
             case CHANGE_MENU:
                 sendMessage(ChangeScreenNetController.handleMessage(message));
