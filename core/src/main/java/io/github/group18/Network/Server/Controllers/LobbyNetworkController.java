@@ -86,8 +86,8 @@ public class LobbyNetworkController {
                                 body2.put("success", true);
                                 clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
                                 success = true;
-                                ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
-                                lobby.initMaps();
+//                                ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
+//                                lobby.initMaps();
                                 break;
                             }else {
                                 body2.put("error", "Number of User not enough");

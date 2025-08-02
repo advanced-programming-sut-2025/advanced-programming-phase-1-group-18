@@ -78,6 +78,7 @@ public class Message {
         lobby,
         choosing_map,
         CHANGE_MENU,
+        game_menu,
         download_request
     }
 }

@@ -60,7 +60,10 @@ public class ClientConnectionThread extends ConnectionThread {
                 ChooseMapNetworkController.handleMessage(message,this);
                 return true;
             case CHANGE_MENU:
-                ChangeScreenNetController.handleMessage(message);
+                sendMessage(ChangeScreenNetController.handleMessage(message));
+                return true;
+            case game_menu:
+                sendMessage(GameNetworkController.handleMessage(message));
                 return true;
         }
         return false;
