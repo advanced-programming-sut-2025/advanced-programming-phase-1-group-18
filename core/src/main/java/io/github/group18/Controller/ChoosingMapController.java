@@ -16,15 +16,16 @@ public class ChoosingMapController {
     private ChoosingMapView view;
     private ArrayList<String> users = new ArrayList<>();
     private ArrayList<Integer> maps = new ArrayList<>();
-    private int map1=0;
-    private int map2=0;
-    private int map3=0;
-    private int map4=0;
+    private int map1 = 0;
+    private int map2 = 0;
+    private int map3 = 0;
+    private int map4 = 0;
     private GameMenuController gameMenuController;
 
     public void setGameMenuController(GameMenuController gameMenuController) {
         this.gameMenuController = gameMenuController;
     }
+
     public void setView(ChoosingMapView view) {
         this.view = view;
     }
@@ -32,30 +33,31 @@ public class ChoosingMapController {
     public void setUsers(ArrayList<String> users) {
         this.users = users;
     }
+
     public void setMaps(ArrayList<Integer> maps) {
         this.maps = maps;
     }
 
-    public void arrangeVisibily(){
+    public void arrangeVisibily() {
         Message res = ChooseMapMessageHandler.refreshMaps(App.getCurrentUser());
         System.out.println(res.getBody());
         System.out.println(res.getMenu());
         int usersNum = res.getFromBody("usersNum");
 
-        if(usersNum<3){
+        if (usersNum < 3) {
             view.getMap3().dispose();
         }
-        if(usersNum<4) {
+        if (usersNum < 4) {
             view.getMap4().dispose();
         }
         for (int i = 0; i < usersNum; i++) {
-            if (i==0){
+            if (i == 0) {
                 view.setMap1(getMap(res.getIntFromBody("0")));
-            }else if(i==1){
+            } else if (i == 1) {
                 view.setMap2(getMap(res.getIntFromBody("1")));
-            }else if(i==2){
+            } else if (i == 2) {
                 view.setMap3(getMap(res.getIntFromBody("2")));
-            }else if(i==3){
+            } else if (i == 3) {
                 view.setMap4(getMap(res.getIntFromBody("3")));
             }
         }
@@ -139,7 +141,7 @@ public class ChoosingMapController {
         }
     }
 
-    public Texture getMap (int mapNum){
+    public Texture getMap(int mapNum) {
         return switch (mapNum) {
             case 1 -> GameAssetManager.getGameAssetManager().getMap1Texture();
             case 2 -> GameAssetManager.getGameAssetManager().getMap2Texture();
