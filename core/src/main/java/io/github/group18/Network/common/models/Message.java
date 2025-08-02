@@ -68,6 +68,8 @@ public class Message {
         select_map,
         start_game,
         status,
+        load_game_screen,
+        add_player_to_Clientmain
     }
 
     public enum Menu {

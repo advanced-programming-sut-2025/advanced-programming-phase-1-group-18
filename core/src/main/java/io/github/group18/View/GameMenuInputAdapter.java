@@ -27,6 +27,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.enums.TavilehAnimalEnums;
 
 public class GameMenuInputAdapter extends InputAdapter {
@@ -263,8 +264,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
         Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
 
-        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
-        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+        int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
 
         int dx = tileX - Math.round(playerPos.first);
         int dy = tileY - Math.round(playerPos.second);
@@ -314,8 +315,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
         Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
 
-        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
-        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+        int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
 
         int dx = tileX - Math.round(playerPos.first);
         int dy = tileY - Math.round(playerPos.second);
@@ -444,7 +445,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             pixmap.drawPixel(0, 0);
             whitePixel = new Texture(pixmap);
             pixmap.dispose();
-            batch.draw(whitePixel, game.getPlantx() * Game.TILE_SIZE, game.getPlanty() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(whitePixel, game.getPlantx() * ClientModel.TILE_SIZE, game.getPlanty() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
             batch.setColor(Color.WHITE);
             batch.end();
 
@@ -461,8 +462,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
         Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
 
-        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
-        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+        int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
 
         int dx = tileX - Math.round(playerPos.first);
         int dy = tileY - Math.round(playerPos.second);
@@ -560,8 +561,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
         Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
 
-        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
-        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+        int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
 
         if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() instanceof CraftingItem) {
             CraftingItem craft = (CraftingItem) App.getCurrentGame().getMap().get(tileX).get(tileY).getInside();
@@ -593,8 +594,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
         Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
 
-        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
-        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+        int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
 
 //        int dx = tileX - Math.round(playerPos.first);
 //        int dy = tileY - Math.round(playerPos.second);
@@ -782,8 +783,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Game game = gameController.getGame();
         Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
 
-        int tileX = (int) (worldCoords.x / game.TILE_SIZE);
-        int tileY = (int) (worldCoords.y / game.TILE_SIZE);
+        int tileX = (int) (worldCoords.x / ClientModel.TILE_SIZE);
+        int tileY = (int) (worldCoords.y / ClientModel.TILE_SIZE);
 
         if (input.equalsIgnoreCase("barn")) {
             CarpentersShopController.build("barn", tileX, tileY);

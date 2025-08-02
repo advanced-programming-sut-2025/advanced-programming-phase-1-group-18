@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -19,6 +21,7 @@ import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
+import io.github.group18.Network.Client.App.ClientModel;
 
 public class GameView {
     private final GameController gameController;
@@ -50,6 +53,29 @@ public class GameView {
     private NPCDialogView npcDialogView;
 
     private NPCView npcView;
+
+    private boolean sebastian_dialog = false;
+    private boolean abigail_dialog = false;
+    private boolean harvey_dialog = false;
+    private boolean leah_dialog = false;
+    private boolean robin_dialog = false;
+
+    private boolean sebastian_view = false;
+    private boolean abigail_view = false;
+    private boolean harvey_view = false;
+    private boolean leah_view = false;
+    private boolean robin_view = false;
+
+    private OrthographicCamera camera;
+    private boolean cameraInitialized = false;
+    private boolean showPopup = false;
+    private String popupMessage = "";
+    private Rectangle popupRect = new Rectangle();
+    private boolean watering = false;
+    private float plantx, planty;
+    private float waterTimer = 0f;
+
+    private String pendingPlacementName;
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -165,7 +191,7 @@ public class GameView {
 
     private void loadInventoryItems() {
         Game game = gameController.getGame();
-        for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
+        for (Item item : ClientModel.getPlayer().getInventory().getItems().keySet()) {
             if (item instanceof CraftingItem) {
                 textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
                     findRegion(((CraftingItem) item).getCraftingItem().name())));
@@ -184,7 +210,7 @@ public class GameView {
 
     public void render() {
         Game game = gameController.getGame();
-        batch.setProjectionMatrix(game.getCamera().combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
         renderPlayer();
@@ -212,45 +238,45 @@ public class GameView {
         if (sebastian.getX() >= startx && sebastian.getX() <= endx &&
             sebastian.getY() >= starty && sebastian.getY() <= endy) {
             Texture npc = gameAssetManager.getSebastian_NPC();
-            batch.draw(npc, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
-            batch.draw(triangle, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(npc, sebastian.getX() * ClientModel.TILE_SIZE, sebastian.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            batch.draw(triangle, sebastian.getX() * ClientModel.TILE_SIZE, sebastian.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
         }
 
         if (abigail.getX() >= startx && abigail.getX() <= endx &&
             abigail.getY() >= starty && abigail.getY() <= endy) {
             Texture npc = gameAssetManager.getAbigail_NPC();
-            batch.draw(npc, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
-            batch.draw(triangle, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(npc, abigail.getX() * ClientModel.TILE_SIZE, abigail.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            batch.draw(triangle, abigail.getX() * ClientModel.TILE_SIZE, abigail.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
         }
 
         if (harvey.getX() >= startx && harvey.getX() <= endx &&
             harvey.getY() >= starty && harvey.getY() <= endy) {
             Texture npc = gameAssetManager.getHarvey_NPC();
-            batch.draw(npc, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
-            batch.draw(triangle, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(npc, harvey.getX() * ClientModel.TILE_SIZE, harvey.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            batch.draw(triangle, harvey.getX() * ClientModel.TILE_SIZE, harvey.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
         }
 
         if (leah.getX() >= startx && leah.getX() <= endx &&
             leah.getY() >= starty && leah.getY() <= endy) {
             Texture npc = gameAssetManager.getLeah_NPC();
-            batch.draw(npc, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
-            batch.draw(triangle, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(npc, leah.getX() * ClientModel.TILE_SIZE, leah.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            batch.draw(triangle, leah.getX() * ClientModel.TILE_SIZE, leah.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
         }
 
         if (robin.getX() >= startx && robin.getX() <= endx &&
             robin.getY() >= starty && robin.getY() <= endy) {
             Texture npc = gameAssetManager.getRobin_NPC();
-            batch.draw(npc, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
-            batch.draw(triangle, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            batch.draw(npc, robin.getX() * ClientModel.TILE_SIZE, robin.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            batch.draw(triangle, robin.getX() * ClientModel.TILE_SIZE, robin.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
         }
 
-        if (currentGame.isSebastian_dialog() || currentGame.isAbigail_dialog()
-            || currentGame.isHarvey_dialog() || currentGame.isLeah_dialog() || currentGame.isRobin_dialog()) {
+        if (isSebastian_dialog() || isAbigail_dialog()
+            || isHarvey_dialog() || isLeah_dialog() || isRobin_dialog()) {
             npcDialogView.render();
         }
 
-        if (currentGame.isSebastian_view() || currentGame.isHarvey_view() ||
-        currentGame.isLeah_view() || currentGame.isRobin_view() || currentGame.isAbigail_view()) {
+        if (isSebastian_view() || isHarvey_view() ||
+        isLeah_view() || isRobin_view() || isAbigail_view()) {
             npcView.render();
         }
     }
@@ -281,7 +307,7 @@ public class GameView {
 
     private void renderInMyHandToolPlayer() {
         Game game = gameController.getGame();
-        Player player = game.getCurrentPlayer();
+        Player player = ClientModel.getPlayer();
         Tool tool = player.getInMyHandTool();
         if (tool != null) {
             double first = player.getX();
@@ -295,10 +321,10 @@ public class GameView {
                 Random random = new Random();
                 int x = 5 + random.nextInt(15);
                 int y = 5 + random.nextInt(15);
-                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2 + x), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4 + y), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+                batch.draw(textureRegion, (float) (first * ClientModel.TILE_SIZE + ClientModel.TILE_SIZE / 2 + x), (float) (second * ClientModel.TILE_SIZE + ClientModel.TILE_SIZE / 4 + y), ClientModel.TILE_SIZE / 2, ClientModel.TILE_SIZE / 2);
 
             } else {
-                batch.draw(textureRegion, (float) (first * game.TILE_SIZE + game.TILE_SIZE / 2), (float) (second * game.TILE_SIZE + game.TILE_SIZE / 4), game.TILE_SIZE / 2, game.TILE_SIZE / 2);
+                batch.draw(textureRegion, (float) (first * ClientModel.TILE_SIZE + ClientModel.TILE_SIZE / 2), (float) (second * ClientModel.TILE_SIZE + ClientModel.TILE_SIZE / 4), ClientModel.TILE_SIZE / 2, ClientModel.TILE_SIZE / 2);
             }
         }
     }
@@ -306,8 +332,8 @@ public class GameView {
     private void renderTiles() {
         Game game = gameController.getGame();
         ArrayList<ArrayList<Kashi>> tiles = game.getMap();
-        OrthographicCamera cam = game.getCamera();
-        int tileSize = game.TILE_SIZE;
+        OrthographicCamera cam = camera;
+        int tileSize = ClientModel.TILE_SIZE;
 
         int startX = (int) ((cam.position.x - cam.viewportWidth / 2) / tileSize) - 2;
         int startY = (int) ((cam.position.y - cam.viewportHeight / 2) / tileSize) - 2;
@@ -328,14 +354,14 @@ public class GameView {
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         Game game = gameController.getGame();
-        int tileSize = game.TILE_SIZE;
+        int tileSize = ClientModel.TILE_SIZE;
         TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
                 if (tiles.get(x).get(y).getInside() == null) {
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()) {
+                    if (ClientModel.getPlayer().isPlacingItem()) {
                         batch.setColor(0, 1, 0, 0.5f);
                         batch.draw(texture, drawX, drawY, tileSize, tileSize);
                         batch.setColor(Color.WHITE);
@@ -353,7 +379,7 @@ public class GameView {
         Game game = gameController.getGame();
         ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
         ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
-        int tileSize = game.TILE_SIZE;
+        int tileSize = ClientModel.TILE_SIZE;
 //        System.out.println("drawTiles-init: " + startX + " " + endX + " " + startY + " " + endY);
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
@@ -572,12 +598,12 @@ public class GameView {
                 case Player.EATING_STATE:
                     currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
                     Texture buff = showBuffEffect(player.getFoodBuff());
-                    batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
+                    batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
                     break;
             }
 
-            batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE),
-                game.TILE_SIZE, game.TILE_SIZE * 2);
+            batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
+                ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
         }
 
     }
@@ -624,16 +650,16 @@ public class GameView {
         if (App.getCurrentGame() != null) {
             DateTime time = App.getCurrentGame().getCurrentDateTime();
             if (time != null) {
-                clock.render(batch, time, game.getCamera());
+                clock.render(batch, time, camera);
             }
         }
     }
 
     private void renderInventory() {
         Game game = gameController.getGame();
-        if (game.getCurrentPlayer().isShowInventory()) {
+        if (ClientModel.getPlayer().isShowInventory()) {
             loadInventoryItems();
-            Player player = game.getCurrentPlayer();
+            Player player = ClientModel.getPlayer();
             Inventory playerInventory = player.getInventory();
             Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
             int selectedSlot = player.getInventory().getSelectedSlot();
@@ -645,10 +671,10 @@ public class GameView {
             Matrix4 uiMatrix = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             batch.setProjectionMatrix(uiMatrix);
 
-            int slotSize = game.TILE_SIZE * 2;
+            int slotSize = ClientModel.TILE_SIZE * 2;
             int numSlots = player.getInventory().getMaxQuantity();
             int startX = (Gdx.graphics.getWidth() - numSlots * slotSize) / 2;
-            int y = game.TILE_SIZE * 2; // Distance from bottom of screen
+            int y = ClientModel.TILE_SIZE * 2; // Distance from bottom of screen
 
             // Draw slots
             Texture slotTexture = new Texture(Gdx.files.internal("game/tiles/slot.png"));
@@ -790,6 +816,32 @@ public class GameView {
         // اکشن fade in -> مکث -> fade out -> حذف
     }    // Other Screen methods
 
+    public void update(float deltaTime) {
+        if (!cameraInitialized) {
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            camera.update();
+            cameraInitialized = true;
+        }
+
+        // Simple camera follow - no lerping, no prediction
+        if (ClientModel.getPlayer() != null) {
+            float playerX = (float) ClientModel.getPlayer().getX() * ClientModel.TILE_SIZE;
+            float playerY = (float) ClientModel.getPlayer().getY() * ClientModel.TILE_SIZE;
+
+            // Directly set camera position to player position
+            camera.position.set(playerX, playerY, 0);
+
+            // Clamp to map boundaries
+            float halfWidth = camera.viewportWidth / 2;
+            float halfHeight = camera.viewportHeight / 2;
+            camera.position.x = Math.max(halfWidth, Math.min(playerX, ClientModel.mapWidth * ClientModel.TILE_SIZE - halfWidth));
+            camera.position.y = Math.max(halfHeight, Math.min(playerY, ClientModel.mapHeight * ClientModel.TILE_SIZE - halfHeight));
+
+            camera.update();
+        }
+    }
+
     public float getRedFlashTimer() {
         return redFlashTimer;
     }
@@ -888,5 +940,253 @@ public class GameView {
 
     public void setNpcView(NPCView npcView) {
         this.npcView = npcView;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setBatch(SpriteBatch batch) {
+        this.batch = batch;
+    }
+
+    public TextureRegion[][] getTileTextures() {
+        return tileTextures;
+    }
+
+    public void setTileTextures(TextureRegion[][] tileTextures) {
+        this.tileTextures = tileTextures;
+    }
+
+    public Map<Object, TextureRegion> getTextures() {
+        return textures;
+    }
+
+    public void setTextures(Map<Object, TextureRegion> textures) {
+        this.textures = textures;
+    }
+
+    public Map<String, TextureRegion> getTexturesOnDrug() {
+        return texturesOnDrug;
+    }
+
+    public void setTexturesOnDrug(Map<String, TextureRegion> texturesOnDrug) {
+        this.texturesOnDrug = texturesOnDrug;
+    }
+
+    public BitmapFont getSmallFont() {
+        return smallFont;
+    }
+
+    public void setSmallFont(BitmapFont smallFont) {
+        this.smallFont = smallFont;
+    }
+
+    public GlyphLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(GlyphLayout layout) {
+        this.layout = layout;
+    }
+
+    public TextureAtlas getPlayerAtlas() {
+        return playerAtlas;
+    }
+
+    public void setPlayerAtlas(TextureAtlas playerAtlas) {
+        this.playerAtlas = playerAtlas;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public int getMoveDirection() {
+        return moveDirection;
+    }
+
+    public void setMoveDirection(int moveDirection) {
+        this.moveDirection = moveDirection;
+    }
+
+    public void setPixel(Texture pixel) {
+        this.pixel = pixel;
+    }
+
+    public ClockController getClock() {
+        return clock;
+    }
+
+    public void setClock(ClockController clock) {
+        this.clock = clock;
+    }
+
+    public EnergyController getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(EnergyController energy) {
+        this.energy = energy;
+    }
+
+    public boolean isSebastian_dialog() {
+        return sebastian_dialog;
+    }
+
+    public void setSebastian_dialog(boolean sebastian_dialog) {
+        this.sebastian_dialog = sebastian_dialog;
+    }
+
+    public boolean isAbigail_dialog() {
+        return abigail_dialog;
+    }
+
+    public void setAbigail_dialog(boolean abigail_dialog) {
+        this.abigail_dialog = abigail_dialog;
+    }
+
+    public boolean isHarvey_dialog() {
+        return harvey_dialog;
+    }
+
+    public void setHarvey_dialog(boolean harvey_dialog) {
+        this.harvey_dialog = harvey_dialog;
+    }
+
+    public boolean isLeah_dialog() {
+        return leah_dialog;
+    }
+
+    public void setLeah_dialog(boolean leah_dialog) {
+        this.leah_dialog = leah_dialog;
+    }
+
+    public boolean isRobin_dialog() {
+        return robin_dialog;
+    }
+
+    public void setRobin_dialog(boolean robin_dialog) {
+        this.robin_dialog = robin_dialog;
+    }
+
+    public boolean isSebastian_view() {
+        return sebastian_view;
+    }
+
+    public void setSebastian_view(boolean sebastian_view) {
+        this.sebastian_view = sebastian_view;
+    }
+
+    public boolean isAbigail_view() {
+        return abigail_view;
+    }
+
+    public void setAbigail_view(boolean abigail_view) {
+        this.abigail_view = abigail_view;
+    }
+
+    public boolean isHarvey_view() {
+        return harvey_view;
+    }
+
+    public void setHarvey_view(boolean harvey_view) {
+        this.harvey_view = harvey_view;
+    }
+
+    public boolean isLeah_view() {
+        return leah_view;
+    }
+
+    public void setLeah_view(boolean leah_view) {
+        this.leah_view = leah_view;
+    }
+
+    public boolean isRobin_view() {
+        return robin_view;
+    }
+
+    public void setRobin_view(boolean robin_view) {
+        this.robin_view = robin_view;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public boolean isCameraInitialized() {
+        return cameraInitialized;
+    }
+
+    public boolean isShowPopup() {
+        return showPopup;
+    }
+
+    public void setShowPopup(boolean showPopup) {
+        this.showPopup = showPopup;
+    }
+
+    public String getPopupMessage() {
+        return popupMessage;
+    }
+
+    public void setPopupMessage(String popupMessage) {
+        this.popupMessage = popupMessage;
+    }
+
+    public Rectangle getPopupRect() {
+        return popupRect;
+    }
+
+    public void setPopupRect(Rectangle popupRect) {
+        this.popupRect = popupRect;
+    }
+
+    public boolean isWatering() {
+        return watering;
+    }
+
+    public void setWatering(boolean watering) {
+        this.watering = watering;
+    }
+
+    public float getPlantx() {
+        return plantx;
+    }
+
+    public void setPlantx(float plantx) {
+        this.plantx = plantx;
+    }
+
+    public float getPlanty() {
+        return planty;
+    }
+
+    public void setPlanty(float planty) {
+        this.planty = planty;
+    }
+
+    public float getWaterTimer() {
+        return waterTimer;
+    }
+
+    public void setWaterTimer(float waterTimer) {
+        this.waterTimer = waterTimer;
+    }
+
+    public String getPendingPlacementName() {
+        return pendingPlacementName;
+    }
+
+    public void setPendingPlacementName(String pendingPlacementName) {
+        this.pendingPlacementName = pendingPlacementName;
     }
 }

@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameMessageHandler {
-    public static String startNewGame (User user) {
+    public static void startNewGame (User user) {
         HashMap<String,Object> message = new HashMap<>();
         message.put("user", user);
         Message msg = new Message(message, Message.Type.start_game, Message.Menu.game_menu);
-        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
-        return res.getFromBody("result");
+        ClientModel.getServerConnectionThread().sendMessage(msg);
     }
 }

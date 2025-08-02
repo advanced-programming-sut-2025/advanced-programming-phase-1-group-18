@@ -1,5 +1,7 @@
 package io.github.group18.Network.Client.App;
 
+import io.github.group18.Model.Player;
+
 import java.net.Socket;
 
 public class ClientModel {
@@ -9,6 +11,115 @@ public class ClientModel {
     public static int SERVER_PORT = 12345;          // پورت ترکر (مثلاً 8080)
     public static ServerConnectionThread SERVER_CONNECTION_THREAD;
     public static Socket trackerSocket;
+
+    private Player player;
+
+    public static final int player1TopLeftx = 0;
+    public static final int player1TopLefty = 0;
+    public static final int player1Width = 450;
+    public static final int player1Height = 200;
+
+    public static final int player2TopLeftx = 550;
+    public static final int player2TopLefty = 0;
+    public static final int player2Width = 449;
+    public static final int player2Height = 200;
+
+    public static final int player3TopLeftx = 0;
+    public static final int player3TopLefty = 360;
+    public static final int player3Width = 450;
+    public static final int player3Height = 200;
+
+    public static final int player4TopLeftx = 550;
+    public static final int player4TopLefty = 360;
+    public static final int player4Width = 449;
+    public static final int player4Height = 200;
+
+    public static final int BlackSmithTopLeftx = 75;
+    public static final int BlackSmithTopLefty = 230;
+    public static final int BlackSmithWidth = 5;
+    public static final int BlackSmithHeight = 5;
+    public static final int BlackSmithEnterancex = 78;
+    public static final int BlackSmithEnterancey = 232;
+
+    public static final int JojoMartTopLeftx = 200;
+    public static final int JojoMartTopLefty = 230;
+    public static final int JojoMartWidth = 5;
+    public static final int JojoMartHeight = 5;
+    public static final int JojoMartEnterancex = 202;
+    public static final int JojoMartEnterancey = 232;
+
+    public static final int PierresGeneralStoreTopLeftx = 325;
+    public static final int PierresGeneralStoreTopLefty = 230;
+    public static final int PierresGeneralStoreWidth = 5;
+    public static final int PierresGeneralStoreHeight = 5;
+    public static final int PierresGeneralStoreEnterancex = 327;
+    public static final int PierresGeneralStoreEnterancey = 232;
+
+    public static final int CarpentersShopTopLeftx = 450;
+    public static final int CarpentersShopTopLefty = 230;
+    public static final int CarpentersShopWidth = 5;
+    public static final int CarpentersShopHeight = 5;
+    public static final int CarpentersShopEnterancex = 452;
+    public static final int CarpentersShopEnterancey = 232;
+
+    public static final int FishShopTopLeftx = 575;
+    public static final int FishShopTopLefty = 230;
+    public static final int FishShopWidth = 5;
+    public static final int FishShopHeight = 5;
+    public static final int FishShopEnterancex = 577;
+    public static final int FishShopEnterancey = 232;
+
+    public static final int MarniesRanchTopLeftx = 700;
+    public static final int MarniesRanchTopLefty = 230;
+    public static final int MarniesRanchWidth = 5;
+    public static final int MarniesRanchHeight = 5;
+    public static final int MarniesRanchEnterancex = 702;
+    public static final int MarniesRanchEnterancey = 232;
+
+    public static final int TheStardropSaloonTopLeftx = 825;
+    public static final int TheStardropSaloonTopLefty = 230;
+    public static final int TheStardropSaloonWidth = 5;
+    public static final int TheStardropSaloonHeight = 5;
+    public static final int TheStardropSaloonEnterancex = 827;
+    public static final int TheStardropSaloonEnterancey = 232;
+
+    // Sebastian
+    public static final int NPCSEBASTIANTopLeftX = 480;
+    public static final int NPCSEBASTIANTopLeftY = 100;
+
+    // Abigail
+    public static final int NPCABIGAILTopLeftX = 500;
+    public static final int NPCABIGAILTopLeftY = 100;
+
+    // Harvey
+    public static final int NPCHARVEYTopLeftX = 520;
+    public static final int NPCHARVEYTopLeftY = 100;
+
+    // Leah
+    public static final int NPCLEAHTopLeftX = 480;
+    public static final int NPCLEAHTopLeftY = 460;
+
+    // Robin
+    public static final int NPCROBINTopLeftX = 520;
+    public static final int NPCROBINTopLeftY = 460;
+
+    public static final int NPCSEBASTIANx = 480;
+    public static final int NPCSEBASTIANy = 100;
+    public static final int NPCABIGAILx = 500;
+    public static final int NPCABIGAILy = 100;
+    public static final int NPCHARVEYx = 520;
+    public static final int NPCHARVEYy = 100;
+    public static final int NPCLEAHx = 480;
+    public static final int NPCLEAHy = 460;
+    public static final int NPCROBINx = 520;
+    public static final int NPCROBINy = 460;
+
+    public static final int mapWidth = 1000;
+    public static final int mapHeight = 560;
+    public static final int TILE_SIZE = 50;
+
+    private static final float cameraLerpSpeed = 8f;
+    private static final int lookAheadTiles = 4;
 
     private static boolean exitFlag = false;
 
@@ -36,8 +147,6 @@ public class ClientModel {
     public static void endAll() {
         try {
             exitFlag = true;
-            // TODO: Implement cleanup
-            // 1. End tracker connection
             ServerConnectionThread.currentThread().interrupt();
             // 2. End all torrent threads
             System.exit(0);
@@ -48,8 +157,6 @@ public class ClientModel {
     }
 
     public static void connectServer() {
-        // TODO: Start Server connection thread
-        // Check if thread exists and not running, then Start thread
         try {
             if (SERVER_CONNECTION_THREAD != null && !SERVER_CONNECTION_THREAD.isAlive()) {
                 SERVER_CONNECTION_THREAD.start();
@@ -61,173 +168,6 @@ public class ClientModel {
         }
     }
 
-//    public static void startListening() {
-//        // TODO: Start peer listener thread
-//        try {
-//            if (P2P_LISTENER_THREAD != null && !P2P_LISTENER_THREAD.isAlive()) {
-//                P2P_LISTENER_THREAD.start();
-//            }
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Peer listener thread not implemented yet");
-//        }
-//        // Check if thread exists and not running, then Start thread
-//    }
-
-//    public static void removeTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
-//        // TODO: Remove and cleanup torrent thread
-//        try {
-//            torrentP2PThread.interrupt();
-//            ACTIVE_P2P_CONNECTIONS.remove(torrentP2PThread);
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Torrent P2P thread not implemented yet");
-//        }
-//    }
-//
-//    public static void addTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
-//        // TODO: Add new torrent thread
-//        try {
-//            // 1. Check if thread is valid
-//            if (torrentP2PThread == null || TORRENT_P2P_THREAD.contains(torrentP2PThread)) {
-//                return;
-//            }
-//            ACTIVE_P2P_CONNECTIONS.add(torrentP2PThread);
-//            // 2. Check if already exists
-//            // 3. Add to list
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Torrent P2P thread not implemented yet");
-//        }
-//    }
-//
-//    public static String getSharedFolderPath() {
-//        // TODO: Get shared folder path'
-//        try {
-//            return SHARED_FOLDER_PATH.toString();
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Shared folder path not implemented yet");
-//        }
-//    }
-//
-//    public static void addSentFile(String receiver, String fileNameAndHash) {
-//        // TODO: Add file to sent files list
-////        receiver = receiver.substring(0, receiver.length() - 2);
-//        try {
-//            for (String receiverIpPort : SENT_FILES.keySet()) {
-//                if (receiverIpPort.equals(receiver)) {
-//                    SENT_FILES.get(receiverIpPort).add(fileNameAndHash);
-//                    return;
-//                }
-//            }
-//
-//            SENT_FILES.put(receiver, new LinkedList<>(Collections.singletonList(fileNameAndHash)));
-////            SENT_FILES.put(receiver, Collections.singletonList(fileNameAndHash));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new UnsupportedOperationException("Sent files not implemented yet");
-//        }
-//    }
-//
-//    public static void addReceivedFile(String sender, String fileNameAndHash) {
-//        // TODO: Add file to received files list
-//        try {
-//            for (String receiverIpPort : RECEIVED_FILES.keySet()) {
-//                if (receiverIpPort.equals(sender)) {
-//                    RECEIVED_FILES.get(receiverIpPort).add(fileNameAndHash);
-//                    return;
-//                }
-//            }
-//            RECEIVED_FILES.put(sender, new LinkedList<>(Collections.singletonList(fileNameAndHash)));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new UnsupportedOperationException("Received files not implemented yet");
-//        }
-//    }
-//
-//    public static String getPeerIP() {
-//        // TODO: Get peer IP address
-//        try {
-//            return SELF_IP_ADDRESS;
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Peer IP not implemented yet");
-//        }
-//    }
-//
-//    public static int getPeerPort() {
-//        // TODO: Get peer port
-//        try {
-//            return SELF_PORT;
-//        } catch (Exception e) {
-//            throw new UnsupportedOperationException("Peer port not implemented yet");
-//        }
-//    }
-//
-//    public static Map<String, List<String>> getSentFiles() {
-//        // TODO: Get copy of sent files map
-//        return Map.copyOf(SENT_FILES);
-////		throw new UnsupportedOperationException("Sent files not implemented yet");
-//    }
-//
-//    public static Map<String, List<String>> getReceivedFiles() {
-//        // TODO: Get copy of received files map
-//        return Map.copyOf(RECEIVED_FILES);
-////		throw new UnsupportedOperationException("Received files not implemented yet");
-//    }
-
-//    public static ServerConnectionThread getP2TConnection() {
-//        // TODO: Get Server connection thread
-//        return SERVER_CONNECTION_THREAD;
-////		throw new UnsupportedOperationException("Server connection not implemented yet");
-//    }
-//
-//    public static void requestDownload(String ip, int port, String filename, String md5) throws Exception {
-//        // TODO: Implement file download from peer
-//        // 1. Check if file already exists
-//        // مرحله ۱: بررسی وجود فایل قبلی
-//
-//        Message requestMsg = getRequestMsg(filename, md5);
-//
-//        // مرحله ۳: برقراری ارتباط با همتا
-//        try (Socket peerSocket = new Socket()) {
-//            peerSocket.connect(new InetSocketAddress(ip, port));
-//
-//            try (DataOutputStream dos = new DataOutputStream(peerSocket.getOutputStream());
-//                 InputStream peerInput = peerSocket.getInputStream()) {
-//
-//                dos.writeUTF(JSONUtils.toJson(requestMsg));
-//                dos.flush();
-//
-//                // مرحله ۴: دریافت و ذخیره فایل
-//                Path destination = SHARED_FOLDER_PATH.resolve(filename);
-//                Files.copy(peerInput, destination, StandardCopyOption.REPLACE_EXISTING);
-//
-//                String actualMd5 = MD5Hash.HashFile(destination.toString());
-//
-//                if (actualMd5 == null || !actualMd5.equals(md5)) {
-//                    Files.deleteIfExists(destination);
-//                    throw new IllegalStateException("The file has been downloaded from peer but is corrupted!");
-//                }
-//
-//                // مرحله ۶: ثبت فایل دریافتی
-//                PeerApp.addReceivedFile(ip + ":" + port, filename + " " + actualMd5);
-//            }
-//        }
-//    }
-//
-//    private static Message getRequestMsg(String filename, String md5) {
-//        File targetFile = new File(SHARED_FOLDER_PATH.toFile(), filename);
-//        if (targetFile.exists()) {
-//            throw new UnsupportedOperationException("You already have the file!");
-//        }
-//
-//        // مرحله ۲: ساخت پیام درخواست
-//        HashMap<String, Object> mess = new HashMap<>();
-//        mess.put("name", filename);
-//        mess.put("md5", md5);
-//        mess.put("receiver_ip", PeerApp.SELF_IP_ADDRESS);
-//        mess.put("receiver_port", getPeerPort());
-//
-//        Message requestMsg = new Message(mess, Message.Type.download_request);
-//        return requestMsg;
-//    }
 
     public static String getServerHost() {
         return SERVER_HOST;
@@ -251,5 +191,413 @@ public class ClientModel {
 
     public static void setServerConnectionThread(ServerConnectionThread serverConnectionThread) {
         SERVER_CONNECTION_THREAD = serverConnectionThread;
+    }
+
+    public static Socket getTrackerSocket() {
+        return trackerSocket;
+    }
+
+    public static void setTrackerSocket(Socket trackerSocket) {
+        ClientModel.trackerSocket = trackerSocket;
+    }
+
+    public static int getPlayer1TopLeftx() {
+        return player1TopLeftx;
+    }
+
+    public static int getPlayer1TopLefty() {
+        return player1TopLefty;
+    }
+
+
+    public static int getPlayer1Width() {
+        return player1Width;
+    }
+
+
+    public static int getPlayer1Height() {
+        return player1Height;
+    }
+
+
+    public static int getPlayer2TopLeftx() {
+        return player2TopLeftx;
+    }
+
+
+    public static int getPlayer2TopLefty() {
+        return player2TopLefty;
+    }
+
+
+    public static int getPlayer2Width() {
+        return player2Width;
+    }
+
+
+    public static int getPlayer2Height() {
+        return player2Height;
+    }
+
+
+    public static int getPlayer3TopLeftx() {
+        return player3TopLeftx;
+    }
+
+
+    public static int getPlayer3TopLefty() {
+        return player3TopLefty;
+    }
+
+
+    public static int getPlayer3Width() {
+        return player3Width;
+    }
+
+
+    public static int getPlayer3Height() {
+        return player3Height;
+    }
+
+
+    public static int getPlayer4TopLeftx() {
+        return player4TopLeftx;
+    }
+
+
+    public static int getPlayer4TopLefty() {
+        return player4TopLefty;
+    }
+
+
+    public static int getPlayer4Width() {
+        return player4Width;
+    }
+
+
+    public static int getPlayer4Height() {
+        return player4Height;
+    }
+
+
+    public static int getBlackSmithTopLeftx() {
+        return BlackSmithTopLeftx;
+    }
+
+    public static int getBlackSmithTopLefty() {
+        return BlackSmithTopLefty;
+    }
+
+    public static int getBlackSmithWidth() {
+        return BlackSmithWidth;
+    }
+
+
+    public static int getBlackSmithHeight() {
+        return BlackSmithHeight;
+    }
+
+
+    public static int getBlackSmithEnterancex() {
+        return BlackSmithEnterancex;
+    }
+
+
+    public static int getBlackSmithEnterancey() {
+        return BlackSmithEnterancey;
+    }
+
+
+    public static int getJojoMartTopLeftx() {
+        return JojoMartTopLeftx;
+    }
+
+
+    public static int getJojoMartTopLefty() {
+        return JojoMartTopLefty;
+    }
+
+
+    public static int getJojoMartWidth() {
+        return JojoMartWidth;
+    }
+
+
+    public static int getJojoMartHeight() {
+        return JojoMartHeight;
+    }
+
+
+    public static int getJojoMartEnterancex() {
+        return JojoMartEnterancex;
+    }
+
+
+    public static int getJojoMartEnterancey() {
+        return JojoMartEnterancey;
+    }
+
+
+    public static int getPierresGeneralStoreTopLeftx() {
+        return PierresGeneralStoreTopLeftx;
+    }
+
+
+    public static int getPierresGeneralStoreTopLefty() {
+        return PierresGeneralStoreTopLefty;
+    }
+
+
+    public static int getPierresGeneralStoreWidth() {
+        return PierresGeneralStoreWidth;
+    }
+
+
+    public static int getPierresGeneralStoreHeight() {
+        return PierresGeneralStoreHeight;
+    }
+
+
+    public static int getPierresGeneralStoreEnterancex() {
+        return PierresGeneralStoreEnterancex;
+    }
+
+
+    public static int getPierresGeneralStoreEnterancey() {
+        return PierresGeneralStoreEnterancey;
+    }
+
+
+    public static int getCarpentersShopTopLeftx() {
+        return CarpentersShopTopLeftx;
+    }
+
+
+    public static int getCarpentersShopTopLefty() {
+        return CarpentersShopTopLefty;
+    }
+
+
+    public static int getCarpentersShopWidth() {
+        return CarpentersShopWidth;
+    }
+
+
+    public static int getCarpentersShopHeight() {
+        return CarpentersShopHeight;
+    }
+
+
+    public static int getCarpentersShopEnterancex() {
+        return CarpentersShopEnterancex;
+    }
+
+
+    public static int getCarpentersShopEnterancey() {
+        return CarpentersShopEnterancey;
+    }
+
+
+    public static int getFishShopTopLeftx() {
+        return FishShopTopLeftx;
+    }
+
+
+    public static int getFishShopTopLefty() {
+        return FishShopTopLefty;
+    }
+
+
+    public static int getFishShopWidth() {
+        return FishShopWidth;
+    }
+
+
+    public static int getFishShopHeight() {
+        return FishShopHeight;
+    }
+
+
+    public static int getFishShopEnterancex() {
+        return FishShopEnterancex;
+    }
+
+
+    public static int getFishShopEnterancey() {
+        return FishShopEnterancey;
+    }
+
+
+    public static int getMarniesRanchTopLeftx() {
+        return MarniesRanchTopLeftx;
+    }
+
+
+    public static int getMarniesRanchTopLefty() {
+        return MarniesRanchTopLefty;
+    }
+
+
+    public static int getMarniesRanchWidth() {
+        return MarniesRanchWidth;
+    }
+
+    public static int getMarniesRanchHeight() {
+        return MarniesRanchHeight;
+    }
+
+    public static int getMarniesRanchEnterancex() {
+        return MarniesRanchEnterancex;
+    }
+
+    public static int getMarniesRanchEnterancey() {
+        return MarniesRanchEnterancey;
+    }
+
+    public static int getTheStardropSaloonTopLeftx() {
+        return TheStardropSaloonTopLeftx;
+    }
+
+
+    public static int getTheStardropSaloonTopLefty() {
+        return TheStardropSaloonTopLefty;
+    }
+
+
+    public static int getTheStardropSaloonWidth() {
+        return TheStardropSaloonWidth;
+    }
+
+
+    public static int getTheStardropSaloonHeight() {
+        return TheStardropSaloonHeight;
+    }
+
+    public static int getTheStardropSaloonEnterancex() {
+        return TheStardropSaloonEnterancex;
+    }
+
+
+
+    public static int getTheStardropSaloonEnterancey() {
+        return TheStardropSaloonEnterancey;
+    }
+
+
+
+    public static int getNPCSEBASTIANTopLeftX() {
+        return NPCSEBASTIANTopLeftX;
+    }
+
+
+
+    public static int getNPCSEBASTIANTopLeftY() {
+        return NPCSEBASTIANTopLeftY;
+    }
+
+
+
+    public static int getNPCABIGAILTopLeftX() {
+        return NPCABIGAILTopLeftX;
+    }
+
+
+
+    public static int getNPCABIGAILTopLeftY() {
+        return NPCABIGAILTopLeftY;
+    }
+
+
+
+    public static int getNPCHARVEYTopLeftX() {
+        return NPCHARVEYTopLeftX;
+    }
+
+
+
+    public static int getNPCHARVEYTopLeftY() {
+        return NPCHARVEYTopLeftY;
+    }
+
+
+
+    public static int getNPCLEAHTopLeftX() {
+        return NPCLEAHTopLeftX;
+    }
+
+
+
+    public static int getNPCLEAHTopLeftY() {
+        return NPCLEAHTopLeftY;
+    }
+
+
+    public static int getNPCROBINTopLeftX() {
+        return NPCROBINTopLeftX;
+    }
+
+    public static int getNPCROBINTopLeftY() {
+        return NPCROBINTopLeftY;
+    }
+
+
+    public static int getNPCSEBASTIANx() {
+        return NPCSEBASTIANx;
+    }
+
+
+    public static int getNPCSEBASTIANy() {
+        return NPCSEBASTIANy;
+    }
+
+
+    public static int getNPCABIGAILx() {
+        return NPCABIGAILx;
+    }
+
+    public static int getNPCABIGAILy() {
+        return NPCABIGAILy;
+    }
+
+
+    public static int getNPCHARVEYx() {
+        return NPCHARVEYx;
+    }
+
+
+    public static int getNPCHARVEYy() {
+        return NPCHARVEYy;
+    }
+
+    public static int getNPCLEAHx() {
+        return NPCLEAHx;
+    }
+
+    public static int getNPCLEAHy() {
+        return NPCLEAHy;
+    }
+
+    public static int getNPCROBINx() {
+        return NPCROBINx;
+    }
+
+    public static int getNPCROBINy() {
+        return NPCROBINy;
+    }
+
+    public static boolean isExitFlag() {
+        return exitFlag;
+    }
+
+    public static void setExitFlag(boolean exitFlag) {
+        ClientModel.exitFlag = exitFlag;
+    }
+
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static void setPlayer(Player player) {
+        this.player = player;
     }
 }

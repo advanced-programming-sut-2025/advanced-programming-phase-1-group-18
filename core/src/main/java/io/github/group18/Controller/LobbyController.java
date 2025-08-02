@@ -67,24 +67,25 @@ public class LobbyController {
         Message message = new Message(body, Message.Type.choose_map, Message.Menu.lobby);
         Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
 //        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message,ClientModel.TIMEOUT_MILLIS);
-        if (res==null) return;
-        if(res.getFromBody("success")){
+        if (res == null) return;
+        if (res.getFromBody("success")) {
 
 //            Main.getMain().getScreen().dispose();
 //            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
 //            ChangeMenuHandler.changeMenu(App.getCurrentUser());
-            String res1 = GameMessageHandler.startNewGame(App.getCurrentUser());
-            Dialog error = new Dialog("result",GameAssetManager.getGameAssetManager().getSkin());
-            error.text(res1);
-            error.button("close");
-            error.show(stage);
-        }else{
-            Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
+            GameMessageHandler.startNewGame(App.getCurrentUser());
+//            Dialog error = new Dialog("result",GameAssetManager.getGameAssetManager().getSkin());
+//            error.text(res1);
+//            error.button("close");
+//            error.show(stage);
+        } else {
+            Dialog error = new Dialog("error", GameAssetManager.getGameAssetManager().getSkin());
             error.text((String) res.getFromBody("error"));
             error.button("close");
             error.show(stage);
         }
     }
+
     public String showInvisibleLobbyInfo(int id) {
         List<Lobby> lobbies = getAllLobbies();
         for (Lobby lobby : lobbies) {

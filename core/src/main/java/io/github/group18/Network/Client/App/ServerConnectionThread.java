@@ -1,5 +1,7 @@
 package io.github.group18.Network.Client.App;
 
+import com.google.gson.Gson;
+import io.github.group18.Model.Player;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.Client.Controller.ChangeMenuController;
 import io.github.group18.Network.common.models.ConnectionThread;
@@ -38,9 +40,18 @@ public class ServerConnectionThread extends ConnectionThread {
         if (message.getType() == Message.Type.command) {
             sendMessage(C2SConnectionController.handleCommand(message));
             return true;
-        }else if (message.getMenu()== Message.Menu.CHANGE_MENU){
+        } else if (message.getMenu() == Message.Menu.CHANGE_MENU) {
             sendMessage(ChangeMenuController.handleMessage(message));
             return true;
+        } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
+            System.out.println("open game page");
+        } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.add_player_to_Clientmain) {
+            Gson gson1 = new Gson();
+            Object playerObj1 = message.getFromBody("player");
+            String playerjson1 = gson1.toJson(playerObj1);
+            Player player = gson1.fromJson(playerjson1, Player.class);
+            ClientModel.setPlayer(player);
+            //go to game
         }
         return false;
     }

@@ -17,9 +17,19 @@ public class ServerModel {
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
 
+
     public static ClientConnectionThread getConnectionByUser(User user) {
         for (ClientConnectionThread connection : connections) {
-            if (connection.getUser().getID()== user.getID()) { //other side ?
+            if (connection.getUser().getID() == user.getID()) { //other side ?
+                return connection;
+            }
+        }
+        return null;
+    }
+
+    public static ClientConnectionThread getConnectionByUserName(String username) {
+        for (ClientConnectionThread connection : connections) {
+            if (connection.getUser().getUsername().equals(username)) {
                 return connection;
             }
         }
@@ -35,8 +45,8 @@ public class ServerModel {
 
     }
 
-    public static List<ClientConnectionThread> getConnections() {
-        return List.copyOf(ServerModel.connections);
+    public static ArrayList<ClientConnectionThread> getConnections() {
+        return new ArrayList<>(ServerModel.connections);
     }
 
     public static void startListening() {

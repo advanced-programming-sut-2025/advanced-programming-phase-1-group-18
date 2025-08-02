@@ -23,6 +23,10 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
+import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.Server.App.ClientConnectionThread;
+import io.github.group18.Network.Server.App.ServerModel;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.*;
 import io.github.group18.enums.*;
 import io.github.group18.enums.Menu;
@@ -46,7 +50,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
             if (view.getExitGame().isPressed()) {
-                exitGame();
+                System.exit(0);
+//                exitGame();
             } else if (view.getTerminateGame().isPressed()) {
                 voteTerminateGame(new Scanner(System.in));
             } else if (view.getLoadGame().isPressed()) {
@@ -58,8 +63,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public static void checkSkilRecipe() {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    public static void checkSkilRecipe(Player player) {
+        Player currentPlayer = player;
         if (currentPlayer.getForagingSkill().getLevel() >= 150) {
             boolean cr1 = false;
             for (CraftingRecipesEnums recipe : currentPlayer.getCraftingRecipes()) {
@@ -343,13 +348,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result whoAmI() {
-        int Playerindex = App.getCurrentGame().getIndexPlayerinControl();
-        return new Result(true, "Player: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername() + " " + Playerindex);
+    public Result whoAmI(Player player) {
+        return new Result(true, "Player: " + player.getOwner().getUsername());
     }
 
-    public static boolean isFainted() {
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() == 0) {
+    public static boolean isFainted(Player player) {
+        if (player.getEnergy() == 0) {
             return true;
         }
         return false;
@@ -367,9 +371,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static void setMapp(Game game) {
         ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
-        int columns = Game.mapHeight; // Define the number of columns
+        int columns = ClientModel.mapHeight; // Define the number of columns
 
-        for (int i = 0; i < Game.mapWidth; i++) {
+        for (int i = 0; i < ClientModel.mapWidth; i++) {
             ArrayList<Kashi> row = new ArrayList<>();
             for (int j = 0; j < columns; j++) {
                 row.add(new Kashi()); // Initialize each cell with an instance of Kashi
@@ -378,7 +382,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         game.setMap(Map);
 
-        for (int i = 0; i < Game.mapWidth; i++) {
+        for (int i = 0; i < ClientModel.mapWidth; i++) {
             for (int j = 0; j < columns; j++) {
                 Map.get(i).get(j).setWalkable(true);
                 Map.get(i).get(j).setEnterance(false);
@@ -387,7 +391,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public static Result gameNew(ArrayList<String> users, ArrayList<Integer> maps,User currentUser) throws NoSuchFieldException, IllegalAccessException {
+    public static Result gameNew(ArrayList<String> users, ArrayList<Integer> maps, User currentUser) throws NoSuchFieldException, IllegalAccessException {
         App.setCurrentUser(currentUser);
         String[] usernames = users.toArray(new String[0]);
 
@@ -396,9 +400,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         for (String username : usernames) {
             boolean check = false;
-//            if (username.equals(App.getCurrentUser().getUsername())) {
-//                return new Result(false, "Can't choose yourself");
-//            }
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
                     check = true;
@@ -428,27 +429,33 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             }
         }
-        Game NewGame = new Game();
+        Game NewGame = new Game(currentUser);
         NewGame.setPlayers(new ArrayList<>());
-        NewGame.setCreator(App.getCurrentUser());
-        NewGame.setIndexPlayerinControl(0);
 
         Player player1 = new Player();
         player1.setOwner(App.getCurrentUser());
         player1.setEnergy(200);
         NewGame.getPlayers().add(player1);
-        //System.out.println("");
+        ClientConnectionThread clientConnectionThread = ServerModel.getConnectionByUserName(currentUser.getUsername());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("player", player1);
+        Message msg = new Message(map, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
+        clientConnectionThread.sendMessage(msg);
         for (String username : usernames) {
             Player player = new Player();
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
-//                    System.out.println("nigga");
                     player.setOwner(user);
                     player.setEnergy(200);
                     NewGame.getPlayers().add(player);
                     break;
                 }
             }
+            ClientConnectionThread clientConnectionThread1 = ServerModel.getConnectionByUserName(username);
+            HashMap<String, Object> map1 = new HashMap<>();
+            map1.put("player", player);
+            Message msg1 = new Message(map1, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
+            clientConnectionThread1.sendMessage(msg1);
         }
         NewGame.setCurrentSeason(Seasons.Spring);
         NewGame.setCurrentDateTime(new DateTime(9, 1));
@@ -459,7 +466,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
             NewGame.getPlayers().get(i).getOwner().setTimesPlayed(NewGame.getPlayers().get(i).getOwner().getTimesPlayed() + 1);
-            //System.out.println(NewGame.getPlayers().get(i).getOwner().getUsername() + " " + NewGame.getPlayers().get(i).getOwner().getTimesPlayed());
         }
 
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
@@ -471,9 +477,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
 
-//            int number = -1;
-//            number = scanner.nextInt();
-//            scanner.nextLine();
             int number = maps.get(i);
 
             if (number >= 1 && number <= 4) {
@@ -546,13 +549,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result exitGame() {
-//        System.exit(0);
+    public Result exitGame(Player playerrr) {
         if (App.getCurrentGame() == null) {
             return new Result(false, "Game not started");
         }
-        if (App.getCurrentGame().getCreator().getUsername().equals(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername())) {
-            //save game
+        if (App.getCurrentGame().getCreator().getUsername().equals(playerrr.getOwner().getUsername())) {
             for (Player player : App.getCurrentGame().getPlayers()) {
                 if (player.getOwner().getHighestGold() < player.getGold()) {
                     player.getOwner().setHighestGold(player.getGold());
@@ -578,10 +579,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result voteTerminateGame(Scanner scanner) {
+    public Result voteTerminateGame(Scanner scanner,Player playerrr) {
         int total_neg = 0;
         for (Player player : App.getCurrentGame().getPlayers()) {
-            if (!player.getOwner().getUsername().equals(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername())) {
+            if (!player.getOwner().getUsername().equals(playerrr.getOwner().getUsername())) {
                 System.out.println(player.getOwner().getUsername() + " Enter your vote to terminate game(+/-): ");
                 String vote = scanner.nextLine();
                 if (vote.equals("-")) {
@@ -627,31 +628,31 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public static void nextTurn(GameMenu gameMenu, GameView gameView) {
-
-        App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
-        if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
-            App.getCurrentGame().setIndexPlayerinControl(0);
-
-
-            if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
-
-                startNewDay(gameMenu, true, gameView);
-
-            } else {
-                App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
-                    App.getCurrentGame().getCurrentDateTime().getDay()));
-            }
-
-            for (Player player : App.getCurrentGame().getPlayers()) {
-                if (player.getFoodBuff().getBuffHours() != 0) {
-                    player.getFoodBuff().setBuffHours(player.getFoodBuff().getBuffHours() - 1);
-                }
-            }
-
-
-        }
-    }
+//    public static void nextTurn(GameMenu gameMenu, GameView gameView) {
+//
+//        App.getCurrentGame().setIndexPlayerinControl(App.getCurrentGame().getIndexPlayerinControl() + 1);
+//        if (App.getCurrentGame().getIndexPlayerinControl() == App.getCurrentGame().getPlayers().size()) {
+//            App.getCurrentGame().setIndexPlayerinControl(0);
+//
+//
+//            if (App.getCurrentGame().getCurrentDateTime().getHour() == 23) {
+//
+//                startNewDay(gameMenu, true, gameView);
+//
+//            } else {
+//                App.getCurrentGame().setCurrentDateTime(new DateTime(App.getCurrentGame().getCurrentDateTime().getHour() + 1,
+//                    App.getCurrentGame().getCurrentDateTime().getDay()));
+//            }
+//
+//            for (Player player : App.getCurrentGame().getPlayers()) {
+//                if (player.getFoodBuff().getBuffHours() != 0) {
+//                    player.getFoodBuff().setBuffHours(player.getFoodBuff().getBuffHours() - 1);
+//                }
+//            }
+//
+//
+//        }
+//    }
 
     public static void getBackHome() {
         int player1TopLeftx = 0;
@@ -816,7 +817,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
 
         // Sell Satl end of the day
-        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().keySet()) {
+        for (Item item : playerrr.getMyFarm().getSatl().getItems().keySet()) {
             //AllCrop+
             //Fertilizer+
             //Food+
@@ -832,11 +833,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             //AllCrop+
             //AllCrop+
             if (item.getCorrectPrice() <= 0) {
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + 100 * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                playerrr.setGold(playerrr.getGold() + 100 * playerrr.getMyFarm().getSatl().getItems().get(item));
             } else {
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + item.getCorrectPrice() * App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+                playerrr.setGold(playerrr.getGold() + item.getCorrectPrice() * playerrr.getMyFarm().getSatl().getItems().get(item));
             }
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().removeItem(item, App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().getItems().get(item));
+            playerrr.getMyFarm().getSatl().removeItem(item, playerrr.getMyFarm().getSatl().getItems().get(item));
 
         }
 
@@ -1283,8 +1284,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() > 500
-            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() > 1000) {
+        if (playerrr.getWood() > 500
+            && playerrr.getGold() > 1000) {
             App.getCurrentGame().getPlayers()
                 .get(App.getCurrentGame().getIndexPlayerinControl())
                 .getMyFarm().getMyGreenHouse().setStatus(true);
@@ -1303,16 +1304,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
             case 0:
                 if (x < 0 || y < 0 ||
-                    (x > App.getCurrentGame().getPlayer2TopLeftx() &&
-                        y < App.getCurrentGame().getPlayer2TopLefty() + App.getCurrentGame().getPlayer2Height()) ||
-                    (x < App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() &&
-                        y > App.getCurrentGame().getPlayer3TopLefty()) ||
-                    (x > App.getCurrentGame().getPlayer4TopLeftx() &&
-                        y > App.getCurrentGame().getPlayer4TopLefty() + App.getCurrentGame().getPlayer4Height())) {
+                    (x > ClientModel.getPlayer2TopLeftx() &&
+                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+                        y > ClientModel.getPlayer3TopLefty()) ||
+                    (x > ClientModel.getPlayer4TopLeftx() &&
+                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
                     return new Result(false, "Your destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                    Player player = playerrr;
 
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
@@ -1371,16 +1372,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
             case 1:
                 if (x < 0 || y < 0 ||
-                    (x < App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() &&
-                        y < App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) ||
-                    (x < App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() &&
-                        y > App.getCurrentGame().getPlayer3TopLefty()) ||
-                    (x > App.getCurrentGame().getPlayer4TopLeftx() &&
-                        y > App.getCurrentGame().getPlayer4TopLefty() + App.getCurrentGame().getPlayer4Height())) {
+                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+                        y > ClientModel.getPlayer3TopLefty()) ||
+                    (x > ClientModel.getPlayer4TopLeftx() &&
+                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
                     return new Result(false, "Your destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                    Player player = playerrr;
 
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
@@ -1441,16 +1442,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 //}
             case 2:
                 if (x < 0 || y < 0 ||
-                    (x < App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() &&
-                        y < App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) ||
-                    (x > App.getCurrentGame().getPlayer2TopLeftx() &&
-                        y < App.getCurrentGame().getPlayer2TopLefty() + App.getCurrentGame().getPlayer2Height()) ||
-                    (x > App.getCurrentGame().getPlayer4TopLeftx() &&
-                        y > App.getCurrentGame().getPlayer4TopLefty() + App.getCurrentGame().getPlayer4Height())) {
+                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+                    (x > ClientModel.getPlayer2TopLeftx() &&
+                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+                    (x > ClientModel.getPlayer4TopLeftx() &&
+                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
                     return new Result(false, "Your destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                    Player player = playerrr;
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
                         (int) player.getX(),
@@ -1508,16 +1509,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             case 3:
                 if (x < 0 || y < 0 ||
-                    (x < App.getCurrentGame().getPlayer1TopLeftx() + App.getCurrentGame().getPlayer1Width() &&
-                        y < App.getCurrentGame().getPlayer1TopLefty() + App.getCurrentGame().getPlayer1Height()) ||
-                    (x > App.getCurrentGame().getPlayer2TopLeftx() &&
-                        y < App.getCurrentGame().getPlayer2TopLefty() + App.getCurrentGame().getPlayer2Height()) ||
-                    (x < App.getCurrentGame().getPlayer3TopLeftx() + App.getCurrentGame().getPlayer3Width() &&
-                        y > App.getCurrentGame().getPlayer3TopLefty())) {
+                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+                    (x > ClientModel.getPlayer2TopLeftx() &&
+                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+                        y > ClientModel.getPlayer3TopLefty())) {
                     return new Result(false, "Your destination is out of bounds");
                 } else {
                     ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+                    Player player = playerrr;
                     AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
                         listMap,
                         (int) player.getX(),
@@ -1793,7 +1794,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        if (item == null) {
 //            return new Result(false, "Item not found");
 //        } else {
-//            Map<Item, Integer> itemmmm = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems();
+//            Map<Item, Integer> itemmmm = playerrr.getInventory().getItems();
 //            TrashCan trashcan = null;
 //            for (Item itemm : itemmmm.keySet()) {
 //                if (itemm instanceof TrashCan) {
@@ -1805,26 +1806,26 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //
 //            }
 //            if (trashcan != null && trashcan.getJens().equals("copper")) {
-//                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+//                int nowgold = playerrr.getGold();
 //                int price = (int) (item.getCorrectPrice() * 0.15);
-//                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
+//                playerrr.setGold(nowgold + price);
 //            }
 //            if (trashcan != null && trashcan.getJens().equals("iron")) {
-//                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+//                int nowgold = playerrr.getGold();
 //                int price = (int) (item.getCorrectPrice() * 0.3);
-//                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
+//                playerrr.setGold(nowgold + price);
 //            }
 //            if (trashcan != null && trashcan.getJens().equals("gold")) {
-//                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+//                int nowgold = playerrr.getGold();
 //                int price = (int) (item.getCorrectPrice() * 0.45);
-//                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
+//                playerrr.setGold(nowgold + price);
 //            }
 //            if (trashcan != null && trashcan.getJens().equals("iridium")) {
-//                int nowgold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
+//                int nowgold = playerrr.getGold();
 //                int price = (int) (item.getCorrectPrice() * 0.6);
-//                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(nowgold + price);
+//                playerrr.setGold(nowgold + price);
 //            }
-//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, number);
+//            playerrr.getInventory().removeItem(item, number);
 //            return new Result(true, number + "of Item " + item.getClass().getSimpleName() + " removed");
 //        }
 //    }
@@ -1855,16 +1856,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            return new Result(false, "Your entered item is not a tool!");
 //        } else {
 //            Tool tool = (Tool) item;
-//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setInMyHandTool(tool);
+//            playerrr.setInMyHandTool(tool);
 //            return new Result(true, "now your entered tool is in your hand!");
 //        }
 //    }
 
-    public Result toolsShowCurrent() {
+    public Result toolsShowCurrent(Player playerrr) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Tool tool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
+        Tool tool = playerrr.getInMyHandTool();
         if (tool == null) {
             return new Result(false, "!You don't have any tools in your hand!");
         } else {
@@ -1877,7 +1878,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        if (isFainted()) {
 //            return new Result(false, "You are fainted!");
 //        }
-//        Map<Item, Integer> items = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems();
+//        Map<Item, Integer> items = playerrr.getInventory().getItems();
 //        StringBuilder toolsList = new StringBuilder("Tools in Inventory:\n");
 //        for (Item item : items.keySet()) {
 //            if (item instanceof Tool) {
@@ -1894,7 +1895,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (!jens.equals("initial") && !jens.equals("copper") && !jens.equals("iron") && !jens.equals("gold") && !jens.equals("iridium")) {
             return new Result(false, "Your entered jens is not Okay!");
         }
-        Tool tool = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInMyHandTool();
+        Tool tool = playerrrplayerrr.getInMyHandTool();
         if (tool == null) {
             return new Result(false, "Item not found");
         } else if (!(tool instanceof Tool)) {
@@ -1903,37 +1904,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         if (jens.equals("copper")) {
             if (tool instanceof Axe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                if (playerrr.getGold() < 2000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
+                    playerrr.setGold(playerrr.getGold() - 2000);
                     ((Axe) tool).update("copper");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Pickaxe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                if (playerrr.getGold() < 2000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
+                    playerrr.setGold(playerrr.getGold() - 2000);
                     ((Pickaxe) tool).update("copper");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Hoe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                if (playerrrplayerrr.getGold() < 2000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2000);
+                    playerrr.setGold(playerrr.getGold() - 2000);
                     ((Hoe) tool).update("copper");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof TrashCan) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 1000) {
+                if (playerrr.getGold() < 1000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1000);
+                    playerrr.setGold(playerrr.getGold() - 1000);
                     ((TrashCan) tool).update("copper");
                     return new Result(true, "tool updated!");
                 }
@@ -1941,37 +1942,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         if (jens.equals("iron")) {
             if (tool instanceof Axe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                if (playerrr.getGold() < 5000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
+                    playerrr.setGold(playerrr.getGold() - 5000);
                     ((Axe) tool).update("iron");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Pickaxe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                if (playerrrplayerrr.getGold() < 5000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
+                    playerrr.setGold(playerrrplayerrr.getGold() - 5000);
                     ((Pickaxe) tool).update("iron");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Hoe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2000) {
+                if (playerrr.getGold() < 2000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
+                    playerrr.setGold(playerrr.getGold() - 5000);
                     ((Hoe) tool).update("iron");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof TrashCan) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 2500) {
+                if (playerrr.getGold() < 2500) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 2500);
+                    playerrr.setGold(playerrr.getGold() - 2500);
                     ((TrashCan) tool).update("iron");
                     return new Result(true, "tool updated!");
                 }
@@ -1979,37 +1980,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         if (jens.equals("gold")) {
             if (tool instanceof Axe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                if (playerrr.getGold() < 10000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
+                    playerrr.setGold(playerrr.getGold() - 10000);
                     ((Axe) tool).update("gold");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Pickaxe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                if (playerrr.getGold() < 10000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
+                    playerrr.setGold(playerrr.getGold() - 10000);
                     ((Pickaxe) tool).update("gold");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Hoe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+                if (playerrr.getGold() < 10000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 10000);
+                    playerrr.setGold(playerrr.getGold() - 10000);
                     ((Hoe) tool).update("gold");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof TrashCan) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 5000) {
+                if (playerrr.getGold() < 5000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 5000);
+                    playerrr.setGold(playerrr.getGold() - 5000);
                     ((TrashCan) tool).update("gold");
                     return new Result(true, "tool updated!");
                 }
@@ -2017,37 +2018,37 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         if (jens.equals("iridium")) {
             if (tool instanceof Axe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                if (playerrr.getGold() < 25000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
+                    playerrr.setGold(playerrr.getGold() - 25000);
                     ((Axe) tool).update("iridium");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Pickaxe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                if (playerrr.getGold() < 25000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
+                    playerrr.setGold(playerrr.getGold() - 25000);
                     ((Pickaxe) tool).update("iridium");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof Hoe) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+                if (playerrr.getGold() < 25000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 25000);
+                    playerrr.setGold(playerrr.getGold() - 25000);
                     ((Hoe) tool).update("iridium");
                     return new Result(true, "tool updated!");
                 }
             }
             if (tool instanceof TrashCan) {
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12500) {
+                if (playerrr.getGold() < 12500) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 12500);
+                    playerrr.setGold(playerrr.getGold() - 12500);
                     ((TrashCan) tool).update("iridium");
                     return new Result(true, "tool updated!");
                 }
@@ -2143,9 +2144,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     private void popUpMessage(GameController gameController, String message, Game game) {
-        game.setPopupMessage(message);
-        game.setShowPopup(true);
-        game.setPopupRect(new Rectangle(Gdx.graphics.getWidth() / 2 - 150,
+        gameController.getGameMenu().getGameView().setPopupMessage(message);
+        gameController.getGameMenu().getGameView().setShowPopup(true);
+        gameController.getGameMenu().getGameView().setPopupRect(new Rectangle(Gdx.graphics.getWidth() / 2 - 150,
             Gdx.graphics.getHeight() / 2 - 75,
             300, 150));
     }
@@ -2179,7 +2180,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result plant(MixedSeed mixedSeed, Kashi kashi) {
 
-        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentplayer = playerrr;
 
         if (!kashi.isShokhmZadeh()) {
             return new Result(false, "You have to shokhm it first");
@@ -2187,7 +2188,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         try {
 
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+            playerrr
                 .getInventory().removeItem(mixedSeed, 1);
 
             Seasons currentSeason = App.getCurrentGame().getCurrentSeason();
@@ -2227,7 +2228,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result plant(ForagingSeed foragingSeed, Kashi kashi) {
 
-        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentplayer = playerrr;
 
         if (!kashi.isShokhmZadeh()) {
             return new Result(false, "You have to shokhm it first");
@@ -2237,7 +2238,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         try {
             AllCrop allCrop1 = new AllCrop();
             ForagingSeedsEnums foragingSeedsEnums = foragingSeed.getType();
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(foragingSeed, 1);
+            playerrr.getInventory().removeItem(foragingSeed, 1);
 
             allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
             allCrop1.initilizeCrop(foragingSeedsEnums);
@@ -2257,7 +2258,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public static Result plant(TreeSeed treeSeed, Kashi kashi) {
-        Player currentplayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentplayer = playerrr;
 
         if (!kashi.isShokhmZadeh()) {
             return new Result(false, "You have to shokhm it first");
@@ -2268,7 +2269,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         AllTree allTree = new AllTree();
         try {
             TreeSeedEnums allTreesEnums = treeSeed.getType();
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(treeSeed, 1);
+            playerrr.getInventory().removeItem(treeSeed, 1);
 
 
             allTree.setSource(allTreesEnums);
@@ -2392,7 +2393,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result fertilize(Fertilizer fertilizer, Kashi kashi) {
 
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = v;
 
         if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
             if (kashi.getInside() instanceof AllTree) {
@@ -2402,7 +2403,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 AllCrop allCrop = (AllCrop) kashi.getInside();
                 allCrop.setDaysGrowCounter(allCrop.getTotalHarvestTime());
             }
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(fertilizer, 1);
+            playerrr.getInventory().removeItem(fertilizer, 1);
             return new Result(true, "Successfully Fertilized");
         } else {
             return new Result(false, "Stand near a plant");
@@ -2414,7 +2415,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+        for (Item item : playerrr.getInventory().getItems().keySet()) {
             if (item instanceof WateringCan) {
                 return new Result(true, "Capacity: " + (((WateringCan) item).getCapacity()));
             }
@@ -2599,7 +2600,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            return new Result(false, "You are fainted!");
 //        }
 //        name = name.replaceAll(" ", "").toLowerCase();
-//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Player player = playerrr;
 //        Cord tileCord = new Cord((int) player.getX(), (int) player.getY());
 //        int dir_x = -1;
 //        int dir_y = -1;
@@ -2679,7 +2680,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
         name = name.replace(" ", "");
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player player = playerrr;
         Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
 
         boolean addItem = false;
@@ -2730,7 +2731,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         } else if (CraftingRecipesEnums.containsCraft(name)) {
             CraftingItem craftingItem = new CraftingItem(name);
             craftingItem.setName(name);
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).
+            playerrr.
                 getCraftingRecipes().add(craftingItem.getCraftingItem());
             player.getInventory().addItem(craftingItem, count);
             addItem = true;
@@ -2840,11 +2841,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 return new Result(false, "Refrigerator is full");
             }
             boolean found = false;
-            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+            for (Item item : playerrr.getInventory().getItems().keySet()) {
                 if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
                     found = true;
                     refrigerator.addItem(item, 1);
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                    playerrr.getInventory().removeItem(item, 1);
                     return new Result(true, "Successful");
                 }
             }
@@ -2860,10 +2861,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             for (Item item : refrigerator.getItems().keySet()) {
                 if (item.getCorrectName().equals(itemname.toLowerCase().replace(" ", ""))) {
                     found = true;
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().isFull()) {
+                    if (playerrr.getInventory().isFull()) {
                         return new Result(false, "Inventory is full");
                     }
-                    App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(item, 1);
+                    playerrr.getInventory().addItem(item, 1);
                     refrigerator.removeItem(item, 1);
                     return new Result(true, "Successful");
                 }
@@ -2879,11 +2880,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes().isEmpty()) {
+        if (playerrr.getCookingRecipes().isEmpty()) {
             return new Result(false, "You are cooked(0 cooking recipes)");
         } else {
             StringBuilder result = new StringBuilder();
-            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes()) {
+            for (Cookingrecipe cookingrecipe : playerrr.getCookingRecipes()) {
                 result.append(cookingrecipe.getFood()).append(" recipe");
             }
             return new Result(true, result.toString());
@@ -2894,7 +2895,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() < 3) {
+        if (playerrr.getEnergy() < 3) {
             return new Result(false, "Not enough energy to cook");
         }
         Set<String> FOOD_ENUMS = new HashSet<>();
@@ -2909,7 +2910,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 return new Result(false, "invalid food");
             }
             Cookingrecipe targetCookingRecipe = null;
-            for (Cookingrecipe cookingrecipe : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes()) {
+            for (Cookingrecipe cookingrecipe : playerrr.getCookingRecipes()) {
                 if (cookingrecipe.getFood() == foodCookingEnums) {
                     targetCookingRecipe = cookingrecipe;
                 }
@@ -2921,9 +2922,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
             for (String food : ingredients.keySet()) {
                 boolean found = false;
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                for (Item item : playerrr.getInventory().getItems().keySet()) {
                     if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
-                        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item) >= ingredients.get(food)) {
+                        if (playerrr.getInventory().getItemQuantity(item) >= ingredients.get(food)) {
                             found = true;
                         }
                     }
@@ -2934,16 +2935,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             }
             for (String food : ingredients.keySet()) {
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                for (Item item : playerrr.getInventory().getItems().keySet()) {
                     if (item.getCorrectName().equals(food.toLowerCase().replace(" ", ""))) {
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, ingredients.get(food));
+                        playerrr.getInventory().removeItem(item, ingredients.get(food));
                     }
                 }
             }
 
             FoodCooking foodCooking = targetCookingRecipe.letmecook(foodCookingEnums);
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(foodCooking, 1);
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() - 3);
+            playerrr.getInventory().addItem(foodCooking, 1);
+            playerrr.setEnergy(playerrr.getEnergy() - 3);
             return new Result(true, "Successfully made " + recipeName);
         } else {
             return new Result(false, "Invalid food");
@@ -2975,15 +2976,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            return new Result(false, "Invalid food");
 //        }
         if (isValidFood(foodName, FOOD_ENUMS)) {
-            for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+            for (Item item : playerrr.getInventory().getItems().keySet()) {
                 if (item instanceof FoodCooking) {
                     FoodCooking foodCooking = (FoodCooking) item;
                     if (foodCooking.getNamee() == foodCookingEnums) {
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().
+                        playerrr.setEnergy(Math.min(App.getCurrentGame().
                             getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
                             get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy()));
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
+                        playerrr.getInventory().removeItem(item, 1);
+                        playerrr.setFoodBuff(foodCooking.getBuff());
                         showBuffEffect(foodCooking.getBuff());
                         App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
 //                        App.getGameController().getGameMenu().
@@ -2997,11 +2998,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             AllCrop crop = new AllCrop();
             crop.initilizeCrop(cropSeed);
             if (crop.isEdible()) {
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                for (Item item : playerrr.getInventory().getItems().keySet()) {
                     if (item instanceof AllCrop) {
                         if (crop.getCorrectName().equalsIgnoreCase(foodName)) {
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + crop.getEnergy()));
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            playerrr.setEnergy(Math.min(playerrr.getMaxEnergy(), playerrr.getEnergy() + crop.getEnergy()));
+                            playerrr.getInventory().removeItem(item, 1);
                             return new Result(true, "You ate " + foodName);
                         }
                     }
@@ -3010,14 +3011,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         } else if (ArtisanGoodsEnums.isContain(foodName)) {
             ArtisanGoods artisanGoods = new ArtisanGoods(foodName);
             if (artisanGoods.getEnergyUsage() != 0) {
-                for (Item item : App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItems().keySet()) {
+                for (Item item : playerrr.getInventory().getItems().keySet()) {
                     if (item instanceof ArtisanGoods) {
                         if (artisanGoods.getCorrectName().equalsIgnoreCase(foodName)) {
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).
+                            playerrr.
                                 setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().
                                     getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
                                     get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + artisanGoods.getEnergyUsage()));
-                            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
+                            playerrr.getInventory().removeItem(item, 1);
                             return new Result(true, "You ate " + foodName);
                         }
                     }
@@ -3041,8 +3042,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (animal.getXofAnimal() == -1 && animal.getYofAnimal() == -1) {
             return new Result(false, "it is inside!");
         } else {
-            int x = (int) App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getX();
-            int y = (int) App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getY();
+            int x = (int) playerrr.getX();
+            int y = (int) playerrr.getY();
             int xOfAnimal = animal.getXofAnimal();
             int yOfAnimal = animal.getYofAnimal();
             boolean isOkay = AreYouNearForNavazesh(x, y, xOfAnimal, yOfAnimal);
@@ -3078,7 +3079,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public Result animals() {
         StringBuilder sb = new StringBuilder();
-        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
         for (Animal animal : animals) {
             // name
             sb.append("Animal name:  ").append(animal.getName()).append("\n");
@@ -3112,15 +3113,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             if (animal instanceof CageAnimal) {
                 switch (where) {
                     case "coop":
-                        ArrayList<CageAnimal> cageAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyCage().getCageAnimals();
                         cageAnimals.add((CageAnimal) animal);
                         break;
                     case "bigcoop":
-                        ArrayList<CageAnimal> bigCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                        ArrayList<CageAnimal> bigCoopAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                         bigCoopAnimals.add((CageAnimal) animal);
                         break;
                     case "deluxecoop":
-                        ArrayList<CageAnimal> deluxeCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                        ArrayList<CageAnimal> deluxeCoopAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                         deluxeCoopAnimals.add((CageAnimal) animal);
                         break;
                     default:
@@ -3130,15 +3131,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             if (animal instanceof TavilehAnimal) {
                 switch (where) {
                     case "barn":
-                        ArrayList<TavilehAnimal> tavilehAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyTavileh().getTavilehAnimals();
                         tavilehAnimals.add((TavilehAnimal) animal);
                         break;
                     case "bigbarn":
-                        ArrayList<TavilehAnimal> bigBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> bigBarnAnimals = playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals();
                         bigBarnAnimals.add((TavilehAnimal) animal);
                         break;
                     case "deluxebarn":
-                        ArrayList<TavilehAnimal> deluxeBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> deluxeBarnAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                         deluxeBarnAnimals.add((TavilehAnimal) animal);
                         break;
                     default:
@@ -3176,27 +3177,27 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             String where = animal.getWhereDoILive();
             switch (where) {
                 case "coop":
-                    ArrayList<CageAnimal> cageAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getCageAnimals();
+                    ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyCage().getCageAnimals();
                     cageAnimals.remove(animal);
                     break;
                 case "bigcoop":
-                    ArrayList<CageAnimal> bigCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                    ArrayList<CageAnimal> bigCoopAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                     bigCoopAnimals.remove(animal);
                     break;
                 case "deluxecoop":
-                    ArrayList<CageAnimal> deluxeCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                    ArrayList<CageAnimal> deluxeCoopAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                     deluxeCoopAnimals.remove(animal);
                     break;
                 case "barn":
-                    ArrayList<TavilehAnimal> barnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                    ArrayList<TavilehAnimal> barnAnimals = playerrr.getMyFarm().getMyTavileh().getTavilehAnimals();
                     barnAnimals.remove(animal);
                     break;
                 case "bigbarn":
-                    ArrayList<TavilehAnimal> bigBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals();
+                    ArrayList<TavilehAnimal> bigBarnAnimals = playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals();
                     bigBarnAnimals.remove(animal);
                     break;
                 case "deluxebarn":
-                    ArrayList<TavilehAnimal> deluxeBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                    ArrayList<TavilehAnimal> deluxeBarnAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                     deluxeBarnAnimals.remove(animal);
                     break;
                 default:
@@ -3240,33 +3241,33 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You can not sell this animal because it is outside of coops/barns!");
         }
         int priceOfSelling = (int) (animal.getPrice() * ((animal.getFriendship() * 1000) + 0.3));
-        int goldsOfPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold();
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(goldsOfPlayer + priceOfSelling);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals().remove(animal);
+        int goldsOfPlayer = playerrr.getGold();
+        playerrr.setGold(goldsOfPlayer + priceOfSelling);
+        playerrr.getMyBoughtAnimals().remove(animal);
         String where = animal.getWhereDoILive();
         switch (where) {
             case "coop":
-                ArrayList<CageAnimal> cageAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getCageAnimals();
+                ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyCage().getCageAnimals();
                 cageAnimals.remove(animal);
                 break;
             case "bigcoop":
-                ArrayList<CageAnimal> bigCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                ArrayList<CageAnimal> bigCoopAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                 bigCoopAnimals.remove(animal);
                 break;
             case "deluxecoop":
-                ArrayList<CageAnimal> deluxeCoopAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                ArrayList<CageAnimal> deluxeCoopAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                 deluxeCoopAnimals.remove(animal);
                 break;
             case "barn":
-                ArrayList<TavilehAnimal> barnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                ArrayList<TavilehAnimal> barnAnimals = playerrr.getMyFarm().getMyTavileh().getTavilehAnimals();
                 barnAnimals.remove(animal);
                 break;
             case "bigbarn":
-                ArrayList<TavilehAnimal> bigBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals();
+                ArrayList<TavilehAnimal> bigBarnAnimals = playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals();
                 bigBarnAnimals.remove(animal);
                 break;
             case "deluxebarn":
-                ArrayList<TavilehAnimal> deluxeBarnAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                ArrayList<TavilehAnimal> deluxeBarnAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                 deluxeBarnAnimals.remove(animal);
                 break;
             default:
@@ -3279,7 +3280,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player player = playerrr;
         Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
         for (Item item : inventory.keySet()) {
             if (item instanceof FishingPole) {
@@ -3315,7 +3316,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
         CraftingItem craftingItem = craftingIte;
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player player = playerrr;
         craftName = craftName.replace("_", "");
         Inventory inventory = player.getInventory();
         Map<Item, Pair<Integer, Integer>> inventoryItems = inventory.getItems();
@@ -3352,7 +3353,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player player = playerrr;
         Inventory inventory = player.getInventory();
         ArrayList<ArtisanGoods> artisanGoods = new ArrayList<>();
         artisanGoods = player.getArtisansInProduce();
@@ -3365,7 +3366,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public static Result sell(Item item, int count) {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
 
         try {
             if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
@@ -3387,9 +3388,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         int quantity = count;
 
         boolean found = false;
-        if (quantity <= App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemQuantity(item)) {
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getSatl().addItem(item, quantity);
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, quantity);
+        if (quantity <= playerrr.getInventory().getItemQuantity(item)) {
+            playerrr.getMyFarm().getSatl().addItem(item, quantity);
+            playerrr.getInventory().removeItem(item, quantity);
             return new Result(true, "Sold" + quantity + " of " + item);
         } else {
             return new Result(false, "Not enough items in your inventory");
@@ -3401,7 +3402,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
         StringBuilder result = new StringBuilder();
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Game currentGame = App.getCurrentGame();
         for (Friendship friendship : currentGame.getFriendships()) {
             for (Player player : App.getCurrentGame().getPlayers()) {
@@ -3425,7 +3426,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Game currentGame = App.getCurrentGame();
         if (App.getCurrentGame().getPlayerByUsername(username) == null) {
             return new Result(false, "Player not found");
@@ -3463,7 +3464,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Player targetPlayer = App.getCurrentGame().getPlayerByUsername(username);
         Game currentGame = App.getCurrentGame();
         StringBuilder result = new StringBuilder();
@@ -3493,7 +3494,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         item = item.replaceAll(" ", "");
         Item gift = null;
         Gift newGift = null;
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Inventory inventory = currentPlayer.getInventory();
         Map<Item, Pair<Integer, Integer>> itemInventory = inventory.getItems();
         Game currentGame = App.getCurrentGame();
@@ -3587,7 +3588,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         StringBuilder result = new StringBuilder();
         result.append("Gift List: \n");
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         for (Gift gift : App.getCurrentGame().getGifts()) {
             if (gift.getReceiver().equals(currentPlayer)) {
                 result.append("Gift id: ").append(gift.getId()).append("\n");
@@ -3604,7 +3605,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         for (Gift gift : App.getCurrentGame().getGifts()) {
             if (gift.getId() == giftNumber) {
                 if (gift.getReceiver().equals(currentPlayer)) {
@@ -3639,7 +3640,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
         StringBuilder result = new StringBuilder();
         result.append("Gift History of ").append(name).append(": \n");
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Player targetPlayer = null;
         for (Player player : App.getCurrentGame().getPlayers()) {
             if (player.getOwner().getUsername().equals(name)) {
@@ -3676,7 +3677,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         if (App.getCurrentGame().getPlayerByUsername(userName) == null) {
             return new Result(false, "Player not found");
         }
@@ -3701,7 +3702,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "You are fainted!");
         }
 
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Inventory inventory = currentPlayer.getInventory();
         Map<Item, Pair<Integer, Integer>> itemInventory = inventory.getItems();
         Game currentGame = App.getCurrentGame();
@@ -3774,7 +3775,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public static Result askMarriage(String userName, String ringName) {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
 
         if (destinationPlayer == null) {
@@ -3827,7 +3828,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public static Result response(String acceptOrReject, String userName) {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         List<MarriageProposal> proposals = App.getCurrentGame().getMarriageProposals();
 
         MarriageProposal targetProposal = null;
@@ -3846,7 +3847,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         if (acceptOrReject.equalsIgnoreCase("-accept")) {
 
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().addItem(targetProposal.getRing(), 1);
+            playerrr.getInventory().addItem(targetProposal.getRing(), 1);
             targetProposal.getProposer().getInventory().removeItem(targetProposal.getRing(), 1);
             proposals.remove(targetProposal);
             Friendship friendship = getFriendship(targetProposal.getReceiver(), targetProposal.getProposer());
@@ -3871,7 +3872,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public void showMyMarriageProposals() {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         List<MarriageProposal> proposals = App.getCurrentGame().getMarriageProposals();
         boolean hasProposal = false;
         for (MarriageProposal proposal : proposals) {
@@ -3887,9 +3888,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    /// / find animal by name
     public Animal findAnimalByName(String animalName) {
-        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
         for (Animal animal : animals) {
             if (animal.getName().equalsIgnoreCase(animalName)) {
                 return animal;
@@ -3903,7 +3903,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     private boolean validNPCPlace(NPCEnums npcEnums) {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
 
         return (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof NPC &&
             ((NPC) App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside()).getName() == npcEnums) ||
@@ -3934,7 +3934,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result meetNPC(NPC npc) {
 
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
 
         int friendshipLevel = -1;
         for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
@@ -4217,7 +4217,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public static Result giftNPC(NPC npcName, Item item, int count) {
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         switch (npcName.getName()) {
             case SEBASTIAN:
 //                //pashm-->??????
@@ -4445,7 +4445,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result friendshipList(NPC npc) {
         StringBuilder result = new StringBuilder();
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         for (Friendshipali friendship : npc.getFriendships()) {
             if (friendship.getPlayer() == currentPlayer) {
                 result.append(npc.getName());
@@ -4458,7 +4458,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result questsList(NPC npc) {
         StringBuilder result = new StringBuilder();
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         int friendshipLVL = -1;
 
         for (Friendshipali friendship : npc.getFriendships()) {
@@ -4481,7 +4481,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     public static Result questsFinish(NPC npc, int index) {
         index--;
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         if (npc.getName() == NPCEnums.SEBASTIAN) {
             int friendshipLVL = -1;
             for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
@@ -4823,8 +4823,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     @Override
     public void menuEnter(String menuName) {
-        Game game = new Game();
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         if (isFainted()) {
             System.out.println("You are fainted!");
         }
@@ -4910,13 +4909,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         );
 
         Map<String, int[]> shopPositions = Map.of(
-            "blacksmithmenu", new int[]{game.getBlackSmithTopLeftx(), game.getBlackSmithTopLefty(), game.getBlackSmithWidth(), game.getBlackSmithHeight()},
-            "carpentersshopmenu", new int[]{game.getCarpentersShopTopLeftx(), game.getCarpentersShopTopLefty(), game.getCarpentersShopWidth(), game.getCarpentersShopHeight()},
-            "fishshopmenu", new int[]{game.getFishShopTopLeftx(), game.getFishShopTopLefty(), game.getFishShopWidth(), game.getFishShopHeight()},
-            "jojamartmenu", new int[]{game.getJojoMartTopLeftx(), game.getJojoMartTopLefty(), game.getJojoMartWidth(), game.getJojoMartHeight()},
-            "marniesranchmenu", new int[]{game.getMarniesRanchTopLeftx(), game.getMarniesRanchTopLefty(), game.getMarniesRanchWidth(), game.getMarniesRanchHeight()},
-            "pirresgeneralstoremenu", new int[]{game.getPierresGeneralStoreTopLeftx(), game.getPierresGeneralStoreTopLefty(), game.getPierresGeneralStoreWidth(), game.getPierresGeneralStoreHeight()},
-            "thestardropsaloonmenu", new int[]{game.getTheStardropSaloonTopLeftx(), game.getTheStardropSaloonTopLefty(), game.getTheStardropSaloonWidth(), game.getTheStardropSaloonHeight()}
+            "blacksmithmenu", new int[]{ClientModel.getBlackSmithTopLeftx(), ClientModel.getBlackSmithTopLefty(), ClientModel.getBlackSmithWidth(), ClientModel.getBlackSmithHeight()},
+            "carpentersshopmenu", new int[]{ClientModel.getCarpentersShopTopLeftx(), ClientModel.getCarpentersShopTopLefty(), ClientModel.getCarpentersShopWidth(), ClientModel.getCarpentersShopHeight()},
+            "fishshopmenu", new int[]{ClientModel.getFishShopTopLeftx(), ClientModel.getFishShopTopLefty(), ClientModel.getFishShopWidth(), ClientModel.getFishShopHeight()},
+            "jojamartmenu", new int[]{ClientModel.getJojoMartTopLeftx(), ClientModel.getJojoMartTopLefty(), ClientModel.getJojoMartWidth(), ClientModel.getJojoMartHeight()},
+            "marniesranchmenu", new int[]{ClientModel.getMarniesRanchTopLeftx(), ClientModel.getMarniesRanchTopLefty(), ClientModel.getMarniesRanchWidth(), ClientModel.getMarniesRanchHeight()},
+            "pirresgeneralstoremenu", new int[]{ClientModel.getPierresGeneralStoreTopLeftx(), ClientModel.getPierresGeneralStoreTopLefty(), ClientModel.getPierresGeneralStoreWidth(), ClientModel.getPierresGeneralStoreHeight()},
+            "thestardropsaloonmenu", new int[]{ClientModel.getTheStardropSaloonTopLeftx(), ClientModel.getTheStardropSaloonTopLefty(), ClientModel.getTheStardropSaloonWidth(), ClientModel.getTheStardropSaloonHeight()}
         );
 
         if (shopHours.containsKey(menuName) && shopPositions.containsKey(menuName)) {
@@ -5014,8 +5013,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public void cheatAdd(int count) {
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + count);
-        System.out.println("new Balance: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold());
+        playerrr.setGold(playerrr.getGold() + count);
+        System.out.println("new Balance: " + playerrr.getGold());
     }
 
 }
