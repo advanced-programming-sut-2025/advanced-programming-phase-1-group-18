@@ -24,6 +24,7 @@ import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Items.CraftingItem;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.enums.CraftingRecipesEnums;
 import io.github.group18.enums.SkillEnum;
 import com.badlogic.gdx.InputMultiplexer;
@@ -93,7 +94,7 @@ public class GameMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        gameController.getGame().update(delta);
+        gameView.update(delta);
         lightningEffect.update(delta);
         gameView.render();
         lightningEffect.render(Main.getBatch());
@@ -123,7 +124,7 @@ public class GameMenu implements Screen {
         if (!advancingDay && sleepAlpha < 1f) {
             sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
             if (sleepAlpha >= 1f) {
-                GameMenuController.startNewDay(gameController.getGameMenu(), false, gameView);
+                GameMenuController.startNewDay(gameController.getGameMenu(), false, gameView, ClientModel.getPlayer());
                 advancingDay = true;
             }
         } else if (advancingDay && sleepAlpha > 0f) {

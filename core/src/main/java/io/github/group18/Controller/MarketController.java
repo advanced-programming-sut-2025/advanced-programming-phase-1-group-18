@@ -2,15 +2,16 @@ package io.github.group18.Controller;
 
 import io.github.group18.Model.App;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public interface MarketController<T> {
-    public default void cheatAdd(int count) {
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() + count);
-        System.out.println("new Balance: " + App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold());
+    public default void cheatAdd(int count,Player playerrr) {
+        playerrr.setGold(playerrr.getGold() + count);
+        System.out.println("new Balance: " + playerrr.getGold());
     }
 
     HashMap<T, Integer> getStock();
@@ -49,7 +50,7 @@ public interface MarketController<T> {
         return new Result(true, stringBuilder.toString());
     }
 
-    Result purchase(String name, String count);
+    Result purchase(String name, String count, Player playerrr);
 
     default boolean isAnimalStore() {
         return false;

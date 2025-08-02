@@ -13,12 +13,8 @@ import io.github.group18.enums.TreeSeedEnums;
 import java.util.HashMap;
 
 public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu, MarketController<Object> {
-    Player currentPlayer;
 
     public PierresGeneralStoreController() {
-        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
-            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        }
     }
 
     @Override
@@ -26,16 +22,16 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
         return App.getCurrentGame().getPierresGeneralStoreMarket().getStock();
     }
 
-    private Result handleSeedPurchase(ForagingSeedsEnums seedType, int quantity) {
+    private Result handleSeedPurchase(ForagingSeedsEnums seedType, int quantity,Player playerrr) {
         for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
             if (item instanceof ForagingSeed && ((ForagingSeed) item).getType() == seedType &&
                     App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
 
-                if (currentPlayer.getGold() >= ((ForagingSeed) item).getPrice()) {
-                    currentPlayer.getInventory().addItem((ForagingSeed) item, quantity);
+                if (playerrr.getGold() >= ((ForagingSeed) item).getPrice()) {
+                    playerrr.getInventory().addItem((ForagingSeed) item, quantity);
                     App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
                     ForagingSeed fg = (ForagingSeed) item;
-                    currentPlayer.setGold(currentPlayer.getGold() - (fg.getCorrectPrice()));
+                    playerrr.setGold(playerrr.getGold() - (fg.getCorrectPrice()));
 
                     return new Result(true, "You purchased " + quantity + " of " + seedType.toString());
                 } else {
@@ -46,8 +42,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
         return new Result(false, "Not enough stock in store");
     }
 
-    public Result purchase(String name, String count) {
-        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    public Result purchase(String name, String count,Player playerrr) {
         int quantity = -1;
         if (count == null) {
             quantity = 1;
@@ -59,9 +54,9 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 if (App.getCurrentGame().getPierresGeneralStoreMarket().isLargePackBougth()) {
                     return new Result(false, "Out of Stock");
                 } else {
-                    if (currentPlayer.getGold() > 2000) {
-                        currentPlayer.setGold(currentPlayer.getGold() - 2000);
-                        currentPlayer.getInventory().setMaxQuantity(24);
+                    if (playerrr.getGold() > 2000) {
+                        playerrr.setGold(playerrr.getGold() - 2000);
+                        playerrr.getInventory().setMaxQuantity(24);
                         App.getCurrentGame().getPierresGeneralStoreMarket().setLargePackBougth(true);
                         return new Result(true, "Bought Large Pack");
                     } else {
@@ -72,9 +67,9 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 if (App.getCurrentGame().getPierresGeneralStoreMarket().isDeluxePackBought()) {
                     return new Result(false, "Out of Stock");
                 } else {
-                    if (currentPlayer.getGold() > 2000) {
-                        currentPlayer.setGold(currentPlayer.getGold() - 10000);
-                        currentPlayer.getInventory().setMaxQuantity(Integer.MAX_VALUE);
+                    if (playerrr.getGold() > 2000) {
+                        playerrr.setGold(playerrr.getGold() - 10000);
+                        playerrr.getInventory().setMaxQuantity(Integer.MAX_VALUE);
                         App.getCurrentGame().getPierresGeneralStoreMarket().setDeluxePackBought(true);
                         return new Result(true, "Bought Deluxe Pack");
                     } else {
@@ -86,10 +81,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("rice") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity = true;
-                        if (currentPlayer.getGold() >= ((Food) item).getPrice()) {
-                            currentPlayer.getInventory().addItem((Food) item, quantity);
+                        if (playerrr.getGold() >= ((Food) item).getPrice()) {
+                            playerrr.getInventory().addItem((Food) item, quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Food) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Food) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -106,10 +101,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof AllCrop && ((AllCrop) item).getCorrectName().equalsIgnoreCase("wheatseeds") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity1 = true;
-                        if (currentPlayer.getGold() >= ((AllCrop) item).getCorrectPrice()) {
-                            currentPlayer.getInventory().addItem(((AllCrop) item), quantity);
+                        if (playerrr.getGold() >= ((AllCrop) item).getCorrectPrice()) {
+                            playerrr.getInventory().addItem(((AllCrop) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((AllCrop) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((AllCrop) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -126,10 +121,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof MarketProducts && ((MarketProducts) item).getCorrectName().equals("bouquet") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity2 = true;
-                        if (currentPlayer.getGold() >= ((MarketProducts) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((MarketProducts) item), quantity);
+                        if (playerrr.getGold() >= ((MarketProducts) item).getPrice()) {
+                            playerrr.getInventory().addItem(((MarketProducts) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((MarketProducts) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((MarketProducts) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -146,10 +141,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof MarketProducts && ((MarketProducts) item).getCorrectName().equals("weddingring") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity3 = true;
-                        if (currentPlayer.getGold() >= ((MarketProducts) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((MarketProducts) item), quantity);
+                        if (playerrr.getGold() >= ((MarketProducts) item).getPrice()) {
+                            playerrr.getInventory().addItem(((MarketProducts) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((MarketProducts) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((MarketProducts) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -166,12 +161,12 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Craftingrecipe && ((Craftingrecipe) item).getName().equals("Dehydrator") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity40 = true;
-                        if (currentPlayer.getGold() >= ((Craftingrecipe) item).getPrice()) {
+                        if (playerrr.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
                             //TODO
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe) item).getPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Craftingrecipe) item).getPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -188,12 +183,12 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Craftingrecipe && ((Craftingrecipe) item).getName().equals("GrassStarter") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity4 = true;
-                        if (currentPlayer.getGold() >= ((Craftingrecipe) item).getPrice()) {
+                        if (playerrr.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
                             //TODO
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Craftingrecipe) item).getPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Craftingrecipe) item).getPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -210,11 +205,11 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Food && ((Food) item).getName().equals("sugar") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity5 = true;
-                        if (currentPlayer.getGold() >= ((Food) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((Food) item), quantity);
+                        if (playerrr.getGold() >= ((Food) item).getPrice()) {
+                            playerrr.getInventory().addItem(((Food) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
 
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Food) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Food) item).getCorrectPrice());
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
@@ -230,10 +225,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof ArtisanGoods && ((ArtisanGoods) item).getCorrectName().equals("Oil_Corn") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity6 = true;
-                        if (currentPlayer.getGold() >= ((ArtisanGoods) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((ArtisanGoods) item), quantity);
+                        if (playerrr.getGold() >= ((ArtisanGoods) item).getPrice()) {
+                            playerrr.getInventory().addItem(((ArtisanGoods) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((ArtisanGoods) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((ArtisanGoods) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -250,10 +245,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof ArtisanGoods && ((ArtisanGoods) item).getCorrectName().equals("Vinegar") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity7 = true;
-                        if (currentPlayer.getGold() >= ((ArtisanGoods) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((ArtisanGoods) item), quantity);
+                        if (playerrr.getGold() >= ((ArtisanGoods) item).getPrice()) {
+                            playerrr.getInventory().addItem(((ArtisanGoods) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((ArtisanGoods) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((ArtisanGoods) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -270,10 +265,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Deluxe Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity8 = true;
-                        if (currentPlayer.getGold() >= ((Fertilizer) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((Fertilizer) item), quantity);
+                        if (playerrr.getGold() >= ((Fertilizer) item).getPrice()) {
+                            playerrr.getInventory().addItem(((Fertilizer) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Fertilizer) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Fertilizer) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -290,10 +285,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Speed-Gro") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity9 = true;
-                        if (currentPlayer.getGold() >= ((Fertilizer) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((Fertilizer) item), quantity);
+                        if (playerrr.getGold() >= ((Fertilizer) item).getPrice()) {
+                            playerrr.getInventory().addItem(((Fertilizer) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Fertilizer) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Fertilizer) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -310,11 +305,11 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.AppleSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity10 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
 
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
                             return new Result(false, "You don't have enough money");
@@ -330,10 +325,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.ApricotSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity11 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -350,10 +345,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.CherrySapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity12 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -370,10 +365,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.OrangeSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity13 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -390,10 +385,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.PeachSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity14 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -410,10 +405,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof TreeSeed && ((TreeSeed) item).getType() == TreeSeedEnums.PomegranateSapling && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity15 = true;
-                        if (currentPlayer.getGold() >= ((TreeSeed) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((TreeSeed) item), quantity);
+                        if (playerrr.getGold() >= ((TreeSeed) item).getPrice()) {
+                            playerrr.getInventory().addItem(((TreeSeed) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((TreeSeed) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((TreeSeed) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -430,10 +425,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Basic Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity16 = true;
-                        if (currentPlayer.getGold() >= ((Fertilizer) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((Fertilizer) item), quantity);
+                        if (playerrr.getGold() >= ((Fertilizer) item).getPrice()) {
+                            playerrr.getInventory().addItem(((Fertilizer) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Fertilizer) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Fertilizer) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -450,10 +445,10 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 for (Object item : App.getCurrentGame().getPierresGeneralStoreMarket().getStock().keySet()) {
                     if (item instanceof Fertilizer && ((Fertilizer) item).getName().equals("Quality Retaining Soil") && App.getCurrentGame().getPierresGeneralStoreMarket().getStock().get(item) >= quantity) {
                         validquantity17 = true;
-                        if (currentPlayer.getGold() >= ((Fertilizer) item).getPrice()) {
-                            currentPlayer.getInventory().addItem(((Fertilizer) item), quantity);
+                        if (playerrr.getGold() >= ((Fertilizer) item).getPrice()) {
+                            playerrr.getInventory().addItem(((Fertilizer) item), quantity);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
-                            currentPlayer.setGold(currentPlayer.getGold() - ((Fertilizer) item).getCorrectPrice());
+                            playerrr.setGold(playerrr.getGold() - ((Fertilizer) item).getCorrectPrice());
 
                             return new Result(true, "You purchased " + quantity + " of " + name);
                         } else {
@@ -466,65 +461,65 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                 }
                 break;
             case "parsnipseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.ParsnipSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.ParsnipSeeds, quantity,playerrr);
             case "beanstarter":
-                return handleSeedPurchase(ForagingSeedsEnums.BeanStarter, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.BeanStarter, quantity,playerrr);
             case "cauliflowerseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.CauliflowerSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.CauliflowerSeeds, quantity,playerrr);
             case "potatoseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.PotatoSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.PotatoSeeds, quantity,playerrr);
             case "tulipbulb":
-                return handleSeedPurchase(ForagingSeedsEnums.TulipBulb, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.TulipBulb, quantity,playerrr);
             case "kaleseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.KaleSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.KaleSeeds, quantity,playerrr);
             case "jazzseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.JazzSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.JazzSeeds, quantity,playerrr);
             case "garlicseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.GarlicSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.GarlicSeeds, quantity,playerrr);
             case "riceshoot":
-                return handleSeedPurchase(ForagingSeedsEnums.RiceShoot, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.RiceShoot, quantity,playerrr);
             case "melonseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.MelonSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.MelonSeeds, quantity,playerrr);
             case "tomatoseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.TomatoSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.TomatoSeeds, quantity,playerrr);
             case "blueberryseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.BlueberrySeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.BlueberrySeeds, quantity,playerrr);
             case "pepperseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.PepperSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.PepperSeeds, quantity,playerrr);
             case "wheatseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.WheatSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.WheatSeeds, quantity,playerrr);
             case "radishseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.RadishSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.RadishSeeds, quantity,playerrr);
             case "poppyseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.PoppySeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.PoppySeeds, quantity,playerrr);
             case "spangleseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.SpangleSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.SpangleSeeds, quantity,playerrr);
             case "hopsstarter":
-                return handleSeedPurchase(ForagingSeedsEnums.HopsStarter, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.HopsStarter, quantity,playerrr);
             case "cornseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.CornSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.CornSeeds, quantity,playerrr);
             case "sunflowerseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.SunflowerSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.SunflowerSeeds, quantity,playerrr);
             case "redcabbageseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.RedCabbageSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.RedCabbageSeeds, quantity,playerrr);
             case "eggplantseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.EggplantSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.EggplantSeeds, quantity,playerrr);
             case "pumpkinseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.PumpkinSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.PumpkinSeeds, quantity,playerrr);
             case "bokchoyseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.BokChoySeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.BokChoySeeds, quantity,playerrr);
             case "yamseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.YamSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.YamSeeds, quantity,playerrr);
             case "cranberryseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.CranberrySeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.CranberrySeeds, quantity,playerrr);
             case "fairyseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.FairySeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.FairySeeds, quantity,playerrr);
             case "amaranthseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.AmaranthSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.AmaranthSeeds, quantity,playerrr);
             case "grapestarter":
-                return handleSeedPurchase(ForagingSeedsEnums.GrapeStarter, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.GrapeStarter, quantity,playerrr);
             case "artichokeseeds":
-                return handleSeedPurchase(ForagingSeedsEnums.ArtichokeSeeds, quantity);
+                return handleSeedPurchase(ForagingSeedsEnums.ArtichokeSeeds, quantity,playerrr);
             default:
                 return new Result(false, "Invalid product name");
         }
@@ -532,7 +527,7 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
         return null;
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName,Player playerrrplayerrr) {
         //from markets we can move to gamemenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

@@ -11,12 +11,7 @@ import java.util.HashMap;
 
 public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketController<Mineral> {
 
-    Player currentPlayer;
-
     public BlackSmithController() {
-        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
-            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        }
     }
 
     @Override
@@ -24,14 +19,14 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
         return App.getCurrentGame().getBlackSmithMarket().getStock();
     }
 
-    public Result purchase(String name, String count) {
+    public Result purchase(String name, String count,Player playerrr) {
         int quantity = -1;
         if (count == null) {
             quantity = 1;
         } else {
             quantity = Integer.parseInt(count);
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         switch (name.toLowerCase()) {
             case "copperore":
                 boolean validquantity = false;
@@ -119,7 +114,7 @@ public class BlackSmithController implements MenuEnter, ShowCurrentMenu, MarketC
         return null;
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName,Player playerrr) {
         //from markets we can move to gamemenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

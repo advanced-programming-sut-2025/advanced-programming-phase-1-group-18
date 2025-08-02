@@ -12,7 +12,7 @@ public class ClientModel {
     public static ServerConnectionThread SERVER_CONNECTION_THREAD;
     public static Socket trackerSocket;
 
-    private Player player;
+    private static Player player;
 
     public static final int player1TopLeftx = 0;
     public static final int player1TopLefty = 0;
@@ -598,6 +598,6 @@ public class ClientModel {
     }
 
     public static void setPlayer(Player player) {
-        this.player = player;
+        ClientModel.player = player;
     }
 }

@@ -6,6 +6,7 @@ import io.github.group18.Model.Items.AllCrop;
 import io.github.group18.Model.Items.ForagingCrop;
 import io.github.group18.Model.Items.ForagingSeed;
 import io.github.group18.Model.Items.MixedSeed;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.enums.ForagingCropsEnums;
 import io.github.group18.enums.ForagingSeedsEnums;
 import io.github.group18.enums.ForagingTreesEnums;
@@ -270,8 +271,8 @@ public class Farm {
 
         // Blacksmith Shop
         ArrayList<Cord> cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getBlackSmithTopLeftx(); i < topleftx + App.getCurrentGame().getBlackSmithTopLeftx() + App.getCurrentGame().getBlackSmithWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getBlackSmithTopLefty(); j < toplefty + App.getCurrentGame().getBlackSmithTopLefty() + App.getCurrentGame().getBlackSmithHeight(); j++) {
+        for (int i = topleftx + ClientModel.getBlackSmithTopLeftx(); i < topleftx + ClientModel.getBlackSmithTopLeftx() + ClientModel.getBlackSmithWidth(); i++) {
+            for (int j = toplefty + ClientModel.getBlackSmithTopLefty(); j < toplefty + ClientModel.getBlackSmithTopLefty() + ClientModel.getBlackSmithHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -279,18 +280,18 @@ public class Farm {
         App.getCurrentGame().getBlackSmithMarket().fillStock();
         App.getCurrentGame().getBlackSmithMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getBlackSmithEnterancex(),
-            toplefty + App.getCurrentGame().getBlackSmithEnterancey(),
-            topleftx + App.getCurrentGame().getBlackSmithTopLeftx(),
-            toplefty + App.getCurrentGame().getBlackSmithTopLefty(),
-            topleftx + App.getCurrentGame().getBlackSmithTopLeftx() + App.getCurrentGame().getBlackSmithWidth(),
-            toplefty + App.getCurrentGame().getBlackSmithTopLefty() + App.getCurrentGame().getBlackSmithHeight()
+            topleftx + ClientModel.getBlackSmithEnterancex(),
+            toplefty + ClientModel.getBlackSmithEnterancey(),
+            topleftx + ClientModel.getBlackSmithTopLeftx(),
+            toplefty + ClientModel.getBlackSmithTopLefty(),
+            topleftx + ClientModel.getBlackSmithTopLeftx() + ClientModel.getBlackSmithWidth(),
+            toplefty + ClientModel.getBlackSmithTopLefty() + ClientModel.getBlackSmithHeight()
         );
 
         //Carpenter's Shop
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getCarpentersShopTopLeftx(); i < topleftx + App.getCurrentGame().getCarpentersShopTopLeftx() + App.getCurrentGame().getCarpentersShopWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getCarpentersShopTopLefty(); j < toplefty + App.getCurrentGame().getCarpentersShopTopLefty() + App.getCurrentGame().getCarpentersShopHeight(); j++) {
+        for (int i = topleftx + ClientModel.getCarpentersShopTopLeftx(); i < topleftx + ClientModel.getCarpentersShopTopLeftx() + ClientModel.getCarpentersShopWidth(); i++) {
+            for (int j = toplefty + ClientModel.getCarpentersShopTopLefty(); j < toplefty + ClientModel.getCarpentersShopTopLefty() + ClientModel.getCarpentersShopHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -298,18 +299,18 @@ public class Farm {
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
         App.getCurrentGame().getCarpentersShopMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getCarpentersShopEnterancex(),
-            toplefty + App.getCurrentGame().getCarpentersShopEnterancey(),
-            topleftx + App.getCurrentGame().getCarpentersShopTopLeftx(),
-            toplefty + App.getCurrentGame().getCarpentersShopTopLefty(),
-            topleftx + App.getCurrentGame().getCarpentersShopTopLeftx() + App.getCurrentGame().getCarpentersShopWidth(),
-            toplefty + App.getCurrentGame().getCarpentersShopTopLefty() + App.getCurrentGame().getCarpentersShopHeight()
+            topleftx + ClientModel.getCarpentersShopEnterancex(),
+            toplefty + ClientModel.getCarpentersShopEnterancey(),
+            topleftx + ClientModel.getCarpentersShopTopLeftx(),
+            toplefty + ClientModel.getCarpentersShopTopLefty(),
+            topleftx + ClientModel.getCarpentersShopTopLeftx() + ClientModel.getCarpentersShopWidth(),
+            toplefty + ClientModel.getCarpentersShopTopLefty() + ClientModel.getCarpentersShopHeight()
         );
 
         // Fish Shop
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getFishShopTopLeftx(); i < topleftx + App.getCurrentGame().getFishShopTopLeftx() + App.getCurrentGame().getFishShopWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getFishShopTopLefty(); j < toplefty + App.getCurrentGame().getFishShopTopLefty() + App.getCurrentGame().getFishShopHeight(); j++) {
+        for (int i = topleftx + ClientModel.getFishShopTopLeftx(); i < topleftx + ClientModel.getFishShopTopLeftx() + ClientModel.getFishShopWidth(); i++) {
+            for (int j = toplefty + ClientModel.getFishShopTopLefty(); j < toplefty + ClientModel.getFishShopTopLefty() + ClientModel.getFishShopHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -317,17 +318,17 @@ public class Farm {
         App.getCurrentGame().getFishShopMarket().fillStock();
         App.getCurrentGame().getFishShopMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getFishShopEnterancex(),
-            toplefty + App.getCurrentGame().getFishShopEnterancey(),
-            topleftx + App.getCurrentGame().getFishShopTopLeftx(),
-            toplefty + App.getCurrentGame().getFishShopTopLefty(),
-            topleftx + App.getCurrentGame().getFishShopTopLeftx() + App.getCurrentGame().getFishShopWidth(),
-            toplefty + App.getCurrentGame().getFishShopTopLefty() + App.getCurrentGame().getFishShopHeight()
+            topleftx + ClientModel.getFishShopEnterancex(),
+            toplefty + ClientModel.getFishShopEnterancey(),
+            topleftx + ClientModel.getFishShopTopLeftx(),
+            toplefty + ClientModel.getFishShopTopLefty(),
+            topleftx + ClientModel.getFishShopTopLeftx() + ClientModel.getFishShopWidth(),
+            toplefty + ClientModel.getFishShopTopLefty() + ClientModel.getFishShopHeight()
         );
         // JojaMart
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getJojoMartTopLeftx(); i < topleftx + App.getCurrentGame().getJojoMartTopLeftx() + App.getCurrentGame().getJojoMartWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getJojoMartTopLefty(); j < toplefty + App.getCurrentGame().getJojoMartTopLefty() + App.getCurrentGame().getJojoMartHeight(); j++) {
+        for (int i = topleftx + ClientModel.getJojoMartTopLeftx(); i < topleftx + ClientModel.getJojoMartTopLeftx() + ClientModel.getJojoMartWidth(); i++) {
+            for (int j = toplefty + ClientModel.getJojoMartTopLefty(); j < toplefty + ClientModel.getJojoMartTopLefty() + ClientModel.getJojoMartHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -335,18 +336,18 @@ public class Farm {
         App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
         App.getCurrentGame().getJojoMartMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getJojoMartEnterancex(),
-            toplefty + App.getCurrentGame().getJojoMartEnterancey(),
-            topleftx + App.getCurrentGame().getJojoMartTopLeftx(),
-            toplefty + App.getCurrentGame().getJojoMartTopLefty(),
-            topleftx + App.getCurrentGame().getJojoMartTopLeftx() + App.getCurrentGame().getJojoMartWidth(),
-            toplefty + App.getCurrentGame().getJojoMartTopLefty() + App.getCurrentGame().getJojoMartHeight()
+            topleftx + ClientModel.getJojoMartEnterancex(),
+            toplefty + ClientModel.getJojoMartEnterancey(),
+            topleftx + ClientModel.getJojoMartTopLeftx(),
+            toplefty + ClientModel.getJojoMartTopLefty(),
+            topleftx + ClientModel.getJojoMartTopLeftx() + ClientModel.getJojoMartWidth(),
+            toplefty + ClientModel.getJojoMartTopLefty() + ClientModel.getJojoMartHeight()
         );
 
         // Marnie's Ranch
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getMarniesRanchTopLeftx(); i < topleftx + App.getCurrentGame().getMarniesRanchTopLeftx() + App.getCurrentGame().getMarniesRanchWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getMarniesRanchTopLefty(); j < toplefty + App.getCurrentGame().getMarniesRanchTopLefty() + App.getCurrentGame().getMarniesRanchHeight(); j++) {
+        for (int i = topleftx + ClientModel.getMarniesRanchTopLeftx(); i < topleftx + ClientModel.getMarniesRanchTopLeftx() + ClientModel.getMarniesRanchWidth(); i++) {
+            for (int j = toplefty + ClientModel.getMarniesRanchTopLefty(); j < toplefty + ClientModel.getMarniesRanchTopLefty() + ClientModel.getMarniesRanchHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -354,18 +355,18 @@ public class Farm {
         App.getCurrentGame().getMarniesRanchMarket().fillStock();
         App.getCurrentGame().getMarniesRanchMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getMarniesRanchEnterancex(),
-            toplefty + App.getCurrentGame().getMarniesRanchEnterancey(),
-            topleftx + App.getCurrentGame().getMarniesRanchTopLeftx(),
-            toplefty + App.getCurrentGame().getMarniesRanchTopLefty(),
-            topleftx + App.getCurrentGame().getMarniesRanchTopLeftx() + App.getCurrentGame().getMarniesRanchWidth(),
-            toplefty + App.getCurrentGame().getMarniesRanchTopLefty() + App.getCurrentGame().getMarniesRanchHeight()
+            topleftx + ClientModel.getMarniesRanchEnterancex(),
+            toplefty + ClientModel.getMarniesRanchEnterancey(),
+            topleftx + ClientModel.getMarniesRanchTopLeftx(),
+            toplefty + ClientModel.getMarniesRanchTopLefty(),
+            topleftx + ClientModel.getMarniesRanchTopLeftx() + ClientModel.getMarniesRanchWidth(),
+            toplefty + ClientModel.getMarniesRanchTopLefty() + ClientModel.getMarniesRanchHeight()
         );
 
         // Pierre's General Store
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx(); i < topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx() + App.getCurrentGame().getPierresGeneralStoreWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty(); j < toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty() + App.getCurrentGame().getPierresGeneralStoreHeight(); j++) {
+        for (int i = topleftx + ClientModel.getPierresGeneralStoreTopLeftx(); i < topleftx + ClientModel.getPierresGeneralStoreTopLeftx() + ClientModel.getPierresGeneralStoreWidth(); i++) {
+            for (int j = toplefty + ClientModel.getPierresGeneralStoreTopLefty(); j < toplefty + ClientModel.getPierresGeneralStoreTopLefty() + ClientModel.getPierresGeneralStoreHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -373,18 +374,18 @@ public class Farm {
         App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
         App.getCurrentGame().getPierresGeneralStoreMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getPierresGeneralStoreEnterancex(),
-            toplefty + App.getCurrentGame().getPierresGeneralStoreEnterancey(),
-            topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx(),
-            toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty(),
-            topleftx + App.getCurrentGame().getPierresGeneralStoreTopLeftx() + App.getCurrentGame().getPierresGeneralStoreWidth(),
-            toplefty + App.getCurrentGame().getPierresGeneralStoreTopLefty() + App.getCurrentGame().getPierresGeneralStoreHeight()
+            topleftx + ClientModel.getPierresGeneralStoreEnterancex(),
+            toplefty + ClientModel.getPierresGeneralStoreEnterancey(),
+            topleftx + ClientModel.getPierresGeneralStoreTopLeftx(),
+            toplefty + ClientModel.getPierresGeneralStoreTopLefty(),
+            topleftx + ClientModel.getPierresGeneralStoreTopLeftx() + ClientModel.getPierresGeneralStoreWidth(),
+            toplefty + ClientModel.getPierresGeneralStoreTopLefty() + ClientModel.getPierresGeneralStoreHeight()
         );
 
         // Stardrop Saloon
         cords = new ArrayList<>();
-        for (int i = topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx(); i < topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx() + App.getCurrentGame().getTheStardropSaloonWidth(); i++) {
-            for (int j = toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty(); j < toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty() + App.getCurrentGame().getTheStardropSaloonHeight(); j++) {
+        for (int i = topleftx + ClientModel.getTheStardropSaloonTopLeftx(); i < topleftx + ClientModel.getTheStardropSaloonTopLeftx() + ClientModel.getTheStardropSaloonWidth(); i++) {
+            for (int j = toplefty + ClientModel.getTheStardropSaloonTopLefty(); j < toplefty + ClientModel.getTheStardropSaloonTopLefty() + ClientModel.getTheStardropSaloonHeight(); j++) {
                 cords.add(new Cord(i, j));
             }
         }
@@ -392,23 +393,23 @@ public class Farm {
         App.getCurrentGame().getTheStardropSaloonMarket().fillStock();
         App.getCurrentGame().getTheStardropSaloonMarket().adaptMap(
             cords,
-            topleftx + App.getCurrentGame().getTheStardropSaloonEnterancex(),
-            toplefty + App.getCurrentGame().getTheStardropSaloonEnterancey(),
-            topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx(),
-            toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty(),
-            topleftx + App.getCurrentGame().getTheStardropSaloonTopLeftx() + App.getCurrentGame().getTheStardropSaloonWidth(),
-            toplefty + App.getCurrentGame().getTheStardropSaloonTopLefty() + App.getCurrentGame().getTheStardropSaloonHeight()
+            topleftx + ClientModel.getTheStardropSaloonEnterancex(),
+            toplefty + ClientModel.getTheStardropSaloonEnterancey(),
+            topleftx + ClientModel.getTheStardropSaloonTopLeftx(),
+            toplefty + ClientModel.getTheStardropSaloonTopLefty(),
+            topleftx + ClientModel.getTheStardropSaloonTopLeftx() + ClientModel.getTheStardropSaloonWidth(),
+            toplefty + ClientModel.getTheStardropSaloonTopLefty() + ClientModel.getTheStardropSaloonHeight()
         );
 
-        App.getCurrentGame().setNPCSEBASTIAN(new NPC(NPCEnums.SEBASTIAN, App.getCurrentGame().getNPCSEBASTIANx(), App.getCurrentGame().getNPCSEBASTIANy()));
+        App.getCurrentGame().setNPCSEBASTIAN(new NPC(NPCEnums.SEBASTIAN, ClientModel.getNPCSEBASTIANx(), ClientModel.getNPCSEBASTIANy()));
 
-        App.getCurrentGame().setNPCABIGAIL(new NPC(NPCEnums.ABIGAIL, App.getCurrentGame().getNPCABIGAILx(), App.getCurrentGame().getNPCABIGAILy()));
+        App.getCurrentGame().setNPCABIGAIL(new NPC(NPCEnums.ABIGAIL, ClientModel.getNPCABIGAILx(), ClientModel.getNPCABIGAILy()));
 
-        App.getCurrentGame().setNPCHARVEY(new NPC(NPCEnums.HARVEY, App.getCurrentGame().getNPCHARVEYx(), App.getCurrentGame().getNPCHARVEYy()));
+        App.getCurrentGame().setNPCHARVEY(new NPC(NPCEnums.HARVEY, ClientModel.getNPCHARVEYx(), ClientModel.getNPCHARVEYy()));
 
-        App.getCurrentGame().setNPCLEAH(new NPC(NPCEnums.LEAH, App.getCurrentGame().getNPCLEAHx(), App.getCurrentGame().getNPCLEAHy()));
+        App.getCurrentGame().setNPCLEAH(new NPC(NPCEnums.LEAH, ClientModel.getNPCLEAHx(), ClientModel.getNPCLEAHy()));
 
-        App.getCurrentGame().setNPCROBIN(new NPC(NPCEnums.ROBIN, App.getCurrentGame().getNPCROBINx(), App.getCurrentGame().getNPCROBINy()));
+        App.getCurrentGame().setNPCROBIN(new NPC(NPCEnums.ROBIN, ClientModel.getNPCROBINx(), ClientModel.getNPCROBINy()));
     }
 
     //Lake, Greenhouse, Cottage, House, Satl, Quarry, ForagingTree, ForagingCrops, Stone, ForagingSeeds

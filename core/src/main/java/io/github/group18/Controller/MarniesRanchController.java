@@ -19,16 +19,14 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
         return App.getCurrentGame().getMarniesRanchMarket().getStock();
     }
 
-    public Result purchase(String name, String count) {
+    public Result purchase(String name, String count,Player playerrr) {
         int quantity = -1;
-        if (count == null)
-        {
+        if (count == null) {
             quantity = 1;
-        } else
-        {
+        } else {
             quantity = Integer.parseInt(count);
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         switch (name.toLowerCase()) {
             case "hay":
                 boolean validquantity = false;
@@ -86,8 +84,7 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         }
                     }
                 }
-                if (!validquantity2)
-                {
+                if (!validquantity2) {
                     return new Result(false, "Not enough stock in store");
                 }
                 break;
@@ -98,28 +95,25 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
         return null;
     }
 
-    public static Result buyAnimal(String typeOfAnimal, String nameOfAnimal)
-    {
-        boolean uniqueName = IsAnimalNameUnique(nameOfAnimal);
-        if(!uniqueName)
-        {
+    public static Result buyAnimal(String typeOfAnimal, String nameOfAnimal,Player playerrr) {
+        boolean uniqueName = IsAnimalNameUnique(nameOfAnimal,playerrr);
+        if (!uniqueName) {
             return new Result(false, "Your entered animal name is not unique!");
         }
-        typeOfAnimal=typeOfAnimal.toLowerCase();
+        typeOfAnimal = typeOfAnimal.toLowerCase();
 
         switch (typeOfAnimal) {
             case "chicken":
-                if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 800) {
+                if (playerrr.getGold() < 800) {
                     return new Result(false, "You don't have enough gold");
                 } else {
                     CageAnimal animal = new CageAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyCage() == null
+                        && playerrr.getMyFarm().getMyBigCoop() == null
+                        && playerrr.getMyFarm().getMyDeluxeCoop() == null) {
                         return new Result(false, "You don't have any coops for keep this chicken!");
                     }
-                    if (  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage()!= null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getCageAnimals().size())) {
+                    if (playerrr.getMyFarm().getMyCage() != null && (playerrr.getMyFarm().getMyCage().getMaxCapacity() > playerrr.getMyFarm().getMyCage().getCageAnimals().size())) {
                         //sets pack
                         animal.setType((CageAnimalsEnums.Chicken));
                         animal.setName(nameOfAnimal);
@@ -129,15 +123,15 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("coop");
 
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyCage().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyCage().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 800;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 800;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Chicken bought successfully and went to simple coop");
 
-                    } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()!= null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals().size())) {
+                    } else if (playerrr.getMyFarm().getMyBigCoop() != null && (playerrr.getMyFarm().getMyBigCoop().getMaxCapacity() > playerrr.getMyFarm().getMyBigCoop().getCageAnimals().size())) {
                         //set pack
                         animal.setType((CageAnimalsEnums.Chicken));
                         animal.setName(nameOfAnimal);
@@ -146,15 +140,15 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("bigcoop");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 800;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 800;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Chicken bought successfully and went to big coop");
 
-                    } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop()!= null && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) {
+                    } else if (playerrr.getMyFarm().getMyDeluxeCoop() != null && playerrr.getMyFarm().getMyDeluxeCoop().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) {
                         //set pack
                         animal.setType(CageAnimalsEnums.Chicken);
                         animal.setName(nameOfAnimal);
@@ -163,37 +157,31 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxecoop");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 800;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 800;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Chicken bought successfully and went to deluxe coop");
 
-                    } else
-                    {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this chicken!");
                     }
                 }
 
 
-
             case "cow":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<1500)
-                {
+                if (playerrr.getGold() < 1500) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     TavilehAnimal animal = new TavilehAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyTavileh() == null
+                        && playerrr.getMyFarm().getMyBigBarn() == null
+                        && playerrr.getMyFarm().getMyDeluxeBarn() == null) {
                         return new Result(false, "You don't have any barns for keep this cow!");
                     }
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
+                    if (playerrr.getMyFarm().getMyTavileh() != null && (playerrr.getMyFarm().getMyTavileh().getMaxCapacity() > playerrr.getMyFarm().getMyTavileh().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyTavileh().getStatus()) {
                         //set animal pack
                         animal.setType((TavilehAnimalEnums.Cow));
                         animal.setName(nameOfAnimal);
@@ -202,15 +190,15 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("barn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyTavileh().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 1500;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Cow bought successfully and went to simple barn");
 
-                    } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getStatus()) {
+                    } else if (playerrr.getMyFarm().getMyBigBarn() != null && (playerrr.getMyFarm().getMyBigBarn().getMaxCapacity() > playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyBigBarn().getStatus()) {
                         //set pack
                         animal.setType((TavilehAnimalEnums.Cow));
                         animal.setName(nameOfAnimal);
@@ -219,16 +207,16 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("bigbarn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 1500;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Cow bought successfully and went to big barn");
 
-                    } else if ((App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getStatus()
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()!=null) {
+                    } else if ((playerrr.getMyFarm().getMyDeluxeBarn().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyDeluxeBarn().getStatus()
+                        && playerrr.getMyFarm().getMyDeluxeBarn() != null) {
                         //set animal pack
                         animal.setType((TavilehAnimalEnums.Cow));
                         animal.setName(nameOfAnimal);
@@ -237,34 +225,29 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxebarn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 1500;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Cow bought successfully and went to deluxe barn");
 
-                    } else
-                    {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this cow!");
                     }
                 }
 
             case "goat":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<4000)
-                {
+                if (playerrr.getGold() < 4000) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     TavilehAnimal animal = new TavilehAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyTavileh() == null
+                        && playerrr.getMyFarm().getMyBigBarn() == null) {
                         return new Result(false, "You don't have any barns for keep this goat!");
                     }
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh()!=null  && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
+                    if (playerrr.getMyFarm().getMyTavileh() != null && (playerrr.getMyFarm().getMyTavileh().getMaxCapacity() > playerrr.getMyFarm().getMyTavileh().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyTavileh().getStatus()) {
                         animal.setType((TavilehAnimalEnums.Goat));
                         animal.setName(nameOfAnimal);
                         animal.setPrice(4000);
@@ -272,15 +255,15 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("barn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyTavileh().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 4000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 4000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Goat bought successfully and went to simple barn");
 
-                    } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getStatus()) {
+                    } else if (playerrr.getMyFarm().getMyBigBarn() != null && (playerrr.getMyFarm().getMyBigBarn().getMaxCapacity() > playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyBigBarn().getStatus()) {
                         //set animal pack
                         animal.setType((TavilehAnimalEnums.Cow));
                         animal.setName(nameOfAnimal);
@@ -289,33 +272,28 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("bigbarn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyBigBarn().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 4000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 4000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Goat bought successfully and went to big barn");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this goat!");
                     }
                 }
 
             case "duck":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<1200)
-                {
+                if (playerrr.getGold() < 1200) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     CageAnimal animal = new CageAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()== null
-                            && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyBigCoop() == null
+                        && playerrr.getMyFarm().getMyDeluxeCoop() == null) {
                         return new Result(false, "You don't have any coops for keep this duck!");
                     }
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()!= null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getStatus()) {
+                    if (playerrr.getMyFarm().getMyBigCoop() != null && (playerrr.getMyFarm().getMyBigCoop().getMaxCapacity() > playerrr.getMyFarm().getMyBigCoop().getCageAnimals().size()) && playerrr.getMyFarm().getMyBigCoop().getStatus()) {
                         //set animal pack
                         animal.setType((CageAnimalsEnums.Duck));
                         animal.setName(nameOfAnimal);
@@ -324,15 +302,14 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("bigcoop");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1200;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 1200;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Duck bought successfully and went to big coop");
-                    }
-                    else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop()!= null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getStatus()) {
+                    } else if (playerrr.getMyFarm().getMyDeluxeCoop() != null && (playerrr.getMyFarm().getMyDeluxeCoop().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) && playerrr.getMyFarm().getMyDeluxeCoop().getStatus()) {
                         animal.setType((CageAnimalsEnums.Duck));
                         animal.setName(nameOfAnimal);
                         animal.setPrice(1200);
@@ -340,33 +317,28 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxecoop");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1200;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 1200;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Duck bought successfully and went to deluxe coop");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this Duck!");
                     }
                 }
 
             case "sheep":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<1200)
-                {
+                if (playerrr.getGold() < 1200) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     TavilehAnimal animal = new TavilehAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyDeluxeBarn() == null) {
                         return new Result(false, "You don't have any barns for keep this sheep!");
                     }
 
-                    if ( App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getStatus()) {
+                    if (playerrr.getMyFarm().getMyDeluxeBarn() != null && (playerrr.getMyFarm().getMyDeluxeBarn().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyDeluxeBarn().getStatus()) {
                         animal.setType((TavilehAnimalEnums.Sheep));
                         animal.setName(nameOfAnimal);
                         animal.setPrice(8000);
@@ -374,33 +346,28 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxebarn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 8000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 8000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Sheep bought successfully and went to deluxe barn");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this Sheep!");
                     }
                 }
 
 
             case "rabbit":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<8000)
-                {
+                if (playerrr.getGold() < 8000) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     CageAnimal animal = new CageAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyDeluxeCoop() == null) {
                         return new Result(false, "You don't have any coops for keep this rabbit!");
                     }
-                    if ( App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getStatus()) {
+                    if (playerrr.getMyFarm().getMyDeluxeBarn() != null && (playerrr.getMyFarm().getMyDeluxeCoop().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals().size()) && playerrr.getMyFarm().getMyDeluxeBarn().getStatus()) {
                         animal.setType((CageAnimalsEnums.Rabbit));
                         animal.setName(nameOfAnimal);
                         animal.setPrice(8000);
@@ -408,68 +375,58 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxecoop");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyDeluxeCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 8000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 8000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Rabbit bought successfully and went to deluxe coop");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this Rabbit!");
                     }
                 }
 
             case "dinosaur":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<14000)
-                {
+                if (playerrr.getGold() < 14000) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
-                    CageAnimal animal  = new CageAnimal();
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()== null)
-                    {
+                } else {
+                    CageAnimal animal = new CageAnimal();
+                    if (playerrr.getMyFarm().getMyBigCoop() == null) {
                         return new Result(false, "You don't have any coops for keep this dinosaur!");
                     }
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getStatus()) {
+                    if (playerrr.getMyFarm().getMyBigCoop() != null && (playerrr.getMyFarm().getMyBigCoop().getMaxCapacity() > playerrr.getMyFarm().getMyBigCoop().getCageAnimals().size()) && playerrr.getMyFarm().getMyBigCoop().getStatus()) {
                         animal.setType((CageAnimalsEnums.Dinosaur));
                         animal.setName(nameOfAnimal);
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
                         animal.setPrice(14000);
                         animal.setOutside(false);
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("bigcoop");
-                        ArrayList<CageAnimal> cageAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigCoop().getCageAnimals();
+                        ArrayList<CageAnimal> cageAnimals = playerrr.getMyFarm().getMyBigCoop().getCageAnimals();
                         cageAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 14000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 14000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Dinosaur bought successfully and went to Big coop");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this Dinosaur!");
                     }
                 }
 
 
             case "pig":
-                if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold()<16000)
-                {
+                if (playerrr.getGold() < 16000) {
                     return new Result(false, "You don't have enough gold");
-                }
-                else
-                {
+                } else {
                     TavilehAnimal animal = new TavilehAnimal();
 
-                    if(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()== null)
-                    {
+                    if (playerrr.getMyFarm().getMyDeluxeBarn() == null) {
                         return new Result(false, "You don't have any barns for keep this pig!");
                     }
 
-                    if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn()!=null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getStatus()) {
+                    if (playerrr.getMyFarm().getMyDeluxeBarn() != null && (playerrr.getMyFarm().getMyDeluxeBarn().getMaxCapacity() > playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals().size()) && playerrr.getMyFarm().getMyDeluxeBarn().getStatus()) {
                         animal.setType((TavilehAnimalEnums.Pig));
                         animal.setName(nameOfAnimal);
                         animal.setPrice(16000);
@@ -477,15 +434,14 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                         animal.setXofAnimal(-1);
                         animal.setYofAnimal(-1);
                         animal.setWhereDoILive("deluxebarn");
-                        ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                        ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
                         animals.add(animal);
-                        ArrayList<TavilehAnimal> tavilehAnimals =  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
+                        ArrayList<TavilehAnimal> tavilehAnimals = playerrr.getMyFarm().getMyDeluxeBarn().getTavilehAnimals();
                         tavilehAnimals.add(animal);
-                        int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 16000;
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                        int newGold = playerrr.getGold() - 16000;
+                        playerrr.setGold(newGold);
                         return new Result(true, "Pig bought successfully and went to Big coop");
-                    }
-                    else {
+                    } else {
                         return new Result(false, "You don't have enough space for keep this Pig!");
                     }
                 }
@@ -496,20 +452,17 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
 
     }
 
-    public static boolean  IsAnimalNameUnique(String name)
-    {
-        ArrayList<Animal> playerAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
-        for(Animal animal : playerAnimals)
-        {
-            if(animal.getName().equals(name))
-            {
+    public static boolean IsAnimalNameUnique(String name,Player playerrr) {
+        ArrayList<Animal> playerAnimals = playerrr.getMyBoughtAnimals();
+        for (Animal animal : playerAnimals) {
+            if (animal.getName().equals(name)) {
                 return false;
             }
         }
         return true;
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName,Player playerrr) {
         //from markets we can move to gamemenu
         menuName = menuName.toLowerCase();
         switch (menuName) {
@@ -522,6 +475,7 @@ public class MarniesRanchController extends GameMenuController implements MenuEn
                 break;
         }
     }
+
     @Override
     public boolean isAnimalStore() {
         return true;

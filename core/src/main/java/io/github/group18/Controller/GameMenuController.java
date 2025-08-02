@@ -53,7 +53,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 System.exit(0);
 //                exitGame();
             } else if (view.getTerminateGame().isPressed()) {
-                voteTerminateGame(new Scanner(System.in));
+//                voteTerminateGame(new Scanner(System.in));
             } else if (view.getLoadGame().isPressed()) {
                 loadGame();
             } else if (view.getStartNewGame().isPressed()) {
@@ -62,6 +62,89 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
         }
     }
+
+    @Override
+    public void menuEnter(String menuName, Player playerrr) {
+        Player currentPlayer = playerrr;
+        if (isFainted(playerrr)) {
+            System.out.println("You are fainted!");
+        }
+        //from registermenu we can move to loginmenu
+        menuName = menuName.toLowerCase();
+
+        Map<String, int[]> shopHours = Map.of(
+            "blacksmithmenu", new int[]{9, 16},
+            "carpentersshopmenu", new int[]{9, 20},
+            "fishshopmenu", new int[]{9, 17},
+            "jojamartmenu", new int[]{9, 23},
+            "marniesranchmenu", new int[]{9, 16},
+            "pirresgeneralstoremenu", new int[]{9, 17},
+            "thestardropsaloonmenu", new int[]{12, 24}
+        );
+
+        Map<String, int[]> shopPositions = Map.of(
+            "blacksmithmenu", new int[]{ClientModel.getBlackSmithTopLeftx(), ClientModel.getBlackSmithTopLefty(), ClientModel.getBlackSmithWidth(), ClientModel.getBlackSmithHeight()},
+            "carpentersshopmenu", new int[]{ClientModel.getCarpentersShopTopLeftx(), ClientModel.getCarpentersShopTopLefty(), ClientModel.getCarpentersShopWidth(), ClientModel.getCarpentersShopHeight()},
+            "fishshopmenu", new int[]{ClientModel.getFishShopTopLeftx(), ClientModel.getFishShopTopLefty(), ClientModel.getFishShopWidth(), ClientModel.getFishShopHeight()},
+            "jojamartmenu", new int[]{ClientModel.getJojoMartTopLeftx(), ClientModel.getJojoMartTopLefty(), ClientModel.getJojoMartWidth(), ClientModel.getJojoMartHeight()},
+            "marniesranchmenu", new int[]{ClientModel.getMarniesRanchTopLeftx(), ClientModel.getMarniesRanchTopLefty(), ClientModel.getMarniesRanchWidth(), ClientModel.getMarniesRanchHeight()},
+            "pirresgeneralstoremenu", new int[]{ClientModel.getPierresGeneralStoreTopLeftx(), ClientModel.getPierresGeneralStoreTopLefty(), ClientModel.getPierresGeneralStoreWidth(), ClientModel.getPierresGeneralStoreHeight()},
+            "thestardropsaloonmenu", new int[]{ClientModel.getTheStardropSaloonTopLeftx(), ClientModel.getTheStardropSaloonTopLefty(), ClientModel.getTheStardropSaloonWidth(), ClientModel.getTheStardropSaloonHeight()}
+        );
+
+        if (shopHours.containsKey(menuName) && shopPositions.containsKey(menuName)) {
+            int currentHour = App.getCurrentGame().getCurrentDateTime().getHour();
+            int[] hours = shopHours.get(menuName);
+            int[] position = shopPositions.get(menuName);
+
+            if (currentHour >= hours[0] && currentHour <= hours[1]) {
+                if ((currentPlayer.getX() >= position[0] && currentPlayer.getX() <= position[0] + position[2]) &&
+                    (currentPlayer.getY() >= position[1] && currentPlayer.getY() <= position[1] + position[3])) {
+                    switch (menuName) {
+                        case "blacksmithmenu":
+                            App.setCurrentMenu(Menu.BlacksmithMenu);
+                            System.out.println("You are now in BlacksmithMenu!");
+                            break;
+                        case "carpentersshopmenu":
+                            App.setCurrentMenu(Menu.CarpentersshopMenu);
+                            System.out.println("You are now in CarpentersshopMenu!");
+                            break;
+                        case "fishshopmenu":
+                            App.setCurrentMenu(Menu.FishshopMenu);
+                            System.out.println("You are now in FishshopMenu!");
+                            break;
+                        case "jojamartmenu":
+                            App.setCurrentMenu(Menu.JojamartMenu);
+                            System.out.println("You are now in JojamartMenu!");
+                            break;
+                        case "marniesranchmenu":
+                            App.setCurrentMenu(Menu.MarniesranchMenu);
+                            System.out.println("You are now in MarniesranchMenu!");
+                            break;
+                        case "pirresgeneralstoremenu":
+                            App.setCurrentMenu(Menu.PirresgeneralstoreMenu);
+                            System.out.println("You are now in PirresgeneralstoreMenu!");
+                            break;
+                        case "thestardropsaloonmenu":
+                            App.setCurrentMenu(Menu.ThestardropsaloonMenu);
+                            System.out.println("You are now in ThestardropsaloonMenu!");
+                            break;
+                        default:
+                            System.out.println("Invalid menu");
+                            break;
+                    }
+                } else {
+                    System.out.println("You have to be in the correct shop area to enter " + menuName);
+                }
+            } else {
+                System.out.println(menuName + " is open between " + hours[0] + " and " + hours[1]);
+            }
+        } else {
+            System.out.println("Invalid menu");
+        }
+
+    }
+
 
     public static void checkSkilRecipe(Player player) {
         Player currentPlayer = player;
@@ -579,7 +662,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result voteTerminateGame(Scanner scanner,Player playerrr) {
+    public Result voteTerminateGame(Scanner scanner, Player playerrr) {
         int total_neg = 0;
         for (Player player : App.getCurrentGame().getPlayers()) {
             if (!player.getOwner().getUsername().equals(playerrr.getOwner().getUsername())) {
@@ -715,7 +798,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    public static void startNewDay(GameMenu gameMenu, boolean transaction, GameView gameView) {
+    public static void startNewDay(GameMenu gameMenu, boolean transaction, GameView gameView, Player playerrr) {
         if (transaction) {
             gameMenu.startSleepTransition();
             return;
@@ -1079,15 +1162,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result time() {
-        if (isFainted()) {
+    public Result time(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         return new Result(true, String.valueOf(App.getCurrentGame().getCurrentDateTime().getHour()));
     }
 
-    public Result date() {
-        if (isFainted()) {
+    public Result date(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         String stringBuilder = App.getCurrentGame().getCurrentDateTime().getSeason() +
@@ -1096,8 +1179,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, stringBuilder);
     }
 
-    public Result dateTime() {
-        if (isFainted()) {
+    public Result dateTime(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         String stringBuilder = App.getCurrentGame().getCurrentDateTime().getSeason() +
@@ -1109,8 +1192,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result dayOfWeek() {
-        if (isFainted()) {
+    public Result dayOfWeek(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay() % 7;
@@ -1126,7 +1209,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         };
     }
 
-    public Result cheatAdvanceTime(int hour, GameMenu gameMenu, GameView gameView) {
+    public Result cheatAdvanceTime(int hour, GameMenu gameMenu, GameView gameView, Player playerrr) {
         if (hour < 0) {
             return new Result(false, "cheatCode: Invalid hour");
         }
@@ -1165,7 +1248,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < hour / 24; i++) {
-            startNewDay(gameMenu, true, gameView);
+            startNewDay(gameMenu, true, gameView, playerrr);
         }
 //        if (hour / 24 >= 1) {
 //            App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
@@ -1173,7 +1256,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "cheatCode: Hour changed! New Hour: " + hourOfDay + " New Day: " + newDay);
     }
 
-    public Result cheatAdvanceDate(int day, GameMenu gameMenu, GameView gameView) {
+    public Result cheatAdvanceDate(int day, GameMenu gameMenu, GameView gameView, Player playerrr) {
         if (day < 0) {
             return new Result(false, "cheatCode: Invalid day");
         }
@@ -1210,22 +1293,22 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
         for (int i = 0; i < day; i++) {
-            startNewDay(gameMenu, true, gameView);
+            startNewDay(gameMenu, true, gameView, playerrr);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
     }
 
-    public Result season() {
-        if (isFainted()) {
+    public Result season(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         return new Result(true, App.getCurrentGame().getCurrentDateTime().getSeason());
     }
 
-    public Result cheatThor(int x, int y) {
+    public Result cheatThor(int x, int y, Player playerrr) {
 
-        if (isFainted()) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
 
@@ -1238,23 +1321,23 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 
-    public Result weather() {
-        if (isFainted()) {
+    public Result weather(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         return new Result(true, "Weather : " + App.getCurrentGame().getCurrentWeather().toString());
     }
 
-    public Result weatherForecast() {
-        if (isFainted()) {
+    public Result weatherForecast(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         return new Result(true, "Tomorrow Weather : " + App.getCurrentGame().getWeather().getFirst().toString());
 
     }
 
-    public Result cheatWeather(String Type) {
-        if (isFainted()) {
+    public Result cheatWeather(String Type, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Deque<WeatherEnum> weather = new ArrayDeque<>();
@@ -1280,303 +1363,298 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result greenHouseBiuld() {
-        if (isFainted()) {
+    public Result greenHouseBiuld(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         if (playerrr.getWood() > 500
             && playerrr.getGold() > 1000) {
-            App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl())
-                .getMyFarm().getMyGreenHouse().setStatus(true);
+            playerrr.getMyFarm().getMyGreenHouse().setStatus(true);
         }
-        return new Result(true, "Green House Build for " + App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername() + "successfully " + App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl())
-            .getMyFarm().getMyGreenHouse().isStatus() + " " + App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl())
+        return new Result(true, "Green House Build for " + playerrr.getOwner().getUsername() + "successfully " + playerrr
+            .getMyFarm().getMyGreenHouse().isStatus() + " " + playerrr
             .getMyFarm().getMyGreenHouse().hashCode());
     }
 
-    public Result walk(int x, int y) {
-        int index = App.getCurrentGame().getIndexPlayerinControl();
-        switch (index) {
-
-            case 0:
-                if (x < 0 || y < 0 ||
-                    (x > ClientModel.getPlayer2TopLeftx() &&
-                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
-                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
-                        y > ClientModel.getPlayer3TopLefty()) ||
-                    (x > ClientModel.getPlayer4TopLeftx() &&
-                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
-                    return new Result(false, "Your destination is out of bounds");
-                } else {
-                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = playerrr;
-
-                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
-                        listMap,
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        x, y);
-
-                    if (result != null) {
-
-                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-
-
-                        while (true) {
-                            String input = "yes";
-                            if (input.equalsIgnoreCase("yes")) {
-                                int tilesWalked = 0;
-                                int turnsMade = 0;
-                                double energyBefore = player.getEnergy();
-                                String lastDirection = null;
-
-                                for (int[] step : result.path) {
-                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
-                                    String direction = AStarPathfinder.getDirection(current, step);
-                                    if (lastDirection != null && !lastDirection.equals(direction)) {
-                                        turnsMade++;
-                                    }
-
-                                    int energyNeededSoFar = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
+//    public Result walk(int x, int y, Player playerrr) {
+//        int index = App.getCurrentGame().getIndexPlayerinControl();
+//        switch (index) {
+//
+//            case 0:
+//                if (x < 0 || y < 0 ||
+//                    (x > ClientModel.getPlayer2TopLeftx() &&
+//                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+//                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+//                        y > ClientModel.getPlayer3TopLefty()) ||
+//                    (x > ClientModel.getPlayer4TopLeftx() &&
+//                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
+//                    return new Result(false, "Your destination is out of bounds");
+//                } else {
+//                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+//                    Player player = playerrr;
+//
+//                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
+//                        listMap,
+//                        (int) player.getX(),
+//                        (int) player.getY(),
+//                        x, y);
+//
+//                    if (result != null) {
+//
+//                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+//
+//
+//                        while (true) {
+//                            String input = "yes";
+//                            if (input.equalsIgnoreCase("yes")) {
+//                                int tilesWalked = 0;
+//                                int turnsMade = 0;
+//                                double energyBefore = player.getEnergy();
+//                                String lastDirection = null;
+//
+//                                for (int[] step : result.path) {
+//                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
+//                                    String direction = AStarPathfinder.getDirection(current, step);
+//                                    if (lastDirection != null && !lastDirection.equals(direction)) {
+//                                        turnsMade++;
+//                                    }
+//
+//                                    int energyNeededSoFar = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
 //                                    if (energyNeededSoFar > energyBefore) {
 //                                        player.setEnergy(0);
 //                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
 //                                        player.setDaysAfterGash(0);
 //                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
 //                                    }
-
-                                    player.setX(step[0]);
-                                    player.setY(step[1]);
-                                    lastDirection = direction;
-                                    tilesWalked++;
-                                }
-
+//
+//                                    player.setX(step[0]);
+//                                    player.setY(step[1]);
+//                                    lastDirection = direction;
+//                                    tilesWalked++;
+//                                }
+//
 //                                double finalEnergy = energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade);
 //                                player.setEnergy(finalEnergy);
-
-                                return new Result(true, "You went to your destination successfully!");
-                            } else if (input.equalsIgnoreCase("no")) {
-                                return new Result(true, "Transportation canceled!");
-                            } else {
-                                return new Result(false, "Enter yes or no");
-                            }
-                        }
-                    } else {
-                        return new Result(false, "Way not found!");
-                    }
-                }
-
-            case 1:
-                if (x < 0 || y < 0 ||
-                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
-                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
-                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
-                        y > ClientModel.getPlayer3TopLefty()) ||
-                    (x > ClientModel.getPlayer4TopLeftx() &&
-                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
-                    return new Result(false, "Your destination is out of bounds");
-                } else {
-                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = playerrr;
-
-                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
-                        listMap,
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        x, y);
-
-                    if (result != null) {
-
-
-                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-
-                        while (true) {
-                            String input = "yes";
-                            if (input.equalsIgnoreCase("yes")) {
-                                int tilesWalked = 0;
-                                int turnsMade = 0;
-                                double energyBefore = player.getEnergy();
-                                String lastDirection = null;
-
-                                for (int[] step : result.path) {
-                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
-                                    String direction = AStarPathfinder.getDirection(current, step);
-                                    if (lastDirection != null && !lastDirection.equals(direction)) {
-                                        turnsMade++;
-                                    }
-
-                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
+//
+//                                return new Result(true, "You went to your destination successfully!");
+//                            } else if (input.equalsIgnoreCase("no")) {
+//                                return new Result(true, "Transportation canceled!");
+//                            } else {
+//                                return new Result(false, "Enter yes or no");
+//                            }
+//                        }
+//                    } else {
+//                        return new Result(false, "Way not found!");
+//                    }
+//                }
+//
+//            case 1:
+//                if (x < 0 || y < 0 ||
+//                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+//                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+//                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+//                        y > ClientModel.getPlayer3TopLefty()) ||
+//                    (x > ClientModel.getPlayer4TopLeftx() &&
+//                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
+//                    return new Result(false, "Your destination is out of bounds");
+//                } else {
+//                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+//                    Player player = playerrr;
+//
+//                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
+//                        listMap,
+//                        (int) player.getX(),
+//                        (int) player.getY(),
+//                        x, y);
+//
+//                    if (result != null) {
+//
+//
+//                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+//
+//                        while (true) {
+//                            String input = "yes";
+//                            if (input.equalsIgnoreCase("yes")) {
+//                                int tilesWalked = 0;
+//                                int turnsMade = 0;
+//                                double energyBefore = player.getEnergy();
+//                                String lastDirection = null;
+//
+//                                for (int[] step : result.path) {
+//                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
+//                                    String direction = AStarPathfinder.getDirection(current, step);
+//                                    if (lastDirection != null && !lastDirection.equals(direction)) {
+//                                        turnsMade++;
+//                                    }
+//
+//                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
 //                                    if (currentRequiredEnergy > energyBefore) {
 //                                        player.setEnergy(0);
 //                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
 //                                        player.setDaysAfterGash(0);
 //                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
 //                                    }
-
-                                    player.setX(step[0]);
-                                    player.setY(step[1]);
-                                    lastDirection = direction;
-                                    tilesWalked++;
-                                }
-
-                                // مصرف انرژی نهایی
+//
+//                                    player.setX(step[0]);
+//                                    player.setY(step[1]);
+//                                    lastDirection = direction;
+//                                    tilesWalked++;
+//                                }
+//
+//                                // مصرف انرژی نهایی
 //                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
-
-                                return new Result(true, "You went to your destination successfully!");
-                            } else if (input.equalsIgnoreCase("no")) {
-                                return new Result(true, "Transportation canceled!");
-                            } else {
-                                return new Result(false, "Enter yes or no");
-                            }
-                        }
-                    } else {
-                        System.out.println("Way not found!");
-                        return new Result(false, "There is no valid path to your destination.");
-                    }
-                }
-
-                //}
-            case 2:
-                if (x < 0 || y < 0 ||
-                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
-                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
-                    (x > ClientModel.getPlayer2TopLeftx() &&
-                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
-                    (x > ClientModel.getPlayer4TopLeftx() &&
-                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
-                    return new Result(false, "Your destination is out of bounds");
-                } else {
-                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = playerrr;
-                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
-                        listMap,
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        x, y);
-
-                    if (result != null) {
-
-
-                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-
-                        while (true) {
-                            String input = "yes";
-                            if (input.equalsIgnoreCase("yes")) {
-                                int tilesWalked = 0;
-                                int turnsMade = 0;
-                                double energyBefore = player.getEnergy();
-                                String lastDirection = null;
-
-                                for (int[] step : result.path) {
-                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
-                                    String direction = AStarPathfinder.getDirection(current, step);
-                                    if (lastDirection != null && !lastDirection.equals(direction)) {
-                                        turnsMade++;
-                                    }
-
-                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
+//
+//                                return new Result(true, "You went to your destination successfully!");
+//                            } else if (input.equalsIgnoreCase("no")) {
+//                                return new Result(true, "Transportation canceled!");
+//                            } else {
+//                                return new Result(false, "Enter yes or no");
+//                            }
+//                        }
+//                    } else {
+//                        System.out.println("Way not found!");
+//                        return new Result(false, "There is no valid path to your destination.");
+//                    }
+//                }
+//
+//                //}
+//            case 2:
+//                if (x < 0 || y < 0 ||
+//                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+//                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+//                    (x > ClientModel.getPlayer2TopLeftx() &&
+//                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+//                    (x > ClientModel.getPlayer4TopLeftx() &&
+//                        y > ClientModel.getPlayer4TopLefty() + ClientModel.getPlayer4Height())) {
+//                    return new Result(false, "Your destination is out of bounds");
+//                } else {
+//                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+//                    Player player = playerrr;
+//                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
+//                        listMap,
+//                        (int) player.getX(),
+//                        (int) player.getY(),
+//                        x, y);
+//
+//                    if (result != null) {
+//
+//
+//                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+//
+//                        while (true) {
+//                            String input = "yes";
+//                            if (input.equalsIgnoreCase("yes")) {
+//                                int tilesWalked = 0;
+//                                int turnsMade = 0;
+//                                double energyBefore = player.getEnergy();
+//                                String lastDirection = null;
+//
+//                                for (int[] step : result.path) {
+//                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
+//                                    String direction = AStarPathfinder.getDirection(current, step);
+//                                    if (lastDirection != null && !lastDirection.equals(direction)) {
+//                                        turnsMade++;
+//                                    }
+//
+//                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
 //                                    if (currentRequiredEnergy > energyBefore) {
 //                                        player.setEnergy(0);
 //                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
 //                                        player.setDaysAfterGash(0);
 //                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
 //                                    }
-
-                                    player.setX(step[0]);
-                                    player.setY(step[1]);
-                                    lastDirection = direction;
-                                    tilesWalked++;
-                                }
-
-                                // کم کردن نهایی انرژی بعد از طی کامل مسیر
+//
+//                                    player.setX(step[0]);
+//                                    player.setY(step[1]);
+//                                    lastDirection = direction;
+//                                    tilesWalked++;
+//                                }
+//
+//                                // کم کردن نهایی انرژی بعد از طی کامل مسیر
 //                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
-
-                                return new Result(true, "You went to your destination successfully!");
-                            } else if (input.equalsIgnoreCase("no")) {
-                                return new Result(true, "Transportation canceled!");
-                            } else {
-                                return new Result(false, "Enter yes or no");
-                            }
-                        }
-                    } else {
-                        System.out.println("Way not found!");
-                        return new Result(false, "There is no valid path to your destination.");
-                    }
-                }
-            case 3:
-                if (x < 0 || y < 0 ||
-                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
-                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
-                    (x > ClientModel.getPlayer2TopLeftx() &&
-                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
-                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
-                        y > ClientModel.getPlayer3TopLefty())) {
-                    return new Result(false, "Your destination is out of bounds");
-                } else {
-                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
-                    Player player = playerrr;
-                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
-                        listMap,
-                        (int) player.getX(),
-                        (int) player.getY(),
-                        x, y);
-
-                    if (result != null) {
-                        System.out.println("Way found!");
-
-
-                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
-
-                        while (true) {
-                            String input = "yes";
-                            if (input.equalsIgnoreCase("yes")) {
-                                int tilesWalked = 0;
-                                int turnsMade = 0;
-                                double energyBefore = player.getEnergy();
-                                String lastDirection = null;
-
-                                for (int[] step : result.path) {
-                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
-                                    String direction = AStarPathfinder.getDirection(current, step);
-                                    if (lastDirection != null && !lastDirection.equals(direction)) {
-                                        turnsMade++;
-                                    }
-
-                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
+//
+//                                return new Result(true, "You went to your destination successfully!");
+//                            } else if (input.equalsIgnoreCase("no")) {
+//                                return new Result(true, "Transportation canceled!");
+//                            } else {
+//                                return new Result(false, "Enter yes or no");
+//                            }
+//                        }
+//                    } else {
+//                        System.out.println("Way not found!");
+//                        return new Result(false, "There is no valid path to your destination.");
+//                    }
+//                }
+//            case 3:
+//                if (x < 0 || y < 0 ||
+//                    (x < ClientModel.getPlayer1TopLeftx() + ClientModel.getPlayer1Width() &&
+//                        y < ClientModel.getPlayer1TopLefty() + ClientModel.getPlayer1Height()) ||
+//                    (x > ClientModel.getPlayer2TopLeftx() &&
+//                        y < ClientModel.getPlayer2TopLefty() + ClientModel.getPlayer2Height()) ||
+//                    (x < ClientModel.getPlayer3TopLeftx() + ClientModel.getPlayer3Width() &&
+//                        y > ClientModel.getPlayer3TopLefty())) {
+//                    return new Result(false, "Your destination is out of bounds");
+//                } else {
+//                    ArrayList<ArrayList<Kashi>> listMap = App.getCurrentGame().getMap();
+//                    Player player = playerrr;
+//                    AStarPathfinder.Natigeh result = AStarPathfinder.findPath(
+//                        listMap,
+//                        (int) player.getX(),
+//                        (int) player.getY(),
+//                        x, y);
+//
+//                    if (result != null) {
+//                        System.out.println("Way found!");
+//
+//
+//                        int estimatedEnergy = AStarPathfinder.calculatePower(result.tileCount, result.turnCount);
+//
+//                        while (true) {
+//                            String input = "yes";
+//                            if (input.equalsIgnoreCase("yes")) {
+//                                int tilesWalked = 0;
+//                                int turnsMade = 0;
+//                                double energyBefore = player.getEnergy();
+//                                String lastDirection = null;
+//
+//                                for (int[] step : result.path) {
+//                                    int[] current = new int[]{(int) player.getX(), (int) player.getY()};
+//                                    String direction = AStarPathfinder.getDirection(current, step);
+//                                    if (lastDirection != null && !lastDirection.equals(direction)) {
+//                                        turnsMade++;
+//                                    }
+//
+//                                    int currentRequiredEnergy = AStarPathfinder.calculatePower(tilesWalked + 1, turnsMade);
 //                                    if (currentRequiredEnergy > energyBefore) {
 //                                        player.setEnergy(0);
 //                                        player.setMaxEnergy((int) (0.75 * player.getMaxEnergy()));
 //                                        player.setDaysAfterGash(0);
 //                                        return new Result(true, "You ran out of energy and stopped at (" + player.getX() + ", " + player.getY() + ")");
 //                                    }
-                                    player.setX(step[0]);
-                                    player.setY(step[1]);
-                                    lastDirection = direction;
-                                    tilesWalked++;
-                                }
-
-                                // Energy consumption done after full traversal
+//                                    player.setX(step[0]);
+//                                    player.setY(step[1]);
+//                                    lastDirection = direction;
+//                                    tilesWalked++;
+//                                }
+//
+//                                // Energy consumption done after full traversal
 //                                player.setEnergy(energyBefore - AStarPathfinder.calculatePower(tilesWalked, turnsMade));
-
-                                return new Result(true, "You went to your destination successfully!");
-                            } else if (input.equalsIgnoreCase("no")) {
-                                return new Result(true, "Transportation canceled!");
-                            } else {
-                                return new Result(false, "Enter yes or no");
-                            }
-                        }
-                    } else {
-                        System.out.println("Way not found!");
-                        return new Result(false, "There is no valid path to your destination.");
-                    }
-                }
-        }
-        return null;
-    }
+//
+//                                return new Result(true, "You went to your destination successfully!");
+//                            } else if (input.equalsIgnoreCase("no")) {
+//                                return new Result(true, "Transportation canceled!");
+//                            } else {
+//                                return new Result(false, "Enter yes or no");
+//                            }
+//                        }
+//                    } else {
+//                        System.out.println("Way not found!");
+//                        return new Result(false, "There is no valid path to your destination.");
+//                    }
+//                }
+//        }
+//        return null;
+//    }
 
     public void printMap(int x, int y, int Xsize, int Ysize) {
         ArrayList<ArrayList<Kashi>> Map = App.getCurrentGame().getMap();
@@ -1738,32 +1816,28 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public void energyShow() {
+    public void energyShow(Player playerrr) {
         System.out.println("Energy: " +
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame()
-                .getIndexPlayerinControl()).getEnergy());
+            playerrr.getEnergy());
     }
 
-    public Result energySet(int value) {
-        if (isFainted()) {
+    public Result energySet(int value, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         if (value < 0) {
             return new Result(false, "CheatCode: Invalid energy");
         }
-        App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(value);
+        playerrr.setEnergy(value);
         return new Result(true, "CheatCode: Energy set to " + value);
     }
 
-    public void energyUnlimited() {
-        if (isFainted()) {
+    public void energyUnlimited(Player playerrr) {
+        if (isFainted(playerrr)) {
             System.out.println("You are fainted!");
         }
-        App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl()).setMaxEnergy(Integer.MAX_VALUE);
-        App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl()).setEnergy(Integer.MAX_VALUE);
+        playerrr.setMaxEnergy(Integer.MAX_VALUE);
+        playerrr.setEnergy(Integer.MAX_VALUE);
         System.out.println("**Energy unlimited**");
 
     }
@@ -1862,7 +1936,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //    }
 
     public Result toolsShowCurrent(Player playerrr) {
-        if (isFainted()) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Tool tool = playerrr.getInMyHandTool();
@@ -1888,14 +1962,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        return new Result(true, toolsList.toString());
 //    }
 
-    public Result toolsUpgrade(String jens) {
-        if (isFainted()) {
+    public Result toolsUpgrade(String jens, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         if (!jens.equals("initial") && !jens.equals("copper") && !jens.equals("iron") && !jens.equals("gold") && !jens.equals("iridium")) {
             return new Result(false, "Your entered jens is not Okay!");
         }
-        Tool tool = playerrrplayerrr.getInMyHandTool();
+        Tool tool = playerrr.getInMyHandTool();
         if (tool == null) {
             return new Result(false, "Item not found");
         } else if (!(tool instanceof Tool)) {
@@ -1922,7 +1996,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             }
             if (tool instanceof Hoe) {
-                if (playerrrplayerrr.getGold() < 2000) {
+                if (playerrr.getGold() < 2000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
                     playerrr.setGold(playerrr.getGold() - 2000);
@@ -1951,10 +2025,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             }
             if (tool instanceof Pickaxe) {
-                if (playerrrplayerrr.getGold() < 5000) {
+                if (playerrr.getGold() < 5000) {
                     return new Result(false, "Your golds are not enough!");
                 } else {
-                    playerrr.setGold(playerrrplayerrr.getGold() - 5000);
+                    playerrr.setGold(playerrr.getGold() - 5000);
                     ((Pickaxe) tool).update("iron");
                     return new Result(true, "tool updated!");
                 }
@@ -2097,8 +2171,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        }
 //    }
 
-    public Result craftInfo(String craftName, GameController gameController) {
-        if (isFainted()) {
+    public Result craftInfo(String craftName, GameController gameController, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         ForagingSeedsEnums foragingSeedsEnums;
@@ -2178,7 +2252,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Map.entry(MixedSeedsEnums.PowderMelon, AllCropsEnums.PowderMelon)
     );
 
-    public static Result plant(MixedSeed mixedSeed, Kashi kashi) {
+    public static Result plant(MixedSeed mixedSeed, Kashi kashi, Player playerrr) {
 
         Player currentplayer = playerrr;
 
@@ -2214,8 +2288,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             AllCrop allCrop = new AllCrop();
             allCrop.initilizeCrop(selectedSeed);
 
-            Player currentPlayer = App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl());
+            Player currentPlayer = playerrr;
             kashi.setInside(allCrop);
 
             currentPlayer.getMyFarm().getAllCrops().add(allCrop);
@@ -2226,7 +2299,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public static Result plant(ForagingSeed foragingSeed, Kashi kashi) {
+    public static Result plant(ForagingSeed foragingSeed, Kashi kashi, Player playerrr) {
 
         Player currentplayer = playerrr;
 
@@ -2243,8 +2316,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             allCrop1.setSourceForagingSeedEnum(foragingSeedsEnums);
             allCrop1.initilizeCrop(foragingSeedsEnums);
 
-            Player currentPlayer = App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl());
+            Player currentPlayer = playerrr;
             Kashi kashi1 = kashi;
             kashi1.setInside(allCrop1);
 
@@ -2257,7 +2329,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "can't plant");
     }
 
-    public static Result plant(TreeSeed treeSeed, Kashi kashi) {
+    public static Result plant(TreeSeed treeSeed, Kashi kashi, Player playerrr) {
         Player currentplayer = playerrr;
 
         if (!kashi.isShokhmZadeh()) {
@@ -2275,8 +2347,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             allTree.setSource(allTreesEnums);
             allTree.initilizeCrop(allTreesEnums);
 
-            Player currentPlayer = App.getCurrentGame().getPlayers()
-                .get(App.getCurrentGame().getIndexPlayerinControl());
+            Player currentPlayer = playerrr;
             Kashi kashi2 = kashi;
             kashi2.setInside(allTree);
 
@@ -2289,8 +2360,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result showPlant(int x, int y) {
-        if (isFainted()) {
+    public Result showPlant(int x, int y, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Kashi targetKashi = new Kashi();
@@ -2391,9 +2462,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public static Result fertilize(Fertilizer fertilizer, Kashi kashi) {
+    public static Result fertilize(Fertilizer fertilizer, Kashi kashi, Player playerrr) {
 
-        Player currentPlayer = v;
+        Player currentPlayer = playerrr;
 
         if (kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
             if (kashi.getInside() instanceof AllTree) {
@@ -2411,8 +2482,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result howMuchWater() {
-        if (isFainted()) {
+    public Result howMuchWater(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         for (Item item : playerrr.getInventory().getItems().keySet()) {
@@ -2423,14 +2494,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "No WateringCan found");
     }
 
-    public Result craftingShowRecipes() {
-        if (isFainted()) {
+    public Result craftingShowRecipes(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         //todo if player not in home return error
         StringBuilder resultBuilder = new StringBuilder();
-        ArrayList<CraftingRecipesEnums> craftingRecipes = App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl())
+        ArrayList<CraftingRecipesEnums> craftingRecipes = playerrr
             .getCraftingRecipes();
 
         for (CraftingRecipesEnums craftingRecipe : craftingRecipes) {
@@ -2453,11 +2523,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, resultBuilder.toString());
     }
 
-    public Result craftingCraft(String itemName) {
-        if (isFainted()) {
+    public Result craftingCraft(String itemName, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
-        Player currentPlayer = getCurrentPlayer();
+        Player currentPlayer = playerrr;
 
         // 1. بررسی انرژی و دسترسی‌های اولیه
         if (currentPlayer.getEnergy() < 2) {
@@ -2480,12 +2550,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
 
         // 4. انجام عملیات ساخت
-        return executeCrafting(currentPlayer, itemName, recipe);
-    }
-
-    private Player getCurrentPlayer() {
-        Game currentGame = App.getCurrentGame();
-        return currentGame.getPlayers().get(currentGame.getIndexPlayerinControl());
+        return executeCrafting(currentPlayer, itemName, recipe,playerrr);
     }
 
     private CraftingRecipesEnums findRecipe(Player player, String itemName) {
@@ -2529,15 +2594,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    private Result executeCrafting(Player player, String itemName, CraftingRecipesEnums recipe) {
-        if (isFainted()) {
+    private Result executeCrafting(Player player, String itemName, CraftingRecipesEnums recipe, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         // مصرف مواد اولیه
-        consumeMaterials(player, recipe);
+        consumeMaterials(player, recipe, playerrr);
 
         // افزودن آیتم ساخته شده
-        addCraftedItem(player, itemName);
+        addCraftedItem(player, itemName, playerrr);
 
         // کاهش انرژی
         player.setEnergy(player.getEnergy() - 2);
@@ -2545,8 +2610,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, itemName + " crafted successfully");
     }
 
-    private void consumeMaterials(Player player, CraftingRecipesEnums recipe) {
-        if (isFainted()) {
+    private void consumeMaterials(Player player, CraftingRecipesEnums recipe, Player playerrr) {
+        if (isFainted(playerrr)) {
             System.out.println("You are fainted!");
         }
         for (Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
@@ -2577,8 +2642,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    private void addCraftedItem(Player player, String itemName) {
-        if (isFainted()) {
+    private void addCraftedItem(Player player, String itemName, Player playerrr) {
+        if (isFainted(playerrr)) {
             System.out.println("You are fainted!");
         }
         player.getInventory().getItems().entrySet().stream()
@@ -2675,8 +2740,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //        return new Result(false, "item " + name + " not found");
 //    }
 
-    public Result cheatAddItem(String name, int count) {
-        if (isFainted()) {
+    public Result cheatAddItem(String name, int count, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         name = name.replace(" ", "");
@@ -2738,7 +2803,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         } else if (FoodCookingEnums.isContain(name)) {
             Cookingrecipe cookingrecipe = new Cookingrecipe();
             cookingrecipe.setFood(FoodCookingEnums.valueOf(name));
-            App.getCurrentGame().getCurrentPlayer().getCookingRecipes().add(cookingrecipe);
+            playerrr.getCookingRecipes().add(cookingrecipe);
             addItem = true;
         } else if (PoleJensEnums.isContain(name)) {
             String jens = name.replaceAll("pole", "");
@@ -2825,11 +2890,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result cookingRefrigerator(String pickOrPut, String itemname) throws ClassNotFoundException {
-        if (isFainted()) {
+    public Result cookingRefrigerator(String pickOrPut, String itemname, Player playerrr) throws ClassNotFoundException {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
-        Refrigerator refrigerator = App.getCurrentGame().getCurrentPlayer()
+        Refrigerator refrigerator = playerrr
             .getMyFarm().getMyCottage().getMyRefrigerator();
         Stack<Integer> freeIndexes = new Stack<>();
         for (int i = 9 - 1; i >= 0; i--) {
@@ -2876,8 +2941,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "");
     }
 
-    public Result cookingShowRecipes() {
-        if (isFainted()) {
+    public Result cookingShowRecipes(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         if (playerrr.getCookingRecipes().isEmpty()) {
@@ -2891,8 +2956,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result cookingPrepare(String recipeName) {
-        if (isFainted()) {
+    public Result cookingPrepare(String recipeName, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         if (playerrr.getEnergy() < 3) {
@@ -2957,9 +3022,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             .anyMatch(food -> food.equalsIgnoreCase(processedInput));
     }
 
-    public Result eat(String foodName) {
+    public Result eat(String foodName, Player playerrr) {
 
-        if (isFainted()) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Set<String> FOOD_ENUMS = new HashSet<>();
@@ -2980,9 +3045,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 if (item instanceof FoodCooking) {
                     FoodCooking foodCooking = (FoodCooking) item;
                     if (foodCooking.getNamee() == foodCookingEnums) {
-                        playerrr.setEnergy(Math.min(App.getCurrentGame().
-                            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
-                            get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy()));
+                        playerrr.setEnergy(Math.min(playerrr.getMaxEnergy(), playerrr.getEnergy() + foodCooking.getEnergy()));
                         playerrr.getInventory().removeItem(item, 1);
                         playerrr.setFoodBuff(foodCooking.getBuff());
                         showBuffEffect(foodCooking.getBuff());
@@ -3015,9 +3078,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     if (item instanceof ArtisanGoods) {
                         if (artisanGoods.getCorrectName().equalsIgnoreCase(foodName)) {
                             playerrr.
-                                setEnergy(Math.min(App.getCurrentGame().getPlayers().get(App.getCurrentGame().
-                                    getIndexPlayerinControl()).getMaxEnergy(), App.getCurrentGame().getPlayers().
-                                    get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + artisanGoods.getEnergyUsage()));
+                                setEnergy(Math.min(playerrr.getMaxEnergy(), playerrr.getEnergy() + artisanGoods.getEnergyUsage()));
                             playerrr.getInventory().removeItem(item, 1);
                             return new Result(true, "You ate " + foodName);
                         }
@@ -3031,8 +3092,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    public Result pet(String name) {
-        Animal animal = findAnimalByName(name);
+    public Result pet(String name, Player playerrr) {
+        Animal animal = findAnimalByName(name,playerrr);
         if (animal == null) {
             return new Result(false, "You can not pet that animal!");
         }
@@ -3064,8 +3125,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return false;
     }
 
-    public Result cheatSetFriendship(String animalName, int amount) {
-        Animal animal = findAnimalByName(animalName);
+    public Result cheatSetFriendship(String animalName, int amount,Player playerrr) {
+        Animal animal = findAnimalByName(animalName,playerrr);
         if (animal == null) {
             return new Result(false, "Your entered name does not exists between your animals!");
         } else if (amount > 1000) {
@@ -3077,7 +3138,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result animals() {
+    public Result animals(Player playerrr) {
         StringBuilder sb = new StringBuilder();
         ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
         for (Animal animal : animals) {
@@ -3094,15 +3155,15 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, sb.toString());
     }
 
-    public Result shepherdInAnimals(String animalName) {
+    public Result shepherdInAnimals(String animalName, Player playerrr) {
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
-        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName);
+        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName,playerrr);
         if (founded) {
             return new Result(false, "your animal name doesn't exist!");
         }
         // find that animal
-        Animal animal = findAnimalByName(animalName);
+        Animal animal = findAnimalByName(animalName,playerrr);
         if (!(animal.isOutside())) {
             return new Result(false, "Your entered animal is inside!");
         } else {
@@ -3150,16 +3211,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result shepherdOutAnimals(String animalName, int x, int y) {
+    public Result shepherdOutAnimals(String animalName, int x, int y, Player playerrr) {
 
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
-        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName);
+        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName,playerrr);
         if (founded) {
             return new Result(false, "your animal name doesn't exist!");
         }
         // find that animal
-        Animal animal = findAnimalByName(animalName);
+        Animal animal = findAnimalByName(animalName,playerrr);
         //
         if (animal.isOutside()) {
             return new Result(false, "Your entered animal is outside!");
@@ -3213,8 +3274,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public Result feedHay(String animalName) {
-        Animal animal = findAnimalByName(animalName);
+    public Result feedHay(String animalName,Player playerrr) {
+        Animal animal = findAnimalByName(animalName,playerrr);
         if (animal == null) {
             return new Result(false, "Your entered animal doesn't exist!");
         } else if (animal.isTaghzieh()) {
@@ -3232,8 +3293,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public Result sellAnimal(String name) {
-        Animal animal = findAnimalByName(name);
+    public Result sellAnimal(String name, Player playerrr) {
+        Animal animal = findAnimalByName(name,playerrr);
         if (animal == null) {
             return new Result(false, "Your entered animal was not found between your own animals! so you can not sell!");
         }
@@ -3276,8 +3337,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "You sell " + animal.getName() + " Successfully and " + priceOfSelling + " golds added to your golds!");
     }
 
-    public Result fishing(String fishingPole) {
-        if (isFainted()) {
+    public Result fishing(String fishingPole, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player player = playerrr;
@@ -3311,8 +3372,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return lowerSet1.equals(lowerSet2);
     }
 
-    public Result artisanUse(String craftName, ArrayList<String> itemName, CraftingItem craftingIte) {
-        if (isFainted()) {
+    public Result artisanUse(String craftName, ArrayList<String> itemName, CraftingItem craftingIte, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         CraftingItem craftingItem = craftingIte;
@@ -3349,8 +3410,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "ingredients and crafting does not match");
     }
 
-    public Result artisanGet(String artisanName, CraftingItem craftingItem) {
-        if (isFainted()) {
+    public Result artisanGet(String artisanName, CraftingItem craftingItem, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player player = playerrr;
@@ -3365,7 +3426,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "artisan not found");
     }
 
-    public static Result sell(Item item, int count) {
+    public static Result sell(Item item, int count, Player playerrr) {
         Player currentPlayer = playerrr;
 
         try {
@@ -3397,8 +3458,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result friendships() {
-        if (isFainted()) {
+    public Result friendships(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         StringBuilder result = new StringBuilder();
@@ -3422,8 +3483,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public static Result talk(String username, String message) {
-        if (isFainted()) {
+    public static Result talk(String username, String message, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player currentPlayer = playerrr;
@@ -3460,8 +3521,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "message sent successfully");
     }
 
-    public static Result talkHistory(String username) {
-        if (isFainted()) {
+    public static Result talkHistory(String username, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player currentPlayer = playerrr;
@@ -3486,8 +3547,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public static Result gift(String userName, int amount, String item) {
-        if (isFainted()) {
+    public static Result gift(String userName, int amount, String item, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
 
@@ -3582,8 +3643,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    public Result giftList() {
-        if (isFainted()) {
+    public Result giftList(Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         StringBuilder result = new StringBuilder();
@@ -3601,8 +3662,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public Result giftRate(int giftNumber, int rate) {
-        if (isFainted()) {
+    public Result giftRate(int giftNumber, int rate, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player currentPlayer = playerrr;
@@ -3634,8 +3695,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(false, "Gift can't rated");
     }
 
-    public Result giftHistory(String name) {
-        if (isFainted()) {
+    public Result giftHistory(String name, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         StringBuilder result = new StringBuilder();
@@ -3673,8 +3734,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public Result hug(String userName) {
-        if (isFainted()) {
+    public Result hug(String userName, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
         Player currentPlayer = playerrr;
@@ -3697,8 +3758,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "You hug " + userName + " successfully");
     }
 
-    public static Result flower(String username) {
-        if (isFainted()) {
+    public static Result flower(String username, Player playerrr) {
+        if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
 
@@ -3774,7 +3835,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    public static Result askMarriage(String userName, String ringName) {
+    public static Result askMarriage(String userName, String ringName, Player playerrr) {
         Player currentPlayer = playerrr;
         Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
 
@@ -3827,7 +3888,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "Marriage proposal sent to " + userName + " with a " + ring.getCorrectName() + ".");
     }
 
-    public static Result response(String acceptOrReject, String userName) {
+    public static Result response(String acceptOrReject, String userName, Player playerrr) {
         Player currentPlayer = playerrr;
         List<MarriageProposal> proposals = App.getCurrentGame().getMarriageProposals();
 
@@ -3871,7 +3932,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public void showMyMarriageProposals() {
+    public void showMyMarriageProposals(Player playerrr) {
         Player currentPlayer = playerrr;
         List<MarriageProposal> proposals = App.getCurrentGame().getMarriageProposals();
         boolean hasProposal = false;
@@ -3888,7 +3949,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Animal findAnimalByName(String animalName) {
+    public Animal findAnimalByName(String animalName, Player playerrr) {
         ArrayList<Animal> animals = playerrr.getMyBoughtAnimals();
         for (Animal animal : animals) {
             if (animal.getName().equalsIgnoreCase(animalName)) {
@@ -3902,7 +3963,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    private boolean validNPCPlace(NPCEnums npcEnums) {
+    private boolean validNPCPlace(NPCEnums npcEnums, Player playerrr) {
         Player currentPlayer = playerrr;
 
         return (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof NPC &&
@@ -3932,7 +3993,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public static Result meetNPC(NPC npc) {
+    public static Result meetNPC(NPC npc, Player playerrr) {
 
         Player currentPlayer = playerrr;
 
@@ -4216,7 +4277,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    public static Result giftNPC(NPC npcName, Item item, int count) {
+    public static Result giftNPC(NPC npcName, Item item, int count, Player playerrr) {
         Player currentPlayer = playerrr;
         switch (npcName.getName()) {
             case SEBASTIAN:
@@ -4443,7 +4504,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    public static Result friendshipList(NPC npc) {
+    public static Result friendshipList(NPC npc, Player playerrr) {
         StringBuilder result = new StringBuilder();
         Player currentPlayer = playerrr;
         for (Friendshipali friendship : npc.getFriendships()) {
@@ -4456,7 +4517,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public static Result questsList(NPC npc) {
+    public static Result questsList(NPC npc, Player playerrr) {
         StringBuilder result = new StringBuilder();
         Player currentPlayer = playerrr;
         int friendshipLVL = -1;
@@ -4479,7 +4540,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public static Result questsFinish(NPC npc, int index) {
+    public static Result questsFinish(NPC npc, int index, Player playerrr) {
         index--;
         Player currentPlayer = playerrr;
         if (npc.getName() == NPCEnums.SEBASTIAN) {
@@ -4821,156 +4882,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    @Override
-    public void menuEnter(String menuName) {
-        Player currentPlayer = playerrr;
-        if (isFainted()) {
-            System.out.println("You are fainted!");
-        }
-        //from registermenu we can move to loginmenu
-        menuName = menuName.toLowerCase();
-//        switch (menuName) {
-//            case "blacksmithmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 16) {
-//                    if ((currentPlayer.getX() >= game.getBlackSmithTopLeftx() && currentPlayer.getX() <= game.getBlackSmithTopLeftx() + game.getBlackSmithWidth()) &&
-//                            (currentPlayer.getY() >= game.getBlackSmithTopLefty() && currentPlayer.getY() <= game.getBlackSmithTopLefty() + game.getBlackSmithHeight())) {
-//                        App.setCurrentMenu(Menu.BlacksmithMenu);
-//                        System.out.println("You are now in BlacksmithMenu!");
-//                    } else {
-//                        System.out.println("You have to be in the Market");
-//                    }
-//                } else {
-//                    System.out.println("BlackSmith is opened between 9 and 16");
-//                }
-//                break;
-//            case "carpentersshopmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 20) {
-//                    App.setCurrentMenu(Menu.CarpentersshopMenu);
-//                    System.out.println("You are now in CarpentersshopMenu!");
-//                } else {
-//                    System.out.println("CarpentersShop is opened between 9 and 20");
-//                }
-//                break;
-//            case "fishshopmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 17) {
-//                    App.setCurrentMenu(Menu.FishshopMenu);
-//                    System.out.println("You are now in FishshopMenu!");
-//                } else {
-//                    System.out.println("FishShop is opened between 9 and 17");
-//                }
-//                break;
-//            case "jojamartmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 23) {
-//                    App.setCurrentMenu(Menu.JojamartMenu);
-//                    System.out.println("You are now in JojamartMenu!");
-//                } else {
-//                    System.out.println("JojamartShop is opened between 9 and 23");
-//                }
-//                break;
-//            case "marniesranchmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 16) {
-//                    App.setCurrentMenu(Menu.MarniesranchMenu);
-//                    System.out.println("You are now in MarniesranchMenu!");
-//                } else {
-//                    System.out.println("MarniesranchShop is opened between 9 and 16");
-//                }
-//                break;
-//            case "pirresgeneralstoremenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 9 && App.getCurrentGame().getCurrentDateTime().getHour() <= 17) {
-//
-//                    App.setCurrentMenu(Menu.PirresgeneralstoreMenu);
-//                    System.out.println("You are now in PirresgeneralstoreMenu!");
-//                } else {
-//                    System.out.println("PirresgeneralStore is opened between 9 and 17");
-//                }
-//                break;
-//            case "thestardropsaloonmenu":
-//                if (App.getCurrentGame().getCurrentDateTime().getHour() >= 12 && App.getCurrentGame().getCurrentDateTime().getHour() <= 24) {
-//
-//                    App.setCurrentMenu(Menu.ThestardropsaloonMenu);
-//                    System.out.println("You are now in ThestardropsaloonMenu!");
-//                } else {
-//                    System.out.println("TheStardrposaloon+ is opened between 12 and 24");
-//                }
-//                break;
-//            default:
-//                System.out.println("Invalid menu");
-//                break;
-//        }
-
-        Map<String, int[]> shopHours = Map.of(
-            "blacksmithmenu", new int[]{9, 16},
-            "carpentersshopmenu", new int[]{9, 20},
-            "fishshopmenu", new int[]{9, 17},
-            "jojamartmenu", new int[]{9, 23},
-            "marniesranchmenu", new int[]{9, 16},
-            "pirresgeneralstoremenu", new int[]{9, 17},
-            "thestardropsaloonmenu", new int[]{12, 24}
-        );
-
-        Map<String, int[]> shopPositions = Map.of(
-            "blacksmithmenu", new int[]{ClientModel.getBlackSmithTopLeftx(), ClientModel.getBlackSmithTopLefty(), ClientModel.getBlackSmithWidth(), ClientModel.getBlackSmithHeight()},
-            "carpentersshopmenu", new int[]{ClientModel.getCarpentersShopTopLeftx(), ClientModel.getCarpentersShopTopLefty(), ClientModel.getCarpentersShopWidth(), ClientModel.getCarpentersShopHeight()},
-            "fishshopmenu", new int[]{ClientModel.getFishShopTopLeftx(), ClientModel.getFishShopTopLefty(), ClientModel.getFishShopWidth(), ClientModel.getFishShopHeight()},
-            "jojamartmenu", new int[]{ClientModel.getJojoMartTopLeftx(), ClientModel.getJojoMartTopLefty(), ClientModel.getJojoMartWidth(), ClientModel.getJojoMartHeight()},
-            "marniesranchmenu", new int[]{ClientModel.getMarniesRanchTopLeftx(), ClientModel.getMarniesRanchTopLefty(), ClientModel.getMarniesRanchWidth(), ClientModel.getMarniesRanchHeight()},
-            "pirresgeneralstoremenu", new int[]{ClientModel.getPierresGeneralStoreTopLeftx(), ClientModel.getPierresGeneralStoreTopLefty(), ClientModel.getPierresGeneralStoreWidth(), ClientModel.getPierresGeneralStoreHeight()},
-            "thestardropsaloonmenu", new int[]{ClientModel.getTheStardropSaloonTopLeftx(), ClientModel.getTheStardropSaloonTopLefty(), ClientModel.getTheStardropSaloonWidth(), ClientModel.getTheStardropSaloonHeight()}
-        );
-
-        if (shopHours.containsKey(menuName) && shopPositions.containsKey(menuName)) {
-            int currentHour = App.getCurrentGame().getCurrentDateTime().getHour();
-            int[] hours = shopHours.get(menuName);
-            int[] position = shopPositions.get(menuName);
-
-            if (currentHour >= hours[0] && currentHour <= hours[1]) {
-                if ((currentPlayer.getX() >= position[0] && currentPlayer.getX() <= position[0] + position[2]) &&
-                    (currentPlayer.getY() >= position[1] && currentPlayer.getY() <= position[1] + position[3])) {
-                    switch (menuName) {
-                        case "blacksmithmenu":
-                            App.setCurrentMenu(Menu.BlacksmithMenu);
-                            System.out.println("You are now in BlacksmithMenu!");
-                            break;
-                        case "carpentersshopmenu":
-                            App.setCurrentMenu(Menu.CarpentersshopMenu);
-                            System.out.println("You are now in CarpentersshopMenu!");
-                            break;
-                        case "fishshopmenu":
-                            App.setCurrentMenu(Menu.FishshopMenu);
-                            System.out.println("You are now in FishshopMenu!");
-                            break;
-                        case "jojamartmenu":
-                            App.setCurrentMenu(Menu.JojamartMenu);
-                            System.out.println("You are now in JojamartMenu!");
-                            break;
-                        case "marniesranchmenu":
-                            App.setCurrentMenu(Menu.MarniesranchMenu);
-                            System.out.println("You are now in MarniesranchMenu!");
-                            break;
-                        case "pirresgeneralstoremenu":
-                            App.setCurrentMenu(Menu.PirresgeneralstoreMenu);
-                            System.out.println("You are now in PirresgeneralstoreMenu!");
-                            break;
-                        case "thestardropsaloonmenu":
-                            App.setCurrentMenu(Menu.ThestardropsaloonMenu);
-                            System.out.println("You are now in ThestardropsaloonMenu!");
-                            break;
-                        default:
-                            System.out.println("Invalid menu");
-                            break;
-                    }
-                } else {
-                    System.out.println("You have to be in the correct shop area to enter " + menuName);
-                }
-            } else {
-                System.out.println(menuName + " is open between " + hours[0] + " and " + hours[1]);
-            }
-        } else {
-            System.out.println("Invalid menu");
-        }
-
-    }
-
     public void showBuffEffect(Buff buff) {
         // مسیر عکس را بسته به نوع buff مشخص کن
         Main.getBatch().begin();
@@ -5012,7 +4923,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    public void cheatAdd(int count) {
+    public void cheatAdd(int count, Player playerrr) {
         playerrr.setGold(playerrr.getGold() + count);
         System.out.println("new Balance: " + playerrr.getGold());
     }

@@ -51,7 +51,6 @@ public class ServerConnectionThread extends ConnectionThread {
             String playerjson1 = gson1.toJson(playerObj1);
             Player player = gson1.fromJson(playerjson1, Player.class);
             ClientModel.setPlayer(player);
-            //go to game
         }
         return false;
     }

@@ -39,7 +39,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     public GameMenuInputAdapter(GameController gameController) {
         this.gameController = gameController;
         Game game = gameController.getGame();
-        game.getCurrentPlayer().setShowInventory(true);
+        ClientModel.getPlayer().setShowInventory(true);
     }
 
     @Override
@@ -48,11 +48,6 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
             switchInventorySlot(keycode);
-        }
-
-
-        if (keycode == Input.Keys.N) {
-            nextTurn();
         }
 
         if (keycode == Input.Keys.P) {
@@ -71,7 +66,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
         if (keycode == Input.Keys.V) {
-            Game.getCurrentPlayer().pickSelectedItem();
+            ClientModel.getPlayer().pickSelectedItem();
         }
 
         if (keycode == Input.Keys.C) {
@@ -92,7 +87,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.F) {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getCurrentPlayer();
+            Player currentPlayer = ClientModel.getPlayer();
             ArrayList<Player> friends = game.getFriendsOf(currentPlayer); // فرض بر این که این متد وجود داره
 
             FriendsWindow friendsWindow = new FriendsWindow(
@@ -107,7 +102,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
         if (keycode == Input.Keys.H) {
-            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            Player currentPlayer = ClientModel.getPlayer();
 
             TalkHistoryWindow talkHistoryWindow = new TalkHistoryWindow(
                 GameAssetManager.getGameAssetManager().getSkin(),
@@ -122,7 +117,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.T) {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getCurrentPlayer();
+            Player currentPlayer = ClientModel.getPlayer();
 
             TalkWindow talkWindow = new TalkWindow(
                 GameAssetManager.getGameAssetManager().getSkin(),
@@ -137,7 +132,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         if(keycode == Input.Keys.G)
         {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getCurrentPlayer();
+            Player currentPlayer = ClientModel.getPlayer();
             GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage(),
                 currentPlayer);
@@ -147,7 +142,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.R) {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getCurrentPlayer();
+            Player currentPlayer = ClientModel.getPlayer();
             GiftViewWindow giftViewWindow = new GiftViewWindow(
                 game,
                 GameAssetManager.getGameAssetManager().getSkin(),
@@ -159,7 +154,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         if(keycode == Input.Keys.J)
         {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Player currentPlayer = ClientModel.getPlayer();
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
             Stage stage = gameController.getGameMenu().getStage();
 
@@ -172,7 +167,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.X)
         {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Player currentPlayer = ClientModel.getPlayer();
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
             Stage stage = gameController.getGameMenu().getStage();
 
@@ -184,7 +179,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.M) {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Player currentPlayer = ClientModel.getPlayer();
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
             Stage stage = gameController.getGameMenu().getStage();
 
@@ -195,7 +190,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.K) {
             Game game = App.getCurrentGame();
-            Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+            Player currentPlayer = ClientModel.getPlayer();
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
             Stage stage = gameController.getGameMenu().getStage();
 
@@ -222,16 +217,16 @@ public class GameMenuInputAdapter extends InputAdapter {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         Game game = gameController.getGame();
-        int current = game.getCurrentPlayer().getInventory().getSelectedSlot();
-        int size = game.getCurrentPlayer().getInventory().getMaxQuantity();
+        int current = ClientModel.getPlayer().getInventory().getSelectedSlot();
+        int size = ClientModel.getPlayer().getInventory().getMaxQuantity();
         int next = (current + (amountY > 0 ? 1 : -1) + size) % size;
-        game.getCurrentPlayer().getInventory().setSelectedSlot(next);
+        ClientModel.getPlayer().getInventory().setSelectedSlot(next);
         return true;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).isPlacingItem()) {
+        if (ClientModel.getPlayer().isPlacingItem()) {
             if (button == Input.Buttons.LEFT) {
                 System.out.println("place ");
                 placeCrafting(screenX, screenY);
@@ -242,7 +237,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 if (buildingPaceMode) {
                     buildDamdari(screenX, screenY);
                 }
-                Game.getCurrentPlayer().pickSelectedItem();
+                ClientModel.getPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
                 openNpcDialog(screenX, screenY);
                 openNpcPage(screenX,screenY);
@@ -259,10 +254,10 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void openNpcPage(int screenX, int screenY) {
         Game game = gameController.getGame();
-        OrthographicCamera camera = game.getCamera();
+        OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+        Pair<Float, Float> playerPos = new Pair<>((float) ClientModel.getPlayer().getX(), (float) ClientModel.getPlayer().getY());
 
         int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
@@ -281,23 +276,23 @@ public class GameMenuInputAdapter extends InputAdapter {
         NPC robin = currentGame.getNPCROBIN();
 
         if (tileX == sebastian.getX() && (tileY == sebastian.getY() || tileY == sebastian.getY() + 1)) {
-            currentGame.setSebastian_view(true);
+            gameController.getGameMenu().getGameView().setSebastian_view(true);
             openNPCViewPage(sebastian);
         }
         if (tileX == abigail.getX() && (tileY == abigail.getY() || tileY == abigail.getY() + 1)) {
-            currentGame.setAbigail_view(true);
+            gameController.getGameMenu().getGameView().setAbigail_view(true);
             openNPCViewPage(abigail);
         }
         if (tileX == harvey.getX() && (tileY == harvey.getY() || tileY == harvey.getY() + 1)) {
-            currentGame.setHarvey_view(true);
+            gameController.getGameMenu().getGameView().setHarvey_view(true);
             openNPCViewPage(harvey);
         }
         if (tileX == leah.getX() && (tileY == leah.getY() || tileY == leah.getY() + 1)) {
-            currentGame.setLeah_view(true);
+            gameController.getGameMenu().getGameView().setLeah_view(true);
             openNPCViewPage(leah);
         }
         if (tileX == robin.getX() && (tileY == robin.getY() || tileY == robin.getY() + 1)) {
-            currentGame.setRobin_view(true);
+            gameController.getGameMenu().getGameView().setRobin_view(true);
             openNPCViewPage(robin);
         }
     }
@@ -310,10 +305,10 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void openNpcDialog(int screenX, int screenY) {
         Game game = gameController.getGame();
-        OrthographicCamera camera = game.getCamera();
+        OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+        Pair<Float, Float> playerPos = new Pair<>((float) ClientModel.getPlayer().getX(), (float) ClientModel.getPlayer().getY());
 
         int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
@@ -332,23 +327,23 @@ public class GameMenuInputAdapter extends InputAdapter {
         NPC robin = currentGame.getNPCROBIN();
 
         if (tileX == sebastian.getX() && tileY == sebastian.getY() + 2) {
-            currentGame.setSebastian_dialog(true);
+            gameController.getGameMenu().getGameView().setSebastian_dialog(true);
             openDialogPage(sebastian);
         }
         if (tileX == abigail.getX() && tileY == abigail.getY() + 2) {
-            currentGame.setAbigail_dialog(true);
+            gameController.getGameMenu().getGameView().setAbigail_dialog(true);
             openDialogPage(abigail);
         }
         if (tileX == harvey.getX() && tileY == harvey.getY() + 2) {
-            currentGame.setHarvey_dialog(true);
+            gameController.getGameMenu().getGameView().setHarvey_dialog(true);
             openDialogPage(harvey);
         }
         if (tileX == leah.getX() && tileY == leah.getY() + 2) {
-            currentGame.setLeah_dialog(true);
+            gameController.getGameMenu().getGameView().setLeah_dialog(true);
             openDialogPage(leah);
         }
         if (tileX == robin.getX() && tileY == robin.getY() + 2) {
-            currentGame.setRobin_dialog(true);
+            gameController.getGameMenu().getGameView().setRobin_dialog(true);
             openDialogPage(robin);
         }
     }
@@ -361,7 +356,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     public void update(float delta, Batch batch) {
         Game game = gameController.getGame();
-        Player player = game.getCurrentPlayer();
+        Player player = ClientModel.getPlayer();
         float vx = 0, vy = 0;
         int dir = 0;
 
@@ -395,47 +390,47 @@ public class GameMenuInputAdapter extends InputAdapter {
         player.setVelocity(vx * speed, vy * speed);
         player.update(delta, game.getMap(), gameController.getGameMenu().getGameView());
         //handle craftinfo
-        if (game.isShowPopup()) {
+        if (gameController.getGameMenu().getGameView().isShowPopup()) {
             // Draw semi-transparent background
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(0, 0, 0, 0.5f); // Semi-transparent black
             shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1);
-            shapeRenderer.rect(game.getPopupRect().x, game.getPopupRect().y, game.getPopupRect().width, game.getPopupRect().height);
+            shapeRenderer.rect(gameController.getGameMenu().getGameView().getPopupRect().x, gameController.getGameMenu().getGameView().getPopupRect().y, gameController.getGameMenu().getGameView().getPopupRect().width, gameController.getGameMenu().getGameView().getPopupRect().height);
             shapeRenderer.end();
 
             // Draw text
             batch.begin();
             BitmapFont font = new BitmapFont();
-            font.draw(batch, game.getPopupMessage(),
-                game.getPopupRect().x + 20,
-                game.getPopupRect().y + game.getPopupRect().height - 30);
+            font.draw(batch, gameController.getGameMenu().getGameView().getPopupMessage(),
+                gameController.getGameMenu().getGameView().getPopupRect().x + 20,
+                gameController.getGameMenu().getGameView().getPopupRect().y + gameController.getGameMenu().getGameView().getPopupRect().height - 30);
 
             // Draw close button
             font.draw(batch, "[X] Close",
-                game.getPopupRect().x + game.getPopupRect().width - 80,
-                game.getPopupRect().y + 30);
+                gameController.getGameMenu().getGameView().getPopupRect().x + gameController.getGameMenu().getGameView().getPopupRect().width - 80,
+                gameController.getGameMenu().getGameView().getPopupRect().y + 30);
             batch.end();
 
             // Handle input
             if (Gdx.input.justTouched()) {
                 Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                game.getCamera().unproject(touchPos);
+                gameController.getGameMenu().getGameView().getCamera().unproject(touchPos);
 
                 // Check if close was clicked (simple bounds check)
-                if (touchPos.x > game.getPopupRect().x + game.getPopupRect().width - 80 &&
-                    touchPos.x < game.getPopupRect().x + game.getPopupRect().width - 20 &&
-                    touchPos.y > game.getPopupRect().y &&
-                    touchPos.y < game.getPopupRect().y + 50) {
-                    game.setShowPopup(false);
+                if (touchPos.x > gameController.getGameMenu().getGameView().getPopupRect().x + gameController.getGameMenu().getGameView().getPopupRect().width - 80 &&
+                    touchPos.x < gameController.getGameMenu().getGameView().getPopupRect().x + gameController.getGameMenu().getGameView().getPopupRect().width - 20 &&
+                    touchPos.y > gameController.getGameMenu().getGameView().getPopupRect().y &&
+                    touchPos.y < gameController.getGameMenu().getGameView().getPopupRect().y + 50) {
+                    gameController.getGameMenu().getGameView().setShowPopup(false);
                 }
             }
         }
         //handle watering animation
-        if (game.isWatering()) {
+        if (gameController.getGameMenu().getGameView().isWatering()) {
 
-            game.setWaterTimer(game.getWaterTimer() - Gdx.graphics.getDeltaTime());
+            gameController.getGameMenu().getGameView().setWaterTimer(gameController.getGameMenu().getGameView().getWaterTimer() - Gdx.graphics.getDeltaTime());
 
             batch.begin();
             batch.setColor(0, 0.5f, 1, 0.3f);
@@ -445,22 +440,22 @@ public class GameMenuInputAdapter extends InputAdapter {
             pixmap.drawPixel(0, 0);
             whitePixel = new Texture(pixmap);
             pixmap.dispose();
-            batch.draw(whitePixel, game.getPlantx() * ClientModel.TILE_SIZE, game.getPlanty() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            batch.draw(whitePixel, gameController.getGameMenu().getGameView().getPlantx() * ClientModel.TILE_SIZE, gameController.getGameMenu().getGameView().getPlanty() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
             batch.setColor(Color.WHITE);
             batch.end();
 
-            if (game.getWaterTimer() <= 0) {
-                game.setWatering(false);
+            if (gameController.getGameMenu().getGameView().getWaterTimer() <= 0) {
+                gameController.getGameMenu().getGameView().setWatering(false);
             }
         }
     }
 
     private void gotoMarket(int screenX, int screenY) {
         Game game = gameController.getGame();
-        OrthographicCamera camera = game.getCamera();
+        OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+        Pair<Float, Float> playerPos = new Pair<>((float) ClientModel.getPlayer().getX(), (float) ClientModel.getPlayer().getY());
 
         int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
@@ -525,13 +520,13 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void handleInventoryVisibility() {
         Game game = gameController.getGame();
-        game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
+        ClientModel.getPlayer().setShowInventory(!ClientModel.getPlayer().isShowInventory());
     }
 
     private void switchInventorySlot(int keycode) {
         Game game = gameController.getGame();
         int selectedSlot = keycode - Input.Keys.NUM_1;
-        game.getCurrentPlayer().getInventory().setSelectedSlot(selectedSlot);
+        ClientModel.getPlayer().getInventory().setSelectedSlot(selectedSlot);
     }
 
     private void handleBuildingView() {
@@ -540,8 +535,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         PlaceEntityDialog dialog = new PlaceEntityDialog(stage, skin, name -> {
-            game.setPendingPlacementName(name);
-            input = game.getPendingPlacementName();
+            gameController.getGameMenu().getGameView().setPendingPlacementName(name);
+            input = gameController.getGameMenu().getGameView().getPendingPlacementName();
             inputBuilding(input);
             Gdx.input.setInputProcessor(gameController.getGameMenu().getInputMultiplexer());
         });
@@ -549,17 +544,13 @@ public class GameMenuInputAdapter extends InputAdapter {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void nextTurn() {
-        GameMenuController.nextTurn(gameController.getGameMenu(), gameController.getGameMenu().getGameView());
-    }
-
 
     private void performAction(int screenX, int screenY) {
         Game game = gameController.getGame();
-        OrthographicCamera camera = game.getCamera();
+        OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+        Pair<Float, Float> playerPos = new Pair<>((float) ClientModel.getPlayer().getX(), (float) ClientModel.getPlayer().getY());
 
         int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
@@ -583,16 +574,16 @@ public class GameMenuInputAdapter extends InputAdapter {
             return;
         }
 
-        Item item = Game.getCurrentPlayer().getInventory().getItemBySlot(game.getCurrentPlayer().getInventory().getSelectedSlot());
+        Item item = ClientModel.getPlayer().getInventory().getItemBySlot(ClientModel.getPlayer().getInventory().getSelectedSlot());
         gameController.useItem(item, tileX, tileY, game);
     }
 
     private void placeCrafting(int screenX, int screenY) {
         Game game = gameController.getGame();
-        OrthographicCamera camera = game.getCamera();
+        OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
-        Pair<Float, Float> playerPos = new Pair<>((float) Game.getCurrentPlayer().getX(), (float) Game.getCurrentPlayer().getY());
+        Pair<Float, Float> playerPos = new Pair<>((float) ClientModel.getPlayer().getX(), (float) ClientModel.getPlayer().getY());
 
         int tileX = (int) (worldCoordinates.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoordinates.y / ClientModel.TILE_SIZE);
@@ -600,8 +591,8 @@ public class GameMenuInputAdapter extends InputAdapter {
 //        int dx = tileX - Math.round(playerPos.first);
 //        int dy = tileY - Math.round(playerPos.second);
         if (App.getCurrentGame().getMap().get(tileX).get(tileY).getInside() == null) {
-            Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-            CraftingItem item = Game.getCurrentPlayer().getCraftingInHand();
+            Player currentPlayer = ClientModel.getPlayer();
+            CraftingItem item = ClientModel.getPlayer().getCraftingInHand();
             App.getCurrentGame().getMap().get(tileX).get(tileY).setInside(item);
             App.getCurrentGame().getMap().get(tileX).get(tileY).setWalkable(false);
             currentPlayer.setCraftingInHand(null);
@@ -626,7 +617,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         showNumberInputDialog(stage, "Enter Count: ", new NumberInputListener() {
             @Override
             public void onNumberEntered(int number) {
-                Result result = GameMenuController.sell(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemBySlot(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getSelectedSlot()), number);
+                Result result = GameMenuController.sell(ClientModel.getPlayer().getInventory().getItemBySlot(ClientModel.getPlayer().getInventory().getSelectedSlot()), number,ClientModel.getPlayer());
                 System.out.println("Sell: " + result.getMessage());
                 Gdx.input.setInputProcessor(originalInputProcessor);
             }
@@ -730,48 +721,48 @@ public class GameMenuInputAdapter extends InputAdapter {
             return;
         }
         if (buildingName.equals("barn")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 350 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 6000) {
+            if (ClientModel.getPlayer().getWood() < 350 ||
+                ClientModel.getPlayer().getGold() < 6000) {
                 return;
             } else {
                 buildingPaceMode = true;
             }
         }
         if (buildingName.equalsIgnoreCase("bigBarn")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 450 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 12000) {
+            if (ClientModel.getPlayer().getWood() < 450 ||
+                ClientModel.getPlayer().getGold() < 12000) {
                 return;
             } else {
                 buildingPaceMode = true;
             }
         }
         if (buildingName.equalsIgnoreCase("deluxeBarn")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 550 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 25000) {
+            if (ClientModel.getPlayer().getWood() < 550 ||
+                ClientModel.getPlayer().getGold() < 25000) {
                 return;
             } else {
                 buildingPaceMode = true;
             }
         }
         if (buildingName.equalsIgnoreCase("Coop")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 300 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 4000) {
+            if (ClientModel.getPlayer().getWood() < 300 ||
+                ClientModel.getPlayer().getGold() < 4000) {
                 return;
             } else {
                 buildingPaceMode = true;
             }
         }
         if (buildingName.equalsIgnoreCase("bigCoop")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 400 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 10000) {
+            if (ClientModel.getPlayer().getWood() < 400 ||
+                ClientModel.getPlayer().getGold() < 10000) {
                 return;
             } else {
                 buildingPaceMode = true;
             }
         }
         if (buildingName.equalsIgnoreCase("deluxeCoop")) {
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getWood() < 500 ||
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() < 20000) {
+            if (ClientModel.getPlayer().getWood() < 500 ||
+                ClientModel.getPlayer().getGold() < 20000) {
                 return;
             } else {
                 buildingPaceMode = true;
@@ -781,7 +772,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     private void buildDamdari(int screenX, int screenY) {
         Game game = gameController.getGame();
-        Vector3 worldCoords = game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+        Vector3 worldCoords = gameController.getGameMenu().getGameView().getCamera().unproject(new Vector3(screenX, screenY, 0));
 
         int tileX = (int) (worldCoords.x / ClientModel.TILE_SIZE);
         int tileY = (int) (worldCoords.y / ClientModel.TILE_SIZE);
@@ -794,7 +785,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 //                        int y = tileY + dy;
 //                        System.out.println("khar"+ x);
 //                        System.out.println("nigga"+ y);
-//                          Tavileh tavileh=  App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh();
+//                          Tavileh tavileh=  ClientModel.getPlayer().getMyFarm().getMyTavileh();
 //                          game.getMap().get(x).get(y).setInside(tavileh);
 //                    }
 //                }
@@ -817,11 +808,11 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
         if (input.equalsIgnoreCase("cow")) {
             TavilehAnimal animal = new TavilehAnimal();
-            if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh() == null
-                && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyBigBarn() == null
-                && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyDeluxeBarn() == null) {
+            if (ClientModel.getPlayer().getMyFarm().getMyTavileh() == null
+                && ClientModel.getPlayer().getMyFarm().getMyBigBarn() == null
+                && ClientModel.getPlayer().getMyFarm().getMyDeluxeBarn() == null) {
 
-            } else if (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh() != null && (App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getMaxCapacity() > App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals().size()) && App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getStatus()) {
+            } else if (ClientModel.getPlayer().getMyFarm().getMyTavileh() != null && (ClientModel.getPlayer().getMyFarm().getMyTavileh().getMaxCapacity() > ClientModel.getPlayer().getMyFarm().getMyTavileh().getTavilehAnimals().size()) && ClientModel.getPlayer().getMyFarm().getMyTavileh().getStatus()) {
                 //set animal pack
                 System.exit(0);
                 animal.setType((TavilehAnimalEnums.Cow));
@@ -831,12 +822,12 @@ public class GameMenuInputAdapter extends InputAdapter {
                 animal.setXofAnimal(-1);
                 animal.setYofAnimal(-1);
                 animal.setWhereDoILive("barn");
-                ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
+                ArrayList<Animal> animals = ClientModel.getPlayer().getMyBoughtAnimals();
                 animals.add(animal);
-                ArrayList<TavilehAnimal> tavilehAnimals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh().getTavilehAnimals();
+                ArrayList<TavilehAnimal> tavilehAnimals = ClientModel.getPlayer().getMyFarm().getMyTavileh().getTavilehAnimals();
                 tavilehAnimals.add(animal);
-                int newGold = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getGold() - 1500;
-                App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setGold(newGold);
+                int newGold = ClientModel.getPlayer().getGold() - 1500;
+                ClientModel.getPlayer().setGold(newGold);
             }
         }
         buildingPaceMode = false;

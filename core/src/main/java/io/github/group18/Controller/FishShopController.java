@@ -15,14 +15,14 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
         return App.getCurrentGame().getFishShopMarket().getStock();
     }
 
-    public Result purchase(String name, String count) {
+    public Result purchase(String name, String count,Player playerrr) {
         int quantity = -1;
         if (count == null) {
             quantity = 1;
         } else {
             quantity = Integer.parseInt(count);
         }
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        Player currentPlayer = playerrr;
         switch (name.toLowerCase()) {
             case "fishsmoker":
                 boolean validquantity = false;
@@ -139,7 +139,7 @@ public class FishShopController implements MenuEnter, ShowCurrentMenu, MarketCon
         return null;
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName,Player playerrr) {
         //from markets we can move to gamemenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

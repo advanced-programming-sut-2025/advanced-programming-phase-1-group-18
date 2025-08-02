@@ -6,6 +6,7 @@ import io.github.group18.Model.Game;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Kashi;
 import io.github.group18.Model.Result;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.View.GameMenu;
 
 import java.awt.*;
@@ -89,17 +90,17 @@ public class GameController {
         }
         //Plant Seeds
         if (selectedItem instanceof ForagingSeed foragingSeed) {
-            GameMenuController.plant(foragingSeed, kashi);
+            GameMenuController.plant(foragingSeed, kashi, ClientModel.getPlayer());
         }
         if (selectedItem instanceof TreeSeed treeSeed) {
-            GameMenuController.plant(treeSeed, kashi);
+            GameMenuController.plant(treeSeed, kashi, ClientModel.getPlayer());
         }
         if (selectedItem instanceof MixedSeed mixedSeed) {
-            GameMenuController.plant(mixedSeed, kashi);
+            GameMenuController.plant(mixedSeed, kashi, ClientModel.getPlayer());
         }
         //Fertilizer
         if (selectedItem instanceof Fertilizer fertilizer) {
-            GameMenuController.fertilize(fertilizer, kashi);
+            GameMenuController.fertilize(fertilizer, kashi, ClientModel.getPlayer());
         }
         gameMenu.getGameView().loadTextures();
     }

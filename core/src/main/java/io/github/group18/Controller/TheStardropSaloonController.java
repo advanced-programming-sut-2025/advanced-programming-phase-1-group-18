@@ -18,17 +18,11 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
         return App.getCurrentGame().getTheStardropSaloonMarket().getStock();
     }
 
-
-    Player currentPlayer;
-
     public TheStardropSaloonController() {
-        if (!(App.getCurrentGame() == null || App.getCurrentGame().getPlayers() == null)) {
-            this.currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        }
     }
 
 
-    private Result handlePurchase(FoodCookingEnums cookingEnums, int quantity) {
+    private Result handlePurchase(FoodCookingEnums cookingEnums, int quantity,Player playerrr) {
         currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         for (Object item : App.getCurrentGame().getTheStardropSaloonMarket().getStock().keySet()) {
             if (item instanceof Cookingrecipe && ((Cookingrecipe) item).getFood() == cookingEnums &&
@@ -47,7 +41,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
         return new Result(false, "Not enough stock in store");
     }
 
-    public Result purchase(String name, String count) {
+    public Result purchase(String name, String count,Player playerrr) {
         currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         int quantity = -1;
         if (count == null) {
@@ -206,7 +200,7 @@ public class TheStardropSaloonController implements MenuEnter, ShowCurrentMenu, 
         return null;
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName,Player playerrr) {
         //from markets we can move to gamemenu
         menuName = menuName.toLowerCase();
         switch (menuName) {
