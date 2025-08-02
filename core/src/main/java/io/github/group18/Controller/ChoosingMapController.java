@@ -40,10 +40,7 @@ public class ChoosingMapController {
 
     public void arrangeVisibily() {
         Message res = ChooseMapMessageHandler.refreshMaps(App.getCurrentUser());
-        System.out.println(res.getBody());
-        System.out.println(res.getMenu());
-        int usersNum = res.getFromBody("usersNum");
-
+        int usersNum = res.getIntFromBody("usersNum");
         if (usersNum < 3) {
             view.getMap3().dispose();
         }
@@ -61,8 +58,6 @@ public class ChoosingMapController {
                 view.setMap4(getMap(res.getIntFromBody("3")));
             }
         }
-
-
     }
 
     public void handleStartNewGame() {
@@ -89,48 +84,49 @@ public class ChoosingMapController {
 //                view.setMap4(getMap(map4));
 //                view.getPlayButton().setVisible(true);
             }
-//            else if (view.getPlayButton().isPressed()&& view.getPlayButton().isVisible()) {
-//                view.getPlayButton().setVisible(false);
-//                if(map1 != 0){
-//                    maps.add(map1);
-//                    if (map2!=0){
-//                        maps.add(map2);
-//                        if (map3!=0){
-//                            maps.add(map3);
-//                            if (map4!=0){
-//                                maps.add(map4);
-//                            }
-//                        }
-//                    }
-//                }
-//                if (maps.size()==users.size()) {
-//                    try {
-//                        ArrayList<String>adaptedUsers = new ArrayList<>();
-//                        for (int i = 0; i < users.size()-1; i++) {adaptedUsers.add(users.get(i));}
-//                        Result result = gameMenuController.gameNew(adaptedUsers,maps);
-//                        if (!result.isSuccessful()){
-//                            view.getNotif().setText(result.getMessage());
-//                        }else {
-//                            App.setGameMenuController(gameMenuController);
-//                            GameController gameController = new GameController(Main.getMain());
-//                            App.setGameController(gameController);
-//                            gameController.init(App.getCurrentGame());
-//                            gameController.run();
-////                            mainMenu.hide();
-//
-////                            GameView gameView = new GameView(new GameController(),view.getSkin());
-////                            gameView.setMenuController(gameMenuController);
-////                            Main.getMain().getScreen().dispose();
-////                            Main.getMain().setScreen(gameView);
-//                        }
-//                    }catch (Exception e){
-//                        view.getNotif().setText(e.getMessage());
-//                        e.printStackTrace();
-//                    }
-//                }else {
-//                    view.getNotif().setText("Choose maps complete");
-//                }
-//            }else if (view.getBackButton().isPressed()){
+            else if (view.getPlayButton().isPressed()&& view.getPlayButton().isVisible()) {
+                view.getPlayButton().setVisible(false);
+                if(map1 != 0){
+                    maps.add(map1);
+                    if (map2!=0){
+                        maps.add(map2);
+                        if (map3!=0){
+                            maps.add(map3);
+                            if (map4!=0){
+                                maps.add(map4);
+                            }
+                        }
+                    }
+                }
+                if (maps.size()==users.size()) {
+                    try {
+                        ArrayList<String>adaptedUsers = new ArrayList<>();
+                        for (int i = 0; i < users.size()-1; i++) {adaptedUsers.add(users.get(i));}
+                        Result result = gameMenuController.gameNew(adaptedUsers,maps,App.getCurrentUser());
+                        if (!result.isSuccessful()){
+                            view.getNotif().setText(result.getMessage());
+                        }else {
+                            App.setGameMenuController(gameMenuController);
+                            GameController gameController = new GameController(Main.getMain());
+                            App.setGameController(gameController);
+                            gameController.init(App.getCurrentGame());
+                            gameController.run();
+//                            mainMenu.hide();
+
+//                            GameView gameView = new GameView(new GameController(),view.getSkin());
+//                            gameView.setMenuController(gameMenuController);
+//                            Main.getMain().getScreen().dispose();
+//                            Main.getMain().setScreen(gameView);
+                        }
+                    }catch (Exception e){
+                        view.getNotif().setText(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }else {
+                    view.getNotif().setText("Choose maps complete");
+                }
+            }
+//            else if (view.getBackButton().isPressed()){
 //                users = new ArrayList<>();
 //                maps = new ArrayList<>();
 //                Main.getMain().getScreen().dispose();

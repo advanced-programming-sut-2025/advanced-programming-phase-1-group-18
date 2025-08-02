@@ -10,18 +10,22 @@ import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.ChoosingMapView;
 
+import java.util.HashMap;
+
 public class ChangeMenuController {
     public static Message handleMessage(Message message) {
         switch (message.getType()) {
             case change_menu:
                 changeMenu();
-                return message;
+                HashMap<String,Object>body = new HashMap<>();
+                body.put("message", true);
+                return new Message(body, Message.Type.change_menu, Message.Menu.Basic);
             default:
                 return message;
         }
     }
     public static void changeMenu() {
-        System.out.println(App.getCurrentUser());
+        System.out.println("From Client: change menu");
         Gdx.app.postRunnable(() -> {
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));

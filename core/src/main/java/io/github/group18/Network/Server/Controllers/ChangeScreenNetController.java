@@ -18,15 +18,14 @@ public class ChangeScreenNetController {
                 Object userObj = message.getFromBody("user");
                 String userjson = gson.toJson(userObj);
                 User newUser = gson.fromJson(userjson, User.class);
-                Lobby lobby = ServerModel.getLobbyByUser(newUser);
-                return changeScreen(lobby);
+                return changeScreen();
             default:
                 return message;
         }
     }
 
-    private static Message changeScreen(Lobby lobby) {
-        ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
+    private static Message changeScreen() {
+        ChangeScreenMsgHandler.ChangeScreenToMap(ServerModel.getOnlineUsers());
         HashMap<String,Object>body = new HashMap<>();
         body.put("result", true);
         return new Message(body, Message.Type.change_menu, Message.Menu.CHANGE_MENU);

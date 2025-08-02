@@ -18,13 +18,14 @@ public class ChooseMapNetworkController {
                 String userjson = gson.toJson(userObj);
                 User newUser = gson.fromJson(userjson, User.class);
                 Lobby lobby =ServerModel.getLobbyByUser(newUser);
-                connection.sendMessage(refreshMaps(lobby));
-            case select_map:
+                return (refreshMaps(lobby));
+            case choose_map:
                 gson = new Gson();
                 userObj = message.getFromBody("user");
                 userjson = gson.toJson(userObj);
                 newUser = gson.fromJson(userjson, User.class);
                 int mapNum = message.getIntFromBody("mapNum");
+//                connection.sendMessage(selectMap(newUser,mapNum));
                 return selectMap(newUser,mapNum);
             default:
                 return message;
@@ -32,7 +33,7 @@ public class ChooseMapNetworkController {
     }
     public static Message refreshMaps(Lobby lobby) {
         HashMap<String, Object> body = new HashMap<>();
-        body.put("usersNum", (Integer)lobby.getUsers().size());
+        body.put("usersNum",lobby.getUsers().size());
         int i = 0;
         for (User user : lobby.getUsers()) {
             body.put(String.valueOf(i), lobby.getChoseMap().get(i));
@@ -46,6 +47,6 @@ public class ChooseMapNetworkController {
         lobby.getChoseMap().set(lobby.getUsers().indexOf(user), mapNum);
         body.put("mapNum", mapNum);
         body.put("user", user);
-        return new Message(body, Message.Type.select_map, Message.Menu.choosing_map);
+        return new Message(body, Message.Type.choose_map, Message.Menu.choosing_map);
     }
 }
