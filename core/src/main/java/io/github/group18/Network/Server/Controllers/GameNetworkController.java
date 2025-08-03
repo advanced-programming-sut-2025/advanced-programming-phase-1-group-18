@@ -77,11 +77,15 @@ public class GameNetworkController {
                 HashMap<String, Object> map4 = new HashMap<>();
                 map4.put("numberOfPlayers", App.getCurrentGame().getPlayers().size());
                 int count = 1;
-                for(Player player : App.getCurrentGame().getPlayers())
-                {
+                for (Player player : App.getCurrentGame().getPlayers()) {
                     map4.put(String.valueOf(count), player.getX());
-                    map4.put(String.valueOf(count+1), player.getY());
-                    count += 2;
+                    map4.put(String.valueOf(count + 1), player.getY());
+                    map4.put(String.valueOf(count + 2), player.getMovingDirection());
+                    map4.put(String.valueOf(count + 3), player.getState());
+                    map4.put(String.valueOf(count + 4), player.getFaintTimer());
+                    map4.put(String.valueOf(count + 5), player.getEatingTimer());
+                    map4.put(String.valueOf(count + 6), player.getFoodBuff());
+                    count += 7;
                 }
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
                 clientConnectionThread.sendMessage(send4);

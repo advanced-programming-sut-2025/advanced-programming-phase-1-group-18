@@ -222,11 +222,11 @@ public class GameView {
         batch.begin();
         renderTiles();
         renderPlayer();
-        renderInMyHandToolPlayer();
-        renderInventory();
+//        renderInMyHandToolPlayer();
+//        renderInventory();
         renderClock();
         energy.render(batch);
-        renderMarkets();
+//        renderMarkets();
         renderKalagEffect(batch);
         renderBrightness();
         walking = false;
@@ -620,45 +620,41 @@ public class GameView {
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         int numberOfPlayers = response.getIntFromBody("numberOfPlayers");
-        ArrayList<Double> xs = new ArrayList<>();
-        ArrayList<Double> ys = new ArrayList<>();
         int count = 1;
         for (int i = 0; i < numberOfPlayers; i++) {
-            double x = response.getFromBody(String.valueOf(count));
-            double y = response.getFromBody(String.valueOf(count + 1));
-            xs.add(x);
-            ys.add(y);
-            count += 2;
-        }
-
-
-        for (int i = 0; i < numberOfPlayers; i++) {
-            double first = xs.get(i);
-            double second = ys.get(i);
-
-            moveDirection = player.getMovingDirection();
+            double first = response.getFromBody(String.valueOf(count));
+            double second = response.getFromBody(String.valueOf(count + 1));
+            int movingDirection = response.getIntFromBody(String.valueOf(count + 2));
+            int state = response.getIntFromBody(String.valueOf(count + 3));
+            float faintTimer = response.getFromBody(String.valueOf(count + 4));
+            float eatingTimer = response.getFromBody(String.valueOf(count + 5));
+            Gson gson = new Gson();
+            Object buffObj = response.getFromBody(String.valueOf(count + 6));
+            String buffSTR = gson.toJson(buffObj);
+            Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
             stateTime += Gdx.graphics.getDeltaTime();
 
             TextureRegion currentFrame = new TextureRegion();
 
-            switch (player.getState()) {
+            switch (state) {
                 case Player.STATE_FAINTING:
                     currentFrame = playerAnimations.get(5)
-                        .getKeyFrame(player.getFaintTimer(), false);
+                        .getKeyFrame(faintTimer, false);
                     break;
                 case Player.STATE_IDLE:
-                    currentFrame = playerAnimations.get(player.getMovingDirection())
+                    currentFrame = playerAnimations.get(movingDirection)
                         .getKeyFrame(stateTime, true);
                     break;
                 case Player.EATING_STATE:
-                    currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
-                    Texture buff = showBuffEffect(player.getFoodBuff());
+                    currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
+                    Texture buff = showBuffEffect(foodBuff);
                     batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
                     break;
             }
 
             batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
                 ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            count += 7;
         }
 
     }
@@ -703,15 +699,16 @@ public class GameView {
     }
 
     private void renderClock() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
-        if (game != null) {
-            DateTime time = game.getCurrentDateTime();
-            if (time != null) {
-                clock.render(batch, time, camera);
-            }
+        Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        Gson gson = new Gson();
+        Object dateTimeObj = response.getFromBody("dateTime");
+        String dateTimeStr = gson.toJson(dateTimeObj);
+        DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
+        if (time != null) {
+            clock.render(batch, time, camera);
         }
+
     }
 
     private void renderInventory() {

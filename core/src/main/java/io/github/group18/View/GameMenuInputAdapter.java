@@ -36,9 +36,6 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     public GameMenuInputAdapter(GameController gameController) {
         this.gameController = gameController;
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         ClientModel.getPlayer().setShowInventory(true);
     }
 
@@ -54,16 +51,13 @@ public class GameMenuInputAdapter extends InputAdapter {
             handleCheatCodeDialog();
         }
 
-
         if (keycode == Input.Keys.I) {
             handleInventoryVisibility();
         }
 
-
         if (keycode == Input.Keys.B) {
             handleCraftingMenu();
         }
-
 
         if (keycode == Input.Keys.V) {
             ClientModel.getPlayer().pickSelectedItem();
@@ -102,7 +96,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-
         if (keycode == Input.Keys.H) {
             Player currentPlayer = ClientModel.getPlayer();
 
@@ -115,7 +108,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             gameController.getGameMenu().getStage().addActor(talkHistoryWindow);
             return true;
         }
-
 
         if (keycode == Input.Keys.T) {
             //Server-TODO(ask server for game)
@@ -132,9 +124,9 @@ public class GameMenuInputAdapter extends InputAdapter {
             gameController.getGameMenu().getStage().addActor(talkWindow);
             return true;
         }
+
         //gift Window
-        if(keycode == Input.Keys.G)
-        {
+        if (keycode == Input.Keys.G) {
             //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
             Game game = null;
@@ -159,8 +151,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if(keycode == Input.Keys.J)
-        {
+        if (keycode == Input.Keys.J) {
             //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
             Game game = null;
@@ -174,8 +165,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if (keycode == Input.Keys.X)
-        {
+        if (keycode == Input.Keys.X) {
             //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
             Game game = null;
@@ -216,11 +206,6 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-
-
-
-
-
         return true;
     }
 
@@ -258,7 +243,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 ClientModel.getPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
                 openNpcDialog(screenX, screenY);
-                openNpcPage(screenX,screenY);
+                openNpcPage(screenX, screenY);
                 return true;
             }
             if (button == Input.Buttons.RIGHT) {
@@ -578,7 +563,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         Gdx.input.setInputProcessor(stage);
     }
 
-
     private void performAction(int screenX, int screenY) {
         //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
@@ -648,7 +632,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         return keysHeld;
     }
 
-
     private void Sell() {
         InputProcessor originalInputProcessor = Gdx.input.getInputProcessor();
         Stage stage = gameController.getGameMenu().getStage();
@@ -656,7 +639,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         showNumberInputDialog(stage, "Enter Count: ", new NumberInputListener() {
             @Override
             public void onNumberEntered(int number) {
-                Result result = GameMenuController.sell(ClientModel.getPlayer().getInventory().getItemBySlot(ClientModel.getPlayer().getInventory().getSelectedSlot()), number,ClientModel.getPlayer());
+                Result result = GameMenuController.sell(ClientModel.getPlayer().getInventory().getItemBySlot(ClientModel.getPlayer().getInventory().getSelectedSlot()), number, ClientModel.getPlayer());
                 System.out.println("Sell: " + result.getMessage());
                 Gdx.input.setInputProcessor(originalInputProcessor);
             }
@@ -751,8 +734,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         );
         gameController.getGameMenu().getStage().addActor(cheatWindow);
     }
-
-
 
     //for building
     private void inputBuilding(String buildingName) {
