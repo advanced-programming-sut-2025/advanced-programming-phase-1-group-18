@@ -14,7 +14,7 @@ public class User {
     protected int highestGold;
     protected String avatar;
     protected int ID;
-
+    boolean isChangedScreen=false;
     public String getUsername() {
         return Username;
     }
@@ -127,5 +127,13 @@ public class User {
         if (highestGold != user.highestGold) return false;
         if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
         return true;
+    }
+
+    public boolean isChangedScreen() {
+        return isChangedScreen;
+    }
+
+    public void setChangedScreen(boolean changedScreen) {
+        isChangedScreen = changedScreen;
     }
 }

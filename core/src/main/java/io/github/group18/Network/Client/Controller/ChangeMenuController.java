@@ -33,7 +33,9 @@ public class ChangeMenuController {
         }
     }
     public static void changeMenu(ArrayList<String> usernames) {
-        System.out.println("From Client: change menu");
+        if (App.getCurrentUser().isChangedScreen()) return;
+        System.out.println("From Client: change menu"+usernames);
+        App.getCurrentUser().setChangedScreen(true);
         Gdx.app.postRunnable(() -> {
             ChoosingMapController controller = new ChoosingMapController();
             controller.setGameMenuController(App.getGameMenuController());

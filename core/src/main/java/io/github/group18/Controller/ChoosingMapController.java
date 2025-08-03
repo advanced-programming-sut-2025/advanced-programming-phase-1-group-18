@@ -6,6 +6,7 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ChooseMapMessageHandler;
+import io.github.group18.Network.Client.App.GameMessageHandler;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.ChoosingMapView;
 import io.github.group18.View.GameView;
@@ -51,12 +52,16 @@ public class ChoosingMapController {
         for (int i = 0; i < usersNum; i++) {
             if (i == 0) {
                 view.setMap1(getMap(res.getIntFromBody("0")));
+                map1=res.getIntFromBody("0");
             } else if (i == 1) {
                 view.setMap2(getMap(res.getIntFromBody("1")));
+                map2=res.getIntFromBody("1");
             } else if (i == 2) {
                 view.setMap3(getMap(res.getIntFromBody("2")));
+                map3=res.getIntFromBody("2");
             } else if (i == 3) {
                 view.setMap4(getMap(res.getIntFromBody("3")));
+                map4=res.getIntFromBody("3");
             }
         }
     }
@@ -103,6 +108,7 @@ public class ChoosingMapController {
                     try {
                         ArrayList<String>adaptedUsers = new ArrayList<>();
                         for (int i = 0; i < users.size()-1; i++) {adaptedUsers.add(users.get(i));}
+                        System.out.println(GameMessageHandler.startNewGame(App.getCurrentUser()).getMessage());
                         Result result = gameMenuController.gameNew(adaptedUsers,maps,App.getCurrentUser());
                         if (!result.isSuccessful()){
                             view.getNotif().setText(result.getMessage());

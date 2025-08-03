@@ -19,13 +19,11 @@ public class ChangeScreenMsgHandler {
         body.put("users", userNames);
         Message msg = new Message(body, Message.Type.change_menu, Message.Menu.CHANGE_MENU);
 
-
         for (User user : users) {
             System.out.println("From Server: " + user.getUsername());
             ClientConnectionThread connectionThread = ServerModel.getConnectionByUser(user);
             if(connectionThread == null) continue;
             connectionThread.sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
-
         }
     }
 }

@@ -67,6 +67,7 @@ public class Message {
         refresh_maps,
         select_map,
         start_game,
+        action_pop,
         status,
     }
 

@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
+import io.github.group18.Network.Client.App.GameMessageHandler;
 import io.github.group18.enums.ActionEnum;
 
 import java.util.ArrayList;
@@ -145,6 +146,7 @@ public class ActionMenu {
                             refreshActionSlots();
                         } else {
                             player.setAction(action);
+                            GameMessageHandler.playerActionPop(player.getID(),action.name());
                             setActive(false);
                             Gdx.input.setInputProcessor(gameMenuInputAdapter);
                         }
