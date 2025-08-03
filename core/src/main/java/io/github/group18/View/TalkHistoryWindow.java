@@ -47,12 +47,13 @@ public class TalkHistoryWindow extends Window {
                     historyArea.setText("Please enter a username.");
                     return;
                 }
-                Result talkHistoryResult = GameMenuController.talkHistory(targetUsername);
-                if (talkHistoryResult.isSuccessful()) {
-                    historyArea.setText(talkHistoryResult.getMessage());
-                } else {
-                    historyArea.setText("No messages found or player not found.");
-                }
+                //Server-TODO
+//                Result talkHistoryResult = GameMenuController.talkHistory(targetUsername);
+//                if (talkHistoryResult.isSuccessful()) {
+//                    historyArea.setText(talkHistoryResult.getMessage());
+//                } else {
+//                    historyArea.setText("No messages found or player not found.");
+//                }
             }
         });
 

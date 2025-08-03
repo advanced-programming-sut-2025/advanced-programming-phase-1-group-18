@@ -330,7 +330,7 @@ public class ProfileMenu extends AppMenu implements Screen {
         String input = scanner.nextLine();
         if (ProfileMenuCommands.MenuEnter.getMather(input) != null) {
             String menuName = ProfileMenuCommands.MenuEnter.getMather(input).group(1);
-            controller.menuEnter(menuName);
+//            controller.menuEnter(menuName);
         } else if (ProfileMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (ProfileMenuCommands.ChangeUsername.getMather(input) != null) {

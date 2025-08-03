@@ -9,7 +9,6 @@ import java.util.Map;
 public class FileUtils {
 
 	public static Map<String, String> listFilesInFolder(String folderPath) {
-		// TODO: List files in folder
 		HashMap<String, String> map = new HashMap<String, String>();
 		// 1. Create folder object
 		File folder = new File(folderPath);
@@ -30,7 +29,6 @@ public class FileUtils {
 	}
 
 	public static String getSortedFileList(Map<String, String> files) {
-		// TODO: Get sorted file list
 		// 1. Check if files map is empty
 		if (files.isEmpty()){
 			return "Repository is empty.";

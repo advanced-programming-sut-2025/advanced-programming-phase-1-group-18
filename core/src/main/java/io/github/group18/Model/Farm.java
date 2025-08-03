@@ -12,7 +12,6 @@ import io.github.group18.enums.ForagingSeedsEnums;
 import io.github.group18.enums.ForagingTreesEnums;
 import io.github.group18.enums.NPCEnums;
 
-//TODO SATL SPAWN AND MAP 2 3 4
 public class Farm {
 
     protected ArrayList<Lake> Lakes = new ArrayList<>();

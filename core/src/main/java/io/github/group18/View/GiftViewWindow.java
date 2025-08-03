@@ -22,7 +22,8 @@ public class GiftViewWindow extends Window {
         super("🎁 Your Gifts", skin);
         this.game = game;
         this.skin = skin;
-        this.currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+        //Server-TODO
+//        this.currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
         this.setSize(1000, 800);
         this.setMovable(true);
         this.setPosition((stage.getWidth() - getWidth()) / 2f, (stage.getHeight() - getHeight()) / 2f);

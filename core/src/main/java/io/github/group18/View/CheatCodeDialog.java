@@ -69,6 +69,7 @@ public class CheatCodeDialog extends Window {
         Scanner scanner = new Scanner(System.in);
         GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
             GameAssetManager.getGameAssetManager().getSkin());
-        gameMenuMenu.check(code, scanner, gameController);
+        //Server-TODO
+//        gameMenuMenu.check(code, scanner, gameController);
     }
 }

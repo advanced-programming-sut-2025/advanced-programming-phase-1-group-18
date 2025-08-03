@@ -163,7 +163,6 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         validquantity40 = true;
                         if (playerrr.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
-                            //TODO
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
                             playerrr.setGold(playerrr.getGold() - ((Craftingrecipe) item).getPrice());
@@ -185,7 +184,6 @@ public class PierresGeneralStoreController implements MenuEnter, ShowCurrentMenu
                         validquantity4 = true;
                         if (playerrr.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem(((Craftingrecipe) item), quantity);
-                            //TODO
                             //currentPlayer.getCraftingRecipes().add((Craftingrecipe) item);
                             App.getCurrentGame().getPierresGeneralStoreMarket().removeItem(item, quantity);
                             playerrr.setGold(playerrr.getGold() - ((Craftingrecipe) item).getPrice());

@@ -56,18 +56,18 @@ public class ClockController {
         Snow = textureAtlas.createSprite("Snow");
         Storm = textureAtlas.createSprite("Storm");
 
-        rawClock.setSize(rawClock.getWidth()*scale, rawClock.getHeight()*scale);
-        clockArrow.setSize(clockArrow.getWidth()*scale, clockArrow.getHeight()*scale);
-        Spring.setSize(Spring.getWidth()*scale, Spring.getHeight()*scale);
-        Summer.setSize(Summer.getWidth()*scale, Summer.getHeight()*scale);
-        Fall.setSize(Fall.getWidth()*scale, Fall.getHeight()*scale);
-        Winter.setSize(Winter.getWidth()*scale, Winter.getHeight()*scale);
-        Sunny.setSize(Sunny.getWidth()*scale, Sunny.getHeight()*scale);
-        Rain.setSize(Rain.getWidth()*scale, Rain.getHeight()*scale);
-        Snow.setSize(Snow.getWidth()*scale, Snow.getHeight()*scale);
-        Storm.setSize(Storm.getWidth()*scale, Storm.getHeight()*scale);
+        rawClock.setSize(rawClock.getWidth() * scale, rawClock.getHeight() * scale);
+        clockArrow.setSize(clockArrow.getWidth() * scale, clockArrow.getHeight() * scale);
+        Spring.setSize(Spring.getWidth() * scale, Spring.getHeight() * scale);
+        Summer.setSize(Summer.getWidth() * scale, Summer.getHeight() * scale);
+        Fall.setSize(Fall.getWidth() * scale, Fall.getHeight() * scale);
+        Winter.setSize(Winter.getWidth() * scale, Winter.getHeight() * scale);
+        Sunny.setSize(Sunny.getWidth() * scale, Sunny.getHeight() * scale);
+        Rain.setSize(Rain.getWidth() * scale, Rain.getHeight() * scale);
+        Snow.setSize(Snow.getWidth() * scale, Snow.getHeight() * scale);
+        Storm.setSize(Storm.getWidth() * scale, Storm.getHeight() * scale);
 
-        clockArrow.setOrigin(clockArrow.getWidth()/2, 0);
+        clockArrow.setOrigin(clockArrow.getWidth() / 2, 0);
     }
 
     public void render(SpriteBatch batch, DateTime dateTime, OrthographicCamera camera) {
@@ -84,13 +84,13 @@ public class ClockController {
 
         // Update all sprite positions
         rawClock.setPosition(clockX, clockY);
-        clockArrow.setPosition(clockX + 88 - clockArrow.getWidth()/2, clockY + 156);
+        clockArrow.setPosition(clockX + 88 - clockArrow.getWidth() / 2, clockY + 156);
 
         // Common positions for weather and season icons
-        float weatherX = clockX + 29*scale;
-        float weatherY = clockY + 35*scale;
-        float seasonX = clockX + 53*scale;
-        float seasonY = clockY + 35*scale;
+        float weatherX = clockX + 29 * scale;
+        float weatherY = clockY + 35 * scale;
+        float seasonX = clockX + 53 * scale;
+        float seasonY = clockY + 35 * scale;
 
         Sunny.setPosition(weatherX, weatherY);
         Rain.setPosition(weatherX, weatherY);
@@ -102,37 +102,55 @@ public class ClockController {
         Spring.setPosition(seasonX, seasonY);
 
         // Draw clock
-        clockArrow.setRotation(-((dateTime.getHour() - 9)*12 + 180));
+        clockArrow.setRotation(-((dateTime.getHour() - 9) * 12 + 180));
         rawClock.draw(batch);
         clockArrow.draw(batch);
 
         // Draw season and weather
         switch (dateTime.getSeason()) {
-            case "Spring": Spring.draw(batch); break;
-            case "Summer": Summer.draw(batch); break;
-            case "Fall": Fall.draw(batch); break;
-            case "Winter": Winter.draw(batch); break;
+            case "Spring":
+                Spring.draw(batch);
+                break;
+            case "Summer":
+                Summer.draw(batch);
+                break;
+            case "Fall":
+                Fall.draw(batch);
+                break;
+            case "Winter":
+                Winter.draw(batch);
+                break;
         }
         switch (App.getCurrentGame().getCurrentWeather()) {
-            case RAIN: Rain.draw(batch); break;
-            case SNOW: Snow.draw(batch); break;
-            case SUNNY: Sunny.draw(batch); break;
-            case STORM: Storm.draw(batch); break;
+            case RAIN:
+                Rain.draw(batch);
+                break;
+            case SNOW:
+                Snow.draw(batch);
+                break;
+            case SUNNY:
+                Sunny.draw(batch);
+                break;
+            case STORM:
+                Storm.draw(batch);
+                break;
         }
 
         // Draw text
         GameMenuController menuController = App.getGameMenuController();
-        String dayOfWeek = menuController.dayOfWeek().isSuccessful() ?
-            menuController.dayOfWeek().getMessage() : "Monday";
+        //Server-TODO
+//        String dayOfWeek = menuController.dayOfWeek().isSuccessful() ?
+//            menuController.dayOfWeek().getMessage() : "Monday";
 
         hour.draw(batch, dateTime.getHour() + " o'clock",
-            clockX + 27*scale, clockY + 23*scale + hour.getLineHeight());
-        day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
-            clockX + 27*scale, clockY + 45*scale + hour.getLineHeight());
-
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        gold.draw(batch, String.valueOf(currentPlayer.getGold()),
-            clockX + 17*scale, clockY + 3*scale + gold.getLineHeight());
+            clockX + 27 * scale, clockY + 23 * scale + hour.getLineHeight());
+        //Server-TODO
+//        day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
+//            clockX + 27*scale, clockY + 45*scale + hour.getLineHeight());
+//Server-TODO
+//        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+//        gold.draw(batch, String.valueOf(currentPlayer.getGold()),
+//            clockX + 17*scale, clockY + 3*scale + gold.getLineHeight());
 
         // Restore original projection matrix
         batch.setProjectionMatrix(originalMatrix);

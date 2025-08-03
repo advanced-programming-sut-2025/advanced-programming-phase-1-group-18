@@ -23,8 +23,9 @@ public class ForagingCrop extends Crop implements Name, Price , PictureModel {
         kashi.setEnterance(false);
         kashi.setInside(this);
         kashi.setWalkable(false);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setForagingCrops(new ArrayList<>());
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingCrops().add(this);
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setForagingCrops(new ArrayList<>());
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingCrops().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
 

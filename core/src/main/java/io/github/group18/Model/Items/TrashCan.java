@@ -49,11 +49,11 @@ public class TrashCan extends Tool implements Name,Price, PictureModel
 //                    inventoryMap.put(item, newNumber);
 //                    break;
 //                } else{
-//                    //todo return number > itemCount
+//
 //                    return;
 //                }
 //            } else {
-//                //todo return not found
+//
 //                return;
 //            }
 //        }

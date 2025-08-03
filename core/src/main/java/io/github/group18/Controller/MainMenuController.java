@@ -3,6 +3,7 @@ package io.github.group18.Controller;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
@@ -20,7 +21,7 @@ public class MainMenuController implements MenuEnter, ShowCurrentMenu {
         return new Result(true, "You are logged out");
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName, Player playerrr) {
         //from mainmenu we can move to gamemenu,profilemenu,loginmenu,registermenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

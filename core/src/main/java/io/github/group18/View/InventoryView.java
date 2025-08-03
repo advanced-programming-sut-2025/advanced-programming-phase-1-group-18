@@ -191,13 +191,15 @@ public class InventoryView {
 
         TextureRegion playerFrontFrame = GameView.getPlayerFrontImage();
         Image playerImage = new Image(new TextureRegionDrawable(playerFrontFrame));
-        Label nameLabel = new Label("     Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
-        nameLabel.setColor(Color.GOLD);
-        nameLabel.setFontScale(0.75f);
+        //Server-TODO
+//        Label nameLabel = new Label("     Name: " + Game.getCurrentPlayer().getOwner().getUsername(), skin);
+//        nameLabel.setColor(Color.GOLD);
+//        nameLabel.setFontScale(0.75f);
 
         skillTable.add(playerImage).size(128, 200).padRight(17).top().left();
         skillTable.row();
-        skillTable.add(nameLabel).left().padTop(4);
+        //Server-TODO
+//        skillTable.add(nameLabel).left().padTop(4);
 
         Table skillsIconsTable = new Table();
 
@@ -278,14 +280,16 @@ public class InventoryView {
 
 
     private int getSkillValue(int idx) {
-        return switch (idx) {
-            case 0 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFarmingSkill().getLevel();
-            case 1 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFishingSkill().getLevel();
-            case 2 -> Objects.requireNonNull(Game.getCurrentPlayer()).getForagingSkill().getLevel();
-            case 3 -> Objects.requireNonNull(Game.getCurrentPlayer()).getMiningSkill().getLevel();
-            case 4 -> 0;
-            default -> 0;
-        };
+        //Server-TODO
+//        return switch (idx) {
+//            case 0 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFarmingSkill().getLevel();
+//            case 1 -> Objects.requireNonNull(Game.getCurrentPlayer()).getFishingSkill().getLevel();
+//            case 2 -> Objects.requireNonNull(Game.getCurrentPlayer()).getForagingSkill().getLevel();
+//            case 3 -> Objects.requireNonNull(Game.getCurrentPlayer()).getMiningSkill().getLevel();
+//            case 4 -> 0;
+//            default -> 0;
+//        };
+        return 0;
     }
 
 
@@ -330,7 +334,6 @@ public class InventoryView {
             slotStack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    //TODO : in future
                     System.exit(0);
                 }
             });

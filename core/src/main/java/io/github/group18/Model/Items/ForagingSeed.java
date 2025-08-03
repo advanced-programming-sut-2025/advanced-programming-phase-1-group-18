@@ -37,8 +37,9 @@ public class ForagingSeed extends Seed implements Name,Price
         kashi.setEnterance(false);
         kashi.setInside(this);
         kashi.setWalkable(false);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setForagingSeeds(new ArrayList<>());
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingSeeds().add(this);
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setForagingSeeds(new ArrayList<>());
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getForagingSeeds().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
     }
 

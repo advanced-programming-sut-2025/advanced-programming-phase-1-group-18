@@ -29,7 +29,8 @@ public class RegisterMenu extends AppMenu {
             controller.exit();
         } else if (RegisterMenuCommands.MenuEnter.getMatcher(input) != null) {
             String menuName = RegisterMenuCommands.MenuEnter.getMatcher(input).group(1);
-            controller.menuEnter(menuName);
+            //Server-TODO
+//            controller.menuEnter(menuName);
         } else if (RegisterMenuCommands.ShowCurrentMenu.getMatcher(input) != null) {
             controller.showCurrentMenu();
         } else {

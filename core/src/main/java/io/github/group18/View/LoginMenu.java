@@ -21,7 +21,7 @@ public class LoginMenu extends AppMenu {
             controller.exit();
         } else if (LoginMenuCommands.MenuEnter.getMather(input) != null) {
             String menuName = LoginMenuCommands.MenuEnter.getMather(input).group(1);
-            controller.menuEnter(menuName);
+//            controller.menuEnter(menuName);
         } else if (LoginMenuCommands.ShowCurrentMenu.getMather(input) != null) {
             controller.showCurrentMenu();
         } else if (LoginMenuCommands.ForgetPassword.getMather(input) != null) {

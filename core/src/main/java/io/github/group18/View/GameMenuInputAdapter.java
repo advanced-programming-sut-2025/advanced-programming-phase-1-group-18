@@ -778,7 +778,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         int tileY = (int) (worldCoords.y / ClientModel.TILE_SIZE);
 
         if (input.equalsIgnoreCase("barn")) {
-            CarpentersShopController.build("barn", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("barn", tileX, tileY);
 //                for (int dx = -3; dx <= 3; dx++) {
 //                    for (int dy = -2; dy <= 1; dy++) {
 //                        int x = tileX + dx;
@@ -791,20 +792,25 @@ public class GameMenuInputAdapter extends InputAdapter {
 //                }
         }
         if (input.equalsIgnoreCase("bigbarn")) {
-            CarpentersShopController.build("bigbarn", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("bigbarn", tileX, tileY);
         }
         if (input.equalsIgnoreCase("deluxebarn")) {
-            CarpentersShopController.build("deluxebarn", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("deluxebarn", tileX, tileY);
         }
         if (input.equalsIgnoreCase("coop")) {
-            CarpentersShopController.build("coop", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("coop", tileX, tileY);
 
         }
         if (input.equalsIgnoreCase("bigcoop")) {
-            CarpentersShopController.build("bigcoop", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("bigcoop", tileX, tileY);
         }
         if (input.equalsIgnoreCase("deluxecoop")) {
-            CarpentersShopController.build("deluxecoop", tileX, tileY);
+            //Server-TODO
+//            CarpentersShopController.build("deluxecoop", tileX, tileY);
         }
         if (input.equalsIgnoreCase("cow")) {
             TavilehAnimal animal = new TavilehAnimal();

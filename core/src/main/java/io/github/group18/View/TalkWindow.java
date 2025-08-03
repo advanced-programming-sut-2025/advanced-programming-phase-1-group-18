@@ -36,8 +36,9 @@ public class TalkWindow extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 String username = userField.getText().trim();
                 String message = msgField.getText().trim();
-                Result result = GameMenuController.talk(username, message);
-                resultLabel.setText(result.getMessage());
+                //Server-TODO
+//                Result result = GameMenuController.talk(username, message);
+//                resultLabel.setText(result.getMessage());
             }
         });
 

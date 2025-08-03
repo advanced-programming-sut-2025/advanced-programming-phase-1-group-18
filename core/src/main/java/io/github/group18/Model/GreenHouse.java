@@ -54,10 +54,11 @@ public class GreenHouse implements PictureModel{
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
         this.insideKashis.addAll(kashis);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
-        System.out.println(" Building: " +
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())+ " " +
-            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyGreenHouse().hashCode());
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
+//        System.out.println(" Building: " +
+//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())+ " " +
+//            App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyGreenHouse().hashCode());
     }
 
     @Override

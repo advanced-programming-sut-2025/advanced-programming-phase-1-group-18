@@ -34,7 +34,8 @@ public class Cottage implements PictureModel
             kashis.add(kashi);
         }
         this.insideKashis.addAll(kashis);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyCottage(this);
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyCottage(this);
     }
 
     public Refrigerator getMyRefrigerator() {

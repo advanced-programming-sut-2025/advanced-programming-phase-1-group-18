@@ -44,9 +44,9 @@ public class GiftWindow extends Window {
                     messageLabel.setText("Invalid amount");
                     return;
                 }
-
-                Result result = GameMenuController.gift(username, amount, item);
-                messageLabel.setText(result.getMessage());
+//Server-TODO
+//                Result result = GameMenuController.gift(username, amount, item);
+//                messageLabel.setText(result.getMessage());
             }
         });
 

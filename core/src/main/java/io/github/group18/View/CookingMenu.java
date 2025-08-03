@@ -34,7 +34,8 @@ public class CookingMenu {
     float scale;
     Table craftingItem;
     ArrayList<ImageButton> buttons;
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    //Server-TODO
+//    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
     Label notify;
 
     public CookingMenu() {
@@ -251,35 +252,36 @@ public class CookingMenu {
     }
 
     public void adjustButtons() {
-        ArrayList<Cookingrecipe> recipesEnums =App.getCurrentGame().
-            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes();
-        for (Cookingrecipe recipesEnum : recipesEnums) {
-            FoodCookingEnums recipes = recipesEnum.getFood();
-            switch (recipes) {
-                case BakedFish -> buttons.get(0).setColor(Color.WHITE);
-                case Bread -> buttons.get(1).setColor(Color.WHITE);
-                case Cookie -> buttons.get(2).setColor(Color.WHITE);
-                case DishOTheSea -> buttons.get(3).setColor(Color.WHITE);
-                case FarmersLunch -> buttons.get(4).setColor(Color.WHITE);
-                case Friedegg -> buttons.get(5).setColor(Color.WHITE);
-                case FruitSalad -> buttons.get(6).setColor(Color.WHITE);
-                case HashBrowns -> buttons.get(7).setColor(Color.WHITE);
-                case MakiRoll -> buttons.get(8).setColor(Color.WHITE);
-                case MinersTreat -> buttons.get(9).setColor(Color.WHITE);
-                case Omelet -> buttons.get(10).setColor(Color.WHITE);
-                case Pancakes -> buttons.get(11).setColor(Color.WHITE);
-                case Pizza -> buttons.get(12).setColor(Color.WHITE);
-                case PumpkinPie -> buttons.get(13).setColor(Color.WHITE);
-                case RedPlate -> buttons.get(14).setColor(Color.WHITE);
-                case Salad -> buttons.get(15).setColor(Color.WHITE);
-                case SalmonDinner -> buttons.get(16).setColor(Color.WHITE);
-                case SeaformPudding -> buttons.get(17).setColor(Color.WHITE);
-                case Spaghetti -> buttons.get(18).setColor(Color.WHITE);
-                case SurvivalBurger -> buttons.get(19).setColor(Color.WHITE);
-                case Tortilla -> buttons.get(20).setColor(Color.WHITE);
-                case TripleShotEspresso -> buttons.get(21).setColor(Color.WHITE);
-            }
-        }
+        //Server-TODO
+//        ArrayList<Cookingrecipe> recipesEnums =App.getCurrentGame().
+//            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCookingRecipes();
+//        for (Cookingrecipe recipesEnum : recipesEnums) {
+//            FoodCookingEnums recipes = recipesEnum.getFood();
+//            switch (recipes) {
+//                case BakedFish -> buttons.get(0).setColor(Color.WHITE);
+//                case Bread -> buttons.get(1).setColor(Color.WHITE);
+//                case Cookie -> buttons.get(2).setColor(Color.WHITE);
+//                case DishOTheSea -> buttons.get(3).setColor(Color.WHITE);
+//                case FarmersLunch -> buttons.get(4).setColor(Color.WHITE);
+//                case Friedegg -> buttons.get(5).setColor(Color.WHITE);
+//                case FruitSalad -> buttons.get(6).setColor(Color.WHITE);
+//                case HashBrowns -> buttons.get(7).setColor(Color.WHITE);
+//                case MakiRoll -> buttons.get(8).setColor(Color.WHITE);
+//                case MinersTreat -> buttons.get(9).setColor(Color.WHITE);
+//                case Omelet -> buttons.get(10).setColor(Color.WHITE);
+//                case Pancakes -> buttons.get(11).setColor(Color.WHITE);
+//                case Pizza -> buttons.get(12).setColor(Color.WHITE);
+//                case PumpkinPie -> buttons.get(13).setColor(Color.WHITE);
+//                case RedPlate -> buttons.get(14).setColor(Color.WHITE);
+//                case Salad -> buttons.get(15).setColor(Color.WHITE);
+//                case SalmonDinner -> buttons.get(16).setColor(Color.WHITE);
+//                case SeaformPudding -> buttons.get(17).setColor(Color.WHITE);
+//                case Spaghetti -> buttons.get(18).setColor(Color.WHITE);
+//                case SurvivalBurger -> buttons.get(19).setColor(Color.WHITE);
+//                case Tortilla -> buttons.get(20).setColor(Color.WHITE);
+//                case TripleShotEspresso -> buttons.get(21).setColor(Color.WHITE);
+//            }
+//        }
     }
     public void addToolButtonListener(ImageButton button, String foodName, Skin skin, Stage stage) {
         FoodCookingEnums info = FoodCookingEnums.valueOf(foodName);
@@ -305,10 +307,12 @@ public class CookingMenu {
             protected void result(Object object) {
                 boolean confirmed = (boolean) object;
                 if (confirmed) {
-                    System.out.println(App.getGameMenuController().eat(foodName));
+                    //Server-TODO
+//                    System.out.println(App.getGameMenuController().eat(foodName));
                     Gdx.input.setInputProcessor(gameMenuInputAdapter);
                     setActive(false);
-                    App.getCurrentGame().getCurrentPlayer().eat();
+                    //Server-TODO
+//                    App.getCurrentGame().getCurrentPlayer().eat();
                 } else {
                     System.out.println("Cancelled");
                 }
@@ -321,19 +325,20 @@ public class CookingMenu {
             public void clicked(InputEvent event, float x, float y) {
                 infoDialog.hide();
                 StringBuilder resultText = new StringBuilder();
-                Result result = App.getGameMenuController().cookingPrepare(foodName);
-                if(result.isSuccessful()){
-                    eatDialog.getContentTable().clear();
-                    resultText.append(result.getMessage());
-                    resultText.append("\nDo you want to eat?");
-                    eatDialog.text(resultText.toString());
-                    eatDialog.show(stage);
-                }else{
-                    resultText.append("Error: "+result.getMessage());
-                    resultDialog.getContentTable().clear();
-                    resultDialog.text(resultText.toString());
-                    resultDialog.show(stage);
-                }
+                //Server-TODO
+//                Result result = App.getGameMenuController().cookingPrepare(foodName);
+//                if(result.isSuccessful()){
+//                    eatDialog.getContentTable().clear();
+//                    resultText.append(result.getMessage());
+//                    resultText.append("\nDo you want to eat?");
+//                    eatDialog.text(resultText.toString());
+//                    eatDialog.show(stage);
+//                }else{
+//                    resultText.append("Error: "+result.getMessage());
+//                    resultDialog.getContentTable().clear();
+//                    resultDialog.text(resultText.toString());
+//                    resultDialog.show(stage);
+//                }
             }
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {

@@ -9,26 +9,25 @@ public class Shear extends Tool implements Name,Price
     protected String usage;
     protected int price;
     public String use(Kashi kashi){
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-
-        if (player.getEnergy() >= getEnergyUsage()) {
-            if (isValidForShear(kashi)) {
-                player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo cutting wool
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
-                GameMenuController.checkSkilRecipe();
-                return "Wool caught";
-            }
-            else{
-                player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo just decrease energy
-                return "Not Animal found";
-            }
-        }
-        else {
-            //todo return error for not enough energy
-            return "Not enough energy";
-        }
+        //Server-TODO
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//
+//        if (player.getEnergy() >= getEnergyUsage()) {
+//            if (isValidForShear(kashi)) {
+//                player.setEnergy(player.getEnergy() - getEnergyUsage());
+//                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel()+5);
+//                GameMenuController.checkSkilRecipe();
+//                return "Wool caught";
+//            }
+//            else{
+//                player.setEnergy(player.getEnergy() - getEnergyUsage());
+//                return "Not Animal found";
+//            }
+//        }
+//        else {
+//            return "Not enough energy";
+//        }
+        return "Not enough energy";
     }
 
     public static boolean isValidForShear(Kashi kashi){

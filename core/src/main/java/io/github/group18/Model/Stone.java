@@ -54,8 +54,9 @@ public class Stone implements PictureModel
         }
         kashi.setInside(this);
         kashi.setWalkable(false);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setStones(new ArrayList<>());
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getStones().add(this);
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setStones(new ArrayList<>());
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getStones().add(this);
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
 
     }

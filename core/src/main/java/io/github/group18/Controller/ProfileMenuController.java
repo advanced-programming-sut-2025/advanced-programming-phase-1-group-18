@@ -17,6 +17,7 @@ import io.github.group18.Database.DataManager.UserDataManager;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
 import io.github.group18.View.MainMenu;
 import io.github.group18.View.ProfileMenu;
@@ -243,7 +244,7 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
         System.out.println(App.getCurrentUser().getTimesPlayed());
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName, Player playerrr) {
         //from profilemenu we can move to mainmenu
         menuName = menuName.toLowerCase();
         if (menuName.equals("mainmenu")) {//App.setCurrentMenu(Menu.MainMenu);

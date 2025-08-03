@@ -16,19 +16,21 @@ public class Hoe extends Tool implements Name, Price, PictureModel {
     }
 
     public Result use(Kashi kashi) {
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-
-        boolean IsOkayOrNot = IsValidForUsing(kashi);
-        if (IsOkayOrNot) {
-            player.setEnergy(player.getEnergy() - getEnergyUsage());
-            kashi.setShokhmZadeh(true);
-            player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
-            GameMenuController.checkSkilRecipe();
-            return new Result(true, "You successfully made there shokm zadeh!");
-        } else {
-            player.setEnergy(player.getEnergy() - getEnergyUsage());
-            return new Result(false, "You unsuccessfully made there shokm zadeh!");
-        }
+        //Server-TODO
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//
+//        boolean IsOkayOrNot = IsValidForUsing(kashi);
+//        if (IsOkayOrNot) {
+//            player.setEnergy(player.getEnergy() - getEnergyUsage());
+//            kashi.setShokhmZadeh(true);
+//            player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+//            GameMenuController.checkSkilRecipe();
+//            return new Result(true, "You successfully made there shokm zadeh!");
+//        } else {
+//            player.setEnergy(player.getEnergy() - getEnergyUsage());
+//            return new Result(false, "You unsuccessfully made there shokm zadeh!");
+//        }
+        return new Result(false, "You unsuccessfully made there shokm zadeh!");
     }
 
 

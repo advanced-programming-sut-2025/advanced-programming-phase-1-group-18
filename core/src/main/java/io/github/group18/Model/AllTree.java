@@ -131,7 +131,9 @@ public class AllTree extends Tree implements PictureModel {
         App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         kashi.setInside(this);
         kashi.setWalkable(false);
-        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getAllTrees().add(this);
+
+        //Server-TODO
+//        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getAllTrees().add(this);
     }
 
     public void initilizeCrop(TreeSeedEnums treeSeedEnums) {

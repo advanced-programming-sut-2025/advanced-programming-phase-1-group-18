@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Json;
 import com.google.gson.GsonBuilder;
 import io.github.group18.Database.DataManager.UserDataManager;
 import io.github.group18.Model.App;
+import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Client.App.RegisterMessageHandler;
@@ -286,7 +287,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         return new Result(true, "");
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName, Player playerrr) {
         //from registermenu we can move to loginmenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

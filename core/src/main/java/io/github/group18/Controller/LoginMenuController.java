@@ -3,6 +3,7 @@ package io.github.group18.Controller;
 
 import com.google.gson.Gson;
 import io.github.group18.Model.App;
+import io.github.group18.Model.Player;
 import io.github.group18.Model.Result;
 import io.github.group18.Model.User;
 
@@ -105,7 +106,7 @@ public class LoginMenuController implements MenuEnter, ShowCurrentMenu {
         System.exit(0);
     }
 
-    public void menuEnter(String menuName) {
+    public void menuEnter(String menuName, Player playerrr) {
         //from loginmenu we can move to registermenu
         menuName = menuName.toLowerCase();
         switch (menuName) {

@@ -105,7 +105,6 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
         Stock.put(fertilizer, Integer.MAX_VALUE);
 
         //grass starter again wtf
-        //TODO
 
         Fertilizer fertilizer1 = new Fertilizer();
         fertilizer1.setName("Speed-Gro");

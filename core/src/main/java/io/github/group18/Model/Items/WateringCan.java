@@ -18,75 +18,76 @@ public class WateringCan extends Tool implements Name, Price ,PictureModel{
     }
 
     public String use(Kashi kashi,int x,int y) {
-        App.getCurrentGame().setWatering(true);
-        App.getCurrentGame().setPlantx(x);
-        App.getCurrentGame().setPlanty(y);
-        App.getCurrentGame().setWaterTimer(1f);
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-
-        if (player.getFarmingSkill().getLevel() == 5) {
-            if (player.getEnergy() >= getEnergyUsage() - 1) {
-                if (isValidForFilling(kashi)) {
-                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
-                    setCapacity(getMax_Capacity());
-                    return "Watering Can filled";
-                } else if (isValidForWatering(kashi)) {
-                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
-                    setCapacity(getCapacity() - 1);
-                    Object plant = kashi.getInside();
-                    if (plant instanceof AllCrop) {
-                        if (!((AllCrop) plant).isFedThisDay()) {
-                            ((AllCrop) plant).setFedThisDay(true);
-                            return "Plant watered";
-                        } else {
-                            return "Plant doesn't need water";
-                        }
-                    } else if (plant instanceof AllTree) {
-                        if (!((AllTree) plant).isFedThisDay()) {
-                            ((AllTree) plant).setFedThisDay(true);
-                            return "Plant watered";
-                        } else {
-                            return "Plant doesn't need water";
-                        }
-                    }
-                } else {
-                    return "No plant found";
-                }
-            } else {
-                return "Not enough energy";
-            }
-        } else {
-            if (player.getEnergy() >= getEnergyUsage()) {
-                if (isValidForFilling(kashi)) {
-                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
-                    setCapacity(getMax_Capacity());
-                    return "Watering Can filled";
-                } else if (isValidForWatering(kashi)) {
-                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
-                    setCapacity(getCapacity() - 1);
-                    Object plant = kashi.getInside();
-                    if (plant instanceof AllCrop) {
-                        if (!((AllCrop) plant).isFedThisDay()) {
-                            ((AllCrop) plant).setFedThisDay(true);
-                            return "Plant watered";
-                        } else {
-                            return "Plant doesn't need water";
-                        }
-                    } else if (plant instanceof AllTree) {
-                        if (!((AllTree) plant).isFedThisDay()) {
-                            ((AllTree) plant).setFedThisDay(true);
-                            return "Plant watered";
-                        } else {
-                            return "Plant doesn't need water";
-                        }
-                    }
-                } else {
-                    return "No plant found";
-                }
-            } else {
-                return "Not enough energy";
-            }
-        }
+        //Server-TODO
+//        App.getCurrentGame().setWatering(true);
+//        App.getCurrentGame().setPlantx(x);
+//        App.getCurrentGame().setPlanty(y);
+//        App.getCurrentGame().setWaterTimer(1f);
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//
+//        if (player.getFarmingSkill().getLevel() == 5) {
+//            if (player.getEnergy() >= getEnergyUsage() - 1) {
+//                if (isValidForFilling(kashi)) {
+//                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
+//                    setCapacity(getMax_Capacity());
+//                    return "Watering Can filled";
+//                } else if (isValidForWatering(kashi)) {
+//                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
+//                    setCapacity(getCapacity() - 1);
+//                    Object plant = kashi.getInside();
+//                    if (plant instanceof AllCrop) {
+//                        if (!((AllCrop) plant).isFedThisDay()) {
+//                            ((AllCrop) plant).setFedThisDay(true);
+//                            return "Plant watered";
+//                        } else {
+//                            return "Plant doesn't need water";
+//                        }
+//                    } else if (plant instanceof AllTree) {
+//                        if (!((AllTree) plant).isFedThisDay()) {
+//                            ((AllTree) plant).setFedThisDay(true);
+//                            return "Plant watered";
+//                        } else {
+//                            return "Plant doesn't need water";
+//                        }
+//                    }
+//                } else {
+//                    return "No plant found";
+//                }
+//            } else {
+//                return "Not enough energy";
+//            }
+//        } else {
+//            if (player.getEnergy() >= getEnergyUsage()) {
+//                if (isValidForFilling(kashi)) {
+//                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
+//                    setCapacity(getMax_Capacity());
+//                    return "Watering Can filled";
+//                } else if (isValidForWatering(kashi)) {
+//                    player.setEnergy(player.getEnergy() - getEnergyUsage() + 1);
+//                    setCapacity(getCapacity() - 1);
+//                    Object plant = kashi.getInside();
+//                    if (plant instanceof AllCrop) {
+//                        if (!((AllCrop) plant).isFedThisDay()) {
+//                            ((AllCrop) plant).setFedThisDay(true);
+//                            return "Plant watered";
+//                        } else {
+//                            return "Plant doesn't need water";
+//                        }
+//                    } else if (plant instanceof AllTree) {
+//                        if (!((AllTree) plant).isFedThisDay()) {
+//                            ((AllTree) plant).setFedThisDay(true);
+//                            return "Plant watered";
+//                        } else {
+//                            return "Plant doesn't need water";
+//                        }
+//                    }
+//                } else {
+//                    return "No plant found";
+//                }
+//            } else {
+//                return "Not enough energy";
+//            }
+//        }
         return "OMG";
     }
 

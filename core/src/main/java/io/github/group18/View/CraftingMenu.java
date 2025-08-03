@@ -34,7 +34,8 @@ public class CraftingMenu {
     float scale;
     Table craftingItem;
     ArrayList<ImageButton> buttons;
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    //Server-TODO
+//    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
     Label notify;
 
     public CraftingMenu() {
@@ -218,33 +219,34 @@ public class CraftingMenu {
     }
 
     public void adjustButtons() {
-        ArrayList<CraftingRecipesEnums> recipesEnums =App.getCurrentGame().
-            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCraftingRecipes();
-        for (CraftingRecipesEnums recipesEnum : recipesEnums) {
-            switch (recipesEnum) {
-                case BeeHouse -> buttons.get(0).setColor(Color.WHITE);
-                case Bomb -> buttons.get(1).setColor(Color.WHITE);
-                case CherryBomb -> buttons.get(2).setColor(Color.WHITE);
-                case MegaBomb -> buttons.get(3).setColor(Color.WHITE);
-                case CharcoalKiln -> buttons.get(4).setColor(Color.WHITE);
-                case CheesePress -> buttons.get(5).setColor(Color.WHITE);
-                case Dehydrator -> buttons.get(6).setColor(Color.WHITE);
-                case DeluxeScarecrow -> buttons.get(7).setColor(Color.WHITE);
-                case FishSmoker -> buttons.get(8).setColor(Color.WHITE);
-                case Furnace -> buttons.get(9).setColor(Color.WHITE);
-                case GrassStarter -> buttons.get(10).setColor(Color.WHITE);
-                case IridiumSprinkler -> buttons.get(11).setColor(Color.WHITE);
-                case Keg -> buttons.get(12).setColor(Color.WHITE);
-                case Loom -> buttons.get(13).setColor(Color.WHITE);
-                case MayonnaiseMachine -> buttons.get(14).setColor(Color.WHITE);
-                case MysticTreeSeed -> buttons.get(15).setColor(Color.WHITE);
-                case OilMaker -> buttons.get(16).setColor(Color.WHITE);
-                case PreservesJar -> buttons.get(17).setColor(Color.WHITE);
-                case QualitySprinkler -> buttons.get(18).setColor(Color.WHITE);
-                case Scarecrow -> buttons.get(19).setColor(Color.WHITE);
-                case Sprinkler -> buttons.get(20).setColor(Color.WHITE);
-            }
-        }
+        //Server-TODO
+//        ArrayList<CraftingRecipesEnums> recipesEnums =App.getCurrentGame().
+//            getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getCraftingRecipes();
+//        for (CraftingRecipesEnums recipesEnum : recipesEnums) {
+//            switch (recipesEnum) {
+//                case BeeHouse -> buttons.get(0).setColor(Color.WHITE);
+//                case Bomb -> buttons.get(1).setColor(Color.WHITE);
+//                case CherryBomb -> buttons.get(2).setColor(Color.WHITE);
+//                case MegaBomb -> buttons.get(3).setColor(Color.WHITE);
+//                case CharcoalKiln -> buttons.get(4).setColor(Color.WHITE);
+//                case CheesePress -> buttons.get(5).setColor(Color.WHITE);
+//                case Dehydrator -> buttons.get(6).setColor(Color.WHITE);
+//                case DeluxeScarecrow -> buttons.get(7).setColor(Color.WHITE);
+//                case FishSmoker -> buttons.get(8).setColor(Color.WHITE);
+//                case Furnace -> buttons.get(9).setColor(Color.WHITE);
+//                case GrassStarter -> buttons.get(10).setColor(Color.WHITE);
+//                case IridiumSprinkler -> buttons.get(11).setColor(Color.WHITE);
+//                case Keg -> buttons.get(12).setColor(Color.WHITE);
+//                case Loom -> buttons.get(13).setColor(Color.WHITE);
+//                case MayonnaiseMachine -> buttons.get(14).setColor(Color.WHITE);
+//                case MysticTreeSeed -> buttons.get(15).setColor(Color.WHITE);
+//                case OilMaker -> buttons.get(16).setColor(Color.WHITE);
+//                case PreservesJar -> buttons.get(17).setColor(Color.WHITE);
+//                case QualitySprinkler -> buttons.get(18).setColor(Color.WHITE);
+//                case Scarecrow -> buttons.get(19).setColor(Color.WHITE);
+//                case Sprinkler -> buttons.get(20).setColor(Color.WHITE);
+//            }
+//        }
     }
 
     public void addToolButtonListener( ImageButton button,  String toolName,  Skin skin,  Stage stage) {
@@ -272,18 +274,19 @@ public class CraftingMenu {
             public void clicked(InputEvent event, float x, float y) {
                 infoDialog.hide();
                 StringBuilder resultText = new StringBuilder();
-                Result result = App.getGameMenuController().craftingCraft(toolName);
-                if(result.isSuccessful()){
-                    resultText.append(result.getMessage());
-                    if (info.isPlaceable()){
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                            .setPlacingItem(true);
-                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
-                            .setCraftingInHand(new CraftingItem(info.name()));
-                    }
-                }else{
-                    resultText.append("Error: "+result.getMessage());
-                }
+                //Server-TODO
+//                Result result = App.getGameMenuController().craftingCraft(toolName);
+//                if(result.isSuccessful()){
+//                    resultText.append(result.getMessage());
+//                    if (info.isPlaceable()){
+//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+//                            .setPlacingItem(true);
+//                        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl())
+//                            .setCraftingInHand(new CraftingItem(info.name()));
+//                    }
+//                }else{
+//                    resultText.append("Error: "+result.getMessage());
+//                }
                 resultDialog.getContentTable().clear();
                 resultDialog.text(resultText.toString());
                 resultDialog.show(stage);

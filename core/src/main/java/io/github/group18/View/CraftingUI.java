@@ -73,15 +73,16 @@ public class CraftingUI {
 //        stage.addActor(inventoryWindow);
     }
     private void loadInventoryItems() {
-        for (Item item : App.getCurrentGame()
-            .getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof PictureModel pictureModel) {
-                String path = pictureModel.getPath();
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
-            } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
-            }
-        }
+        //Server-TODO
+//        for (Item item : App.getCurrentGame()
+//            .getCurrentPlayer().getInventory().getItems().keySet()) {
+//            if (item instanceof PictureModel pictureModel) {
+//                String path = pictureModel.getPath();
+//                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+//            } else {
+//                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+//            }
+//        }
     }
     private void createInventoryWindow() {
 //        if (!active) return;
@@ -122,12 +123,13 @@ public class CraftingUI {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 errorDialog.getContentTable().clear();
-                Result result = App.getGameMenuController().artisanUse(craftingItem.getCraftingItem().name(),selectedItems,
-                    craftingItem);
-                if(!result.isSuccessful()){
-                    selectedItems.clear();
-                }
-                errorDialog.text(result.getMessage());
+                //Server-TODO
+//                Result result = App.getGameMenuController().artisanUse(craftingItem.getCraftingItem().name(),selectedItems,
+//                    craftingItem);
+//                if(!result.isSuccessful()){
+//                    selectedItems.clear();
+//                }
+//                errorDialog.text(result.getMessage());
                 errorDialog.show(window.getStage());
             }
         });
@@ -138,103 +140,105 @@ public class CraftingUI {
         window.add(startButton);
     }
     private void buildInventorySlots(Table slotsTable) {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        Inventory inventory = player.getInventory();
-        Map<Item, Pair<Integer, Integer>> items = inventory.getItems();
+        //Server-TODO
+//        Player player = App.getCurrentGame().getCurrentPlayer();
+//        Inventory inventory = player.getInventory();
+//        Map<Item, Pair<Integer, Integer>> items = inventory.getItems();
 
         int count = 0;
-        for (int i = 0; i < inventory.getMaxQuantity(); i++) {
-            Stack slotStack = new Stack();
-            Image slotBg = new Image(new Texture(Gdx.files.internal("game/tiles/slot.png")));
-            Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
-            slotBg.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                }
-                @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    if(pointer == -1) {
-                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
-                    }
-                }
-                @Override
-                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(pointer == -1) {
-                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
-                            new Texture(Gdx.files.internal("game/tiles/slot.png")))));
-                    }
-                }
-
-            });
-            slotBg.setTouchable(Touchable.enabled);
-            slotStack.add(slotBg);
-            for (Map.Entry<Item, Pair<Integer, Integer>> entry : items.entrySet()) {
-                Item item = entry.getKey();
-                int index = entry.getValue().second;
-                int quantity = entry.getValue().first;
-
-                if (index == i) {
-                    TextureRegion itemTex = textures.get(item);
-                    if (itemTex != null) {
-                        ImageButton itemImage = new ImageButton(new TextureRegionDrawable(itemTex));
-                        slotStack.add(itemImage);
-                        Dialog errorDialog = new Dialog("Error", skin);
-                        errorDialog.text("You can't move it to refrigerator");
-                        errorDialog.center();
-                        errorDialog.button("close");
-
-                        Dialog confirmDialog = new Dialog("Confirm", skin) {
-                            @Override
-                            protected void result(Object object) {
-                                boolean confirmed = (boolean) object;
-                                if (confirmed) {
-                                    System.out.println("Confirmed for item: " + item.getCorrectName());
-                                    if (!selectedItems.contains(item.getCorrectName())) {
-                                        selectedItems.add(item.getCorrectName());
-                                    }
-                                } else {
-                                    System.out.println("Cancelled");
-                                }
-                            }
-                        };
-                        confirmDialog.text("Are you sure you use this item?");
-                        confirmDialog.button("yes", true);
-                        confirmDialog.button("no", false);
-                        itemImage.addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                confirmDialog.show(window.getStage());
-                            }
-                            @Override
-                            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                                if(pointer == -1) {
-                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
-                                }
-                            }
-
-                            @Override
-                            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                                if(pointer == -1) {
-                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
-                                        new Texture(Gdx.files.internal("game/tiles/slot.png")))));
-                                }
-                            }
-                        });
-
-                        // Quantity label
-                        Label qtyLabel = new Label(String.valueOf(quantity), skin);
-                        qtyLabel.setFontScale(0.8f);
-                        qtyLabel.setAlignment(Align.bottomRight);
-                        qtyLabel.setTouchable(Touchable.disabled);
-                        slotStack.add(qtyLabel);
-                    }
-                }
-            }
-
-            slotsTable.add(slotStack);
-            count++;
-            if (count % 10 == 0) slotsTable.row();
-        }
+        //Server-TODO
+//        for (int i = 0; i < inventory.getMaxQuantity(); i++) {
+//            Stack slotStack = new Stack();
+//            Image slotBg = new Image(new Texture(Gdx.files.internal("game/tiles/slot.png")));
+//            Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
+//            slotBg.addListener(new ClickListener() {
+//                @Override
+//                public void clicked(InputEvent event, float x, float y) {
+//                }
+//                @Override
+//                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                    if(pointer == -1) {
+//                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
+//                    }
+//                }
+//                @Override
+//                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                    if(pointer == -1) {
+//                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
+//                            new Texture(Gdx.files.internal("game/tiles/slot.png")))));
+//                    }
+//                }
+//
+//            });
+//            slotBg.setTouchable(Touchable.enabled);
+//            slotStack.add(slotBg);
+//            for (Map.Entry<Item, Pair<Integer, Integer>> entry : items.entrySet()) {
+//                Item item = entry.getKey();
+//                int index = entry.getValue().second;
+//                int quantity = entry.getValue().first;
+//
+//                if (index == i) {
+//                    TextureRegion itemTex = textures.get(item);
+//                    if (itemTex != null) {
+//                        ImageButton itemImage = new ImageButton(new TextureRegionDrawable(itemTex));
+//                        slotStack.add(itemImage);
+//                        Dialog errorDialog = new Dialog("Error", skin);
+//                        errorDialog.text("You can't move it to refrigerator");
+//                        errorDialog.center();
+//                        errorDialog.button("close");
+//
+//                        Dialog confirmDialog = new Dialog("Confirm", skin) {
+//                            @Override
+//                            protected void result(Object object) {
+//                                boolean confirmed = (boolean) object;
+//                                if (confirmed) {
+//                                    System.out.println("Confirmed for item: " + item.getCorrectName());
+//                                    if (!selectedItems.contains(item.getCorrectName())) {
+//                                        selectedItems.add(item.getCorrectName());
+//                                    }
+//                                } else {
+//                                    System.out.println("Cancelled");
+//                                }
+//                            }
+//                        };
+//                        confirmDialog.text("Are you sure you use this item?");
+//                        confirmDialog.button("yes", true);
+//                        confirmDialog.button("no", false);
+//                        itemImage.addListener(new ClickListener() {
+//                            @Override
+//                            public void clicked(InputEvent event, float x, float y) {
+//                                confirmDialog.show(window.getStage());
+//                            }
+//                            @Override
+//                            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                                if(pointer == -1) {
+//                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                                if(pointer == -1) {
+//                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
+//                                        new Texture(Gdx.files.internal("game/tiles/slot.png")))));
+//                                }
+//                            }
+//                        });
+//
+//                        // Quantity label
+//                        Label qtyLabel = new Label(String.valueOf(quantity), skin);
+//                        qtyLabel.setFontScale(0.8f);
+//                        qtyLabel.setAlignment(Align.bottomRight);
+//                        qtyLabel.setTouchable(Touchable.disabled);
+//                        slotStack.add(qtyLabel);
+//                    }
+//                }
+//            }
+//
+//            slotsTable.add(slotStack);
+//            count++;
+//            if (count % 10 == 0) slotsTable.row();
+//        }
     }
     private void createWindow() {
         window = new Window("Artisan", skin);
@@ -260,110 +264,110 @@ public class CraftingUI {
                 setActive(false);
             }
         });
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        Inventory inventory = player.getInventory();
-        Map<Item, Pair<Integer, Integer>> items = inventory.getItems();
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        Inventory inventory = player.getInventory();
+//        Map<Item, Pair<Integer, Integer>> items = inventory.getItems();
 
         int count = 0;
-
-        for (int i = 0; i < inventory.getMaxQuantity(); i++) {
-            Stack slotStack = new Stack();
-
-            // Slot background
-            Image slotBg = new Image(new Texture(Gdx.files.internal("game/tiles/slot.png")));
-            Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
-            slotBg.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                }
-                @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    if(pointer == -1) {
-                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
-                    }
-                }
-                @Override
-                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(pointer == -1) {
-                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
-                            new Texture(Gdx.files.internal("game/tiles/slot.png")))));
-                    }
-                }
-
-            });
-            slotBg.setTouchable(Touchable.enabled);
-            slotStack.add(slotBg);
-
-            // If item exists in this slot index, add it
-            for (Map.Entry<Item, Pair<Integer, Integer>> entry : items.entrySet()) {
-                Item item = entry.getKey();
-                int index = entry.getValue().second;
-                int quantity = entry.getValue().first;
-
-                if (index == i) {
-                    System.out.println(i);
-                    TextureRegion itemTex = textures.get(item);
-                    if (itemTex != null) {
-                        ImageButton itemImage = new ImageButton(new TextureRegionDrawable(itemTex));
-                        slotStack.add(itemImage);
-                        Dialog errorDialog = new Dialog("Error", skin);
-                        errorDialog.text("You can't move it to refrigerator");
-                        errorDialog.center();
-                        errorDialog.button("close");
-
-                        Dialog confirmDialog = new Dialog("Confirm", skin) {
-                            @Override
-                            protected void result(Object object) {
-                                boolean confirmed = (boolean) object;
-                                if (confirmed) {
-                                    System.out.println("Confirmed for item: " + item.getCorrectName());
-                                    if (!selectedItems.contains(item.getCorrectName())) {
-                                        selectedItems.add(item.getCorrectName());
-                                    }
-                                } else {
-                                    System.out.println("Cancelled");
-                                }
-                            }
-                        };
-                        confirmDialog.text("Are you sure you use this item?");
-                        confirmDialog.button("yes", true);
-                        confirmDialog.button("no", false);
-                        itemImage.addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y) {
-                                confirmDialog.show(window.getStage());
-                            }
-                            @Override
-                            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                                if(pointer == -1) {
-                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
-                                }
-                            }
-
-                            @Override
-                            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                                if(pointer == -1) {
-                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
-                                        new Texture(Gdx.files.internal("game/tiles/slot.png")))));
-                                }
-                            }
-                        });
-
-                        // Quantity label
-                        Label qtyLabel = new Label(String.valueOf(quantity), skin);
-                        qtyLabel.setFontScale(0.8f);
-                        qtyLabel.setAlignment(Align.bottomRight);
-                        qtyLabel.setTouchable(Touchable.disabled);
-                        slotStack.add(qtyLabel);
-                    }
-                }
-            }
-
-            slotsTable.add(slotStack);
-
-            count++;
-            if (count % 10 == 0) slotsTable.row(); // هر 10 تا یک ردیف جدید
-        }
+//Server-TODO
+//        for (int i = 0; i < inventory.getMaxQuantity(); i++) {
+//            Stack slotStack = new Stack();
+//
+//            // Slot background
+//            Image slotBg = new Image(new Texture(Gdx.files.internal("game/tiles/slot.png")));
+//            Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
+//            slotBg.addListener(new ClickListener() {
+//                @Override
+//                public void clicked(InputEvent event, float x, float y) {
+//                }
+//                @Override
+//                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                    if(pointer == -1) {
+//                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
+//                    }
+//                }
+//                @Override
+//                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                    if(pointer == -1) {
+//                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
+//                            new Texture(Gdx.files.internal("game/tiles/slot.png")))));
+//                    }
+//                }
+//
+//            });
+//            slotBg.setTouchable(Touchable.enabled);
+//            slotStack.add(slotBg);
+//
+//            // If item exists in this slot index, add it
+//            for (Map.Entry<Item, Pair<Integer, Integer>> entry : items.entrySet()) {
+//                Item item = entry.getKey();
+//                int index = entry.getValue().second;
+//                int quantity = entry.getValue().first;
+//
+//                if (index == i) {
+//                    System.out.println(i);
+//                    TextureRegion itemTex = textures.get(item);
+//                    if (itemTex != null) {
+//                        ImageButton itemImage = new ImageButton(new TextureRegionDrawable(itemTex));
+//                        slotStack.add(itemImage);
+//                        Dialog errorDialog = new Dialog("Error", skin);
+//                        errorDialog.text("You can't move it to refrigerator");
+//                        errorDialog.center();
+//                        errorDialog.button("close");
+//
+//                        Dialog confirmDialog = new Dialog("Confirm", skin) {
+//                            @Override
+//                            protected void result(Object object) {
+//                                boolean confirmed = (boolean) object;
+//                                if (confirmed) {
+//                                    System.out.println("Confirmed for item: " + item.getCorrectName());
+//                                    if (!selectedItems.contains(item.getCorrectName())) {
+//                                        selectedItems.add(item.getCorrectName());
+//                                    }
+//                                } else {
+//                                    System.out.println("Cancelled");
+//                                }
+//                            }
+//                        };
+//                        confirmDialog.text("Are you sure you use this item?");
+//                        confirmDialog.button("yes", true);
+//                        confirmDialog.button("no", false);
+//                        itemImage.addListener(new ClickListener() {
+//                            @Override
+//                            public void clicked(InputEvent event, float x, float y) {
+//                                confirmDialog.show(window.getStage());
+//                            }
+//                            @Override
+//                            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                                if(pointer == -1) {
+//                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                                if(pointer == -1) {
+//                                    slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(
+//                                        new Texture(Gdx.files.internal("game/tiles/slot.png")))));
+//                                }
+//                            }
+//                        });
+//
+//                        // Quantity label
+//                        Label qtyLabel = new Label(String.valueOf(quantity), skin);
+//                        qtyLabel.setFontScale(0.8f);
+//                        qtyLabel.setAlignment(Align.bottomRight);
+//                        qtyLabel.setTouchable(Touchable.disabled);
+//                        slotStack.add(qtyLabel);
+//                    }
+//                }
+//            }
+//
+//            slotsTable.add(slotStack);
+//
+//            count++;
+//            if (count % 10 == 0) slotsTable.row(); // هر 10 تا یک ردیف جدید
+//        }
 
         window.add(slotsTable);
         Dialog errorDialog = new Dialog("Result", skin);
@@ -375,13 +379,14 @@ public class CraftingUI {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 errorDialog.getContentTable().clear();
-                Result result = App.getGameMenuController().artisanUse(craftingItem.getCraftingItem().name(),
-                    selectedItems,craftingItem);
-                if(!result.isSuccessful()){
-                    selectedItems.clear();
-                }
-                craftingItem.setProcessing(true);
-                errorDialog.text(result.getMessage());
+                //Server-TODO
+//                Result result = App.getGameMenuController().artisanUse(craftingItem.getCraftingItem().name(),
+//                    selectedItems,craftingItem);
+//                if(!result.isSuccessful()){
+//                    selectedItems.clear();
+//                }
+//                craftingItem.setProcessing(true);
+//                errorDialog.text(result.getMessage());
                 errorDialog.show(window.getStage());
             }
         });
@@ -415,7 +420,8 @@ public class CraftingUI {
                 setActive(false);
             }
         });
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        //Server-TODO
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
         window.add(slotsTable);
         Dialog errorDialog = new Dialog("Result", skin);
@@ -487,7 +493,8 @@ public class CraftingUI {
                 setActive(false);
             }
         });
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+        //Server-TODO
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
         window.add(slotsTable);
         Dialog errorDialog = new Dialog("Result", skin);
@@ -498,7 +505,8 @@ public class CraftingUI {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println(App.getGameMenuController().artisanGet(craftingItem.getInsideArtisan().getCorrectName(),craftingItem));
+                //Server-TODO
+//                System.out.println(App.getGameMenuController().artisanGet(craftingItem.getInsideArtisan().getCorrectName(),craftingItem));
                 craftingItem.setProcessing(false);
                 craftingItem.setReady(false);
                 errorDialog.getContentTable().clear();

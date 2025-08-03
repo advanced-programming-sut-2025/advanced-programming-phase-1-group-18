@@ -12,7 +12,8 @@ public class EnergyController {
     private Sprite greenBarTexture;
     private float maxEnergyLen;
     private int energy;
-    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+    //Server-TODO
+//    Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
     int scale;
     public EnergyController(){
         scale = 2;
@@ -23,13 +24,15 @@ public class EnergyController {
         energyTexture.setPosition(Gdx.graphics.getWidth()-energyTexture.getWidth()-10,
             10);
         greenBarTexture.setPosition(energyTexture.getX()+9*scale, 10+6*scale);
-        energy = (int) currentPlayer.getEnergy();
+        //Server-TODO
+//        energy = (int) currentPlayer.getEnergy();
         maxEnergyLen = greenBarTexture.getHeight();
     }
     public void render(SpriteBatch batch){
-        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-        float nesbat = (float) ((float) currentPlayer.getEnergy() /currentPlayer.getMaxEnergy());
-        greenBarTexture.setSize(greenBarTexture.getWidth(), nesbat*maxEnergyLen);
+        //Server-TODO
+//        currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//        float nesbat = (float) ((float) currentPlayer.getEnergy() /currentPlayer.getMaxEnergy());
+//        greenBarTexture.setSize(greenBarTexture.getWidth(), nesbat*maxEnergyLen);
         energyTexture.draw(batch);
         greenBarTexture.draw(batch);
     }

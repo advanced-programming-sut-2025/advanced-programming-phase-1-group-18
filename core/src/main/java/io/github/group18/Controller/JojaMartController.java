@@ -98,7 +98,6 @@ public class JojaMartController implements MenuEnter, ShowCurrentMenu, MarketCon
                         validquantity2 = true;
                         if (playerrr.getGold() >= ((Craftingrecipe) item).getPrice()) {
 //                            currentPlayer.getInventory().addItem((Craftingrecipe)item, quantity);
-                            //TODO ADD CRAFTINGRECIPE TO PLAYER
                             App.getCurrentGame().getJojoMartMarket().removeItem(item, quantity);
                             playerrr.setGold(playerrr.getGold() - ((Craftingrecipe)item).getPrice());
 

@@ -31,9 +31,9 @@ public class FlowerSendWindow extends Window {
                     messageLabel.setText("Username cannot be empty.");
                     return;
                 }
-
-                Result result = GameMenuController.flower(username);
-                messageLabel.setText(result.getMessage());
+//Server-TODO
+//                Result result = GameMenuController.flower(username);
+//                messageLabel.setText(result.getMessage());
             }
         });
 

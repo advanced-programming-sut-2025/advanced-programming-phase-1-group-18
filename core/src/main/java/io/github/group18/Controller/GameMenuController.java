@@ -2498,7 +2498,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
-        //todo if player not in home return error
         StringBuilder resultBuilder = new StringBuilder();
         ArrayList<CraftingRecipesEnums> craftingRecipes = playerrr
             .getCraftingRecipes();
@@ -2726,7 +2725,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //                } else {
 //                    iterator.remove(); // اگر فقط یکی بود، کل آیتم رو حذف کن
 //                }
-//                //todo place in map ObjectInside?
+//
 //                tileCord.setX(dir_x + tileCord.getX());
 //                tileCord.setY(dir_y + tileCord.getY());
 //                if (App.getCurrentGame().getMap().get(tileCord.getX()).get(tileCord.getY()).getInside() == null) {
@@ -2851,7 +2850,6 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         }
 
-        //todo if name is Item
 //        for (Item item : AllGameItems.getAllItems()) {
 //            if (item.getClass().getSimpleName().equalsIgnoreCase(name)) {
 //                foundItem = item;

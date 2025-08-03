@@ -49,8 +49,9 @@ public class MarriageResponseWindow extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 if (validProposers.isEmpty()) return;
                 String selected = proposalBox.getSelected().split(" ")[0]; // Extract username
-                Result result = GameMenuController.response("-accept", selected);
-                messageLabel.setText(result.getMessage());
+                //Server-TODO
+//                Result result = GameMenuController.response("-accept", selected);
+//                messageLabel.setText(result.getMessage());
             }
         });
 
@@ -59,8 +60,9 @@ public class MarriageResponseWindow extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 if (validProposers.isEmpty()) return;
                 String selected = proposalBox.getSelected().split(" ")[0]; // Extract username
-                Result result = GameMenuController.response("-reject", selected);
-                messageLabel.setText(result.getMessage());
+//Server-TODO
+//                Result result = GameMenuController.response("-reject", selected);
+//                messageLabel.setText(result.getMessage());
             }
         });
 

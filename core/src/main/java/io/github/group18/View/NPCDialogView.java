@@ -40,11 +40,12 @@ public class NPCDialogView {
 
         Window npcWindow = new Window("NPC Dialog", skin);
         npcWindow.setModal(true);
-
-        Label npctalk = new Label(GameMenuController.meetNPC(npc).getMessage(), skin);
+//Server-TODO
+//        Label npctalk = new Label(GameMenuController.meetNPC(npc).getMessage(), skin);
 
         Table headerTable = new Table(skin);
-        headerTable.add(npctalk).pad(20, 20, 20, 20).row();
+        //Server-TODO
+//        headerTable.add(npctalk).pad(20, 20, 20, 20).row();
 
         npcWindow.add(headerTable).row();
 
@@ -56,19 +57,24 @@ public class NPCDialogView {
                 npcWindow.remove();
                 Gdx.input.setInputProcessor(inputProcessor);
                 if (npc.getName() == NPCEnums.SEBASTIAN) {
-                    App.getCurrentGame().setSebastian_dialog(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setSebastian_dialog(false);
                 }
                 if (npc.getName() == NPCEnums.ABIGAIL) {
-                    App.getCurrentGame().setAbigail_dialog(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setAbigail_dialog(false);
                 }
                 if (npc.getName() == NPCEnums.HARVEY) {
-                    App.getCurrentGame().setHarvey_dialog(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setHarvey_dialog(false);
                 }
                 if (npc.getName() == NPCEnums.LEAH) {
-                    App.getCurrentGame().setLeah_dialog(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setLeah_dialog(false);
                 }
                 if (npc.getName() == NPCEnums.ROBIN) {
-                    App.getCurrentGame().setRobin_dialog(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setRobin_dialog(false);
                 }
             }
         });
@@ -125,19 +131,24 @@ public class NPCDialogView {
         skin.dispose();
         Gdx.input.setInputProcessor(inputProcessor);
         if (npc.getName() == NPCEnums.SEBASTIAN) {
-            App.getCurrentGame().setSebastian_dialog(false);
+            //Server-TODO
+//            App.getCurrentGame().setSebastian_dialog(false);
         }
         if (npc.getName() == NPCEnums.ABIGAIL) {
-            App.getCurrentGame().setAbigail_dialog(false);
+            //Server-TODO
+//            App.getCurrentGame().setAbigail_dialog(false);
         }
         if (npc.getName() == NPCEnums.HARVEY) {
-            App.getCurrentGame().setHarvey_dialog(false);
+            //Server-TODO
+//            App.getCurrentGame().setHarvey_dialog(false);
         }
         if (npc.getName() == NPCEnums.LEAH) {
-            App.getCurrentGame().setLeah_dialog(false);
+            //Server-TODO
+//            App.getCurrentGame().setLeah_dialog(false);
         }
         if (npc.getName() == NPCEnums.ROBIN) {
-            App.getCurrentGame().setRobin_dialog(false);
+            //Server-TODO
+//            App.getCurrentGame().setRobin_dialog(false);
         }
     }
 

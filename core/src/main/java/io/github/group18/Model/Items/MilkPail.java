@@ -10,24 +10,23 @@ public class MilkPail extends Tool implements Name, Price {
     protected int price;
 
     public String use(Kashi kashi) {
-        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-
-        if (player.getEnergy() >= getEnergyUsage()) {
-            if (isValidForMilking(kashi)) {
-                player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo get crop
-                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
-                GameMenuController.checkSkilRecipe();
-                return "Milk achived";
-            } else {
-                player.setEnergy(player.getEnergy() - getEnergyUsage());
-                //todo just decrease energy
-                return "Not animal found. Energy: " + getEnergyUsage();
-            }
-        } else {
-            //todo return error for not enough energy
-            return "Not Enough energy";
-        }
+        //Server-TODO
+//        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//
+//        if (player.getEnergy() >= getEnergyUsage()) {
+//            if (isValidForMilking(kashi)) {
+//                player.setEnergy(player.getEnergy() - getEnergyUsage());
+//                player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
+//                GameMenuController.checkSkilRecipe();
+//                return "Milk achived";
+//            } else {
+//                player.setEnergy(player.getEnergy() - getEnergyUsage());
+//                return "Not animal found. Energy: " + getEnergyUsage();
+//            }
+//        } else {
+//            return "Not Enough energy";
+//        }
+        return "Not Enough energy";
     }
 
     public static boolean isValidForMilking(Kashi kashi) {

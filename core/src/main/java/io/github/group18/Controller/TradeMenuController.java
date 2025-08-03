@@ -40,7 +40,8 @@ public class TradeMenuController extends GameMenuController implements MenuEnter
 
     public void startTrade()
     {
-        checkForIncomingTrades( App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()));
+        //Server-TODO
+//        checkForIncomingTrades( App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()));
         for(Player player : App.getCurrentGame().getPlayers())
         {
             System.out.printf("player : %s\n",player.getOwner().getUsername());
@@ -321,8 +322,8 @@ public class TradeMenuController extends GameMenuController implements MenuEnter
 
 
     public void tradeHistory() {
-
-        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+//Server-TODO
+//        Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
 
         Game currentGame = App.getCurrentGame();
         List<Trade> trades = currentGame.getTrades();
@@ -330,9 +331,10 @@ public class TradeMenuController extends GameMenuController implements MenuEnter
 
         List<Trade> currentPlayerTrades = new ArrayList<>();
         for (Trade trade : trades) {
-            if (trade.getReceiver() != null && trade.getReceiver().equals(currentPlayer)) {
-                currentPlayerTrades.add(trade);
-            }
+            //Server-TODO
+//            if (trade.getReceiver() != null && trade.getReceiver().equals(currentPlayer)) {
+//                currentPlayerTrades.add(trade);
+//            }
         }
         if (currentPlayerTrades.isEmpty()) {
             System.out.println("No trade history available for the current player.");

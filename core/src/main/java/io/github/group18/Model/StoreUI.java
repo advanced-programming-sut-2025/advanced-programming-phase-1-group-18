@@ -53,14 +53,15 @@ public class StoreUI<T> {
                 refreshItemList();
             }
         });
-
-        Label goldLabel = new Label("Gold: " + getPlayerGold(), skin);
+//Server-TODO
+//        Label goldLabel = new Label("Gold: " + getPlayerGold(), skin);
 
 
 
         Table headerTable = new Table(skin);
         headerTable.add(toggleButton).pad(20, 20, 20, 20);
-        headerTable.add(goldLabel).pad(20, 20, 20, 20).row();
+        //Server-TODO
+//        headerTable.add(goldLabel).pad(20, 20, 20, 20).row();
 
         if (marketController.isAnimalStore()) {
             TextButton animalShopButton = new TextButton("Animal Shop", skin);
@@ -69,16 +70,16 @@ public class StoreUI<T> {
                 public void clicked(InputEvent event, float x, float y) {
                     AnimalShopWindow animalShopWindow = new AnimalShopWindow(skin, stage, (animalType, customName) -> {
                         System.out.println("User selected: " + animalType + " with name: " + customName);
-
-                        Result result = MarniesRanchController.buyAnimal(animalType.toLowerCase(), customName);
-                        Dialog resultDialog = new Dialog(result.isSuccessful() ? "Success" : "Error", skin);
-                        resultDialog.text(result.getMessage());
-                        resultDialog.button("OK");
-                        resultDialog.show(stage);
-
-                        if (result.isSuccessful()) {
-                            refreshItemList();
-                        }
+//Server-TODO
+//                        Result result = MarniesRanchController.buyAnimal(animalType.toLowerCase(), customName);
+//                        Dialog resultDialog = new Dialog(result.isSuccessful() ? "Success" : "Error", skin);
+//                        resultDialog.text(result.getMessage());
+//                        resultDialog.button("OK");
+//                        resultDialog.show(stage);
+//
+//                        if (result.isSuccessful()) {
+//                            refreshItemList();
+//                        }
                     });
 
                     stage.addActor(animalShopWindow);
@@ -202,12 +203,12 @@ public class StoreUI<T> {
         }
         return available;
     }
-
-    private int getPlayerGold() {
-        return App.getCurrentGame().getPlayers()
-            .get(App.getCurrentGame().getIndexPlayerinControl())
-            .getGold();
-    }
+//Server-TODO
+//    private int getPlayerGold() {
+//        return App.getCurrentGame().getPlayers()
+//            .get(App.getCurrentGame().getIndexPlayerinControl())
+//            .getGold();
+//    }
 
     private void showPurchaseDialog(T item) {
         if (currentDialog != null) {
@@ -243,7 +244,8 @@ public class StoreUI<T> {
 
         itemDisplay.add(new Label(name, skin)).row();
         itemDisplay.add(new Label("Price: " + price + "g", skin)).pad(10, 0, 0, 0).row();
-        itemDisplay.add(new Label("Your gold: " + getPlayerGold() + "g", skin)).pad(10, 0, 0, 0).row();
+        //Server-TODO
+//        itemDisplay.add(new Label("Your gold: " + getPlayerGold() + "g", skin)).pad(10, 0, 0, 0).row();
 
         currentDialog.add(itemDisplay).pad(20, 20, 20, 20).row();
 
@@ -284,17 +286,18 @@ public class StoreUI<T> {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Result result = marketController.purchase(name, String.valueOf(quantity[0]));
-                if (result.isSuccessful()) {
-                    currentDialog.remove();
-                    refreshItemList();
-                    createMainStoreUI();
-                } else {
-                    Dialog errorDialog = new Dialog("Error", skin);
-                    errorDialog.text(result.getMessage());
-                    errorDialog.button("OK");
-                    errorDialog.show(stage);
-                }
+                //Server-TODO
+//                Result result = marketController.purchase(name, String.valueOf(quantity[0]));
+//                if (result.isSuccessful()) {
+//                    currentDialog.remove();
+//                    refreshItemList();
+//                    createMainStoreUI();
+//                } else {
+//                    Dialog errorDialog = new Dialog("Error", skin);
+//                    errorDialog.text(result.getMessage());
+//                    errorDialog.button("OK");
+//                    errorDialog.show(stage);
+//                }
             }
         });
 

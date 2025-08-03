@@ -17,7 +17,8 @@ public class GiftHistoryWindow extends Window {
         super("📜 Gift History", skin);
         this.game = game;
         this.skin = skin;
-        this.currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
+        //Server-TODO
+//        this.currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
 
         setSize(1000, 800);
         setPosition(500, 180);

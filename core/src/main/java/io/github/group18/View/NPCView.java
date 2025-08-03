@@ -95,19 +95,24 @@ public class NPCView {
                 npcWindow.remove();
                 Gdx.input.setInputProcessor(inputProcessor);
                 if (npc.getName() == NPCEnums.SEBASTIAN) {
-                    App.getCurrentGame().setSebastian_view(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setSebastian_view(false);
                 }
                 if (npc.getName() == NPCEnums.ABIGAIL) {
-                    App.getCurrentGame().setAbigail_view(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setAbigail_view(false);
                 }
                 if (npc.getName() == NPCEnums.HARVEY) {
-                    App.getCurrentGame().setHarvey_view(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setHarvey_view(false);
                 }
                 if (npc.getName() == NPCEnums.LEAH) {
-                    App.getCurrentGame().setLeah_view(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setLeah_view(false);
                 }
                 if (npc.getName() == NPCEnums.ROBIN) {
-                    App.getCurrentGame().setRobin_view(false);
+                    //Server-TODO
+//                    App.getCurrentGame().setRobin_view(false);
                 }
             }
         });
@@ -131,18 +136,19 @@ public class NPCView {
         currentDialog.setModal(true);
 
         Table itemDisplay = new Table(skin);
-        Item item = App.getCurrentGame().getCurrentPlayer().getInventory().getItemBySlot(App.getCurrentGame().getCurrentPlayer().getInventory().getSelectedSlot());
-        if (item instanceof PictureModel) {
-            Texture texture;
-            try {
-                texture = new Texture(Gdx.files.internal(((PictureModel) item).getPath()));
-            } catch (Exception e) {
-                texture = GameAssetManager.getGameAssetManager().getDefaultInventoryItem();
-            }
-            Image image = new Image(texture);
-            image.setScaling(Scaling.fit);
-            itemDisplay.add(image).size(128, 128).padRight(20);
-        }
+        //Server-TODO
+//        Item item = App.getCurrentGame().getCurrentPlayer().getInventory().getItemBySlot(App.getCurrentGame().getCurrentPlayer().getInventory().getSelectedSlot());
+//        if (item instanceof PictureModel) {
+//            Texture texture;
+//            try {
+//                texture = new Texture(Gdx.files.internal(((PictureModel) item).getPath()));
+//            } catch (Exception e) {
+//                texture = GameAssetManager.getGameAssetManager().getDefaultInventoryItem();
+//            }
+//            Image image = new Image(texture);
+//            image.setScaling(Scaling.fit);
+//            itemDisplay.add(image).size(128, 128).padRight(20);
+//        }
 
         currentDialog.add(itemDisplay).pad(20, 20, 20, 20).row();
 
@@ -164,11 +170,12 @@ public class NPCView {
         plusButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int stock = App.getCurrentGame().getCurrentPlayer().getInventory().getItemQuantity(item);
-                if (stock == -1 || quantity[0] < stock) {
-                    quantity[0]++;
-                    quantityLabel.setText(String.valueOf(quantity[0]));
-                }
+                //Server-TODO
+//                int stock = App.getCurrentGame().getCurrentPlayer().getInventory().getItemQuantity(item);
+//                if (stock == -1 || quantity[0] < stock) {
+//                    quantity[0]++;
+//                    quantityLabel.setText(String.valueOf(quantity[0]));
+//                }
             }
         });
 
@@ -183,16 +190,17 @@ public class NPCView {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Result result = GameMenuController.giftNPC(npc, item, quantity[0]);
-                if (result.isSuccessful()) {
-                    currentDialog.remove();
-                    createNPCUI();
-                } else {
-                    Dialog errorDialog = new Dialog("Error", skin);
-                    errorDialog.text(result.getMessage());
-                    errorDialog.button("OK");
-                    errorDialog.show(stage);
-                }
+                //Server-TODO
+//                Result result = GameMenuController.giftNPC(npc, item, quantity[0]);
+//                if (result.isSuccessful()) {
+//                    currentDialog.remove();
+//                    createNPCUI();
+//                } else {
+//                    Dialog errorDialog = new Dialog("Error", skin);
+//                    errorDialog.text(result.getMessage());
+//                    errorDialog.button("OK");
+//                    errorDialog.show(stage);
+//                }
             }
         });
 
@@ -227,9 +235,9 @@ public class NPCView {
 
         currentDialog = new Window("Quests" + npc.getName(), skin);
         currentDialog.setModal(true);
-
-        Label questsLabel = new Label(GameMenuController.questsList(npc).getMessage(), skin);
-        currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
+//Server-TODO
+//        Label questsLabel = new Label(GameMenuController.questsList(npc).getMessage(), skin);
+//        currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
 
         TextButton cancelButton = new TextButton("Cancel", skin);
         cancelButton.addListener(new ClickListener() {
@@ -299,10 +307,11 @@ public class NPCView {
         doButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String result = GameMenuController.questsFinish(npc,quantity[0]).getMessage();
-                Dialog errorDialog = new Dialog(result, skin);
-                errorDialog.button("OK");
-                errorDialog.show(stage);
+                //Server-TODO
+//                String result = GameMenuController.questsFinish(npc,quantity[0]).getMessage();
+//                Dialog errorDialog = new Dialog(result, skin);
+//                errorDialog.button("OK");
+//                errorDialog.show(stage);
             }
         });
         currentDialog.add(doButton).pad(20, 20, 20, 20).row();
@@ -337,9 +346,9 @@ public class NPCView {
 
         currentDialog = new Window("Friendship" + npc.getName(), skin);
         currentDialog.setModal(true);
-
-        Label questsLabel = new Label(GameMenuController.friendshipList(npc).getMessage(), skin);
-        currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
+//Server-TODO
+//        Label questsLabel = new Label(GameMenuController.friendshipList(npc).getMessage(), skin);
+//        currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
 
         TextButton cancelButton = new TextButton("Cancel", skin);
         cancelButton.addListener(new ClickListener() {
@@ -406,19 +415,24 @@ public class NPCView {
         skin.dispose();
         Gdx.input.setInputProcessor(inputProcessor);
         if (npc.getName() == NPCEnums.SEBASTIAN) {
-            App.getCurrentGame().setSebastian_view(false);
+            //Server-TODO
+//            App.getCurrentGame().setSebastian_view(false);
         }
         if (npc.getName() == NPCEnums.ABIGAIL) {
-            App.getCurrentGame().setAbigail_view(false);
+            //Server-TODO
+//            App.getCurrentGame().setAbigail_view(false);
         }
         if (npc.getName() == NPCEnums.HARVEY) {
-            App.getCurrentGame().setHarvey_view(false);
+            //Server-TODO
+//            App.getCurrentGame().setHarvey_view(false);
         }
         if (npc.getName() == NPCEnums.LEAH) {
-            App.getCurrentGame().setLeah_view(false);
+            //Server-TODO
+//            App.getCurrentGame().setLeah_view(false);
         }
         if (npc.getName() == NPCEnums.ROBIN) {
-            App.getCurrentGame().setRobin_view(false);
+            //Server-TODO
+//            App.getCurrentGame().setRobin_view(false);
         }
     }
 }

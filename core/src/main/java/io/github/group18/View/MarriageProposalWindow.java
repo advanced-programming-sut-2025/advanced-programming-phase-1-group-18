@@ -31,9 +31,9 @@ public class MarriageProposalWindow extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 String username = usernameField.getText().trim();
                 String ring = ringField.getText().trim();
-
-                Result result = GameMenuController.askMarriage(username, ring);
-                messageLabel.setText(result.getMessage());
+//Server-TODO
+//                Result result = GameMenuController.askMarriage(username, ring);
+//                messageLabel.setText(result.getMessage());
             }
         });
 
