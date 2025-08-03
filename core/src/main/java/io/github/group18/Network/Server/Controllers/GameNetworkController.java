@@ -9,10 +9,9 @@ import io.github.group18.Network.common.models.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GameNetworkController {
-    public static void handleMessage(Message message) {
+    public static void handleMessage(Message message, ClientConnectionThread clientConnectionThread) {
         switch (message.getType()) {
             case start_game:
                 Gson gson = new Gson();
@@ -28,6 +27,64 @@ public class GameNetworkController {
                 }
                 maps.add(1);
                 startNewGame(usernames, maps, newUser);
+                break;
+            case get_kashi_using_x_y:
+                int x = message.getIntFromBody("x");
+                int y = message.getIntFromBody("y");
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("kashi", App.getCurrentGame().getMap().get(x).get(y));
+                Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
+                clientConnectionThread.sendMessage(send);
+                break;
+            case get_kashis_using_2x_2y:
+                int startx = message.getIntFromBody("startX");
+                int starty = message.getIntFromBody("startY");
+                int endx = message.getIntFromBody("endX");
+                int endy = message.getIntFromBody("endY");
+
+                ArrayList<ArrayList<Kashi>> tileMap = new ArrayList<>();
+
+                for (int i = startx; i <= endx; i++) {
+                    ArrayList<Kashi> currentRow = new ArrayList<>();
+                    for (int j = starty; j <= endy; j++) {
+                        Kashi kashiTile = App.getCurrentGame().getMap().get(i).get(j);
+                        currentRow.add(kashiTile);
+                    }
+                    tileMap.add(currentRow);
+                }
+                HashMap<String, Object> map1 = new HashMap<>();
+                map1.put("kashis", tileMap);
+                Message send1 = new Message(map1, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
+                clientConnectionThread.sendMessage(send1);
+                break;
+            case get_dateTime:
+                HashMap<String, Object> map2 = new HashMap<>();
+                map2.put("dateTime", App.getCurrentGame().getCurrentDateTime());
+                Message send2 = new Message(map2, Message.Type.get_dateTime, Message.Menu.game);
+                clientConnectionThread.sendMessage(send2);
+                break;
+            case get_npc:
+                HashMap<String, Object> map3 = new HashMap<>();
+                map3.put("sebastian", App.getCurrentGame().getNPCSEBASTIAN());
+                map3.put("abigail", App.getCurrentGame().getNPCABIGAIL());
+                map3.put("harvey", App.getCurrentGame().getNPCHARVEY());
+                map3.put("leah", App.getCurrentGame().getNPCLEAH());
+                map3.put("robin", App.getCurrentGame().getNPCROBIN());
+                Message send3 = new Message(map3, Message.Type.get_npc, Message.Menu.game);
+                clientConnectionThread.sendMessage(send3);
+                break;
+            case get_players:
+                HashMap<String, Object> map4 = new HashMap<>();
+                map4.put("numberOfPlayers", App.getCurrentGame().getPlayers().size());
+                int count = 1;
+                for(Player player : App.getCurrentGame().getPlayers())
+                {
+                    map4.put(String.valueOf(count), player.getX());
+                    map4.put(String.valueOf(count+1), player.getY());
+                    count += 2;
+                }
+                Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
+                clientConnectionThread.sendMessage(send4);
                 break;
         }
     }

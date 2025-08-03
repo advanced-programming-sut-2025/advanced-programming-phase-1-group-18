@@ -63,7 +63,10 @@ public class ClientConnectionThread extends ConnectionThread {
                 sendMessage(ChangeScreenNetController.handleMessage(message));
                 return true;
             case game_menu:
-                GameNetworkController.handleMessage(message);
+                GameNetworkController.handleMessage(message,this);
+                return true;
+            case game:
+                GameNetworkController.handleMessage(message,this);
                 return true;
         }
         return false;

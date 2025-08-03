@@ -69,7 +69,12 @@ public class Message {
         start_game,
         status,
         load_game_screen,
-        add_player_to_Clientmain
+        add_player_to_Clientmain,
+        get_kashi_using_x_y,
+        get_kashis_using_2x_2y,
+        get_dateTime,
+        get_npc,
+        get_players
     }
 
     public enum Menu {
@@ -81,6 +86,7 @@ public class Message {
         choosing_map,
         CHANGE_MENU,
         game_menu,
-        download_request
+        download_request,
+        game
     }
 }

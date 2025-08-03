@@ -2204,7 +2204,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 //                craftInfo.append("Base Health: ").append(crop1.getBaseHealth()).append("\n");
                 //                craftInfo.append("Season: ").append(crop1.getSeason()).append("\n");
                 craftInfo.append("Can Become Giant: ").append(crop1.isCanBecomeGiant() ? "TRUE" : "FALSE");
-                popUpMessage(gameController, craftInfo.toString(), gameController.getGame());
+                //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+                Game game = null;
+                popUpMessage(gameController, craftInfo.toString(), game);
                 batch.begin();
                 font.draw(batch, craftInfo.toString(), 100, 100);
                 batch.end();
@@ -2214,7 +2217,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         batch.begin();
         font.draw(batch, "craft not found", 100, 100);
         batch.end();
-        popUpMessage(gameController, "craft not found", gameController.getGame());
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
+        popUpMessage(gameController, "craft not found", game);
         return new Result(false, "craft not found");
     }
 

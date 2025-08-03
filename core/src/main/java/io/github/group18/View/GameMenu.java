@@ -18,7 +18,6 @@ import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
-import io.github.group18.Model.App;
 import io.github.group18.Model.Buff;
 import io.github.group18.Model.Game;
 import io.github.group18.Model.GameAssetManager;

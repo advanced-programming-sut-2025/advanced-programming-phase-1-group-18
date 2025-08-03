@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
 import java.awt.*;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.List;
 
@@ -16,12 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.Message;
 
 public class GameView {
     private final GameController gameController;
@@ -76,6 +80,12 @@ public class GameView {
     private float waterTimer = 0f;
 
     private String pendingPlacementName;
+
+    int startX;
+    int startY;
+    int endX;
+    int endY;
+    ArrayList<ArrayList<Kashi>> tiles;
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -153,11 +163,9 @@ public class GameView {
     }
 
     private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-//        System.out.println("loadTiles-init: " + startX + " " + endX + " " + startY + " " + endY);
-        int debigniggers = 0;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                Kashi tile = tiles.get(x).get(y);
+                Kashi tile = tiles.get(x - startX).get(y - startY);
                 if (tile == null) continue;
 
                 Object inside = tile.getInside();
@@ -170,8 +178,6 @@ public class GameView {
                             } else {
                                 tex = new TextureRegion(new Texture(Gdx.files.internal(pictureModel.getPath())));
                                 texturesOnDrug.put(pictureModel.getPath(), tex);
-                                debigniggers++;
-                                System.out.println(debigniggers);
                             }
                             if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
                                 tex = GameAssetManager.getGameAssetManager().getGreenhouseBroken();
@@ -190,7 +196,10 @@ public class GameView {
     }
 
     private void loadInventoryItems() {
-        Game game = gameController.getGame();
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
+
         for (Item item : ClientModel.getPlayer().getInventory().getItems().keySet()) {
             if (item instanceof CraftingItem) {
                 textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
@@ -209,7 +218,6 @@ public class GameView {
     }
 
     public void render() {
-        Game game = gameController.getGame();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
@@ -226,14 +234,27 @@ public class GameView {
     }
 
     private void renderNPC(int startx, int starty, int endx, int endy) {
-        Game currentGame = App.getCurrentGame();
+
         GameAssetManager gameAssetManager = GameAssetManager.getGameAssetManager();
         Texture triangle = gameAssetManager.getUpsidedownredtriangle();
-        NPC sebastian = currentGame.getNPCSEBASTIAN();
-        NPC abigail = currentGame.getNPCABIGAIL();
-        NPC harvey = currentGame.getNPCHARVEY();
-        NPC leah = currentGame.getNPCLEAH();
-        NPC robin = currentGame.getNPCROBIN();
+        Message send = new Message(new HashMap<>(), Message.Type.get_npc, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        Gson gson = new Gson();
+        Object sebastianObj = response.getFromBody("sebastian");
+        Object abigailObj = response.getFromBody("abigail");
+        Object harveyObj = response.getFromBody("harvey");
+        Object leahObj = response.getFromBody("leah");
+        Object robinObj = response.getFromBody("robin");
+        String sebastianSTR = gson.toJson(sebastianObj);
+        String abigailSTR = gson.toJson(abigailObj);
+        String harveySTR = gson.toJson(harveyObj);
+        String leahSTR = gson.toJson(leahObj);
+        String robinSTR = gson.toJson(robinObj);
+        NPC sebastian = gson.fromJson(sebastianSTR, NPC.class);
+        NPC abigail = gson.fromJson(abigailSTR, NPC.class);
+        NPC harvey = gson.fromJson(harveySTR, NPC.class);
+        NPC leah = gson.fromJson(leahSTR, NPC.class);
+        NPC robin = gson.fromJson(robinSTR, NPC.class);
 
         if (sebastian.getX() >= startx && sebastian.getX() <= endx &&
             sebastian.getY() >= starty && sebastian.getY() <= endy) {
@@ -276,7 +297,7 @@ public class GameView {
         }
 
         if (isSebastian_view() || isHarvey_view() ||
-        isLeah_view() || isRobin_view() || isAbigail_view()) {
+            isLeah_view() || isRobin_view() || isAbigail_view()) {
             npcView.render();
         }
     }
@@ -306,7 +327,9 @@ public class GameView {
     }
 
     private void renderInMyHandToolPlayer() {
-        Game game = gameController.getGame();
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
         Player player = ClientModel.getPlayer();
         Tool tool = player.getInMyHandTool();
         if (tool != null) {
@@ -330,21 +353,40 @@ public class GameView {
     }
 
     private void renderTiles() {
-        Game game = gameController.getGame();
-        ArrayList<ArrayList<Kashi>> tiles = game.getMap();
+
         OrthographicCamera cam = camera;
         int tileSize = ClientModel.TILE_SIZE;
 
-        int startX = (int) ((cam.position.x - cam.viewportWidth / 2) / tileSize) - 2;
-        int startY = (int) ((cam.position.y - cam.viewportHeight / 2) / tileSize) - 2;
-        int endX = (int) ((cam.position.x + cam.viewportWidth / 2) / tileSize) + 2;
-        int endY = (int) ((cam.position.y + cam.viewportHeight / 2) / tileSize) + 2;
+        int newstartX = (int) ((cam.position.x - cam.viewportWidth / 2) / tileSize) - 2;
+        int newstartY = (int) ((cam.position.y - cam.viewportHeight / 2) / tileSize) - 2;
+        int newendX = (int) ((cam.position.x + cam.viewportWidth / 2) / tileSize) + 2;
+        int newendY = (int) ((cam.position.y + cam.viewportHeight / 2) / tileSize) + 2;
 
-        startX = Math.max(0, startX);
-        startY = Math.max(0, startY);
-        endX = Math.min(tiles.size() - 1, endX);
-        endY = Math.min(tiles.get(0).size() - 1, endY);
+        newstartX = Math.max(0, newstartX);
+        newstartY = Math.max(0, newstartY);
+        newendX = Math.min(ClientModel.mapWidth - 1, newendX);
+        newendY = Math.min(ClientModel.mapHeight - 1, newendY);
 
+
+        if (!(startX == newstartX && startY == newstartY && endX == newendX && endY == newendY)) {
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("startX", newstartX);
+            body.put("startY", newstartY);
+            body.put("endX", newendX);
+            body.put("endY", newendY);
+            io.github.group18.Network.common.models.Message send = new io.github.group18.Network.common.models.Message(body, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            Gson gson = new Gson();
+            Object usersArraylistOBJ = response.getBody().get("kashis");
+            String userArraylist = gson.toJson(usersArraylistOBJ);
+            Type userListType = new TypeToken<ArrayList<Kashi>>() {
+            }.getType();
+            tiles = gson.fromJson(userArraylist, userListType);
+            startX = newstartX;
+            startY = newstartY;
+            endX = newendX;
+            endY = newendY;
+        }
 
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
@@ -353,14 +395,13 @@ public class GameView {
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-        Game game = gameController.getGame();
         int tileSize = ClientModel.TILE_SIZE;
         TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
-                if (tiles.get(x).get(y).getInside() == null) {
+                if (tiles.get(x - startX).get(y - startY).getInside() == null) {
                     if (ClientModel.getPlayer().isPlacingItem()) {
                         batch.setColor(0, 1, 0, 0.5f);
                         batch.draw(texture, drawX, drawY, tileSize, tileSize);
@@ -376,19 +417,14 @@ public class GameView {
     }
 
     private void drawTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-        Game game = gameController.getGame();
         ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
         ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
         int tileSize = ClientModel.TILE_SIZE;
-//        System.out.println("drawTiles-init: " + startX + " " + endX + " " + startY + " " + endY);
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-//                System.out.println("drawTiles: " + x + " " + y);
-                getBottomLeftCorner(x, y, tiles.get(x).get(y), tiles, alreadyRenderedTiles, bottomLeftTiles);
+                getBottomLeftCorner(x, y, tiles.get(x - startX).get(y - startY), tiles, alreadyRenderedTiles, bottomLeftTiles);
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
-                    Kashi tile = tiles.get(x).get(y);
-                    Object inside = tile.getInside();
                     //this is for blocks that are covered with big pics so they dont draw anything
                 } else {
                     boolean flag = false;
@@ -402,13 +438,12 @@ public class GameView {
                     }
                     if (flag) {
                         //this is for bottom left corners which should draw a big pic
-                        Kashi tile = tiles.get(x).get(y);
+                        Kashi tile = tiles.get(x - startX).get(y - startY);
                         Object inside = tile.getInside();
                         TextureRegion texture = textures.get(inside);
                         float drawX = x * tileSize;
                         float drawY = y * tileSize;
                         if (inside instanceof GreenHouse greenHouse && greenHouse.isStatus()) {
-//                            System.out.println("Probably not coming here?");
                             texture = GameAssetManager.getGameAssetManager().getGreenhouse();
                         }
                         if (texture == null) {
@@ -418,7 +453,7 @@ public class GameView {
                             tileSize * bottomLeft.getHeight() / bottomLeft.getWidth());
                     } else {
                         //this is for normal blocks
-                        Kashi tile = tiles.get(x).get(y);
+                        Kashi tile = tiles.get(x - startX).get(y - startY);
                         Object inside = tile.getInside();
 
                         if (inside == null) {
@@ -447,10 +482,19 @@ public class GameView {
                             TextureRegion ready = new TextureRegion(GameAssetManager.getGameAssetManager().getReadyTexture());
                             if (((CraftingItem) inside).isProcessing()) {
                                 if (((CraftingItem) inside).getInsideArtisan() != null) {
+
+                                    Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
+                                    Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+                                    Gson gson = new Gson();
+                                    Object dateTimeObj = response.getFromBody("dateTime");
+                                    String dateTimeStr = gson.toJson(dateTimeObj);
+                                    DateTime dateTime = gson.fromJson(dateTimeStr, DateTime.class);
+
+
                                     if (!((CraftingItem) inside).getInsideArtisan().
-                                        isProcessingDone(App.getCurrentGame().getCurrentDateTime())) {
+                                        isProcessingDone(dateTime)) {
                                         blueBar.setRegionWidth((int) (tileSize * (((CraftingItem) inside).getInsideArtisan()
-                                            .nesbatTime(App.getCurrentGame().getCurrentDateTime()))));
+                                            .nesbatTime(dateTime))));
                                         batch.draw(blueBar, drawX, drawY + texture.getRegionHeight() + 10);
                                     } else {
                                         ((CraftingItem) inside).setReady(true);
@@ -482,12 +526,12 @@ public class GameView {
             return;
         }
 
-        ArrayList<Kashi> row = tiles.get(x);
+        ArrayList<Kashi> row = tiles.get(x - startX);
         if (row == null || y >= row.size()) {
             return;
         }
 
-        Kashi tile = row.get(y);
+        Kashi tile = row.get(y - startY);
         if (tile == null || tile.getInside() == null) {
             return;
         }
@@ -499,7 +543,7 @@ public class GameView {
         }
 
         while (x >= 0) {
-            Kashi currentTile = tiles.get(x).get(y);
+            Kashi currentTile = tiles.get(x - startX).get(y - startY);
             if (currentTile == null || currentTile.getInside() == null ||
                 !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
@@ -509,7 +553,7 @@ public class GameView {
         x++;
 
         while (y >= 0) {
-            Kashi currentTile = tiles.get(x).get(y);
+            Kashi currentTile = tiles.get(x - startX).get(y - startY);
             if (currentTile == null || currentTile.getInside() == null ||
                 !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
@@ -525,15 +569,15 @@ public class GameView {
         int heightcounter = 0;
 
         for (int i = startX; i < tiles.size(); i++) {
-            Kashi rowTile = tiles.get(i).get(startY);
+            Kashi rowTile = tiles.get(i - startX).get(startY - startY);
             if (rowTile == null || rowTile.getInside() == null ||
                 !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                 break;
             }
             widthcounter++;
 
-            for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
-                Kashi colTile = tiles.get(i).get(currentY);
+            for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
+                Kashi colTile = tiles.get(i).get(currentY - startY);
                 if (colTile == null || colTile.getInside() == null ||
                     !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
@@ -547,15 +591,15 @@ public class GameView {
             bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
             bottomLeftTiles.add(bottomLeft);
             for (int i = startX; i < tiles.size(); i++) {
-                Kashi rowTile = tiles.get(i).get(startY);
+                Kashi rowTile = tiles.get(i - startX).get(startY - startY);
                 if (rowTile == null || rowTile.getInside() == null ||
                     !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
                 }
 
-                for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
+                for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
                     if (i == startX && currentY == startY) continue;
-                    Kashi colTile = tiles.get(i).get(currentY);
+                    Kashi colTile = tiles.get(i - startX).get(currentY - startY);
                     if (colTile == null || colTile.getInside() == null ||
                         !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                         break;
@@ -567,19 +611,30 @@ public class GameView {
                     }
                 }
             }
-//            System.out.println("X: " + x + " Y: " + y + " width: " + widthcounter + " height: " + heightcounter);
         } else {
             bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
         }
     }
 
     private void renderPlayer() {
-        Game game = gameController.getGame();
-        List<Player> players = game.getPlayers();
+        Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        int numberOfPlayers = response.getIntFromBody("numberOfPlayers");
+        ArrayList<Double> xs = new ArrayList<>();
+        ArrayList<Double> ys = new ArrayList<>();
+        int count = 1;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            double x = response.getFromBody(String.valueOf(count));
+            double y = response.getFromBody(String.valueOf(count + 1));
+            xs.add(x);
+            ys.add(y);
+            count += 2;
+        }
 
-        for (Player player : players) {
-            double first = player.getX();
-            double second = player.getY();
+
+        for (int i = 0; i < numberOfPlayers; i++) {
+            double first = xs.get(i);
+            double second = ys.get(i);
 
             moveDirection = player.getMovingDirection();
             stateTime += Gdx.graphics.getDeltaTime();
@@ -609,7 +664,9 @@ public class GameView {
     }
 
     private void renderBrightness() {
-        Game game = gameController.getGame();
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
         int currentHour = game.getCurrentDateTime().getHour();
         float brightness = 1f;
 
@@ -646,9 +703,11 @@ public class GameView {
     }
 
     private void renderClock() {
-        Game game = gameController.getGame();
-        if (App.getCurrentGame() != null) {
-            DateTime time = App.getCurrentGame().getCurrentDateTime();
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
+        if (game != null) {
+            DateTime time = game.getCurrentDateTime();
             if (time != null) {
                 clock.render(batch, time, camera);
             }
@@ -656,7 +715,9 @@ public class GameView {
     }
 
     private void renderInventory() {
-        Game game = gameController.getGame();
+        //Server-TODO(ask server for game)
+//        Game game = gameController.getGame();
+        Game game = null;
         if (ClientModel.getPlayer().isShowInventory()) {
             loadInventoryItems();
             Player player = ClientModel.getPlayer();
@@ -822,6 +883,32 @@ public class GameView {
             camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             camera.update();
             cameraInitialized = true;
+            OrthographicCamera cam = camera;
+            int tileSize = ClientModel.TILE_SIZE;
+
+            startX = (int) ((cam.position.x - cam.viewportWidth / 2) / tileSize) - 2;
+            startY = (int) ((cam.position.y - cam.viewportHeight / 2) / tileSize) - 2;
+            endX = (int) ((cam.position.x + cam.viewportWidth / 2) / tileSize) + 2;
+            endY = (int) ((cam.position.y + cam.viewportHeight / 2) / tileSize) + 2;
+
+            startX = Math.max(0, startX);
+            startY = Math.max(0, startY);
+            endX = Math.min(ClientModel.mapWidth - 1, endX);
+            endY = Math.min(ClientModel.mapHeight - 1, endY);
+
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("startX", startX);
+            body.put("startY", startY);
+            body.put("endX", endX);
+            body.put("endY", endY);
+            io.github.group18.Network.common.models.Message send = new io.github.group18.Network.common.models.Message(body, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            Gson gson = new Gson();
+            Object usersArraylistOBJ = response.getBody().get("kashis");
+            String userArraylist = gson.toJson(usersArraylistOBJ);
+            Type userListType = new TypeToken<ArrayList<Kashi>>() {
+            }.getType();
+            tiles = gson.fromJson(userArraylist, userListType);
         }
 
         // Simple camera follow - no lerping, no prediction

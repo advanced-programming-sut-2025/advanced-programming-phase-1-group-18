@@ -12,7 +12,6 @@ import io.github.group18.View.GameMenu;
 import java.awt.*;
 
 public class GameController {
-    private Game game;
     private final Main main;
     private GameMenu gameMenu;
 
@@ -20,8 +19,7 @@ public class GameController {
         this.main = main;
     }
 
-    public void init(Game gameModel) {
-        game = gameModel;
+    public void init() {
         gameMenu = new GameMenu(this);
     }
 
@@ -31,14 +29,6 @@ public class GameController {
 
     public GameMenu getGameMenu() {
         return gameMenu;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public Main getMain() {

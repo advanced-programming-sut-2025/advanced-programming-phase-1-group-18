@@ -17,7 +17,6 @@ public class App {
     protected static User CurrentUser;
     protected static Game CurrentGame;
     protected static GameMenuController GameMenuController;
-    protected static GameController GameController;
     protected static ArrayList<User> Users_List = new ArrayList<>();
     private static final String USER_FILE = "users.json";
 
@@ -110,11 +109,4 @@ public class App {
         GameMenuController = gameMenuController;
     }
 
-    public static GameController getGameController() {
-        return GameController;
-    }
-
-    public static void setGameController(GameController gameController) {
-        GameController = gameController;
-    }
 }

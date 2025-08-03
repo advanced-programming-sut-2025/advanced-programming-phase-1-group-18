@@ -1,10 +1,14 @@
 package io.github.group18.Model;
 
+import com.google.gson.Gson;
 import io.github.group18.Model.Items.*;
+import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.GameView;
 import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends User {
     private int daysAfterGash = 0;
@@ -373,7 +377,7 @@ public class Player extends User {
         this.vy = vy;
     }
 
-    public void update(float delta, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
+    public void update(float delta, GameView gameView) {
         if (Energy <= 0 && state != STATE_FAINTING) {
             faint();
         }
@@ -403,10 +407,10 @@ public class Player extends User {
 
         }
 
-        tryMove(vx * delta, vy * delta, tiles, gameView);
+        tryMove(vx * delta, vy * delta, gameView);
     }
 
-    public boolean tryMove(float dx, float dy, ArrayList<ArrayList<Kashi>> tiles, GameView gameView) {
+    public boolean tryMove(float dx, float dy, GameView gameView) {
         if (state == STATE_FAINTING) return false;
         else if (state == EATING_STATE) return false;
         else if (isPlacingItem) {
@@ -416,12 +420,24 @@ public class Player extends User {
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
 
-        if (newX < 1 || newX >= tiles.size() - 1 || newY < 1 || newY >= tiles.get(0).size() - 1) return false;
+        HashMap<String,Object> body = new HashMap<>();
+        body.put("x", newX);
+        body.put("y", newY);
+        Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send,ClientModel.TIMEOUT_MILLIS);
+        Gson gson = new Gson();
+        Object kashiObj = response.getFromBody("kashi");
+        String kashiJson = gson.toJson(kashiObj);
+        Kashi tile = gson.fromJson(kashiJson, Kashi.class);
 
-        if (!(tiles.get(newX).get(newY).getInside() instanceof Lake || tiles.get(newX).get(newY).getInside() instanceof Tavileh ||
-            tiles.get(newX).get(newY).getInside() instanceof BigBarn || tiles.get(newX).get(newY).getInside() instanceof DeluxeBarn ||
-            tiles.get(newX).get(newY).getInside() instanceof Cage || tiles.get(newX).get(newY).getInside() instanceof BigCoop || tiles.get(newX).get(newY).getInside() instanceof DeluxeCoop
-        || tiles.get(newX).get(newY).getInside() instanceof CarpentersShopMarket || tiles.get(newX).get(newY).getInside() instanceof MarniesRanchMarket || tiles.get(newX).get(newY).getInside() instanceof PierresGeneralStoreMarket  || tiles.get(newX).get(newY).getInside() instanceof BlackSmithMarket || tiles.get(newX).get(newY).getInside() instanceof JojoMartMarket || tiles.get(newX).get(newY).getInside() instanceof TheStardropSaloonMarket ))
+
+
+        if (newX < 1 || newX >= ClientModel.mapWidth - 1 || newY < 1 || newY >= ClientModel.mapHeight - 1) return false;
+
+        if (!(tile.getInside() instanceof Lake || tile.getInside() instanceof Tavileh ||
+            tile.getInside() instanceof BigBarn || tile.getInside() instanceof DeluxeBarn ||
+            tile.getInside() instanceof Cage || tile.getInside() instanceof BigCoop || tile.getInside() instanceof DeluxeCoop
+        || tile.getInside() instanceof CarpentersShopMarket || tile.getInside() instanceof MarniesRanchMarket || tile.getInside() instanceof PierresGeneralStoreMarket  || tile.getInside() instanceof BlackSmithMarket || tile.getInside() instanceof JojoMartMarket || tile.getInside() instanceof TheStardropSaloonMarket ))
         {
             x += dx;
             y += dy;
