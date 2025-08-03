@@ -9,14 +9,14 @@ import java.util.HashMap;
 
 public class ArtisanGoods extends Item implements Name, Price {
 
-    protected ArtisanGoodsEnums artisanGoods;
-    protected CraftingRecipesEnums producer;
-    protected int energyUsage;
-    protected DateTime timeToProduce;
-    protected HashMap<Item, Integer> ingredients;
+    public ArtisanGoodsEnums artisanGoods;
+    public CraftingRecipesEnums producer;
+    public int energyUsage;
+    public DateTime timeToProduce;
+    public HashMap<Item, Integer> ingredients;
     private DateTime startTime; // زمان شروع تولید
     private boolean isDone = false;
-    protected int price;
+    public int price;
 
     public ArtisanGoods(String artisanName) {
         artisanName=artisanName.replaceAll(" ", "");

@@ -1,8 +1,8 @@
 package io.github.group18.Model;
 public class Craftingrecipe implements Name
 {
-    protected String Name;
-    protected int price;
+    public String Name;
+    public int price;
 
     public int getPrice() {
         return price;

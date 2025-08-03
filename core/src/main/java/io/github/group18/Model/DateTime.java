@@ -4,8 +4,8 @@ import io.github.group18.enums.Seasons;
 
 public class DateTime
 {
-    protected int Hour;
-    protected int Day;
+    public int Hour;
+    public int Day;
 
     public DateTime(int hour, int day) {
         Hour = hour;

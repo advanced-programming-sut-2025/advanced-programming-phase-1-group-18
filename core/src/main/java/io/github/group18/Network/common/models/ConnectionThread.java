@@ -13,16 +13,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-    protected final DataInputStream dataInputStream;
-    protected final DataOutputStream dataOutputStream;
-    protected final BlockingQueue<Message> receivedMessagesQueue;
-    protected String otherSideIP;
-    protected int otherSidePort;
-    protected Socket socket;
-    protected AtomicBoolean end;
-    protected boolean initialized = false;
+    public final DataInputStream dataInputStream;
+    public final DataOutputStream dataOutputStream;
+    public final BlockingQueue<Message> receivedMessagesQueue;
+    public String otherSideIP;
+    public int otherSidePort;
+    public Socket socket;
+    public AtomicBoolean end;
+    public boolean initialized = false;
 
-    protected ConnectionThread(Socket socket) throws IOException {
+    public ConnectionThread(Socket socket) throws IOException {
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -56,7 +56,7 @@ abstract public class ConnectionThread extends Thread {
 
     abstract public boolean initialHandshake();
 
-    abstract protected boolean handleMessage(Message message);
+    abstract public boolean handleMessage(Message message);
 
     public synchronized void sendMessage(Message message) {
         try {

@@ -3,11 +3,11 @@ package io.github.group18.Model.Items;
 import io.github.group18.Model.*;
 
 public class WateringCan extends Tool implements Name, Price ,PictureModel{
-    protected String Jens;
-    protected int EnergyUsage;
-    protected String usage;
-    protected int capacity;
-    protected int max_Capacity;
+    public String Jens;
+    public int EnergyUsage;
+    public String usage;
+    public int capacity;
+    public int max_Capacity;
 
 
     public WateringCan(String jens, int energyUsage, int capacity, int max_Capacity) {

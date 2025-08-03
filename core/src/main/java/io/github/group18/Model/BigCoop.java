@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class BigCoop implements Name,PictureModel
 {
-    protected boolean Status = false;
-    protected final int MaxCapacity= 8;
-    protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected final int goldNeeded = 10000;
-    protected final int woodNeeded =400;
-    protected final int stoneNeeded = 150;
+    public boolean Status = false;
+    public final int MaxCapacity= 8;
+    public String Level;
+    public ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
+    public final int goldNeeded = 10000;
+    public final int woodNeeded =400;
+    public final int stoneNeeded = 150;
 
     public void setStatus(boolean status) {
         Status = status;

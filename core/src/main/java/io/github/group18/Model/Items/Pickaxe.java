@@ -6,9 +6,9 @@ import io.github.group18.Model.*;
 import io.github.group18.enums.StoneTypes;
 
 public class Pickaxe extends Tool implements Name, Price, PictureModel {
-    protected String Jens;
-    protected int EnergyUsage;
-    protected String usage;
+    public String Jens;
+    public int EnergyUsage;
+    public String usage;
 
     public Pickaxe(String jens, int energyUsage) {
         Jens = jens;

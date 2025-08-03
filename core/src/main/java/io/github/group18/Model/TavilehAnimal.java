@@ -14,8 +14,8 @@ public class TavilehAnimal extends Animal
         this.LivePlace = livePlace;
     }
 
-    protected Tavileh LivePlace;
-    protected TavilehAnimalEnums type;
+    public Tavileh LivePlace;
+    public TavilehAnimalEnums type;
 
     public TavilehAnimalEnums getType() {
         return type;

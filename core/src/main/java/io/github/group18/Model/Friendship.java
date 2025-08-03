@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Friendship
 {
-    protected Player player1;
-    protected Player player2;
-    protected int xp; // experience points for this friendship
-    protected int level;
-    protected DateTime lastInteractionDate;
-    protected ArrayList<String> talkHistory = new ArrayList<>();
+    public Player player1;
+    public Player player2;
+    public int xp; // experience points for this friendship
+    public int level;
+    public DateTime lastInteractionDate;
+    public ArrayList<String> talkHistory = new ArrayList<>();
 
     public Friendship(Player player1, Player player2) {
         this.player1 = player1;

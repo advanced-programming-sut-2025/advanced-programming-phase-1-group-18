@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class BigBarn implements Name,PictureModel
 {
 
-    protected final int MaxCapacity = 8;
-    protected boolean Status = false ;
-    protected String Level;
-    protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
-    protected  int goldNeeded = 12000;
-    protected  int woodNeeded =450;
-    protected  int stoneNeeded = 200;
-    protected  String Name;
+    public final int MaxCapacity = 8;
+    public boolean Status = false ;
+    public String Level;
+    public ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
+    public  int goldNeeded = 12000;
+    public  int woodNeeded =450;
+    public  int stoneNeeded = 200;
+    public  String Name;
 
     public int getMaxCapacity()
     {

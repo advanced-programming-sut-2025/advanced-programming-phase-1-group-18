@@ -4,8 +4,8 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
 public class Scythe extends Tool implements Name, Price ,PictureModel{
-    protected int EnergyUsage;
-    protected String usage;
+    public int EnergyUsage;
+    public String usage;
 
     public String use(Kashi kashi) {
         //Server-TODO

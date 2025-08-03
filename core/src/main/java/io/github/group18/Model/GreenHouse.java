@@ -3,8 +3,8 @@ package io.github.group18.Model;
 import java.util.ArrayList;
 
 public class GreenHouse implements PictureModel{
-    protected boolean Status = false;
-    protected ArrayList<Matarsak> Matarsaks = new ArrayList<>();
+    public boolean Status = false;
+    public ArrayList<Matarsak> Matarsaks = new ArrayList<>();
 
     // Getter and Setter for Status
     public boolean isStatus() {

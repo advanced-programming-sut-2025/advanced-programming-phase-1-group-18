@@ -5,9 +5,9 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
 public class Axe extends Tool implements Name, Price,PictureModel {
-    protected String Jens;
-    protected int EnergyUsage;
-    protected String usage;
+    public String Jens;
+    public int EnergyUsage;
+    public String usage;
 
     public Axe(String jens, int energyUsage) {
         Jens = jens;

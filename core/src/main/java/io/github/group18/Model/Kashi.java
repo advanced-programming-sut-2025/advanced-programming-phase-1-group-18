@@ -4,16 +4,20 @@ import io.github.group18.Model.Items.Item;
 
 public class Kashi
 {
-    protected boolean ShokhmZadeh;
-    protected Object inside;
-    protected boolean Enterance;
-    protected boolean Walkable;
+    public Boolean ShokhmZadeh;
+    public Object inside;
+    public Boolean Enterance;
+    public Boolean Walkable;
+
+    public Kashi() {
+    }
+
     // Getter و Setter برای ShokhmZadeh
-    public boolean isShokhmZadeh() {
+    public Boolean isShokhmZadeh() {
         return ShokhmZadeh;
     }
 
-    public void setShokhmZadeh(boolean ShokhmZadeh) {
+    public void setShokhmZadeh(Boolean ShokhmZadeh) {
         this.ShokhmZadeh = ShokhmZadeh;
     }
 

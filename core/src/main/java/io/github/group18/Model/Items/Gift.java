@@ -4,14 +4,14 @@ import io.github.group18.Model.Name;
 import io.github.group18.Model.Player;
 
 public class Gift extends Item implements Name, Price{
-    protected Item giftItem;
-    protected Player sender;
-    protected Player receiver;
-    protected int rate;
-    protected boolean isRated = false;
+    public Item giftItem;
+    public Player sender;
+    public Player receiver;
+    public int rate;
+    public boolean isRated = false;
     //Server-TODO
-//    protected String name;
-    protected int amount;
+//    public String name;
+    public int amount;
     private static int nextId = 1;
     private final int id;
 

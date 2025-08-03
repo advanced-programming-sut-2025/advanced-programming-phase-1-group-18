@@ -118,7 +118,7 @@ public class RefrigeratorUI {
 //                        slotStack.add(itemImage);
 //                        Dialog confirmDialog = new Dialog("Confirm", skin) {
 //                            @Override
-//                            protected void result(Object object) {
+//                            public void result(Object object) {
 //                                boolean confirmed = (boolean) object;
 //                                if (confirmed) {
 //                                    System.out.println("Confirmed for item: " + item.getCorrectName());

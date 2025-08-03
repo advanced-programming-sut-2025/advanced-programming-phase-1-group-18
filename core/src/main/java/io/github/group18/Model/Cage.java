@@ -5,14 +5,14 @@ public class Cage implements Name,PictureModel
 {
 
     // make it true when Cage
-    protected boolean Status = false;
-    protected final int MaxCapacity =4;
-    protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected  int goldNeeded = 4000;
-    protected  int woodNeeded =300;
-    protected  int stoneNeeded = 150;
-    protected String Name;
+    public boolean Status = false;
+    public final int MaxCapacity =4;
+    public String Level;
+    public ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
+    public  int goldNeeded = 4000;
+    public  int woodNeeded =300;
+    public  int stoneNeeded = 150;
+    public String Name;
 
     public String getLevel() {
         return Level;

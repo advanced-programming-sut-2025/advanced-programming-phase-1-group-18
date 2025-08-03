@@ -42,7 +42,7 @@ public class ClientConnectionThread extends ConnectionThread {
     }
 
     @Override
-    protected boolean handleMessage(Message message) {
+    public boolean handleMessage(Message message) {
         switch (message.getMenu()) {
             case Register:
                 sendMessage(RegisterNetworkController.handleMessage(message));

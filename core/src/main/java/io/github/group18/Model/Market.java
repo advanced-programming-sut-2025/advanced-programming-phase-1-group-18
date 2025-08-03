@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Market
 {
-protected ArrayList<Item> products;
+public ArrayList<Item> products;
     public void adaptMap(HashMap<Integer ,Integer> LakeMap)
     {
 

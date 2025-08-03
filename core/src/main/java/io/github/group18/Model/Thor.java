@@ -2,7 +2,7 @@ package io.github.group18.Model;
 import java.util.ArrayList;
 public class Thor
 {
-    protected ArrayList<Cord> khordeh;
+    public ArrayList<Cord> khordeh;
 
     public ArrayList<Cord> getKhordeh() {
         return khordeh;

@@ -6,10 +6,10 @@ import io.github.group18.enums.FoodCookingEnums;
 
 public class FoodCooking extends Item implements Name, Price {
 
-    protected FoodCookingEnums name;
-    protected int energy;
-    protected int sellPrice;
-    protected Buff buff;
+    public FoodCookingEnums name;
+    public int energy;
+    public int sellPrice;
+    public Buff buff;
 
     public FoodCookingEnums getNamee() {
         return name;

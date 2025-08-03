@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Stone implements PictureModel
 {
-    protected StoneTypes type;
-    protected int Price;
+    public StoneTypes type;
+    public int Price;
 
     public int getPrice() {
         return Price;

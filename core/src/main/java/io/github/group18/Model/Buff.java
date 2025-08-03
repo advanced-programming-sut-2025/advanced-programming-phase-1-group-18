@@ -4,9 +4,9 @@ import io.github.group18.enums.SkillEnum;
 
 public class Buff
 {
-    protected int EnergyIncrease;
-    protected int BuffHours;
-    protected SkillEnum BuffSkillType;
+    public int EnergyIncrease;
+    public int BuffHours;
+    public SkillEnum BuffSkillType;
     // Getter and Setter for EnergyIncrease
     public int getEnergyIncrease() {
         return EnergyIncrease;

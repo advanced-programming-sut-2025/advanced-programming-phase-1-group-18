@@ -6,8 +6,8 @@ import io.github.group18.enums.SkillEnum;
 
 public class Cookingrecipe {
 
-    protected FoodCookingEnums Foodtype;
-    protected int price;
+    public FoodCookingEnums Foodtype;
+    public int price;
 
 
     public int getPrice() {

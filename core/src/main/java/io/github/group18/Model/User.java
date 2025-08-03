@@ -4,16 +4,16 @@ import io.github.group18.Controller.RegisterMenuController;
 
 public class User {
 
-    protected String Username;
-    protected String Password;
-    protected String Email;
-    protected String Gender;
-    protected String NickName;
-    protected boolean stayLoggedIn;
-    protected int timesPlayed;
-    protected int highestGold;
-    protected String avatar;
-    protected int ID;
+    public String Username;
+    public String Password;
+    public String Email;
+    public String Gender;
+    public String NickName;
+    public boolean stayLoggedIn;
+    public int timesPlayed;
+    public int highestGold;
+    public String avatar;
+    public int ID;
 
     public String getUsername() {
         return Username;

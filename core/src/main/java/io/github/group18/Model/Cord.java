@@ -1,8 +1,8 @@
 package io.github.group18.Model;
 
 public class Cord {
-    protected int x;
-    protected int y;
+    public int x;
+    public int y;
 
     public Cord(int x, int y) {
         this.x = x;

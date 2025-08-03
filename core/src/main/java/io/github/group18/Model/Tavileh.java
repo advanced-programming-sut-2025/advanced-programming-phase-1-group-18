@@ -3,14 +3,14 @@ import java.util.ArrayList;
 
 public class Tavileh implements Name,PictureModel
 {
-    protected final int MaxCapacity = 4;
-    protected boolean Status = false;
-    protected String Level;
-    protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
-    protected  int goldNeeded = 6000;
-    protected  int woodNeeded =350;
-    protected  int stoneNeeded = 150;
-    protected String Name;
+    public final int MaxCapacity = 4;
+    public boolean Status = false;
+    public String Level;
+    public ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
+    public  int goldNeeded = 6000;
+    public  int woodNeeded =350;
+    public  int stoneNeeded = 150;
+    public String Name;
 
 
     public int getMaxCapacity() {

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class DeluxeCoop implements Name,PictureModel
 {
 
-    protected final int MaxCapacity = 12;
-    protected boolean Status = false;
-    protected String Level;
-    protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected final int goldNeeded = 20000;
-    protected final int woodNeeded =500;
-    protected final int stoneNeeded = 200;
-    protected String Name;
+    public final int MaxCapacity = 12;
+    public boolean Status = false;
+    public String Level;
+    public ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
+    public final int goldNeeded = 20000;
+    public final int woodNeeded =500;
+    public final int stoneNeeded = 200;
+    public String Name;
 
     public String getLevel() {
         return Level;

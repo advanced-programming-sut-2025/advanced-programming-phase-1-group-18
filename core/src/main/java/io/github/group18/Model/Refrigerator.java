@@ -7,13 +7,13 @@ import io.github.group18.Model.Items.Item;
 
 public class Refrigerator
 {
-    protected Map<Item, Pair<Integer, Integer>> Items = new HashMap<>();
+    public Map<Item, Pair<Integer, Integer>> Items = new HashMap<>();
     public Map<Item, Pair<Integer, Integer>> getItems() {
         return Items;
     }
     private Stack<Integer> freeIndexes = new Stack<>();
     private int selectedSlot = -1;
-    protected int MaxQuantity = 9;
+    public int MaxQuantity = 9;
 
     public Refrigerator(int maxQuantity) {
         MaxQuantity = maxQuantity;

@@ -4,7 +4,7 @@ import io.github.group18.Model.Name;
 import io.github.group18.Model.PictureModel;
 
 public class StoneItem extends Item implements Name, Price, PictureModel {
-    protected int price;
+    public int price;
 
     @Override
     public String getCorrectName() {

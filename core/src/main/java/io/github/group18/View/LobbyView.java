@@ -126,7 +126,7 @@ public class LobbyView implements Screen {
                         TextField passwordField = new TextField("", skin);
 
                         Dialog passwordDialog = new Dialog("Private Lobby", skin) {
-                            protected void result(Object object) {
+                            public void result(Object object) {
                                 if ((boolean) object) {
                                     String password = passwordField.getText();
                                     controller.joinLobby(selectedLobby, App.getCurrentUser(), password);
@@ -210,7 +210,7 @@ public class LobbyView implements Screen {
         TextField field = new TextField("", skin);
 
         Dialog dialog = new Dialog("Enter Lobby ID", skin) {
-            protected void result(Object object) {
+            public void result(Object object) {
                 if ((boolean) object) {
                     String id = field.getText();
 
@@ -255,7 +255,7 @@ public class LobbyView implements Screen {
             }
         });
         Dialog dialog = new Dialog("Create Lobby", skin) {
-            protected void result(Object object) {
+            public void result(Object object) {
                 if ((boolean) object) {
                     String name = nameField.getText();
                     boolean isPrivate = privateCheckBox.isChecked();
@@ -285,7 +285,7 @@ public class LobbyView implements Screen {
 
         Dialog dialog = new Dialog("Lobby Info", skin) {
             @Override
-            protected void result(Object object) {
+            public void result(Object object) {
                 if ("createGame".equals(object)) {
 //                    controller.createGame(lobby);
                 } else if ("leave".equals(object)) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Quarry implements PictureModel{
-    protected Stone stone;
+    public Stone stone;
 
     public Stone getStone() {
         return stone;

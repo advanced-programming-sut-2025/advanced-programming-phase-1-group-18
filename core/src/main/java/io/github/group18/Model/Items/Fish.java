@@ -8,11 +8,11 @@ import io.github.group18.enums.Seasons;
 
 public class Fish extends Item implements Name,Price
 {
-    protected String Jens;
-    protected String name;
-    protected double basePrice ;
-    protected Seasons seasons ;
-    protected Quality quality;
+    public String Jens;
+    public String name;
+    public double basePrice ;
+    public Seasons seasons ;
+    public Quality quality;
 
     public String getJens() {
         return Jens;

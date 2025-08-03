@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Satl implements PictureModel
 {
-    protected HashMap<Item, Integer> Items;
+    public HashMap<Item, Integer> Items;
 
 
     public void adaptMap(Cord cord) {

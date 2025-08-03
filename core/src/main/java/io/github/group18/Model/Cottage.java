@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Cottage implements PictureModel
 {
-    protected Refrigerator myRefrigerator;
+    public Refrigerator myRefrigerator;
 
     public void adaptMap(ArrayList<Cord> cords,int Enterancex, int Enterancey,int borderlowx,int borderlowy,int borderhighx,int borderhighy) {
         ArrayList<Kashi> kashis = new ArrayList<>();

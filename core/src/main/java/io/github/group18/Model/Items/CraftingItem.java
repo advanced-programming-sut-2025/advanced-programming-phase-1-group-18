@@ -7,14 +7,14 @@ import io.github.group18.Model.Name;
 
 public class CraftingItem extends Item implements Name,Price
 {
-    protected CraftingRecipesEnums craftingItem;
-    protected String Name;
-    protected HashMap<String,Integer> Ingredients ;
-    protected int SellPrice;
-    protected int price;
-    protected boolean isProcessing;
-    protected ArtisanGoods insideArtisan;
-    protected boolean isReady;
+    public CraftingRecipesEnums craftingItem;
+    public String Name;
+    public HashMap<String,Integer> Ingredients ;
+    public int SellPrice;
+    public int price;
+    public boolean isProcessing;
+    public ArtisanGoods insideArtisan;
+    public boolean isReady;
 
     public CraftingItem(String name) {
         for(CraftingRecipesEnums craft : CraftingRecipesEnums.values()){

@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import io.github.group18.Model.Items.AnimalProduct;
 
 public class Animal {
-    protected String Name;
-    protected int Friendship = 0;
-    protected boolean Navazesh = false;
-    protected boolean Taghzieh = false;
+    public String Name;
+    public int Friendship = 0;
+    public boolean Navazesh = false;
+    public boolean Taghzieh = false;
     //
-    protected String whereDoILive;
-    protected int xofAnimal;
-    protected int yofAnimal;
-    protected boolean isOutside;
+    public String whereDoILive;
+    public int xofAnimal;
+    public int yofAnimal;
+    public boolean isOutside;
 
-    protected int Price;
-    protected ArrayList<AnimalProduct> AnimalProducts;
+    public int Price;
+    public ArrayList<AnimalProduct> AnimalProducts;
 
     // Getter and Setter for Name
     public String getName() {

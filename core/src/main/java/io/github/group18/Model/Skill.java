@@ -1,8 +1,8 @@
 package io.github.group18.Model;
 public class Skill
 {
-    protected String Type;
-    protected int Level;
+    public String Type;
+    public int Level;
 
     public String getType() {
         return Type;

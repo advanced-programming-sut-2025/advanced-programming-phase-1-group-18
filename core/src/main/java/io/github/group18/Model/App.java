@@ -12,12 +12,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class App {
-    protected static ArrayList<Game> Games = new ArrayList<>();
-    protected static Menu CurrentMenu = Menu.RegisterMenu;
-    protected static User CurrentUser;
-    protected static Game CurrentGame;
-    protected static GameMenuController GameMenuController;
-    protected static ArrayList<User> Users_List = new ArrayList<>();
+    public static ArrayList<Game> Games = new ArrayList<>();
+    public static Menu CurrentMenu = Menu.RegisterMenu;
+    public static User CurrentUser;
+    public static Game CurrentGame;
+    public static GameMenuController GameMenuController;
+    public static ArrayList<User> Users_List = new ArrayList<>();
     private static final String USER_FILE = "users.json";
 
     public static ArrayList<User> getUsers_List() {

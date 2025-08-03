@@ -14,29 +14,29 @@ public class Player extends User {
     private int daysAfterGash = 0;
     private int daysAfterJavabeRad = 0;
 
-    protected User Owner;
-    protected double Energy;
-    protected double maxEnergy = 200;
-    protected double maxEnergyforMarriage = 200;
+    public User Owner;
+    public double Energy;
+    public double maxEnergy = 200;
+    public double maxEnergyforMarriage = 200;
 
-    protected double x;
-    protected double y;
-    protected Farm myFarm;
-    protected boolean UnlimitedEnergy;
-    protected Skill FarmingSkill;
-    protected Skill ExtractionSkill;
-    protected Skill ForagingSkill;
-    protected Skill FishingSkill;
-    protected Skill MiningSkill;
-    protected Player partner;
-    protected Buff FoodBuff;
-    protected int wood;
-    protected int gold;
-    protected ArrayList<Cookingrecipe> CookingRecipes;
-    protected ArrayList<CraftingRecipesEnums> CraftingRecipes;
-    protected Inventory inventory;
-    protected ArrayList<ArtisanGoods> artisansInProduce;
-    protected ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
+    public double x;
+    public double y;
+    public Farm myFarm;
+    public boolean UnlimitedEnergy;
+    public Skill FarmingSkill;
+    public Skill ExtractionSkill;
+    public Skill ForagingSkill;
+    public Skill FishingSkill;
+    public Skill MiningSkill;
+    public Player partner;
+    public Buff FoodBuff;
+    public int wood;
+    public int gold;
+    public ArrayList<Cookingrecipe> CookingRecipes;
+    public ArrayList<CraftingRecipesEnums> CraftingRecipes;
+    public Inventory inventory;
+    public ArrayList<ArtisanGoods> artisansInProduce;
+    public ArrayList<Animal> myBoughtAnimals = new ArrayList<>();
 
     private int movingDirection = 0;
     private float speed = 4f;
@@ -51,8 +51,8 @@ public class Player extends User {
     private float eatingTimer;
     private boolean isPlacingItem = false;
 
-    protected Tool inMyHandTool;
-    protected CraftingItem craftingInHand;
+    public Tool inMyHandTool;
+    public CraftingItem craftingInHand;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -424,11 +424,39 @@ public class Player extends User {
         body.put("x", newX);
         body.put("y", newY);
         Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send,ClientModel.TIMEOUT_MILLIS);
-        Gson gson = new Gson();
-        Object kashiObj = response.getFromBody("kashi");
-        String kashiJson = gson.toJson(kashiObj);
-        Kashi tile = gson.fromJson(kashiJson, Kashi.class);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+
+        Boolean shokhmZadehObj = response.getFromBody("ShokhmZadeh");
+        Boolean entranceObj = response.getFromBody("Enterance");
+        Boolean walkableObj = response.getFromBody("Walkable");
+        String insideState = response.getFromBody("inside");
+
+        Kashi tile = new Kashi();
+        tile.setShokhmZadeh(shokhmZadehObj);
+        tile.setEnterance(entranceObj);
+        tile.setWalkable(walkableObj);
+
+        if ("full".equals(insideState)) {
+            System.out.println("inside: " + response.getFromBody("inside"));
+            System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
+            System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
+            Object insideClassObj = response.getFromBody("insideCLASS");
+            Object insideRaw = response.getFromBody("insideOBJ");
+
+            if (insideClassObj instanceof Class<?>) {
+                Class<?> clazz = (Class<?>) insideClassObj;
+
+                Gson gson = new Gson();
+                String insideJson = gson.toJson(insideRaw);
+                Object insideDeserialized = gson.fromJson(insideJson, clazz);
+
+                tile.setInside(insideDeserialized);
+            } else {
+                System.out.println("Warning: insideCLASS is not a Class<?>. Got: " + insideClassObj);
+            }
+        } else {
+            tile.setInside(null);
+        }
 
 
 

@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 public class CageAnimal extends Animal
 {
-    protected Cage LivePlace;
-    protected CageAnimalsEnums type;
+    public Cage LivePlace;
+    public CageAnimalsEnums type;
 
     public CageAnimalsEnums getType() {
         return type;

@@ -32,8 +32,24 @@ public class GameNetworkController {
             case get_kashi_using_x_y:
                 int x = message.getIntFromBody("x");
                 int y = message.getIntFromBody("y");
+//                System.out.println("client wats the block " + x + " " + y);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("kashi", App.getCurrentGame().getMap().get(x).get(y));
+                Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
+                map.put("ShokhmZadeh", kashi.isShokhmZadeh());
+                map.put("Enterance", kashi.getEnterance());
+                map.put("Walkable", kashi.getWalkable());
+                if (kashi.getInside() == null) {
+                    map.put("inside", "null");
+                } else {
+                    map.put("inside", "full");
+                    map.put("insideOBJ", kashi.getInside());
+                    map.put("insideCLASS", kashi.getInside().getClass());
+                }
+                System.out.println("server is giving the client the kashi " + App.getCurrentGame().getMap().get(x).get(y).toString());
+//                System.out.println("Kashi JSON being sent: " + new Gson().toJson(App.getCurrentGame().getMap().get(x).get(y)));
+//                if (App.getCurrentGame().getMap().get(x).get(y) == null) {
+//                    System.out.println("the block server gave is null");
+//                }
                 Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 clientConnectionThread.sendMessage(send);
                 break;

@@ -304,7 +304,7 @@ public class CookingMenu {
         infoDialog.getContentTable().setColor(1f, 0.8f, 0.2f, 1f);
         Dialog eatDialog = new Dialog("Eat Food", skin) {
             @Override
-            protected void result(Object object) {
+            public void result(Object object) {
                 boolean confirmed = (boolean) object;
                 if (confirmed) {
                     //Server-TODO

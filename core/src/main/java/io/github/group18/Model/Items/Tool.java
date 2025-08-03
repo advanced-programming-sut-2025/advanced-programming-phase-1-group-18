@@ -1,8 +1,8 @@
 package io.github.group18.Model.Items;
 
 public class Tool extends Item {
-    protected int energyUsage;
-    protected String usage;
+    public int energyUsage;
+    public String usage;
 
     public int getEnergyUsage() {
         return energyUsage;

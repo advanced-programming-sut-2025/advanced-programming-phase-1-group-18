@@ -19,7 +19,7 @@ import static io.github.group18.Network.Client.App.ClientModel.TIMEOUT_MILLIS;
 
 public class ServerConnectionThread extends ConnectionThread {
 
-    protected ServerConnectionThread(Socket socket) throws IOException {
+    public ServerConnectionThread(Socket socket) throws IOException {
         super(socket);
     }
 
@@ -41,7 +41,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     @Override
-    protected boolean handleMessage(Message message) {
+    public boolean handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             sendMessage(C2SConnectionController.handleCommand(message));
             return true;

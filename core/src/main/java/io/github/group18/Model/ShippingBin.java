@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class ShippingBin implements Name, PictureModel
 {
 
-    protected final int goldNeeded =250;
-    protected final int woodNeeded = 150;
+    public final int goldNeeded =250;
+    public final int woodNeeded = 150;
     public int getWoodNeeded()
     {
         return woodNeeded;

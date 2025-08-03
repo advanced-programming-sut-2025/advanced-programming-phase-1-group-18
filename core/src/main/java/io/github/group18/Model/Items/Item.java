@@ -3,7 +3,7 @@ package io.github.group18.Model.Items;
 import io.github.group18.Model.Name;
 
 public class Item implements Name, Price {
-    protected String name;
+    public String name;
 
     public void setName(String name) {
         this.name = name;

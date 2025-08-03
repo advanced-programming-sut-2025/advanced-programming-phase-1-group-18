@@ -5,9 +5,9 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
 public class MilkPail extends Tool implements Name, Price {
-    protected int EnergyUsage = 4;
-    protected String usage;
-    protected int price;
+    public int EnergyUsage = 4;
+    public String usage;
+    public int price;
 
     public String use(Kashi kashi) {
         //Server-TODO

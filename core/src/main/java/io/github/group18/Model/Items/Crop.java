@@ -3,8 +3,8 @@ package io.github.group18.Model.Items;
 public abstract class Crop extends Item
 {
 
-   protected int BaseSellPrice;
-   protected int Energy;
+   public int BaseSellPrice;
+   public int Energy;
 
 
    public int getBaseSellPrice() {

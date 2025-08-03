@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Well implements Name
 {
-    protected final int goldNeeded =1000;
-    protected final int stoneNeeded = 75;
+    public final int goldNeeded =1000;
+    public final int stoneNeeded = 75;
     public int getStoneNeeded() {
         return stoneNeeded;
     }

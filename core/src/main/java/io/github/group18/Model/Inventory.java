@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Inventory {
-    protected int MaxQuantity;
-    protected String Type;
+    public int MaxQuantity;
+    public String Type;
 
     private Map<Item, Pair<Integer, Integer>> Items;
     private Stack<Integer> freeIndexes;
