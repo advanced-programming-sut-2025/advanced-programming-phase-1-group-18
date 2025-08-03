@@ -39,6 +39,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         this.gameController = gameController;
         Game game = gameController.getGame();
         game.getCurrentPlayer().setShowInventory(true);
+        game.getCurrentPlayer().setShowActions(true);
     }
 
     @Override
@@ -75,6 +76,9 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         if (keycode == Input.Keys.C) {
             handleCookingMenu();
+        }
+        if (keycode == Input.Keys.O){
+            handleActionMenu();
         }
 
         if (keycode == Input.Keys.Q) {
@@ -525,6 +529,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     private void handleInventoryVisibility() {
         Game game = gameController.getGame();
         game.getCurrentPlayer().setShowInventory(!game.getCurrentPlayer().isShowInventory());
+        game.getCurrentPlayer().setShowActions(!game.getCurrentPlayer().isShowActions());
     }
 
     private void switchInventorySlot(int keycode) {
@@ -710,6 +715,12 @@ public class GameMenuInputAdapter extends InputAdapter {
         App.getGameController().getGameMenu().getCookingMenu().setActive(true);
         App.getGameController().getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
         Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getCookingMenu().getStage());
+    }
+
+    private void handleActionMenu() {
+        App.getGameController().getGameMenu().getActionMenu().setActive(true);
+        App.getGameController().getGameMenu().getActionMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(App.getGameController().getGameMenu().getActionMenu().getStage());
     }
 
     private void handleCheatCodeDialog() {

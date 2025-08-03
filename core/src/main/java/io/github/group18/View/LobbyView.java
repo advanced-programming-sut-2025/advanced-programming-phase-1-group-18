@@ -90,7 +90,7 @@ public class LobbyView implements Screen {
         mainTable.add(bottomButtons).expandX().fillX().row();
 
         mainTable.add(backButton).left().pad(10);
-        mainTable.add(chooseMapButton).right().pad(10);
+//        mainTable.add(chooseMapButton).right().pad(10);
 
         setupListeners();
         updateLobbyList();

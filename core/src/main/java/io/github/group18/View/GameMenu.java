@@ -47,6 +47,7 @@ public class GameMenu implements Screen {
     private InputMultiplexer inputMultiplexer;
     private FishingMiniGame fishingMiniGame;
     private CraftingUI craftingUI;
+    private ActionMenu actionMenu;
     private Stage stage;
     private Buff buff;
     private boolean showBuff = false;
@@ -64,6 +65,8 @@ public class GameMenu implements Screen {
         cookingMenu.setActive(false);
         this.craftingUI = new CraftingUI(new CraftingItem(CraftingRecipesEnums.Furnace.name()));
         craftingUI.setActive(false);
+        this.actionMenu = new ActionMenu();
+        actionMenu.setActive(false);
         initializeGame();
     }
 
@@ -95,7 +98,7 @@ public class GameMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameController.getGame().update(delta);
         lightningEffect.update(delta);
-        gameView.render();
+        gameView.render(delta);
         lightningEffect.render(Main.getBatch());
         gameMenuInputAdapter.update(delta,gameView.getBatch());
         handleNightSleepFade(delta);
@@ -105,6 +108,7 @@ public class GameMenu implements Screen {
         craftingMenu.render();
         cookingMenu.render();
         craftingUI.render();
+        actionMenu.render();
 
         stage.act(delta);
         stage.draw();
@@ -380,6 +384,14 @@ public class GameMenu implements Screen {
 
     public void setCraftingUI(CraftingUI craftingUI) {
         this.craftingUI = craftingUI;
+    }
+
+    public ActionMenu getActionMenu() {
+        return actionMenu;
+    }
+
+    public void setActionMenu(ActionMenu actionMenu) {
+        this.actionMenu = actionMenu;
     }
 
     public void setStage(Stage stage) {

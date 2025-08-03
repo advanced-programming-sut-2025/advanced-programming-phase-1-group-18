@@ -10,15 +10,26 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.*;
 
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
+import io.github.group18.enums.ActionEnum;
+
+import static io.github.group18.Model.Game.getCurrentPlayer;
 
 public class GameView {
     private final GameController gameController;
@@ -38,6 +49,7 @@ public class GameView {
     private float redFlashTimer = 0f;
     private boolean isFlashingRed = false;
     private boolean walking = false;
+    private Player currentPlayer;
 
     private StoreUI BlackSmith;
     private StoreUI CarpentersShop;
@@ -56,6 +68,7 @@ public class GameView {
         batch = new SpriteBatch();
         clock = new ClockController();
         energy = new EnergyController();
+        currentPlayer=getCurrentPlayer();
         loadTextures();
         loadFont();
     }
@@ -165,7 +178,7 @@ public class GameView {
 
     private void loadInventoryItems() {
         Game game = gameController.getGame();
-        for (Item item : game.getCurrentPlayer().getInventory().getItems().keySet()) {
+        for (Item item : getCurrentPlayer().getInventory().getItems().keySet()) {
             if (item instanceof CraftingItem) {
                 textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
                     findRegion(((CraftingItem) item).getCraftingItem().name())));
@@ -182,7 +195,7 @@ public class GameView {
         }
     }
 
-    public void render() {
+    public void render(float delta) {
         Game game = gameController.getGame();
         batch.setProjectionMatrix(game.getCamera().combined);
         batch.begin();
@@ -281,7 +294,7 @@ public class GameView {
 
     private void renderInMyHandToolPlayer() {
         Game game = gameController.getGame();
-        Player player = game.getCurrentPlayer();
+        Player player = getCurrentPlayer();
         Tool tool = player.getInMyHandTool();
         if (tool != null) {
             double first = player.getX();
@@ -575,6 +588,11 @@ public class GameView {
                     batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
                     break;
             }
+            if (player.getAction()!= null){
+                TextureRegion actionPop = GameAssetManager.getGameAssetManager().getActionAtlas().
+                    findRegion(player.getAction().name());
+                batch.draw(actionPop,(float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + currentFrame.getRegionHeight());
+            }
 
             batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE),
                 game.TILE_SIZE, game.TILE_SIZE * 2);
@@ -631,9 +649,9 @@ public class GameView {
 
     private void renderInventory() {
         Game game = gameController.getGame();
-        if (game.getCurrentPlayer().isShowInventory()) {
+        if (getCurrentPlayer().isShowInventory()) {
             loadInventoryItems();
-            Player player = game.getCurrentPlayer();
+            Player player = getCurrentPlayer();
             Inventory playerInventory = player.getInventory();
             Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
             int selectedSlot = player.getInventory().getSelectedSlot();

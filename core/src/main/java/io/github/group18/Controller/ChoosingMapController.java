@@ -114,16 +114,17 @@ public class ChoosingMapController {
                             gameController.run();
 //                            mainMenu.hide();
 
-                            GameView gameView = new GameView(new GameController(Main.getMain()));
+//                            GameView gameView = new GameView(new GameController(Main.getMain()));
 //                            gameView.setMenuController(gameMenuController);
-                            Main.getMain().getScreen().dispose();
-                            Main.getMain().setScreen(gameView.getGameController().getGameMenu());
+//                            Main.getMain().getScreen().dispose();
+//                            Main.getMain().setScreen(gameView.getGameController().getGameMenu());
                         }
                     }catch (Exception e){
                         view.getNotif().setText(e.getMessage());
                         e.printStackTrace();
                     }
                 }else {
+                    System.out.println("From ChoosingMapController: maps size is " + maps.size()+ " and users size is " + users.size()  );
                     view.getNotif().setText("Choose maps complete");
                 }
             }
