@@ -163,8 +163,8 @@ public class GameView {
     }
 
     private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-        for (int x = startX; x < tiles.size(); x++) {
-            for (int y = startY; y < tiles.get(x).size(); y++) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
                 Kashi tile = tiles.get(x - startX).get(y - startY);
                 if (tile == null) continue;
 
@@ -224,7 +224,7 @@ public class GameView {
 //        renderPlayer();
 //        renderInMyHandToolPlayer();
 //        renderInventory();
-        renderClock();
+//        renderClock();
         energy.render(batch);
 //        renderMarkets();
         renderKalagEffect(batch);
@@ -369,40 +369,14 @@ public class GameView {
 
 
         if (!(startX == newstartX && startY == newstartY && endX == newendX && endY == newendY)) {
-            Gson gson = new Gson();
-
-            for (int i = startX; i <= endX; i++) {
-                HashMap<String, Object> requestBody = new HashMap<>();
-                requestBody.put("startY", startY);
-                requestBody.put("endY", endY);
-                requestBody.put("rowIndex", i);
-                Message sendRequest = new Message(requestBody, Message.Type.get_kashi_row, Message.Menu.game);
-
-                Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(sendRequest, ClientModel.TIMEOUT_MILLIS);
-
-                if (response == null || response.getBody() == null) {
-                    System.err.println("Client: Read timeout or connection error for row " + i);
-                    break;
-                }
-
-                Object kashisAsGenericObjects = response.getBody().get("row");
-                String kashisJson = gson.toJson(kashisAsGenericObjects);
-                Type kashiListType = new TypeToken<ArrayList<Kashi>>() {
-                }.getType();
-                ArrayList<Kashi> currentRow = gson.fromJson(kashisJson, kashiListType);
-
-                if (currentRow != null) {
-                    tiles.add(currentRow);
-                    System.out.println("Client: Received and added row " + i);
-                }
-            }
-            System.out.println("did the impossbile");
+            fillTheMap(newstartX, newstartY, endX, endY);
             startX = newstartX;
             startY = newstartY;
             endX = newendX;
             endY = newendY;
         }
 
+        System.out.println("doing the triple with " + startX + " " + startY + " to " + endX + " " + endY);
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
@@ -412,8 +386,8 @@ public class GameView {
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         int tileSize = ClientModel.TILE_SIZE;
         TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
-        for (int x = startX; x < tiles.size(); x++) {
-            for (int y = startY; y < tiles.get(x).size(); y++) {
+        for (int x = startX; x < endX; x++) {
+            for (int y = startY; y < endY; y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
                 if (tiles.get(x - startX).get(y - startY).getInside() == null) {
@@ -435,8 +409,8 @@ public class GameView {
         ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
         ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
         int tileSize = ClientModel.TILE_SIZE;
-        for (int x = startX; x < tiles.size(); x++) {
-            for (int y = startY; y < tiles.get(x).size(); y++) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
                 getBottomLeftCorner(x, y, tiles.get(x - startX).get(y - startY), tiles, alreadyRenderedTiles, bottomLeftTiles);
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
@@ -842,7 +816,6 @@ public class GameView {
         return batch;
     }
 
-
     public Texture getPixel() {
         return pixel;
     }
@@ -908,34 +881,9 @@ public class GameView {
             startY = Math.max(0, startY);
             endX = Math.min(ClientModel.mapWidth - 1, endX);
             endY = Math.min(ClientModel.mapHeight - 1, endY);
-            Gson gson = new Gson();
 
-            for (int i = startX; i <= endX; i++) {
-                HashMap<String, Object> requestBody = new HashMap<>();
-                requestBody.put("startY", startY);
-                requestBody.put("endY", endY);
-                requestBody.put("rowIndex", i);
-                Message sendRequest = new Message(requestBody, Message.Type.get_kashi_row, Message.Menu.game);
+            fillTheMap(startX, startY, endX, endY);
 
-                Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(sendRequest, ClientModel.TIMEOUT_MILLIS);
-
-                if (response == null || response.getBody() == null) {
-                    System.err.println("Client: Read timeout or connection error for row " + i);
-                    break;
-                }
-
-                Object kashisAsGenericObjects = response.getBody().get("row");
-                String kashisJson = gson.toJson(kashisAsGenericObjects);
-                Type kashiListType = new TypeToken<ArrayList<Kashi>>() {
-                }.getType();
-                ArrayList<Kashi> currentRow = gson.fromJson(kashisJson, kashiListType);
-
-                if (currentRow != null) {
-                    tiles.add(currentRow);
-                    System.out.println("Client: Received and added row " + i);
-                }
-            }
-            System.out.println("did the impossible");
 //            HashMap<String, Object> body = new HashMap<>();
 //            body.put("startX", startX);
 //            body.put("startY", startY);
@@ -981,6 +929,58 @@ public class GameView {
 
             camera.update();
         }
+    }
+
+    private void fillTheMap(int startX, int startY, int endX, int endY) {
+        tiles.clear();
+        int countX = 0;
+        int countY = 0;
+        for (int i = startX; i <= endX; i++) {
+            for (int j = startY; j <= endY; j++) {
+                tiles.add(new ArrayList<>());
+                HashMap<String, Object> body = new HashMap<>();
+                body.put("x", i);
+                body.put("y", j);
+                Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
+                Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+
+                Boolean shokhmZadehObj = response.getFromBody("ShokhmZadeh");
+                Boolean entranceObj = response.getFromBody("Enterance");
+                Boolean walkableObj = response.getFromBody("Walkable");
+                String insideState = response.getFromBody("inside");
+
+                Kashi tile = new Kashi();
+                tile.setShokhmZadeh(shokhmZadehObj);
+                tile.setEnterance(entranceObj);
+                tile.setWalkable(walkableObj);
+
+                if ("full".equals(insideState)) {
+                    System.out.println("inside: " + response.getFromBody("inside"));
+                    System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
+                    System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
+                    String className = response.getFromBody("insideCLASS");
+                    Object insideRaw = response.getFromBody("insideOBJ");
+
+                    try {
+                        Class<?> clazz = Class.forName(className);
+                        Gson gson = new Gson();
+                        String insideJson = gson.toJson(insideRaw);
+                        Object insideDeserialized = gson.fromJson(insideJson, clazz);
+                        tile.setInside(insideDeserialized);
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Warning: Class not found: " + className);
+                        e.printStackTrace();
+                    }
+                } else {
+                    tile.setInside(null);
+                }
+                tiles.get(countX).add(tile);
+                countY++;
+            }
+            countX++;
+            countY = 0;
+        }
+        System.out.println("filled the map from " + startX + " " + startY + " to " + endX + " " + endY);
     }
 
     public float getRedFlashTimer() {

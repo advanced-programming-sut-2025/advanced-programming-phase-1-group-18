@@ -32,24 +32,21 @@ public class GameNetworkController {
             case get_kashi_using_x_y:
                 int x = message.getIntFromBody("x");
                 int y = message.getIntFromBody("y");
-//                System.out.println("client wats the block " + x + " " + y);
+                System.out.println("client wants the block " + x + " " + y);
                 HashMap<String, Object> map = new HashMap<>();
                 Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
                 map.put("ShokhmZadeh", kashi.isShokhmZadeh());
                 map.put("Enterance", kashi.getEnterance());
                 map.put("Walkable", kashi.getWalkable());
+
                 if (kashi.getInside() == null) {
                     map.put("inside", "null");
                 } else {
                     map.put("inside", "full");
                     map.put("insideOBJ", kashi.getInside());
-                    map.put("insideCLASS", kashi.getInside().getClass());
+                    map.put("insideCLASS", kashi.getInside().getClass().getName());
                 }
-                System.out.println("server is giving the client the kashi " + App.getCurrentGame().getMap().get(x).get(y).toString());
-//                System.out.println("Kashi JSON being sent: " + new Gson().toJson(App.getCurrentGame().getMap().get(x).get(y)));
-//                if (App.getCurrentGame().getMap().get(x).get(y) == null) {
-//                    System.out.println("the block server gave is null");
-//                }
+
                 Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 clientConnectionThread.sendMessage(send);
                 break;
@@ -74,17 +71,17 @@ public class GameNetworkController {
 //                Message send1 = new Message(map1, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
 //                clientConnectionThread.sendMessage(send1);
 //                break;
-            case get_kashi_row:
-                int starty = message.getIntFromBody("startY");
-                int endy = message.getIntFromBody("endY");
-                int rowIndex = message.getIntFromBody("rowIndex");
-                ArrayList<Kashi> currentRow = App.getCurrentGame().getMap().get(rowIndex);
-                List<Kashi> visibleRow = currentRow.subList(starty, endy + 1);
-                HashMap<String, Object> rowMap = new HashMap<>();
-                rowMap.put("row", visibleRow);
-                Message sendRow = new Message(rowMap, Message.Type.get_kashi_row, Message.Menu.game);
-                clientConnectionThread.sendMessage(sendRow);
-                break;
+//            case get_kashi_row:
+//                int starty = message.getIntFromBody("startY");
+//                int endy = message.getIntFromBody("endY");
+//                int rowIndex = message.getIntFromBody("rowIndex");
+//                ArrayList<Kashi> currentRow = App.getCurrentGame().getMap().get(rowIndex);
+//                List<Kashi> visibleRow = currentRow.subList(starty, endy + 1);
+//                HashMap<String, Object> rowMap = new HashMap<>();
+//                rowMap.put("row", visibleRow);
+//                Message sendRow = new Message(rowMap, Message.Type.get_kashi_row, Message.Menu.game);
+//                clientConnectionThread.sendMessage(sendRow);
+//                break;
             case get_dateTime:
                 HashMap<String, Object> map2 = new HashMap<>();
                 map2.put("dateTime", App.getCurrentGame().getCurrentDateTime());
