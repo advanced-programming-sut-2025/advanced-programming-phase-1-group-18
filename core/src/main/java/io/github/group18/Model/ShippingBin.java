@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class ShippingBin implements Name, PictureModel
 {
-    protected ArrayList<Kashi> insideKashis;
 
     protected final int goldNeeded =250;
     protected final int woodNeeded = 150;
@@ -18,7 +17,6 @@ public class ShippingBin implements Name, PictureModel
     }
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords)
         {
@@ -30,7 +28,6 @@ public class ShippingBin implements Name, PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
      }
 
     @Override

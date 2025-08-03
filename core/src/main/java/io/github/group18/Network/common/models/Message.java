@@ -48,7 +48,11 @@ public class Message {
     }
 
     public int getIntFromBody(String fieldName) {
-        return (int) ((double) ((Double) body.get(fieldName)));
+        Object value = body.get(fieldName);
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        return 0;
     }
 
     public enum Type {
@@ -74,7 +78,9 @@ public class Message {
         get_kashis_using_2x_2y,
         get_dateTime,
         get_npc,
-        get_players
+        get_players,
+        get_kashi_row,
+        get_kashi_column
     }
 
     public enum Menu {

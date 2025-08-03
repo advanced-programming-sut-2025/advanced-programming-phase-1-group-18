@@ -475,50 +475,50 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public static Result gameNew(ArrayList<String> users, ArrayList<Integer> maps, User currentUser) throws NoSuchFieldException, IllegalAccessException {
-        App.setCurrentUser(currentUser);
+//        App.setCurrentUser(currentUser);
         String[] usernames = users.toArray(new String[0]);
 
-        if (usernames.length > 3) {
-            return new Result(false, "Choose 3 usernames Max");
+        if (usernames.length > 4) {
+            return new Result(false, "Choose 4 usernames Max");
         }
-        for (String username : usernames) {
-            boolean check = false;
-            for (User user : App.getUsers_List()) {
-                if (username.equals(user.getUsername())) {
-                    check = true;
-                    break;
-                }
-            }
-            if (!check) {
-                return new Result(false, "Username does not exist");
-            }
-        }
-        String[] usrnms = new String[usernames.length];
-        int counter = 0;
-        for (String username : usernames) {
-            for (String usernm : usrnms) {
-                if (username.equals(usernm)) {
-                    return new Result(false, "Username selected twice");
-                }
-            }
-            usrnms[counter] = username;
-        }
-        for (String username : usernames) {
-            for (Game game : App.getGames()) {
-                for (Player player : game.getPlayers()) {
-                    if (player.getOwner().getUsername().equals(username)) {
-                        return new Result(false, "Username is already in a game");
-                    }
-                }
-            }
-        }
+//        for (String username : usernames) {
+//            boolean check = false;
+//            for (User user : App.getUsers_List()) {
+//                if (username.equals(user.getUsername())) {
+//                    check = true;
+//                    break;
+//                }
+//            }
+//            if (!check) {
+//                return new Result(false, "Username does not exist");
+//            }
+//        }
+//        String[] usrnms = new String[usernames.length];
+//        int counter = 0;
+//        for (String username : usernames) {
+//            for (String usernm : usrnms) {
+//                if (username.equals(usernm)) {
+//                    return new Result(false, "Username selected twice");
+//                }
+//            }
+//            usrnms[counter] = username;
+//        }
+//        for (String username : usernames) {
+//            for (Game game : App.getGames()) {
+//                for (Player player : game.getPlayers()) {
+//                    if (player.getOwner().getUsername().equals(username)) {
+//                        return new Result(false, "Username is already in a game");
+//                    }
+//                }
+//            }
+//        }
         Game NewGame = new Game(currentUser);
         NewGame.setPlayers(new ArrayList<>());
 
-        Player player1 = new Player();
-        player1.setOwner(currentUser);
-        player1.setEnergy(200);
-        NewGame.getPlayers().add(player1);
+//        Player player1 = new Player();
+//        player1.setOwner(currentUser);
+//        player1.setEnergy(200);
+//        NewGame.getPlayers().add(player1);
 
         for (String username : usernames) {
             Player player = new Player();
@@ -546,11 +546,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
             Player player;
-            if (i != 0) {
+//            if (i != 0) {
                 player = NewGame.getPlayers().get(i);
-            } else {
-                player = player1;
-            }
+//            } else {
+//                player = player1;
+//            }
             System.out.println("Choosing map for: " + player.getOwner().getUsername());
 
             int number = maps.get(i);
@@ -594,13 +594,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     System.out.println("Unexpected error occurred.");
                     break;
             }
-            ClientConnectionThread clientConnectionThread = ServerModel.getConnectionByUserName(currentUser.getUsername());
+            ClientConnectionThread clientConnectionThread = ServerModel.getConnectionByUserName(player.getOwner().getUsername());
             HashMap<String, Object> map = new HashMap<>();
             map.put("owner", player.getOwner());
             map.put("energy", player.getEnergy());
             map.put("x", player.getX());
             map.put("y", player.getY());
             Message msg = new Message(map, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
+            System.out.println("we have sent a message to the client " + clientConnectionThread.getUser().getUsername() + " to fill the player object in clientmodel");
             clientConnectionThread.sendMessage(msg);
         }
         NewGame.initializeFriendships();
@@ -1129,8 +1130,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
                 }
             }
-            App.getGameController().getGameMenu().getLightningEffect().start();
-//                    thor.setKhordeh(kashiList);
+            //Server-TODO
+//            App.getGameController().getGameMenu().getLightningEffect().start();
+////                    thor.setKhordeh(kashiList);
         }
 
         //update animal navazesh
@@ -1318,7 +1320,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             coal.setType(ForagingMineralsEnums.Coal);
             App.getCurrentGame().getMap().get(x).get(y).setInside(coal);
         }
-        App.getGameController().getGameMenu().getLightningEffect().start();
+        //Server-TODO
+//        App.getGameController().getGameMenu().getLightningEffect().start();
         return new Result(true, "cheatCode: Thor changed! Thor strike at (" + x + "," + y + ")");
     }
 
@@ -3054,7 +3057,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         playerrr.getInventory().removeItem(item, 1);
                         playerrr.setFoodBuff(foodCooking.getBuff());
                         showBuffEffect(foodCooking.getBuff());
-                        App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
+                        //Server-TODO
+//                        App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
 //                        App.getGameController().getGameMenu().
                         return new Result(true, "You ate " + foodName);
                     }

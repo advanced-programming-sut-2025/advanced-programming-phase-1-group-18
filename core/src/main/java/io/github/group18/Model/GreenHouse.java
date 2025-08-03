@@ -5,15 +5,6 @@ import java.util.ArrayList;
 public class GreenHouse implements PictureModel{
     protected boolean Status = false;
     protected ArrayList<Matarsak> Matarsaks = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
-
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
 
     // Getter and Setter for Status
     public boolean isStatus() {
@@ -34,7 +25,6 @@ public class GreenHouse implements PictureModel{
     }
 
     public void adaptMap(ArrayList<Cord> cords, int Enterancex, int Enterancey, int borderlowx, int borderlowy, int borderhighx, int borderhighy) {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -53,7 +43,6 @@ public class GreenHouse implements PictureModel{
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
         //Server-TODO
 //        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyGreenHouse(this);
 //        System.out.println(" Building: " +

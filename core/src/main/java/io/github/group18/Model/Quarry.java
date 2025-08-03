@@ -6,17 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Quarry implements PictureModel{
-    protected ArrayList<Kashi> insideKashis;
     protected Stone stone;
-
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
-
 
     public Stone getStone() {
         return stone;
@@ -28,7 +18,6 @@ public class Quarry implements PictureModel{
 
     public void adaptMap(ArrayList<Cord> cords) {
         Random rand = new Random();
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -60,7 +49,6 @@ public class Quarry implements PictureModel{
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
         //Server-TODO
 //        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setQuarrys(new ArrayList<>());
 //        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getQuarrys().add(this);

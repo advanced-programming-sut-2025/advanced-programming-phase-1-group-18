@@ -7,7 +7,6 @@ public class DeluxeBarn implements Name,PictureModel
 
     protected final int MaxCapacity =12;
     protected boolean Status = false;
-    protected ArrayList<Kashi> insideKashis;
     protected String Level;
     protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
     protected  int goldNeeded = 25000;
@@ -80,7 +79,6 @@ public class DeluxeBarn implements Name,PictureModel
 
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -91,7 +89,6 @@ public class DeluxeBarn implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

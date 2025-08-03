@@ -36,7 +36,8 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     public GameMenuInputAdapter(GameController gameController) {
         this.gameController = gameController;
-        ClientModel.getPlayer().setShowInventory(true);
+        //Server-TODO
+//        ClientModel.getPlayer().setShowInventory(true);
     }
 
     @Override

@@ -6,7 +6,6 @@ public class Kashi
 {
     protected boolean ShokhmZadeh;
     protected Object inside;
-    protected Item itemInside;
     protected boolean Enterance;
     protected boolean Walkable;
     // Getter و Setter برای ShokhmZadeh
@@ -42,11 +41,4 @@ public class Kashi
         Walkable = walkable;
     }
 
-    public Item getItemInside() {
-        return itemInside;
-    }
-
-    public void setItemInside(Item itemInside) {
-        this.itemInside = itemInside;
-    }
 }

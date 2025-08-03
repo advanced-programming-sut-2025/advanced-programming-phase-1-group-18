@@ -8,7 +8,6 @@ public class BigCoop implements Name,PictureModel
     protected final int MaxCapacity= 8;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
     protected final int goldNeeded = 10000;
     protected final int woodNeeded =400;
     protected final int stoneNeeded = 150;
@@ -52,7 +51,6 @@ public class BigCoop implements Name,PictureModel
     }
 
     public void adaptMap(ArrayList<Cord> cords) {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -63,7 +61,6 @@ public class BigCoop implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
     @Override
     public String getCorrectName() {

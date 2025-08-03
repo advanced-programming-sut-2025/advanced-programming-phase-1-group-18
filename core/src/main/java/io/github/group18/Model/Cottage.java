@@ -3,18 +3,9 @@ import java.util.ArrayList;
 
 public class Cottage implements PictureModel
 {
-    protected ArrayList<Kashi> insideKashis;
     protected Refrigerator myRefrigerator;
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
 
     public void adaptMap(ArrayList<Cord> cords,int Enterancex, int Enterancey,int borderlowx,int borderlowy,int borderhighx,int borderhighy) {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -33,7 +24,6 @@ public class Cottage implements PictureModel
             }
             kashis.add(kashi);
         }
-        this.insideKashis.addAll(kashis);
         //Server-TODO
 //        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyCottage(this);
     }

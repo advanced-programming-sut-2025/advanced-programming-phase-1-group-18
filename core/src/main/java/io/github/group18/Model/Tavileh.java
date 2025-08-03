@@ -7,7 +7,6 @@ public class Tavileh implements Name,PictureModel
     protected boolean Status = false;
     protected String Level;
     protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
     protected  int goldNeeded = 6000;
     protected  int woodNeeded =350;
     protected  int stoneNeeded = 150;
@@ -74,7 +73,6 @@ public class Tavileh implements Name,PictureModel
     }
 
     public void adaptMap(ArrayList<Cord> cords) {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             //System.out.println("1");
@@ -86,7 +84,6 @@ public class Tavileh implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

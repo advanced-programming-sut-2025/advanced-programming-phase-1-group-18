@@ -9,19 +9,10 @@ public class DeluxeCoop implements Name,PictureModel
     protected boolean Status = false;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
     protected final int goldNeeded = 20000;
     protected final int woodNeeded =500;
     protected final int stoneNeeded = 200;
     protected String Name;
-
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
 
     public String getLevel() {
         return Level;
@@ -62,7 +53,6 @@ public class DeluxeCoop implements Name,PictureModel
 
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -73,7 +63,6 @@ public class DeluxeCoop implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

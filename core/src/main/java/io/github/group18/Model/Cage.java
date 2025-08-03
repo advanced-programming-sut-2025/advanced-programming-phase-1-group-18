@@ -9,19 +9,10 @@ public class Cage implements Name,PictureModel
     protected final int MaxCapacity =4;
     protected String Level;
     protected ArrayList<CageAnimal> CageAnimals = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
     protected  int goldNeeded = 4000;
     protected  int woodNeeded =300;
     protected  int stoneNeeded = 150;
     protected String Name;
-
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
 
     public String getLevel() {
         return Level;
@@ -82,7 +73,6 @@ public class Cage implements Name,PictureModel
     public void adaptMap(ArrayList<Cord> cords)
     {
 
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -93,7 +83,6 @@ public class Cage implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

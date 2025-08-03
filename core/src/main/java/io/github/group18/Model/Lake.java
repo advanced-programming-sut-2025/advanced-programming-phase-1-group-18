@@ -3,19 +3,9 @@ import java.util.ArrayList;
 
 public class Lake implements PictureModel
 {
-    protected ArrayList<Kashi> insideKashis;
-
-    public ArrayList<Kashi> getInsideKashis() {
-        return insideKashis;
-    }
-
-    public void setInsideKashis(ArrayList<Kashi> insideKashis) {
-        this.insideKashis = insideKashis;
-    }
 
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for(Cord cord : cords)
         {
@@ -27,7 +17,6 @@ public class Lake implements PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
         //Server-TODO
 //        App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getLakes().add(this);
     }

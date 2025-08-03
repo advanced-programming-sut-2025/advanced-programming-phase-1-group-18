@@ -85,7 +85,7 @@ public class GameView {
     int startY;
     int endX;
     int endY;
-    ArrayList<ArrayList<Kashi>> tiles;
+    ArrayList<ArrayList<Kashi>> tiles = new ArrayList<>();
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -163,8 +163,8 @@ public class GameView {
     }
 
     private void loadTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
+        for (int x = startX; x < tiles.size(); x++) {
+            for (int y = startY; y < tiles.get(x).size(); y++) {
                 Kashi tile = tiles.get(x - startX).get(y - startY);
                 if (tile == null) continue;
 
@@ -221,14 +221,14 @@ public class GameView {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
-        renderPlayer();
+//        renderPlayer();
 //        renderInMyHandToolPlayer();
 //        renderInventory();
         renderClock();
         energy.render(batch);
 //        renderMarkets();
         renderKalagEffect(batch);
-        renderBrightness();
+//        renderBrightness();
         walking = false;
         batch.end();
     }
@@ -369,19 +369,34 @@ public class GameView {
 
 
         if (!(startX == newstartX && startY == newstartY && endX == newendX && endY == newendY)) {
-            HashMap<String, Object> body = new HashMap<>();
-            body.put("startX", newstartX);
-            body.put("startY", newstartY);
-            body.put("endX", newendX);
-            body.put("endY", newendY);
-            io.github.group18.Network.common.models.Message send = new io.github.group18.Network.common.models.Message(body, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
-            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
             Gson gson = new Gson();
-            Object usersArraylistOBJ = response.getBody().get("kashis");
-            String userArraylist = gson.toJson(usersArraylistOBJ);
-            Type userListType = new TypeToken<ArrayList<Kashi>>() {
-            }.getType();
-            tiles = gson.fromJson(userArraylist, userListType);
+
+            for (int i = startX; i <= endX; i++) {
+                HashMap<String, Object> requestBody = new HashMap<>();
+                requestBody.put("startY", startY);
+                requestBody.put("endY", endY);
+                requestBody.put("rowIndex", i);
+                Message sendRequest = new Message(requestBody, Message.Type.get_kashi_row, Message.Menu.game);
+
+                Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(sendRequest, ClientModel.TIMEOUT_MILLIS);
+
+                if (response == null || response.getBody() == null) {
+                    System.err.println("Client: Read timeout or connection error for row " + i);
+                    break;
+                }
+
+                Object kashisAsGenericObjects = response.getBody().get("row");
+                String kashisJson = gson.toJson(kashisAsGenericObjects);
+                Type kashiListType = new TypeToken<ArrayList<Kashi>>() {
+                }.getType();
+                ArrayList<Kashi> currentRow = gson.fromJson(kashisJson, kashiListType);
+
+                if (currentRow != null) {
+                    tiles.add(currentRow);
+                    System.out.println("Client: Received and added row " + i);
+                }
+            }
+            System.out.println("did the impossbile");
             startX = newstartX;
             startY = newstartY;
             endX = newendX;
@@ -391,14 +406,14 @@ public class GameView {
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
-        renderNPC(startX, startY, endX, endY);
+//        renderNPC(startX, startY, endX, endY);
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
         int tileSize = ClientModel.TILE_SIZE;
         TextureRegion texture = new TextureRegion(GameAssetManager.getGameAssetManager().getGrass());
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
+        for (int x = startX; x < tiles.size(); x++) {
+            for (int y = startY; y < tiles.get(x).size(); y++) {
                 float drawX = x * tileSize;
                 float drawY = y * tileSize;
                 if (tiles.get(x - startX).get(y - startY).getInside() == null) {
@@ -420,8 +435,8 @@ public class GameView {
         ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles = new ArrayList<>();
         ArrayList<BottomLeft> bottomLeftTiles = new ArrayList<>();
         int tileSize = ClientModel.TILE_SIZE;
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
+        for (int x = startX; x < tiles.size(); x++) {
+            for (int y = startY; y < tiles.get(x).size(); y++) {
                 getBottomLeftCorner(x, y, tiles.get(x - startX).get(y - startY), tiles, alreadyRenderedTiles, bottomLeftTiles);
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
@@ -620,6 +635,7 @@ public class GameView {
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         int numberOfPlayers = response.getIntFromBody("numberOfPlayers");
+        System.out.println("client received numofplayers: " + numberOfPlayers);
         int count = 1;
         for (int i = 0; i < numberOfPlayers; i++) {
             double first = response.getFromBody(String.valueOf(count));
@@ -892,20 +908,61 @@ public class GameView {
             startY = Math.max(0, startY);
             endX = Math.min(ClientModel.mapWidth - 1, endX);
             endY = Math.min(ClientModel.mapHeight - 1, endY);
-
-            HashMap<String, Object> body = new HashMap<>();
-            body.put("startX", startX);
-            body.put("startY", startY);
-            body.put("endX", endX);
-            body.put("endY", endY);
-            io.github.group18.Network.common.models.Message send = new io.github.group18.Network.common.models.Message(body, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
-            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
             Gson gson = new Gson();
-            Object usersArraylistOBJ = response.getBody().get("kashis");
-            String userArraylist = gson.toJson(usersArraylistOBJ);
-            Type userListType = new TypeToken<ArrayList<Kashi>>() {
-            }.getType();
-            tiles = gson.fromJson(userArraylist, userListType);
+
+            for (int i = startX; i <= endX; i++) {
+                HashMap<String, Object> requestBody = new HashMap<>();
+                requestBody.put("startY", startY);
+                requestBody.put("endY", endY);
+                requestBody.put("rowIndex", i);
+                Message sendRequest = new Message(requestBody, Message.Type.get_kashi_row, Message.Menu.game);
+
+                Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(sendRequest, ClientModel.TIMEOUT_MILLIS);
+
+                if (response == null || response.getBody() == null) {
+                    System.err.println("Client: Read timeout or connection error for row " + i);
+                    break;
+                }
+
+                Object kashisAsGenericObjects = response.getBody().get("row");
+                String kashisJson = gson.toJson(kashisAsGenericObjects);
+                Type kashiListType = new TypeToken<ArrayList<Kashi>>() {
+                }.getType();
+                ArrayList<Kashi> currentRow = gson.fromJson(kashisJson, kashiListType);
+
+                if (currentRow != null) {
+                    tiles.add(currentRow);
+                    System.out.println("Client: Received and added row " + i);
+                }
+            }
+            System.out.println("did the impossible");
+//            HashMap<String, Object> body = new HashMap<>();
+//            body.put("startX", startX);
+//            body.put("startY", startY);
+//            body.put("endX", endX);
+//            body.put("endY", endY);
+//            io.github.group18.Network.common.models.Message send = new io.github.group18.Network.common.models.Message(body, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
+//            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS * 1000);
+//            if (response == null || response.getBody() == null) {
+//                System.err.println("Error: Server response or response body was null. Cannot update tiles.");
+//                return;
+//            }
+//            Gson gson = new Gson();
+//            Object kashisAsGenericObjects = response.getBody().get("kashis");
+//            if (kashisAsGenericObjects == null) {
+//                System.err.println("Error: The 'kashis' key was not found in the response body or its value was null.");
+//                return;
+//            }
+//            String kashisJson = gson.toJson(kashisAsGenericObjects);
+//            Type kashiList2DType = new TypeToken<ArrayList<ArrayList<Kashi>>>() {}.getType();
+//
+//
+//            if (tiles != null) {
+//                tiles = gson.fromJson(kashisJson, kashiList2DType);
+//                System.out.println("Successfully received and deserialized " + tiles.size() + " rows of tiles.");
+//            } else {
+//                System.err.println("Error: Deserialization of tiles returned null. The JSON format may be incorrect.");
+//            }
         }
 
         // Simple camera follow - no lerping, no prediction

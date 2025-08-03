@@ -29,6 +29,7 @@ public class LoginNetworkController {
                 response.put("user", user); // 👈 اینو اضافه کن
                 ServerModel.getOnlineUsers().add(user);
                 connection.setUser(user);
+                System.out.println("rezi is cooking " + user.getUsername());
                 return new Message(response, Message.Type.Login, Message.Menu.Login);
             }
         }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Well implements Name
 {
-    protected ArrayList<Kashi> insideKashis;
     protected final int goldNeeded =1000;
     protected final int stoneNeeded = 75;
     public int getStoneNeeded() {
@@ -15,7 +14,6 @@ public class Well implements Name
     }
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -26,7 +24,6 @@ public class Well implements Name
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.github.group18.Network.common.models.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GameNetworkController {
     public static void handleMessage(Message message, ClientConnectionThread clientConnectionThread) {
@@ -36,26 +37,37 @@ public class GameNetworkController {
                 Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 clientConnectionThread.sendMessage(send);
                 break;
-            case get_kashis_using_2x_2y:
-                int startx = message.getIntFromBody("startX");
+//            case get_kashis_using_2x_2y:
+//                int startx = message.getIntFromBody("startX");
+//                int starty = message.getIntFromBody("startY");
+//                int endx = message.getIntFromBody("endX");
+//                int endy = message.getIntFromBody("endY");
+//
+//                ArrayList<ArrayList<Kashi>> tileMap = new ArrayList<>();
+//
+//                for (int i = startx; i <= endx; i++) {
+//                    ArrayList<Kashi> currentRow = new ArrayList<>();
+//                    for (int j = starty; j <= endy; j++) {
+//                        Kashi kashiTile = App.getCurrentGame().getMap().get(i).get(j);
+//                        currentRow.add(kashiTile);
+//                    }
+//                    tileMap.add(currentRow);
+//                }
+//                HashMap<String, Object> map1 = new HashMap<>();
+//                map1.put("kashis", tileMap);
+//                Message send1 = new Message(map1, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
+//                clientConnectionThread.sendMessage(send1);
+//                break;
+            case get_kashi_row:
                 int starty = message.getIntFromBody("startY");
-                int endx = message.getIntFromBody("endX");
                 int endy = message.getIntFromBody("endY");
-
-                ArrayList<ArrayList<Kashi>> tileMap = new ArrayList<>();
-
-                for (int i = startx; i <= endx; i++) {
-                    ArrayList<Kashi> currentRow = new ArrayList<>();
-                    for (int j = starty; j <= endy; j++) {
-                        Kashi kashiTile = App.getCurrentGame().getMap().get(i).get(j);
-                        currentRow.add(kashiTile);
-                    }
-                    tileMap.add(currentRow);
-                }
-                HashMap<String, Object> map1 = new HashMap<>();
-                map1.put("kashis", tileMap);
-                Message send1 = new Message(map1, Message.Type.get_kashis_using_2x_2y, Message.Menu.game);
-                clientConnectionThread.sendMessage(send1);
+                int rowIndex = message.getIntFromBody("rowIndex");
+                ArrayList<Kashi> currentRow = App.getCurrentGame().getMap().get(rowIndex);
+                List<Kashi> visibleRow = currentRow.subList(starty, endy + 1);
+                HashMap<String, Object> rowMap = new HashMap<>();
+                rowMap.put("row", visibleRow);
+                Message sendRow = new Message(rowMap, Message.Type.get_kashi_row, Message.Menu.game);
+                clientConnectionThread.sendMessage(sendRow);
                 break;
             case get_dateTime:
                 HashMap<String, Object> map2 = new HashMap<>();
@@ -76,6 +88,7 @@ public class GameNetworkController {
             case get_players:
                 HashMap<String, Object> map4 = new HashMap<>();
                 map4.put("numberOfPlayers", App.getCurrentGame().getPlayers().size());
+                System.out.println("numOfPlayers: " + App.getCurrentGame().getPlayers().size());
                 int count = 1;
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     map4.put(String.valueOf(count), player.getX());
@@ -87,6 +100,7 @@ public class GameNetworkController {
                     map4.put(String.valueOf(count + 6), player.getFoodBuff());
                     count += 7;
                 }
+                System.out.println(map4.toString());
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
                 clientConnectionThread.sendMessage(send4);
                 break;

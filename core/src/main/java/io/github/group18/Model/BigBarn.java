@@ -9,7 +9,6 @@ public class BigBarn implements Name,PictureModel
     protected boolean Status = false ;
     protected String Level;
     protected ArrayList<TavilehAnimal> TavilehAnimals = new ArrayList<>();
-    protected ArrayList<Kashi> insideKashis;
     protected  int goldNeeded = 12000;
     protected  int woodNeeded =450;
     protected  int stoneNeeded = 200;
@@ -79,7 +78,6 @@ public class BigBarn implements Name,PictureModel
 
     public void adaptMap(ArrayList<Cord> cords)
     {
-        this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for (Cord cord : cords) {
             Kashi kashi = new Kashi();
@@ -90,7 +88,6 @@ public class BigBarn implements Name,PictureModel
             kashis.add(kashi);
             App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
         }
-        this.insideKashis.addAll(kashis);
     }
 
     @Override

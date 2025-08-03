@@ -1,5 +1,6 @@
 package io.github.group18.Network.Client.App;
 
+import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Main;
@@ -49,9 +50,16 @@ public class ServerConnectionThread extends ConnectionThread {
             return true;
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
             //open game page
-            GameController gameController = new GameController(Main.getMain());
-            gameController.init();
-            gameController.run();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    // All code inside here will be executed on the main LibGDX thread.
+                    // It is now safe to create SpriteBatch, Stages, etc.
+                    GameController gameController = new GameController(Main.getMain());
+                    gameController.init();
+                    gameController.run();
+                }
+            });
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.add_player_to_Clientmain) {
             Gson gson1 = new Gson();
             Object userObj1 = message.getFromBody("owner");
