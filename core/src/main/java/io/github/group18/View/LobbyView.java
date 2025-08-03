@@ -121,9 +121,7 @@ public class LobbyView implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 //                updateLobbyList();
-                System.out.println("someone is trying to join lobby");
                 if (selectedLobby != null) {
-                    System.out.println("selected lobby aint null");
                     if (selectedLobby.getAccessLevel() == ppEnum.PRIVATE) {
                         TextField passwordField = new TextField("", skin);
 

@@ -59,11 +59,16 @@ abstract public class ConnectionThread extends Thread {
     abstract protected boolean handleMessage(Message message);
 
     public synchronized void sendMessage(Message message) {
-        String JSONString = JSONUtils.toJson(message);
-
         try {
-            dataOutputStream.writeUTF(JSONString);
-        } catch (IOException e) {
+            String JSONString = JSONUtils.toJson(message);
+
+            try {
+                dataOutputStream.writeUTF(JSONString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -516,29 +516,22 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         NewGame.setPlayers(new ArrayList<>());
 
         Player player1 = new Player();
-        player1.setOwner(App.getCurrentUser());
+        player1.setOwner(currentUser);
         player1.setEnergy(200);
         NewGame.getPlayers().add(player1);
-        ClientConnectionThread clientConnectionThread = ServerModel.getConnectionByUserName(currentUser.getUsername());
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("player", player1);
-        Message msg = new Message(map, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
-        clientConnectionThread.sendMessage(msg);
+
         for (String username : usernames) {
             Player player = new Player();
+            User user1 = null;
             for (User user : App.getUsers_List()) {
                 if (username.equals(user.getUsername())) {
+                    user1 = user;
                     player.setOwner(user);
                     player.setEnergy(200);
                     NewGame.getPlayers().add(player);
                     break;
                 }
             }
-            ClientConnectionThread clientConnectionThread1 = ServerModel.getConnectionByUserName(username);
-            HashMap<String, Object> map1 = new HashMap<>();
-            map1.put("player", player);
-            Message msg1 = new Message(map1, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
-            clientConnectionThread1.sendMessage(msg1);
         }
         NewGame.setCurrentSeason(Seasons.Spring);
         NewGame.setCurrentDateTime(new DateTime(9, 1));
@@ -568,8 +561,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 return new Result(false, "Invalid number");
             }
 
-            int topLeftx = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLeftx");
-            int topLefty = (int) getFieldValue(Game.class, NewGame, "player" + (i + 1) + "TopLefty");
+            int topLeftx = (int) getFieldValue(ClientModel.class, NewGame, "player" + (i + 1) + "TopLeftx");
+            int topLefty = (int) getFieldValue(ClientModel.class, NewGame, "player" + (i + 1) + "TopLefty");
 
             player.setX(topLeftx + 5);
             player.setY(topLefty + 5);
@@ -580,20 +573,20 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 App.setGames(new ArrayList<>());
                 App.getGames().add(NewGame);
             }
-            switch (number - 1) {
-                case 0:
+            switch (number) {
+                case 1:
                     player.setMyFarm(new Farm());
                     player.getMyFarm().createMap1(topLeftx, topLefty);
                     break;
-                case 1:
+                case 2:
                     player.setMyFarm(new Farm());
                     player.getMyFarm().createMap2(topLeftx, topLefty);
                     break;
-                case 2:
+                case 3:
                     player.setMyFarm(new Farm());
                     player.getMyFarm().createMap3(topLeftx, topLefty);
                     break;
-                case 3:
+                case 4:
                     player.setMyFarm(new Farm());
                     player.getMyFarm().createMap4(topLeftx, topLefty);
                     break;
@@ -601,6 +594,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     System.out.println("Unexpected error occurred.");
                     break;
             }
+            ClientConnectionThread clientConnectionThread = ServerModel.getConnectionByUserName(currentUser.getUsername());
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("owner", player.getOwner());
+            map.put("energy", player.getEnergy());
+            map.put("x", player.getX());
+            map.put("y", player.getY());
+            Message msg = new Message(map, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
+            clientConnectionThread.sendMessage(msg);
         }
         NewGame.initializeFriendships();
         return new Result(true, "Game Created");
@@ -2549,7 +2550,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
 
         // 4. انجام عملیات ساخت
-        return executeCrafting(currentPlayer, itemName, recipe,playerrr);
+        return executeCrafting(currentPlayer, itemName, recipe, playerrr);
     }
 
     private CraftingRecipesEnums findRecipe(Player player, String itemName) {
@@ -3091,7 +3092,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public Result pet(String name, Player playerrr) {
-        Animal animal = findAnimalByName(name,playerrr);
+        Animal animal = findAnimalByName(name, playerrr);
         if (animal == null) {
             return new Result(false, "You can not pet that animal!");
         }
@@ -3123,8 +3124,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return false;
     }
 
-    public Result cheatSetFriendship(String animalName, int amount,Player playerrr) {
-        Animal animal = findAnimalByName(animalName,playerrr);
+    public Result cheatSetFriendship(String animalName, int amount, Player playerrr) {
+        Animal animal = findAnimalByName(animalName, playerrr);
         if (animal == null) {
             return new Result(false, "Your entered name does not exists between your animals!");
         } else if (amount > 1000) {
@@ -3156,12 +3157,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public Result shepherdInAnimals(String animalName, Player playerrr) {
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
-        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName,playerrr);
+        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName, playerrr);
         if (founded) {
             return new Result(false, "your animal name doesn't exist!");
         }
         // find that animal
-        Animal animal = findAnimalByName(animalName,playerrr);
+        Animal animal = findAnimalByName(animalName, playerrr);
         if (!(animal.isOutside())) {
             return new Result(false, "Your entered animal is inside!");
         } else {
@@ -3213,12 +3214,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
-        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName,playerrr);
+        boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName, playerrr);
         if (founded) {
             return new Result(false, "your animal name doesn't exist!");
         }
         // find that animal
-        Animal animal = findAnimalByName(animalName,playerrr);
+        Animal animal = findAnimalByName(animalName, playerrr);
         //
         if (animal.isOutside()) {
             return new Result(false, "Your entered animal is outside!");
@@ -3272,8 +3273,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public Result feedHay(String animalName,Player playerrr) {
-        Animal animal = findAnimalByName(animalName,playerrr);
+    public Result feedHay(String animalName, Player playerrr) {
+        Animal animal = findAnimalByName(animalName, playerrr);
         if (animal == null) {
             return new Result(false, "Your entered animal doesn't exist!");
         } else if (animal.isTaghzieh()) {
@@ -3292,7 +3293,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     public Result sellAnimal(String name, Player playerrr) {
-        Animal animal = findAnimalByName(name,playerrr);
+        Animal animal = findAnimalByName(name, playerrr);
         if (animal == null) {
             return new Result(false, "Your entered animal was not found between your own animals! so you can not sell!");
         }

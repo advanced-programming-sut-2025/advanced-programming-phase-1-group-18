@@ -35,12 +35,13 @@ public class GameNetworkController {
     private static void startNewGame(ArrayList<String> users, ArrayList<Integer> maps, User newUser) {
         try {
             Result result = GameMenuController.gameNew(users, maps, newUser);
+            System.out.println("init players done(owner + energy + x + y are set)");
             if (result.isSuccessful()) {
                 ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
                 for (ClientConnectionThread connection : connections) {
                     if (clientConnectionIsaPlayer(connection, users)) {
                         HashMap<String, Object> body = new HashMap<>();
-                        body.put("game", App.getCurrentGame());
+//                        body.put("game", App.getCurrentGame());
                         Message msg = new Message(body, Message.Type.load_game_screen, Message.Menu.game_menu);
                         connection.sendMessage(msg);
                     }

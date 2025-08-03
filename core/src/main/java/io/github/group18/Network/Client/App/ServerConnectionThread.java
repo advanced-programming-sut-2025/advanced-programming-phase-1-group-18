@@ -2,6 +2,7 @@ package io.github.group18.Network.Client.App;
 
 import com.google.gson.Gson;
 import io.github.group18.Model.Player;
+import io.github.group18.Model.User;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.Client.Controller.ChangeMenuController;
 import io.github.group18.Network.common.models.ConnectionThread;
@@ -44,12 +45,20 @@ public class ServerConnectionThread extends ConnectionThread {
             sendMessage(ChangeMenuController.handleMessage(message));
             return true;
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
-            System.out.println("open game page");
+
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.add_player_to_Clientmain) {
             Gson gson1 = new Gson();
-            Object playerObj1 = message.getFromBody("player");
-            String playerjson1 = gson1.toJson(playerObj1);
-            Player player = gson1.fromJson(playerjson1, Player.class);
+            Object userObj1 = message.getFromBody("owner");
+            String userjson1 = gson1.toJson(userObj1);
+            User user = gson1.fromJson(userjson1, User.class);
+            double energy = message.getFromBody("energy");
+            double x = message.getFromBody("x");
+            double y = message.getFromBody("y");
+            Player player = new Player();
+            player.setOwner(user);
+            player.setEnergy(energy);
+            player.setX(x);
+            player.setY(y);
             ClientModel.setPlayer(player);
         }
         return false;

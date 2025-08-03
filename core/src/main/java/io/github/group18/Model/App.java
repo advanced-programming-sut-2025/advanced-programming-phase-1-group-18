@@ -35,7 +35,7 @@ public class App {
     // Load users from users.json
     public static void loadUsersFromFile() {
         Users_List = UserDataManager.loadAllUsers();
-        System.out.println("Loaded " + Users_List.size() + " users");
+//        System.out.println("Loaded " + Users_List.size() + " users");
 //        File file = new File(USER_FILE);
 //        if (!file.exists()) return;
 //
@@ -49,7 +49,7 @@ public class App {
     }
     public static void loadUsersFromDatabase() {
         Users_List = UserDataManager.loadAllUsers();
-        System.out.println("Loaded " + Users_List.size() + " users");
+//        System.out.println("Loaded " + Users_List.size() + " users");
 //        File file = new File(USER_FILE);
 //        if (!file.exists()) return;
 //

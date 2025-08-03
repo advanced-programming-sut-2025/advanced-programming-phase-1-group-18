@@ -9,7 +9,8 @@ public class Gift extends Item implements Name, Price{
     protected Player receiver;
     protected int rate;
     protected boolean isRated = false;
-    protected String name;
+    //Server-TODO
+//    protected String name;
     protected int amount;
     private static int nextId = 1;
     private final int id;

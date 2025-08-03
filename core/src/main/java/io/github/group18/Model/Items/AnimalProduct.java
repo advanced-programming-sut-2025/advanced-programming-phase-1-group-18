@@ -5,7 +5,8 @@ import io.github.group18.enums.AnimalProductType;
 import io.github.group18.enums.ProductQuality;
 
 public class AnimalProduct extends Item implements Name, Price {
-    private String name;
+    //Server-TODO
+//    private String name;
     private String jens;
     private int basePrice;
     private AnimalProductType type;
