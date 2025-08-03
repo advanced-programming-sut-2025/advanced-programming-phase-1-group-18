@@ -174,7 +174,7 @@ public class LobbyView implements Screen {
         chooseMapButton.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
-               controller.chooseMap(App.getCurrentUser(),stage);
+//               controller.chooseMap(App.getCurrentUser(),stage);
            }
         });
 
@@ -289,7 +289,7 @@ public class LobbyView implements Screen {
             @Override
             protected void result(Object object) {
                 if ("createGame".equals(object)) {
-//                    controller.createGame(lobby);
+                    controller.chooseMap(App.getCurrentUser(),stage,lobby);
                 } else if ("leave".equals(object)) {
                     controller.leaveLobby(lobby, App.getCurrentUser());
                     updateLobbyList();

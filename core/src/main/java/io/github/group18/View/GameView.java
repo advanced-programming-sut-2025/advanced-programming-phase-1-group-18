@@ -889,4 +889,8 @@ public class GameView {
     public void setNpcView(NPCView npcView) {
         this.npcView = npcView;
     }
+
+    public GameController getGameController() {
+        return gameController;
+    }
 }

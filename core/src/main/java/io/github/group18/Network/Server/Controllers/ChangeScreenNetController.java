@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Server.App.ChangeScreenMsgHandler;
-import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 
@@ -18,14 +17,15 @@ public class ChangeScreenNetController {
                 Object userObj = message.getFromBody("user");
                 String userjson = gson.toJson(userObj);
                 User newUser = gson.fromJson(userjson, User.class);
-                return changeScreen();
+                Lobby lobby = ServerModel.getLobbyById(message.getIntFromBody("lobby"));
+                return changeScreen(lobby);
             default:
                 return message;
         }
     }
 
-    private static Message changeScreen() {
-        ChangeScreenMsgHandler.ChangeScreenToMap(ServerModel.getOnlineUsers());
+    private static Message changeScreen(Lobby lobby) {
+        ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
         HashMap<String,Object>body = new HashMap<>();
         body.put("result", true);
         return new Message(body, Message.Type.change_menu, Message.Menu.CHANGE_MENU);

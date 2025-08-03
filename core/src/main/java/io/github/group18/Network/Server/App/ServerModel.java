@@ -114,4 +114,13 @@ public class ServerModel {
         }
         return null;
     }
+
+    public static Lobby getLobbyById(int id) {
+        for (Lobby lobby : lobbies) {
+            if (lobby.getId() == id) {
+                return lobby;
+            }
+        }
+        return null;
+    }
 }

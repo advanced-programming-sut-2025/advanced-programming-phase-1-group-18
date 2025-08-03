@@ -8,6 +8,7 @@ import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ChooseMapMessageHandler;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.ChoosingMapView;
+import io.github.group18.View.GameView;
 import io.github.group18.View.StartNewGame;
 
 import java.util.ArrayList;
@@ -113,10 +114,10 @@ public class ChoosingMapController {
                             gameController.run();
 //                            mainMenu.hide();
 
-//                            GameView gameView = new GameView(new GameController(),view.getSkin());
+                            GameView gameView = new GameView(new GameController(Main.getMain()));
 //                            gameView.setMenuController(gameMenuController);
-//                            Main.getMain().getScreen().dispose();
-//                            Main.getMain().setScreen(gameView);
+                            Main.getMain().getScreen().dispose();
+                            Main.getMain().setScreen(gameView.getGameController().getGameMenu());
                         }
                     }catch (Exception e){
                         view.getNotif().setText(e.getMessage());
