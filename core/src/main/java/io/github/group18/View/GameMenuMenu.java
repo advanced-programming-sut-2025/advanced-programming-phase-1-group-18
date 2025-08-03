@@ -45,6 +45,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
         this.background = GameAssetManager.getBackground();
         this.skin = skin;
         this.controller = controller;
+        App.setGameMenuController(controller);
         this.startNewGame = new TextButton("Start New Game", skin);
         this.loadGame = new TextButton("Load Game", skin);
         this.exitGame = new TextButton("Exit", skin);

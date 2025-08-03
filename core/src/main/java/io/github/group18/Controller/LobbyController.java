@@ -61,18 +61,19 @@ public class LobbyController {
         Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
-    public void chooseMap(User user, Stage stage) {
+    public void chooseMap(User user, Stage stage,Lobby lobby) {
         HashMap<String, Object> body = new HashMap<>();
         body.put("user", user);
+        body.put("lobby", lobby.getId());
         Message message = new Message(body, Message.Type.choose_map, Message.Menu.lobby);
         Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
 //        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message,ClientModel.TIMEOUT_MILLIS);
         if (res==null) return;
         if(res.getFromBody("success")){
-
+            int lobbyId = res.getIntFromBody("lobby");
 //            Main.getMain().getScreen().dispose();
 //            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
-            ChangeMenuHandler.changeMenu(App.getCurrentUser());
+            ChangeMenuHandler.changeMenu(App.getCurrentUser(),lobbyId);
         }else{
             Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
             error.text((String) res.getFromBody("error"));

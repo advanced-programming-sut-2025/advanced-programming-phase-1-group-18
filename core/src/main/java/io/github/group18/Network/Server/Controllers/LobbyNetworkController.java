@@ -77,12 +77,14 @@ public class LobbyNetworkController {
                 HashMap<String, Object> body2 = new HashMap<>();
                 boolean flag = false;
                 boolean success = false;
+                int lobbyId = message.getIntFromBody("lobby");
                 for (Lobby lobby : ServerModel.getLobbies()) {
-                    if (lobby.getUsers().contains(user1)){
+                    if (lobby.getId()==lobbyId){
                         flag = true;
                         if(lobby.getAdmin().equals(user1)){
                             if (lobby.getUsers().size()>1){
                                 body2.put("success", true);
+                                body2.put("lobby", lobby.getId());
                                 clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
                                 success = true;
                                 lobby.initMaps();

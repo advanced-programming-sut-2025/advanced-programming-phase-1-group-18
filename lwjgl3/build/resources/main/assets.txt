@@ -997,6 +997,8 @@ poles/Bamboo_Pole.png
 poles/Fiberglass_Rod.png
 poles/Iridium_Rod.png
 poles/Training_Rod.png
+popAction/action.atlas
+popAction/action.png
 skin/1hoursheet.PNG
 skin/font-export.fnt
 skin/font-subtitle-export.fnt
