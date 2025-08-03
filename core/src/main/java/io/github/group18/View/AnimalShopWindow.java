@@ -1,18 +1,14 @@
 package io.github.group18.View;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
-import io.github.group18.Controller.MarniesRanchController;
 import io.github.group18.Model.*;
-import io.github.group18.Model.Items.Price;
 
 import java.util.Map;
-
 
 public class AnimalShopWindow extends Window {
 
@@ -23,7 +19,6 @@ public class AnimalShopWindow extends Window {
     public AnimalShopWindow(Skin skin, Stage stage, AnimalSelectionHandler handler) {
         super("Choose Your Animal", skin);
 
-        //salam
         this.setModal(true);
         this.setMovable(true);
         this.setResizable(false);
@@ -68,11 +63,15 @@ public class AnimalShopWindow extends Window {
 
             Table row = new Table(skin);
 
-            row.add(new Label(displayText, skin)).width(250).left();
+            // Load image
+            Image animalImage = createAnimalImage(animalType.toLowerCase());
+            row.add(animalImage).width(48).height(48).padRight(10);
+
+            row.add(new Label(displayText, skin)).width(200).left();
 
             TextField nameField = new TextField("", skin);
             nameField.setMessageText("Enter Name");
-            row.add(nameField).width(350).padLeft(10);
+            row.add(nameField).width(250).padLeft(10);
 
             TextButton selectButton = new TextButton("Buy", skin);
             selectButton.addListener(new ClickListener() {
@@ -88,11 +87,11 @@ public class AnimalShopWindow extends Window {
                     }
 
                     handler.onAnimalSelected(animalType, customName);
-                    remove(); // Close window after selection
+                    remove();
                 }
             });
 
-            row.add(selectButton).width(100).padLeft(10);
+            row.add(selectButton).width(80).padLeft(10);
             row.pad(10);
             table.add(row).fillX().row();
         }
@@ -100,5 +99,19 @@ public class AnimalShopWindow extends Window {
         return table;
     }
 
-}
+    private Image createAnimalImage(String animalName) {
+        String texturePath = "animals/" + animalName + ".png";
+        Texture texture;
 
+        try {
+            texture = new Texture(Gdx.files.internal(texturePath));
+        } catch (Exception e) {
+            // Fallback if image not found
+            texture = new Texture(Gdx.files.internal("animals/unknown.png"));
+        }
+
+        Image image = new Image(texture);
+        image.setScaling(Scaling.fit);
+        return image;
+    }
+}

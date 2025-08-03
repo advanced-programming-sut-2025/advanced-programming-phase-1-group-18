@@ -4,7 +4,7 @@ import io.github.group18.enums.CageAnimalsEnums;
 
 import java.util.HashMap;
 
-public class CageAnimal extends Animal
+public class CageAnimal extends Animal implements PictureModel
 {
     protected Cage LivePlace;
     protected CageAnimalsEnums type;
@@ -28,5 +28,9 @@ public class CageAnimal extends Animal
     public void adaptMap(HashMap<Integer ,Integer> LakeMap)
     {
 
+    }
+    @Override
+    public String getPath() {
+        return type.getImagePath();
     }
 }

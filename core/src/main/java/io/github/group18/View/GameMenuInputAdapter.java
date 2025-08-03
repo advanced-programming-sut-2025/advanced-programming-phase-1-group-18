@@ -238,6 +238,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             }
         } else {
             if (button == Input.Buttons.LEFT) {
+                checkBarnClicked(screenX, screenY);
                 if (buildingPaceMode) {
                     buildDamdari(screenX, screenY);
                 }
@@ -838,5 +839,60 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
     }
+
+    private void checkBarnClicked(int screenX, int screenY) {
+        OrthographicCamera camera = game.getCamera();
+        camera.update();
+        Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
+
+        int tileX = (int) (worldCoordinates.x / Game.TILE_SIZE);
+        int tileY = (int) (worldCoordinates.y / Game.TILE_SIZE);
+
+        Game currentGame = App.getCurrentGame();
+        Object what = App.getCurrentGame().getMap().get(tileX).get(tileY).getInside();
+        if(what instanceof Tavileh)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("barn", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+        if(what instanceof BigBarn)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("bigbarn", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+        if(what instanceof DeluxeBarn)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("deluxebarn", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+        if(what instanceof Cage)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("coop", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+        if(what instanceof BigCoop)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("bigcoop", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+        if(what instanceof DeluxeCoop)
+        {
+            Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+            AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("deluxecoop", GameAssetManager.getGameAssetManager().getSkin(),
+                gameController.getGameMenu().getStage());
+            gameController.getGameMenu().getStage().addActor(animalsWindow);
+        }
+    }
+
 
 }

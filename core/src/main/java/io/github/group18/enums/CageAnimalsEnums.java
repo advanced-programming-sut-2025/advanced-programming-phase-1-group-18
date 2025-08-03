@@ -5,5 +5,9 @@ public enum CageAnimalsEnums
     Chicken,
     Duck,
     Rabbit,
-    Dinosaur,
+    Dinosaur;
+
+    public String getImagePath() {
+    return "animals/" + this.name().toLowerCase() + ".png";
+}
 }

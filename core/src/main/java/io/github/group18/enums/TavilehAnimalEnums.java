@@ -6,4 +6,8 @@ public enum TavilehAnimalEnums
     Sheep,
     Goat,
     Pig;
+
+    public String getImagePath() {
+        return "animals/" + this.name().toLowerCase() + ".png";
+    }
 }

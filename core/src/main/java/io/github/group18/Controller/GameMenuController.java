@@ -3153,7 +3153,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         }
     }
 
-    public Result shepherdOutAnimals(String animalName, int x, int y) {
+    public static Result shepherdOutAnimals(String animalName, int x, int y) {
 
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
@@ -3170,13 +3170,23 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (!map.get(x).get(y).getWalkable()) {
             return new Result(false, "your can not move animal to there!");
         }
-        //weather
-        if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN || App.getCurrentGame().getCurrentWeather() == WeatherEnum.SNOW || App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
-            return new Result(false, "Weather is not okay for moving " + animalName + " to outside!");
-        } else {
+//        //weather
+//        if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN || App.getCurrentGame().getCurrentWeather() == WeatherEnum.SNOW || App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
+//            return new Result(false, "Weather is not okay for moving " + animalName + " to outside!");
+//        }
+        else {
             animal.setXofAnimal(x);
             animal.setYofAnimal(y);
             animal.setOutside(true);
+            Cord cord = new Cord(x, y);
+            Kashi tile = App.getCurrentGame().getMap().get(x).get(y);
+
+
+            if (animal != null) {
+                animal.setOutside(true);
+                tile.setInside(animal);
+            }
+
             String where = animal.getWhereDoILive();
             switch (where) {
                 case "coop":
@@ -3235,7 +3245,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "");
     }
 
-    public Result sellAnimal(String name) {
+    public static Result sellAnimal(String name) {
         Animal animal = findAnimalByName(name);
         if (animal == null) {
             return new Result(false, "Your entered animal was not found between your own animals! so you can not sell!");
@@ -3892,7 +3902,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
     /// / find animal by name
-    public Animal findAnimalByName(String animalName) {
+    public static Animal findAnimalByName(String animalName) {
         ArrayList<Animal> animals = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyBoughtAnimals();
         for (Animal animal : animals) {
             if (animal.getName().equalsIgnoreCase(animalName)) {

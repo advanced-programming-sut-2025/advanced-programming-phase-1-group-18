@@ -928,6 +928,14 @@ Watering_Can/Gold_Watering_Can.png
 Watering_Can/Iridium_Watering_Can.png
 Watering_Can/Steel_Watering_Can.png
 Watering_Can/Watering_Can.png
+animals/chicken.png
+animals/cow.png
+animals/dinosaur.png
+animals/duck.png
+animals/goat.png
+animals/pig.png
+animals/rabbit.png
+animals/sheep.png
 avatar.png
 bullet.png
 cookingRecipes/cook menu.jpg

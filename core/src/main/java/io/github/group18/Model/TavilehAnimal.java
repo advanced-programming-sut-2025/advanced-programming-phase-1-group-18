@@ -4,7 +4,7 @@ import io.github.group18.enums.TavilehAnimalEnums;
 
 import java.util.HashMap;
 
-public class TavilehAnimal extends Animal
+public class TavilehAnimal extends Animal implements PictureModel
 {
     public Tavileh getLivePlace() {
         return LivePlace;
@@ -28,5 +28,14 @@ public class TavilehAnimal extends Animal
     public void adaptMap(HashMap<Integer ,Integer> LakeMap)
     {
 
+    }
+
+    public String getImagePath() {
+        return type.getImagePath();
+    }
+
+    @Override
+    public String getPath() {
+        return type.getImagePath();
     }
 }
