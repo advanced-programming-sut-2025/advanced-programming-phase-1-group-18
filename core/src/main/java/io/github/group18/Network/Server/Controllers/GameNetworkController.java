@@ -32,13 +32,17 @@ public class GameNetworkController {
             case get_kashi_using_x_y:
                 int x = message.getIntFromBody("x");
                 int y = message.getIntFromBody("y");
-                System.out.println("client wants the block " + x + " " + y);
+//                if (x == 0 && y <= 3) {
+//                    System.out.println("client wants the block " + x + " " + y);
+//                }
                 HashMap<String, Object> map = new HashMap<>();
                 Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
                 map.put("ShokhmZadeh", kashi.isShokhmZadeh());
                 map.put("Enterance", kashi.getEnterance());
                 map.put("Walkable", kashi.getWalkable());
-
+//                if (x == 0 && y <= 3) {
+//                    System.out.println("exception block 0 ta 3 " + kashi.isShokhmZadeh() + " " + kashi.getEnterance() + " " + kashi.getWalkable());
+//                }
                 if (kashi.getInside() == null) {
                     map.put("inside", "null");
                 } else {
@@ -100,16 +104,16 @@ public class GameNetworkController {
                 break;
             case get_players:
                 HashMap<String, Object> map4 = new HashMap<>();
-                map4.put("numberOfPlayers", App.getCurrentGame().getPlayers().size());
+                map4.put("numberOfPlayers", String.valueOf(App.getCurrentGame().getPlayers().size()));
                 System.out.println("numOfPlayers: " + App.getCurrentGame().getPlayers().size());
                 int count = 1;
                 for (Player player : App.getCurrentGame().getPlayers()) {
-                    map4.put(String.valueOf(count), player.getX());
-                    map4.put(String.valueOf(count + 1), player.getY());
-                    map4.put(String.valueOf(count + 2), player.getMovingDirection());
-                    map4.put(String.valueOf(count + 3), player.getState());
-                    map4.put(String.valueOf(count + 4), player.getFaintTimer());
-                    map4.put(String.valueOf(count + 5), player.getEatingTimer());
+                    map4.put(String.valueOf(count), String.valueOf(player.getX()));
+                    map4.put(String.valueOf(count + 1), String.valueOf(player.getY()));
+                    map4.put(String.valueOf(count + 2), String.valueOf(player.getMovingDirection()));
+                    map4.put(String.valueOf(count + 3), String.valueOf(player.getState()));
+                    map4.put(String.valueOf(count + 4), String.valueOf(player.getFaintTimer()));
+                    map4.put(String.valueOf(count + 5), String.valueOf(player.getEatingTimer()));
                     map4.put(String.valueOf(count + 6), player.getFoodBuff());
                     count += 7;
                 }
@@ -128,9 +132,7 @@ public class GameNetworkController {
                 ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
                 for (ClientConnectionThread connection : connections) {
                     if (clientConnectionIsaPlayer(connection, users)) {
-                        HashMap<String, Object> body = new HashMap<>();
-//                        body.put("game", App.getCurrentGame());
-                        Message msg = new Message(body, Message.Type.load_game_screen, Message.Menu.game_menu);
+                        Message msg = new Message(new HashMap<>(), Message.Type.load_game_screen, Message.Menu.game_menu);
                         connection.sendMessage(msg);
                     }
                 }

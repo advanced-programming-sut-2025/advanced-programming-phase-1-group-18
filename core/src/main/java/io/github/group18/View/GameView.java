@@ -221,7 +221,8 @@ public class GameView {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
-//        renderPlayer();
+//            renderPlayer();
+
 //        renderInMyHandToolPlayer();
 //        renderInventory();
 //        renderClock();
@@ -352,7 +353,7 @@ public class GameView {
         }
     }
 
-    private void renderTiles() {
+    private boolean renderTiles() {
 
         OrthographicCamera cam = camera;
         int tileSize = ClientModel.TILE_SIZE;
@@ -369,18 +370,19 @@ public class GameView {
 
 
         if (!(startX == newstartX && startY == newstartY && endX == newendX && endY == newendY)) {
-            fillTheMap(newstartX, newstartY, endX, endY);
+            fillTheMap(newstartX, newstartY, newendX, newendY);
             startX = newstartX;
             startY = newstartY;
             endX = newendX;
             endY = newendY;
         }
 
-        System.out.println("doing the triple with " + startX + " " + startY + " to " + endX + " " + endY);
+//        System.out.println("doing the triple with " + startX + " " + startY + " to " + endX + " " + endY);
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
 //        renderNPC(startX, startY, endX, endY);
+        return true;
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
@@ -446,7 +448,7 @@ public class GameView {
                         Object inside = tile.getInside();
 
                         if (inside == null) {
-                            if (tile.isShokhmZadeh()) {
+                            if (tile != null && tile.isShokhmZadeh()) {
                                 float drawX = x * tileSize;
                                 float drawY = y * tileSize;
                                 batch.draw(GameAssetManager.getGameAssetManager().getSoilTexture(), drawX, drawY, tileSize, tileSize);
@@ -608,16 +610,24 @@ public class GameView {
     private void renderPlayer() {
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        int numberOfPlayers = response.getIntFromBody("numberOfPlayers");
+        System.out.println("Full response body: " + response.getBody().toString());
+        String numberOfPlayersSTR = response.getFromBody("numberOfPlayers");
+        int numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
         System.out.println("client received numofplayers: " + numberOfPlayers);
         int count = 1;
         for (int i = 0; i < numberOfPlayers; i++) {
-            double first = response.getFromBody(String.valueOf(count));
-            double second = response.getFromBody(String.valueOf(count + 1));
-            int movingDirection = response.getIntFromBody(String.valueOf(count + 2));
-            int state = response.getIntFromBody(String.valueOf(count + 3));
-            float faintTimer = response.getFromBody(String.valueOf(count + 4));
-            float eatingTimer = response.getFromBody(String.valueOf(count + 5));
+            String firstSTR = response.getFromBody(String.valueOf(count));
+            double first = Double.parseDouble(firstSTR);
+            String secondSTR = response.getFromBody(String.valueOf(count + 1));
+            double second = Double.parseDouble(secondSTR);
+            String movingDirectionSTR = response.getFromBody(String.valueOf(count + 2));
+            int movingDirection = Integer.parseInt(movingDirectionSTR);
+            String stateSTR = response.getFromBody(String.valueOf(count + 3));
+            int state = Integer.parseInt(stateSTR);
+            String faintTimerSTR = response.getFromBody(String.valueOf(count + 4));
+            float faintTimer = Float.parseFloat(faintTimerSTR);
+            String eatingTimerSTR = response.getFromBody(String.valueOf(count + 5));
+            float eatingTimer = Float.parseFloat(eatingTimerSTR);
             Gson gson = new Gson();
             Object buffObj = response.getFromBody(String.valueOf(count + 6));
             String buffSTR = gson.toJson(buffObj);
@@ -881,9 +891,7 @@ public class GameView {
             startY = Math.max(0, startY);
             endX = Math.min(ClientModel.mapWidth - 1, endX);
             endY = Math.min(ClientModel.mapHeight - 1, endY);
-
             fillTheMap(startX, startY, endX, endY);
-
 //            HashMap<String, Object> body = new HashMap<>();
 //            body.put("startX", startX);
 //            body.put("startY", startY);
@@ -917,7 +925,7 @@ public class GameView {
         if (ClientModel.getPlayer() != null) {
             float playerX = (float) ClientModel.getPlayer().getX() * ClientModel.TILE_SIZE;
             float playerY = (float) ClientModel.getPlayer().getY() * ClientModel.TILE_SIZE;
-
+//            System.out.println("here is player x and y " + playerX / ClientModel.TILE_SIZE + " " + playerY / ClientModel.TILE_SIZE);
             // Directly set camera position to player position
             camera.position.set(playerX, playerY, 0);
 
@@ -943,21 +951,32 @@ public class GameView {
                 body.put("y", j);
                 Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-
+                if (i == 0 && j <= 3) {
+                    System.out.println("server response for first 3 blocks " + response.getBody().toString());
+                }
                 Boolean shokhmZadehObj = response.getFromBody("ShokhmZadeh");
                 Boolean entranceObj = response.getFromBody("Enterance");
                 Boolean walkableObj = response.getFromBody("Walkable");
                 String insideState = response.getFromBody("inside");
-
+                System.out.println("here is kashi ( " + i + " " + j + " ) that we got from server " + shokhmZadehObj + " " + entranceObj + " " + walkableObj);
+                if (shokhmZadehObj == null) {
+                    shokhmZadehObj = false;
+                }
+                if (entranceObj == null) {
+                    entranceObj = false;
+                }
+                if (walkableObj == null) {
+                    walkableObj = true;
+                }
                 Kashi tile = new Kashi();
                 tile.setShokhmZadeh(shokhmZadehObj);
                 tile.setEnterance(entranceObj);
                 tile.setWalkable(walkableObj);
 
                 if ("full".equals(insideState)) {
-                    System.out.println("inside: " + response.getFromBody("inside"));
-                    System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
-                    System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
+//                    System.out.println("inside: " + response.getFromBody("inside"));
+//                    System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
+//                    System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
                     String className = response.getFromBody("insideCLASS");
                     Object insideRaw = response.getFromBody("insideOBJ");
 
