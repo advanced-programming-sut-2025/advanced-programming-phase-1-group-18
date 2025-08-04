@@ -1,0 +1,24 @@
+cheat add 10000 dollars
+
+#BlackSmith
+walk -l 75,230
+
+#JojoMartMarket
+walk -l 200,230
+
+#PierresGeneralStore
+walk -l 325,230
+
+#CarpentersShop
+walk -l 450,230
+
+#FishShop
+walk -l 575,230
+
+#MarniesRanchMarket
+walk -l 700,230
+
+#TheStardropSaloonMarket
+walk -l 825,230
+
+
