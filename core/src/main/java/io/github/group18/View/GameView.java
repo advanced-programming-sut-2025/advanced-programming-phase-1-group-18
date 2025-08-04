@@ -230,10 +230,9 @@ public class GameView {
 
         renderInMyHandToolPlayer();
         renderInventory();
-        if (clockTimeUpdated) {
-            renderClock();
-            clockTimeUpdated = false;
-        }
+        renderClock();
+        clockTimeUpdated = false;
+
         energy.render(batch);
 //        renderMarkets();
         renderKalagEffect(batch);
@@ -673,7 +672,7 @@ public class GameView {
         while (response.getType() != Message.Type.get_dateTime) {
             response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
-        System.out.println("server response for datetime(render brightness) " + response.getBody().toString());
+//        System.out.println("server response for datetime(render brightness) " + response.getBody().toString());
         Gson gson = new Gson();
         Object dateTimeObj = response.getFromBody("dateTime");
         String dateTimeStr = gson.toJson(dateTimeObj);
@@ -719,12 +718,13 @@ public class GameView {
         while (response.getType() != Message.Type.get_dateTime) {
             response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
-        System.out.println("server response for datetime(renderclock) " + response.getBody().toString());
+//        System.out.println("server response for datetime(renderclock) " + response.getBody().toString());
         Gson gson = new Gson();
         Object dateTimeObj = response.getFromBody("dateTime");
         String dateTimeStr = gson.toJson(dateTimeObj);
         DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
         if (time != null) {
+            System.out.println("3");
             clock.render(batch, time, camera);
         }
 

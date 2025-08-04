@@ -107,7 +107,6 @@ public class ClockController {
         clockArrow.setRotation(-((dateTime.getHour() - 9) * 12 + 180));
         rawClock.draw(batch);
         clockArrow.draw(batch);
-
         // Draw season and weather
         switch (dateTime.getSeason()) {
             case "Spring":
@@ -128,7 +127,7 @@ public class ClockController {
         while (response.getType() != Message.Type.get_weather) {
             response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
-        System.out.println("server response for weather " + response.getBody().toString());
+//        System.out.println("server response for weather " + response.getBody().toString());
         WeatherEnum weather = WeatherEnum.valueOf(response.getFromBody("weather"));
         switch (weather) {
             case RAIN:
@@ -144,23 +143,20 @@ public class ClockController {
                 Storm.draw(batch);
                 break;
         }
-
-        //Server-TODO
         String dayOfWeek = GameMenuController.dayOfWeek(ClientModel.getPlayer(), dateTime.getDay()).isSuccessful() ?
             GameMenuController.dayOfWeek(ClientModel.getPlayer(), dateTime.getDay()).getMessage() : "Monday";
-
         hour.draw(batch, dateTime.getHour() + " o'clock",
             clockX + 27 * scale, clockY + 23 * scale + hour.getLineHeight());
         day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
             clockX + 27 * scale, clockY + 45 * scale + hour.getLineHeight());
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", ClientModel.getPlayer().getOwner().getUsername());
-        Message send1 = new Message(new HashMap<>(), Message.Type.get_gold, Message.Menu.game);
+        Message send1 = new Message(body, Message.Type.get_gold, Message.Menu.game);
         Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
         while (response1 == null || response1.getType() != Message.Type.get_gold) {
             response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
         }
-        System.out.println("server response for gold " + response.getBody().toString());
+//        System.out.println("server response for gold " + response.getBody().toString());
         int goldd = response1.getIntFromBody("gold");
         gold.draw(batch, String.valueOf(goldd),
             clockX + 17 * scale, clockY + 3 * scale + gold.getLineHeight());
