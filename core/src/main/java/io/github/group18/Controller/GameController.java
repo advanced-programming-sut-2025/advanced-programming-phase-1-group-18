@@ -9,6 +9,7 @@ import io.github.group18.Model.Result;
 import io.github.group18.View.GameMenu;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameController {
     private boolean escapePressed = false;
@@ -55,7 +56,17 @@ public class GameController {
                     System.out.println(result.getMessage());
                 }
             } else if (tool instanceof Scythe scythe) {
-                String result = scythe.use(kashi);
+                ArrayList<Kashi> map = new ArrayList<>();
+                map.add(game.getMap().get(x - 1).get(y - 1));
+                map.add(game.getMap().get(x - 1).get(y));
+                map.add(game.getMap().get(x - 1).get(y + 1));
+                map.add(game.getMap().get(x).get(y - 1));
+                map.add(game.getMap().get(x).get(y));
+                map.add(game.getMap().get(x).get(y + 1));
+                map.add(game.getMap().get(x + 1).get(y - 1));
+                map.add(game.getMap().get(x + 1).get(y));
+                map.add(game.getMap().get(x + 1).get(y + 1));
+                String result = scythe.use(map, kashi);
                 System.out.println(result);
             } else if (tool instanceof Shear shear) {
                 String result = shear.use(kashi);
@@ -66,7 +77,7 @@ public class GameController {
                 String result = fishingPole.use();
                 System.out.println(result);
             } else if (tool instanceof WateringCan wateringCan) {
-                String result = wateringCan.use(kashi,x,y);
+                String result = wateringCan.use(kashi, x, y);
                 System.out.println(result);
             }
         }

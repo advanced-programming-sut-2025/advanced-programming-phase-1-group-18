@@ -441,7 +441,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         player1.setOwner(App.getCurrentUser());
         player1.setEnergy(200);
         NewGame.getPlayers().add(player1);
-        //System.out.println("");
+//        System.out.println("player1: " + player1.getOwner().getUsername());
         for (String username : usernames) {
             Player player = new Player();
             for (User user : App.getUsers_List()) {
@@ -450,6 +450,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                     player.setOwner(user);
                     player.setEnergy(200);
                     NewGame.getPlayers().add(player);
+//                    System.out.println("players: " + player.getOwner().getUsername());
                     break;
                 }
             }
@@ -463,7 +464,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
             NewGame.getPlayers().get(i).getOwner().setTimesPlayed(NewGame.getPlayers().get(i).getOwner().getTimesPlayed() + 1);
-            //System.out.println(NewGame.getPlayers().get(i).getOwner().getUsername() + " " + NewGame.getPlayers().get(i).getOwner().getTimesPlayed());
+            RegisterMenuController.saveUsersToFile();
         }
 
         for (int i = 0; i < NewGame.getPlayers().size(); i++) {
@@ -473,7 +474,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             } else {
                 player = player1;
             }
-            System.out.println("Choosing map for: " + player.getOwner().getUsername());
+            System.out.println("Choosing map forni: " + player.getOwner().getUsername());
 
 //            int number = -1;
 //            number = scanner.nextInt();
@@ -569,7 +570,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             Gson gson = new Gson();
             try (FileWriter writer = new FileWriter("users.json")) {
                 gson.toJson(App.getUsers_List(), writer);
-                System.out.println("Users saved to users.json");
+//                System.out.println("Users saved to users.json");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -608,7 +609,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             Gson gson = new Gson();
             try (FileWriter writer = new FileWriter("users.json")) {
                 gson.toJson(App.getUsers_List(), writer);
-                System.out.println("Users saved to users.json");
+//                System.out.println("Users saved to users.json");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -894,6 +895,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             } else if (threshold >= 1) {
                 shouldRemove = rand.nextInt(100) < 25; // 25%
             }
+
+//            shouldRemove = true;
 
             if (shouldRemove) {
                 gameView.startRedFlash();
@@ -2132,10 +2135,18 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 //                craftInfo.append("Base Health: ").append(crop1.getBaseHealth()).append("\n");
                 //                craftInfo.append("Season: ").append(crop1.getSeason()).append("\n");
                 craftInfo.append("Can Become Giant: ").append(crop1.isCanBecomeGiant() ? "TRUE" : "FALSE");
-                popUpMessage(gameController, craftInfo.toString());
-                batch.begin();
-                font.draw(batch, craftInfo.toString(), 100, 100);
-                batch.end();
+                com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new com.badlogic.gdx.scenes.scene2d.ui.Dialog("Crop Information", GameAssetManager.getGameAssetManager().getSkin());
+
+                com.badlogic.gdx.scenes.scene2d.ui.Label content = new com.badlogic.gdx.scenes.scene2d.ui.Label(craftInfo, GameAssetManager.getGameAssetManager().getSkin());
+                content.setWrap(true);
+                content.setWidth(400);
+
+                dialog.getContentTable().add(content).width(400).pad(10);
+                dialog.getContentTable().row();
+
+                dialog.button("Close", true);
+
+                dialog.show(gameController.getGameMenu().getStage());
                 return new Result(true, craftInfo.toString());
             }
         }
@@ -3461,9 +3472,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
 
-        for (Friendship friendships :currentGame.getFriendships()){
-            for(Player player : App.getCurrentGame().getPlayers()){
-                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+        for (Friendship friendships : currentGame.getFriendships()) {
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                if ((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)) {
                     friendship = friendships;
                 }
             }
@@ -3480,7 +3491,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, "message sent successfully");
     }
 
-    public static  Result talkHistory(String username) {
+    public static Result talkHistory(String username) {
         if (isFainted()) {
             return new Result(false, "You are fainted!");
         }
@@ -3490,9 +3501,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         StringBuilder result = new StringBuilder();
         Friendship friendship = null;
         friendship = getFriendship(targetPlayer, currentPlayer);
-        for (Friendship friendships :currentGame.getFriendships()){
-            for(Player player : App.getCurrentGame().getPlayers()){
-                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+        for (Friendship friendships : currentGame.getFriendships()) {
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                if ((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)) {
                     friendship = friendships;
                 }
             }
@@ -3524,16 +3535,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
 
-        int dx = (int)Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy =(int)Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to talk");
         }
 
         Friendship friendship = getFriendship(targetPlayer, currentPlayer);
-        for (Friendship friendships :currentGame.getFriendships()){
-            for(Player player : App.getCurrentGame().getPlayers()){
-                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+        for (Friendship friendships : currentGame.getFriendships()) {
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                if ((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)) {
                     friendship = friendships;
                 }
             }
@@ -3732,8 +3743,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             return new Result(false, "Player not found");
         }
 
-        int dx = (int)Math.abs(currentPlayer.getX() - targetPlayer.getX());
-        int dy = (int)Math.abs(currentPlayer.getY() - targetPlayer.getY());
+        int dx = (int) Math.abs(currentPlayer.getX() - targetPlayer.getX());
+        int dy = (int) Math.abs(currentPlayer.getY() - targetPlayer.getY());
         if (!(dx <= 1 && dy <= 1)) {
             return new Result(false, "You are not near to talk");
         }
@@ -3794,7 +3805,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     }
 
 
-    public static  Result askMarriage(String userName, String ringName) {
+    public static Result askMarriage(String userName, String ringName) {
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         Player destinationPlayer = App.getCurrentGame().getPlayerByUsername(userName);
 
@@ -3818,9 +3829,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
         Friendship friendship = getFriendship(destinationPlayer, currentPlayer);
         Game currentGame = App.getCurrentGame();
-        for (Friendship friendships :currentGame.getFriendships()){
-            for(Player player : App.getCurrentGame().getPlayers()){
-                if((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)){
+        for (Friendship friendships : currentGame.getFriendships()) {
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                if ((!player.equals(currentPlayer)) && friendships.isBetween(currentPlayer, player)) {
                     friendship = friendships;
                 }
             }

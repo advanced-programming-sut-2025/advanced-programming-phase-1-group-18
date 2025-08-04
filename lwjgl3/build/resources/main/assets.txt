@@ -342,15 +342,15 @@ Crops/Starfruit_Stage_4.png
 Crops/Starfruit_Stage_5.png
 Crops/Starfruit_Stage_6.png
 Crops/Stir_Fry.png
+Crops/StrawBerry1.png
+Crops/StrawBerry2.png
+Crops/StrawBerry3.png
+Crops/StrawBerry4.png
+Crops/StrawBerry5.png
+Crops/StrawBerry6.png
+Crops/StrawBerry7.png
 Crops/Strawberry.png
-Crops/Strawberry_Seeds.png
-Crops/Strawberry_Stage_1.png
-Crops/Strawberry_Stage_2.png
-Crops/Strawberry_Stage_3.png
-Crops/Strawberry_Stage_4.png
-Crops/Strawberry_Stage_5.png
-Crops/Strawberry_Stage_6.png
-Crops/Strawberry_Stage_7.png
+Crops/StrawberrySeeds.png
 Crops/Stuffing.png
 Crops/Sugar.png
 Crops/SummerSpangle.png
@@ -610,6 +610,7 @@ Foraging/Yellow_Juice.png
 Foraging/Yellow_Pickles.png
 Greenhouse/greenhouse-broken.png
 Greenhouse/greenhouse.png
+Jazz_Seeds.png
 JojaCola.jpg
 Logo_of_Stardew_Valley.png
 MainMenuBackground.jpg
@@ -687,6 +688,7 @@ NPC/HARVEY.jpeg
 NPC/LEAH.jpeg
 NPC/ROBIN.png
 NPC/SEBASTIAN.jpeg
+PierresGeneralStoreMarket.png
 RegisterImage.jpg
 SkillsIcon/FarmingSkill.png
 SkillsIcon/FishingSkill.png
@@ -702,6 +704,7 @@ Skin/pixthulhu-ui.atlas
 Skin/pixthulhu-ui.json
 Skin/pixthulhu-ui.png
 Stone.png
+StrawberrySeeds.png
 Tools/36_Backpack.png
 Tools/Auto-Grabber.png
 Tools/Auto-Grabber_Full.png

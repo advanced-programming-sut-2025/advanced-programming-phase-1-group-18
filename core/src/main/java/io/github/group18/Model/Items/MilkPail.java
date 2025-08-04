@@ -4,7 +4,7 @@ import io.github.group18.Controller.GameMenuController;
 
 import io.github.group18.Model.*;
 
-public class MilkPail extends Tool implements Name, Price {
+public class MilkPail extends Tool implements Name, Price, PictureModel {
     protected int EnergyUsage = 4;
     protected String usage;
     protected int price;
@@ -84,5 +84,10 @@ public class MilkPail extends Tool implements Name, Price {
     @Override
     public int getCorrectPrice() {
         return price;
+    }
+
+    @Override
+    public String getPath() {
+        return "Tools/Milk_Pail.png";
     }
 }

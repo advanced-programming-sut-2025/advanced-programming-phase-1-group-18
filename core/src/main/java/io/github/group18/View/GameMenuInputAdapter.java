@@ -134,8 +134,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
         //gift Window
-        if(keycode == Input.Keys.G)
-        {
+        if (keycode == Input.Keys.G) {
             Game game = App.getCurrentGame();
             Player currentPlayer = game.getCurrentPlayer();
             GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
@@ -156,8 +155,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if(keycode == Input.Keys.J)
-        {
+        if (keycode == Input.Keys.J) {
             Game game = App.getCurrentGame();
             Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -169,8 +167,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if (keycode == Input.Keys.X)
-        {
+        if (keycode == Input.Keys.X) {
             Game game = App.getCurrentGame();
             Player currentPlayer = game.getPlayers().get(game.getIndexPlayerinControl());
             Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -205,9 +202,21 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
+        if (keycode == Input.Keys.CONTROL_RIGHT) {
+            Dialog dialog = new Dialog("Greenhouse Requirements", GameAssetManager.getGameAssetManager().getSkin());
 
+            Label content = new Label("In order to build a Greenhouse,\nyou need 500 wood and 1000 gold!",
+                GameAssetManager.getGameAssetManager().getSkin());
+            content.setWrap(true);
+            content.setWidth(400);
 
+            dialog.getContentTable().add(content).width(400).pad(10);
+            dialog.getContentTable().row();
 
+            dialog.button("Close", true);
+
+            dialog.show(gameController.getGameMenu().getStage());
+        }
 
 
         return true;
@@ -245,7 +254,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 Game.getCurrentPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
                 openNpcDialog(screenX, screenY);
-                openNpcPage(screenX,screenY);
+                openNpcPage(screenX, screenY);
                 return true;
             }
             if (button == Input.Buttons.RIGHT) {
@@ -476,31 +485,31 @@ public class GameMenuInputAdapter extends InputAdapter {
             } else {
                 GameView gameView = gameController.getGameMenu().getGameView();
                 if (kashi.getInside() instanceof BlackSmithMarket) {
-                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(), Gdx.input.getInputProcessor()));
+                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(), Gdx.input.getInputProcessor(), "BlackSmith"));
                     Gdx.input.setInputProcessor(gameView.getBlackSmith().getStage());
                 }
                 if (kashi.getInside() instanceof CarpentersShopMarket) {
-                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(), Gdx.input.getInputProcessor()));
+                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(), Gdx.input.getInputProcessor(), "CarpentersShop"));
                     Gdx.input.setInputProcessor(gameView.getCarpentersShop().getStage());
                 }
                 if (kashi.getInside() instanceof FishShopMarket) {
-                    gameView.setFishShop(new StoreUI(new FishShopController(), Gdx.input.getInputProcessor()));
+                    gameView.setFishShop(new StoreUI(new FishShopController(), Gdx.input.getInputProcessor(), "FishShop"));
                     Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
                 }
                 if (kashi.getInside() instanceof JojoMartMarket) {
-                    gameView.setJojaMart(new StoreUI(new JojaMartController(), Gdx.input.getInputProcessor()));
+                    gameView.setJojaMart(new StoreUI(new JojaMartController(), Gdx.input.getInputProcessor(), "JojoMartMarket"));
                     Gdx.input.setInputProcessor(gameView.getJojaMart().getStage());
                 }
                 if (kashi.getInside() instanceof MarniesRanchMarket) {
-                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(), Gdx.input.getInputProcessor()));
+                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(), Gdx.input.getInputProcessor(), "MarniesRanchMarket"));
                     Gdx.input.setInputProcessor(gameView.getMarniesRanch().getStage());
                 }
                 if (kashi.getInside() instanceof PierresGeneralStoreMarket) {
-                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(), Gdx.input.getInputProcessor()));
+                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(), Gdx.input.getInputProcessor(), "PierresGeneralStore"));
                     Gdx.input.setInputProcessor(gameView.getPirresGeneralStore().getStage());
                 }
                 if (kashi.getInside() instanceof TheStardropSaloonMarket) {
-                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(), Gdx.input.getInputProcessor()));
+                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(), Gdx.input.getInputProcessor(), "TheStardropSaloonMarket"));
                     Gdx.input.setInputProcessor(gameView.getTheStarDropSalooon().getStage());
                 }
                 //goto store
@@ -625,6 +634,26 @@ public class GameMenuInputAdapter extends InputAdapter {
             public void onNumberEntered(int number) {
                 Result result = GameMenuController.sell(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getItemBySlot(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().getSelectedSlot()), number);
                 System.out.println("Sell: " + result.getMessage());
+                if (result.isSuccessful()) {
+                    // You sold number of items
+                    Dialog successDialog = new Dialog("Success", GameAssetManager.getGameAssetManager().getSkin());
+                    Label successLabel = new Label("You sold " + number + " item(s)!", GameAssetManager.getGameAssetManager().getSkin());
+                    successLabel.setWrap(true);
+                    successLabel.setWidth(400);
+                    successDialog.getContentTable().add(successLabel).width(400).pad(10);
+                    successDialog.button("Close", true);
+                    successDialog.show(stage);
+                } else {
+                    // You don't have number of items
+                    Dialog errorDialog = new Dialog("Error", GameAssetManager.getGameAssetManager().getSkin());
+                    Label errorLabel = new Label("You don't have " + number + " item(s) to sell. Or you are not near a Satl", GameAssetManager.getGameAssetManager().getSkin());
+                    errorLabel.setWrap(true);
+                    errorLabel.setWidth(400);
+                    errorDialog.getContentTable().add(errorLabel).width(400).pad(10);
+                    errorDialog.button("Close", true);
+                    errorDialog.show(stage);
+                }
+
                 Gdx.input.setInputProcessor(originalInputProcessor);
             }
 
@@ -718,7 +747,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         );
         gameController.getGameMenu().getStage().addActor(cheatWindow);
     }
-
 
 
     //for building
@@ -850,43 +878,37 @@ public class GameMenuInputAdapter extends InputAdapter {
 
         Game currentGame = App.getCurrentGame();
         Object what = App.getCurrentGame().getMap().get(tileX).get(tileY).getInside();
-        if(what instanceof Tavileh)
-        {
+        if (what instanceof Tavileh) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("barn", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());
             gameController.getGameMenu().getStage().addActor(animalsWindow);
         }
-        if(what instanceof BigBarn)
-        {
+        if (what instanceof BigBarn) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("bigbarn", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());
             gameController.getGameMenu().getStage().addActor(animalsWindow);
         }
-        if(what instanceof DeluxeBarn)
-        {
+        if (what instanceof DeluxeBarn) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("deluxebarn", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());
             gameController.getGameMenu().getStage().addActor(animalsWindow);
         }
-        if(what instanceof Cage)
-        {
+        if (what instanceof Cage) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("coop", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());
             gameController.getGameMenu().getStage().addActor(animalsWindow);
         }
-        if(what instanceof BigCoop)
-        {
+        if (what instanceof BigCoop) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("bigcoop", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());
             gameController.getGameMenu().getStage().addActor(animalsWindow);
         }
-        if(what instanceof DeluxeCoop)
-        {
+        if (what instanceof DeluxeCoop) {
             Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
             AnimalsInBuildingWindow animalsWindow = new AnimalsInBuildingWindow("deluxecoop", GameAssetManager.getGameAssetManager().getSkin(),
                 gameController.getGameMenu().getStage());

@@ -86,6 +86,20 @@ public class Player extends User {
         Scythe scythe = new Scythe();
         this.inventory.addItem(scythe, 1);
 
+        FishingPole fishingPole = new FishingPole();
+        fishingPole.setJens("training");
+        fishingPole.setEnergyUsage(5);
+        this.inventory.addItem(fishingPole, 1);
+
+        Shear shear = new Shear();
+        shear.setPrice(100);
+        this.inventory.addItem(shear, 1);
+
+        MilkPail milkPail = new MilkPail();
+        milkPail.setPrice(100);
+        this.inventory.addItem(milkPail, 1);
+
+
 //        TrashCan trashCan = new TrashCan("initial");
 //        this.inventory.addItem(trashCan, 1);
     }
@@ -421,9 +435,8 @@ public class Player extends User {
         if (!(tiles.get(newX).get(newY).getInside() instanceof Lake || tiles.get(newX).get(newY).getInside() instanceof Tavileh ||
             tiles.get(newX).get(newY).getInside() instanceof BigBarn || tiles.get(newX).get(newY).getInside() instanceof DeluxeBarn ||
             tiles.get(newX).get(newY).getInside() instanceof Cage || tiles.get(newX).get(newY).getInside() instanceof BigCoop || tiles.get(newX).get(newY).getInside() instanceof DeluxeCoop
-        || tiles.get(newX).get(newY).getInside() instanceof CarpentersShopMarket || tiles.get(newX).get(newY).getInside() instanceof MarniesRanchMarket || tiles.get(newX).get(newY).getInside() instanceof PierresGeneralStoreMarket  || tiles.get(newX).get(newY).getInside() instanceof BlackSmithMarket || tiles.get(newX).get(newY).getInside() instanceof JojoMartMarket || tiles.get(newX).get(newY).getInside() instanceof TheStardropSaloonMarket
-         || tiles.get(newX).get(newY).getInside() instanceof Animal))
-        {
+            || tiles.get(newX).get(newY).getInside() instanceof CarpentersShopMarket || tiles.get(newX).get(newY).getInside() instanceof MarniesRanchMarket || tiles.get(newX).get(newY).getInside() instanceof PierresGeneralStoreMarket || tiles.get(newX).get(newY).getInside() instanceof BlackSmithMarket || tiles.get(newX).get(newY).getInside() instanceof JojoMartMarket || tiles.get(newX).get(newY).getInside() instanceof TheStardropSaloonMarket
+            || tiles.get(newX).get(newY).getInside() instanceof Animal)) {
             x += dx;
             y += dy;
             if (dx != 0 || dy != 0) {
@@ -442,6 +455,7 @@ public class Player extends User {
             faintTimer = 0f;
         }
     }
+
     public void eat() {
         if (state != EATING_STATE) {
             state = EATING_STATE;

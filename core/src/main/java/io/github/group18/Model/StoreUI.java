@@ -28,18 +28,18 @@ public class StoreUI<T> {
     private Window currentDialog;
     private InputProcessor inputProcessor;
 
-    public StoreUI(MarketController<T> controller, InputProcessor inputProcessor) {
+    public StoreUI(MarketController<T> controller, InputProcessor inputProcessor, String name) {
         this.marketController = controller;
         this.stage = new Stage(new ScreenViewport());
         this.skin = GameAssetManager.getGameAssetManager().getSkin();
         this.inputProcessor = inputProcessor;
-        createMainStoreUI();
+        createMainStoreUI(name);
     }
 
-    private void createMainStoreUI() {
+    private void createMainStoreUI(String name) {
         stage.clear();
 
-        Window storeWindow = new Window("Store Menu", skin);
+        Window storeWindow = new Window(name, skin);
         storeWindow.setModal(true);
         storeWindow.setMovable(false);
 
@@ -50,12 +50,11 @@ public class StoreUI<T> {
             public void clicked(InputEvent event, float x, float y) {
                 showAllItems = !showAllItems;
                 toggleButton.setText(showAllItems ? "Show Available" : "Show All");
-                refreshItemList();
+                refreshItemList(name);
             }
         });
 
         Label goldLabel = new Label("Gold: " + getPlayerGold(), skin);
-
 
 
         Table headerTable = new Table(skin);
@@ -77,7 +76,7 @@ public class StoreUI<T> {
                         resultDialog.show(stage);
 
                         if (result.isSuccessful()) {
-                            refreshItemList();
+                            refreshItemList(name);
                         }
                     });
 
@@ -90,7 +89,7 @@ public class StoreUI<T> {
         storeWindow.add(headerTable).row();
 
         itemTable = new Table(skin);
-        refreshItemList();
+        refreshItemList(name);
 
         ScrollPane scrollPane = new ScrollPane(itemTable, skin);
         scrollPane.setFadeScrollBars(false);
@@ -115,7 +114,7 @@ public class StoreUI<T> {
         stage.addActor(storeWindow);
     }
 
-    private void refreshItemList() {
+    private void refreshItemList(String name) {
         itemTable.clear();
 
         HashMap<T, Integer> stock = showAllItems ?
@@ -148,17 +147,22 @@ public class StoreUI<T> {
             image.setColor(isAvailable ? Color.WHITE : Color.GRAY);
 
             if (item instanceof Name) {
-                Label label = new Label(((Name) item).getCorrectName(), skin);
+                Label label;
+                try {
+                    label = new Label(((Name) item).getCorrectName(), skin);
+                } catch (Exception e) {
+                    label = new Label("item", skin);
+                }
                 if (!isAvailable) {
                     label.setColor(Color.GRAY);
                 }
-                row.add(label).width(300).pad(20,20,20,20);
+                row.add(label).width(300).pad(20, 20, 20, 20);
             } else {
-                Label label = new Label("unknown", skin);
+                Label label = new Label("item", skin);
                 if (!isAvailable) {
                     label.setColor(Color.GRAY);
                 }
-                row.add(label).width(300).pad(20,20,20,20);
+                row.add(label).width(300).pad(20, 20, 20, 20);
             }
 
             if (item instanceof Price) {
@@ -166,13 +170,13 @@ public class StoreUI<T> {
                 if (!isAvailable) {
                     label.setColor(Color.GRAY);
                 }
-                row.add(label).width(80).pad(20,20,20,20);
+                row.add(label).width(80).pad(20, 20, 20, 20);
             } else {
-                Label label = new Label("-unknown" + "g", skin);
+                Label label = new Label("100" + "g", skin);
                 if (!isAvailable) {
                     label.setColor(Color.GRAY);
                 }
-                row.add(label).width(80).pad(20,20,20,20);
+                row.add(label).width(80).pad(20, 20, 20, 20);
             }
 
             if (quantity > 0) {
@@ -180,14 +184,14 @@ public class StoreUI<T> {
                 row.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        showPurchaseDialog(item);
+                        showPurchaseDialog(item, name);
                     }
                 });
             } else {
                 System.out.println("is this gray?");
                 row.setColor(Color.GRAY);
             }
-            row.pad(20,20,20,20);
+            row.pad(20, 20, 20, 20);
             itemTable.add(row).fillX();
             itemTable.row();
         }
@@ -209,7 +213,7 @@ public class StoreUI<T> {
             .getGold();
     }
 
-    private void showPurchaseDialog(T item) {
+    private void showPurchaseDialog(T item, String namee) {
         if (currentDialog != null) {
             currentDialog.remove();
         }
@@ -218,12 +222,12 @@ public class StoreUI<T> {
         if (item instanceof Name) {
             name = ((Name) item).getCorrectName();
         } else {
-            name = "unknown";
+            name = "item";
         }
         if (item instanceof Price) {
             price = ((Price) item).getCorrectPrice();
         } else {
-            price = -69;
+            price = 100;
         }
         currentDialog = new Window("Buy " + name, skin);
         currentDialog.setModal(true);
@@ -275,7 +279,7 @@ public class StoreUI<T> {
 
         Table quantityTable = new Table(skin);
         quantityTable.add(minusButton).width(100);
-        quantityTable.add(quantityLabel).width(100).pad(20,20,20,20);
+        quantityTable.add(quantityLabel).width(100).pad(20, 20, 20, 20);
         quantityTable.add(plusButton).width(100);
 
         currentDialog.add(quantityTable).pad(20, 20, 20, 20).row();
@@ -287,8 +291,8 @@ public class StoreUI<T> {
                 Result result = marketController.purchase(name, String.valueOf(quantity[0]));
                 if (result.isSuccessful()) {
                     currentDialog.remove();
-                    refreshItemList();
-                    createMainStoreUI();
+                    refreshItemList(namee);
+                    createMainStoreUI(namee);
                 } else {
                     Dialog errorDialog = new Dialog("Error", skin);
                     errorDialog.text(result.getMessage());
