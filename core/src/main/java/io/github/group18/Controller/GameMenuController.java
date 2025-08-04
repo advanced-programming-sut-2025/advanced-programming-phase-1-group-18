@@ -3097,7 +3097,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, sb.toString());
     }
 
-    public Result shepherdInAnimals(String animalName) {
+    public static Result shepherdInAnimals(String animalName) {
         ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
         //errors
         boolean founded = MarniesRanchController.IsAnimalNameUnique(animalName);
@@ -3109,9 +3109,16 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         if (!(animal.isOutside())) {
             return new Result(false, "Your entered animal is inside!");
         } else {
-
+            System.out.println(animal.getXofAnimal());
+            System.out.println(animal.getYofAnimal());
+            int x = animal.getXofAnimal();
+            int y = animal.getYofAnimal();
+            if (x >= 0 && y >= 0) {
+                App.getCurrentGame().getMap().get(x).get(y).setInside(null);
+            }
             animal.setXofAnimal(-1);
             animal.setYofAnimal(-1);
+            animal.setOutside(false);
             String where = animal.getWhereDoILive();
             if (animal instanceof CageAnimal) {
                 switch (where) {
@@ -3149,7 +3156,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         break;
                 }
             }
-            return new Result(true, "Your animal successfully moved to his Cage/Tavileh!");
+            return new Result(true, "Your animal successfully moved to its Cage/Barn!");
         }
     }
 

@@ -20,7 +20,7 @@ public class AnimalsInBuildingWindow extends Window {
         this.setModal(true);
         this.setMovable(true);
         this.setResizable(false);
-        this.setSize(1100, 800);
+        this.setSize(1100, 420);
         this.setPosition(
             Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f,
             Gdx.graphics.getHeight() / 2f - this.getHeight() / 2f
@@ -33,8 +33,9 @@ public class AnimalsInBuildingWindow extends Window {
         animalTable.add("Type").left().padRight(40);
         animalTable.add("Price").left().padRight(40);
         animalTable.add("Outside?").left().padRight(40);
+        animalTable.add("Navazesh?").left().padRight(40);
         animalTable.add("Sell").left().padRight(20);
-        animalTable.add("Send Out").left();
+        animalTable.add("Action").left();
         animalTable.row();
 
         List<Animal> allAnimals = App.getCurrentGame()
@@ -58,26 +59,55 @@ public class AnimalsInBuildingWindow extends Window {
 
                     animalTable.add(tavilehAnimal.isOutside() ? "Yes" : "No").left().padRight(40);
 
+                    animalTable.add(tavilehAnimal.isNavazesh() ? "Yes" : "No").left().padRight(40);
+
                     // Sell Button
                     TextButton sellButton = new TextButton("Sell", skin);
                     sellButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            sellAnimal(tavilehAnimal.getName());
+                            sellAnimal(tavilehAnimal.getName(), stage, skin);
                         }
                     });
                     animalTable.add(sellButton).left().padRight(20);
 
-                    // Send Out Button
-                    TextButton sendOutButton = new TextButton("Send Out", skin);
-                    sendOutButton.addListener(new ClickListener() {
+                    TextButton navazeshButton = new TextButton("Navazesh", skin);
+                    navazeshButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            MoveAnimalWindow moveWindow = new MoveAnimalWindow(tavilehAnimal.getName(), skin, stage);
-                            stage.addActor(moveWindow);
+                            tavilehAnimal.setNavazesh(true);
                         }
                     });
-                    animalTable.add(sendOutButton).left();
+                    animalTable.add(navazeshButton).left().padRight(20);
+                    // Action Button: Send Out or Send In
+                    if (tavilehAnimal.isOutside()) {
+                        TextButton sendInButton = new TextButton("Send In", skin);
+                        sendInButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                Result result = GameMenuController.shepherdInAnimals(tavilehAnimal.getName());
+                                Dialog dialog = new Dialog("Result", skin);
+                                dialog.text(result.getMessage());
+                                dialog.button("OK");
+                                dialog.show(stage);
+                                if (result.isSuccessful()) {
+                                    remove();
+                                    new AnimalsInBuildingWindow(buildingType, skin, stage);
+                                }
+                            }
+                        });
+                        animalTable.add(sendInButton).left();
+                    } else {
+                        TextButton sendOutButton = new TextButton("Send Out", skin);
+                        sendOutButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                MoveAnimalWindow moveWindow = new MoveAnimalWindow(tavilehAnimal, skin, stage);
+                                stage.addActor(moveWindow);
+                            }
+                        });
+                        animalTable.add(sendOutButton).left();
+                    }
 
                     animalTable.row();
                 }
@@ -105,11 +135,15 @@ public class AnimalsInBuildingWindow extends Window {
         return new Texture(Gdx.files.internal(path));
     }
 
-    private void sellAnimal(String animalName) {
+    private void sellAnimal(String animalName, Stage stage, Skin skin) {
         Result result = GameMenuController.sellAnimal(animalName);
-        System.out.println(result.getMessage());
+        Dialog dialog = new Dialog("Sell Result", skin);
+        dialog.text(result.getMessage());
+        dialog.button("OK");
+        dialog.show(stage);
         if (result.isSuccessful()) {
-            remove(); // می‌تونی اینو به refresh کردن جدول تغییر بدی
+            remove();
+            stage.addActor(new AnimalsInBuildingWindow(getTitleLabel().getText().toString().replace("Animals in ", ""), skin, stage)); // refresh
         }
     }
 }

@@ -3,14 +3,23 @@ package io.github.group18.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.group18.Controller.CarpentersShopController;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import io.github.group18.enums.TavilehAnimalEnums;
+
+
 public class MoveAnimalWindow extends Window {
-    public MoveAnimalWindow(String animalName, Skin skin, Stage stage) {
-        super("Move " + animalName + " Outside", skin);
+    public MoveAnimalWindow(TavilehAnimal tavilehAnimal, Skin skin, Stage stage) {
+        super("Move " + tavilehAnimal.getName() + " Outside", skin);
 
         this.setModal(true);
         this.setMovable(true);
@@ -34,7 +43,7 @@ public class MoveAnimalWindow extends Window {
                     int xPos = Integer.parseInt(xField.getText());
                     int yPos = Integer.parseInt(yField.getText());
 
-                    Result result = GameMenuController.shepherdOutAnimals(animalName, xPos, yPos);
+                    Result result = GameMenuController.shepherdOutAnimals(tavilehAnimal.getName(), xPos, yPos);
                     Dialog dialog = new Dialog("Result", skin);
                     dialog.text(result.getMessage());
                     dialog.button("OK");
@@ -42,7 +51,40 @@ public class MoveAnimalWindow extends Window {
 
                     if (result.isSuccessful()) {
                         remove();
+                        if (tavilehAnimal.getType().equals(TavilehAnimalEnums.Cow)) {
+                            Texture cowTexture = new Texture(Gdx.files.internal("animalSprite/cow_sheet.png"));
+                            TextureRegion[][] frames = TextureRegion.split(cowTexture, 32, 32);
+
+                            // چک کردن فریم‌های null (اختیاری)
+                            for (int row = 0; row < frames.length; row++) {
+                                for (int col = 0; col < frames[row].length; col++) {
+                                    if (frames[row][col] == null) {
+                                        System.out.println("⚠️ Null در frames[" + row + "][" + col + "]");
+                                    }
+                                }
+                            }
+
+                            TextureRegion[] walkDownFrames = new TextureRegion[4];
+                            for (int i = 0; i < 4; i++) {
+                                walkDownFrames[i] = frames[2][i];
+                            }
+
+                            Animation<TextureRegion> walkAnim = new Animation<>(0.6f, walkDownFrames);
+
+                            int startX = CarpentersShopController.getA();
+                            int startY = CarpentersShopController.getB();
+                            Vector2 start = new Vector2(startX * 64, startY * 64);
+                            Vector2 target = new Vector2(xPos * 64, yPos * 64);
+
+                            AnimalActor cowActor = new AnimalActor(walkAnim, start, target);
+                            cowActor.setScale(0.5f);
+                            stage.addActor(cowActor);
+
+                            float duration = 8f;
+                            cowActor.addAction(Actions.moveTo(target.x, target.y, duration));
+                        }
                     }
+
                 } catch (NumberFormatException e) {
                     Dialog error = new Dialog("Error", skin);
                     error.text("Invalid number format for X or Y!");

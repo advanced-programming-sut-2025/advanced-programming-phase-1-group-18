@@ -14,15 +14,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import io.github.group18.Model.App;
+import io.github.group18.Model.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import io.github.group18.Model.Game;
-import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.Items.CraftingItem;
+import io.github.group18.Model.Items.Item;
 
 import javax.swing.event.ChangeEvent;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -53,6 +56,8 @@ public class InventoryView {
     //for map
     private Texture minimapTexture;
     private Image minimapImage;
+
+    private final Map<Item, TextureRegion> itemTextures = new HashMap<>();
 
     public InventoryView(Skin skin) {
         this.skin = skin;
@@ -290,73 +295,87 @@ public class InventoryView {
 
 
     private void showInventoryTab() {
+        contentTable.clear();
+
+        loadInventoryTextures();
+
         Table inventoryTable = new Table();
+        inventoryTable.left().top();
+
+        Map<Item, Pair<Integer, Integer>> items = Game.getCurrentPlayer().getInventory().getItems();
+
+        int maxSlots = 60;
 
         TextureRegion slotTextureRegion = new TextureRegion(slotTexture);
-        TextureRegion axeTextureRegion = new TextureRegion(GameAssetManager.getGameAssetManager().getAxe());
-        TextureRegion pickaceTextureRegion = new TextureRegion(GameAssetManager.getGameAssetManager().getPickaxe());
-        TextureRegion sctheTextureRegion = new TextureRegion(GameAssetManager.getGameAssetManager().getScythe());
+        Texture highlightTexture = new Texture(Gdx.files.internal("game/tiles/highlight.png"));
 
-
-        for (int i = 0; i < 60; i++) {
-
+        for (int i = 0; i < maxSlots; i++) {
             Stack slotStack = new Stack();
 
-            slotStack.add(new Image(slotTextureRegion));
+            Image slotBg = new Image(slotTextureRegion);
+            slotStack.add(slotBg);
 
-            if(i == 0)
-            {
-
-                slotStack.add(new Image(axeTextureRegion));
-
-            }
-
-            else if (i == 1)
-            {
-
-                slotStack.add(new Image(pickaceTextureRegion));
-
-            }
-
-            else if (i == 2)
-            {
-
-                slotStack.add(new Image(sctheTextureRegion));
-
-            }
-
-            final int slotIndex = i;
-
-            slotStack.addListener(new ClickListener() {
+            slotBg.addListener(new ClickListener() {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    //TODO : in future
-                    System.exit(0);
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    if (pointer == -1) {
+                        slotBg.setDrawable(new TextureRegionDrawable(new TextureRegion(highlightTexture)));
+                    }
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    if (pointer == -1) {
+                        slotBg.setDrawable(new TextureRegionDrawable(slotTextureRegion));
+                    }
                 }
             });
 
-            inventoryTable.add(slotStack).size(48, 48).pad(5);
 
-            if ((i + 1) % 6 == 0)
-            {
-                inventoryTable.row();
+            for (Map.Entry<Item, Pair<Integer, Integer>> entry : items.entrySet()) {
+                Item item = entry.getKey();
+                int slotIndex = entry.getValue().second;
+                int quantity = entry.getValue().first;
+
+                if (slotIndex == i) {
+                    TextureRegion itemTex = itemTextures.get(item);
+                    if (itemTex != null) {
+                        Image itemImage = new Image(itemTex);
+                        itemImage.setSize(32, 32);
+                        slotStack.add(itemImage);
+
+                        Label qtyLabel = new Label(String.valueOf(quantity), skin);
+                        qtyLabel.setFontScale(0.8f);
+                        qtyLabel.setColor(Color.WHITE);
+                        Container<Label> qtyContainer = new Container<>(qtyLabel);
+                        qtyContainer.align(Align.bottomRight);
+                        qtyContainer.fill();
+                        qtyContainer.pad(2);
+                        slotStack.add(qtyContainer);
+                    }
+                    break;
+                }
             }
 
+            inventoryTable.add(slotStack).size(48, 48).pad(5);
+            if ((i + 1) % 8 == 0)
+                inventoryTable.row();
         }
 
         ScrollPane scrollPane = new ScrollPane(inventoryTable, skin);
-
         scrollPane.setFadeScrollBars(false);
-
         scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setForceScroll(false, true);
+        scrollPane.setScrollbarsOnTop(true);
+        scrollPane.layout();
 
-        scrollPane.setSize(350, 300);
-
-        contentTable.clearChildren();
-
-        contentTable.add(scrollPane).size(350, 300).expand().center();
-
+        contentTable.add(scrollPane)
+            .size(400, 300)
+            .expand()
+            .center();
     }
+
+
 
 
     private void showCraftTab() {
@@ -470,6 +489,27 @@ public class InventoryView {
 
     }
 
+
+
+    //
+
+
+
+
+    private void loadInventoryTextures() {
+        itemTextures.clear();
+        for (Item item : Game.getCurrentPlayer().getInventory().getItems().keySet()) {
+            if (item instanceof CraftingItem craftingItem) {
+                itemTextures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager()
+                    .getCraftingAtlas().findRegion(craftingItem.getCraftingItem().name())));
+            } else if (item instanceof PictureModel pictureModel) {
+                itemTextures.put(item, new TextureRegion(new Texture(Gdx.files.internal(pictureModel.getPath()))));
+            } else {
+                itemTextures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getPickaxe()));
+            }
+        }
+    }
+
     public void update() {
         if (!inventoryWindow.isVisible()) return;
 
@@ -556,7 +596,7 @@ public class InventoryView {
         inventoryWindow.clearActions();
         inventoryWindow.getColor().a = 0f;
         inventoryWindow.setVisible(true);
-
+        selectTab(0);
         inventoryWindow.addAction(sequence(
             fadeIn(0.6f),
             run(() -> {
