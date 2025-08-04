@@ -296,7 +296,7 @@ public class InventoryView {
 
     private void showInventoryTab() {
         contentTable.clear();
-
+//
         loadInventoryTextures();
 
         Table inventoryTable = new Table();
