@@ -1,0 +1,5 @@
+#only works for 4 players and you do it with second player
+
+cheat add item -n wood -c 10000
+cheat add 10000 dollars
+greenhouse build
