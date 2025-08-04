@@ -148,14 +148,14 @@ public class GameView {
                                 tex = new TextureRegion(new Texture(Gdx.files.internal(pictureModel.getPath())));
                                 texturesOnDrug.put(pictureModel.getPath(), tex);
                                 debigniggers++;
-                                System.out.println(debigniggers);
+//                                System.out.println(debigniggers);
                             }
                             if (inside instanceof GreenHouse greenHouse && !greenHouse.isStatus()) {
                                 tex = GameAssetManager.getGameAssetManager().getGreenhouseBroken();
                             }
                             textures.put(inside, tex);
                         } catch (Exception e) {
-                            System.out.println(inside.getClass().getSimpleName());
+//                            System.out.println(inside.getClass().getSimpleName());
                             textures.put(inside, GameAssetManager.getGameAssetManager().getGrass());
                         }
                     } else {
@@ -252,7 +252,7 @@ public class GameView {
         }
 
         if (currentGame.isSebastian_view() || currentGame.isHarvey_view() ||
-        currentGame.isLeah_view() || currentGame.isRobin_view() || currentGame.isAbigail_view()) {
+            currentGame.isLeah_view() || currentGame.isRobin_view() || currentGame.isAbigail_view()) {
             npcView.render();
         }
     }
@@ -360,10 +360,11 @@ public class GameView {
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
                     Kashi tile = tiles.get(x).get(y);
-                    Object inside = tile.getInside();
-//                    if (inside instanceof BlackSmithMarket) {
-//                        System.out.println("are we even here1");
-//                    }
+                    if (tile.isShokhmZadeh() && !(tile.getInside() instanceof AllCrop)) {
+                        float drawX = x * tileSize;
+                        float drawY = y * tileSize;
+                        batch.draw(GameAssetManager.getGameAssetManager().getSoilTexture(), drawX, drawY, tileSize, tileSize);
+                    }
                     //this is for blocks that are covered with big pics so they dont draw anything
                 } else {
                     boolean flag = false;
@@ -484,15 +485,15 @@ public class GameView {
         }
 
         Class<?> clazz = kashi.getInside().getClass();
-        if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
-            kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
-            return;
-        }
+//        if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
+//            kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+//            return;
+//        }
 
         while (x >= 0) {
             Kashi currentTile = tiles.get(x).get(y);
             if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                !currentTile.getInside().getClass().equals(clazz)) {
                 break;
             }
             x--;
@@ -502,7 +503,7 @@ public class GameView {
         while (y >= 0) {
             Kashi currentTile = tiles.get(x).get(y);
             if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                !currentTile.getInside().getClass().equals(clazz)) {
                 break;
             }
             y--;
@@ -518,7 +519,7 @@ public class GameView {
         for (int i = startX; i < tiles.size(); i++) {
             Kashi rowTile = tiles.get(i).get(startY);
             if (rowTile == null || rowTile.getInside() == null ||
-                !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                !rowTile.getInside().getClass().equals(clazz)) {
                 break;
             }
             widthcounter++;
@@ -526,7 +527,7 @@ public class GameView {
             for (currentY = startY; currentY < tiles.get(i).size(); currentY++) {
                 Kashi colTile = tiles.get(i).get(currentY);
                 if (colTile == null || colTile.getInside() == null ||
-                    !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                    !colTile.getInside().getClass().equals(clazz)) {
                     break;
                 }
                 heightcounter++;
@@ -540,7 +541,7 @@ public class GameView {
             for (int i = startX; i < tiles.size(); i++) {
                 Kashi rowTile = tiles.get(i).get(startY);
                 if (rowTile == null || rowTile.getInside() == null ||
-                    !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                    !rowTile.getInside().getClass().equals(clazz)) {
                     break;
                 }
 
@@ -548,7 +549,7 @@ public class GameView {
                     if (i == startX && currentY == startY) continue;
                     Kashi colTile = tiles.get(i).get(currentY);
                     if (colTile == null || colTile.getInside() == null ||
-                        !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                        !colTile.getInside().getClass().equals(clazz)) {
                         break;
                     }
 
@@ -595,7 +596,7 @@ public class GameView {
             batch.draw(currentFrame, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE),
                 game.TILE_SIZE, game.TILE_SIZE * 2);
         }
-        
+
     }
 
     private void renderBrightness() {

@@ -66,7 +66,7 @@ public class ProfileMenu extends AppMenu implements Screen {
         this.passwordLabel = new Label("New Password:", skin);
         this.passwordTextField = new TextField("", skin);
         this.applyPassword = new TextButton("Apply", skin);
-        this.randomPassword = new TextButton("Random Password",skin);
+        this.randomPassword = new TextButton("RPass",skin);
 
         this.oldPasswordLabel = new Label("Old Password:", skin);
         this.oldpasswordTextField = new TextField("", skin);

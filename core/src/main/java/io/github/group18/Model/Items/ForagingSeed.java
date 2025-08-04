@@ -1,16 +1,12 @@
 package io.github.group18.Model.Items;
 
-import io.github.group18.Model.App;
-import io.github.group18.Model.Cord;
-import io.github.group18.Model.Kashi;
-import io.github.group18.Model.Name;
+import io.github.group18.Model.*;
 import io.github.group18.enums.ForagingSeedsEnums;
 
 import java.util.ArrayList;
 
 
-public class ForagingSeed extends Seed implements Name,Price
-{
+public class ForagingSeed extends Seed implements Name, Price, PictureModel {
     ForagingSeedsEnums type;
     private int price;
 
@@ -44,11 +40,22 @@ public class ForagingSeed extends Seed implements Name,Price
 
     @Override
     public String getCorrectName() {
-        return type.toString().toLowerCase().replace(" ","");
+        return type.toString().toLowerCase().replace(" ", "");
     }
 
     @Override
     public int getCorrectPrice() {
         return this.price;
+    }
+
+    @Override
+    public String getPath() {
+        if (type == ForagingSeedsEnums.JazzSeeds) {
+            return "Jazz_Seeds.png";
+        } else if (type == ForagingSeedsEnums.StrawberrySeeds) {
+            return "StrawberrySeeds.png";
+        } else {
+            return "Tools/Gold_Pan.png";
+        }
     }
 }

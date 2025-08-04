@@ -274,7 +274,7 @@ public class RegisterMenuController implements MenuEnter, ShowCurrentMenu {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter("users.json")) {
             gson.toJson(App.getUsers_List(), writer);
-            System.out.println("Users saved to users.json");
+//            System.out.println("Users saved to users.json");
         } catch (IOException e) {
             e.printStackTrace();
         }

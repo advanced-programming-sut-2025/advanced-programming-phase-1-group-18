@@ -7,7 +7,7 @@ import io.github.group18.enums.TreeSeedEnums;
 
 import java.util.HashMap;
 
-public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
+public class PierresGeneralStoreMarket implements adaptMapMarket, PictureModel {
 
     HashMap<Object, Integer> Stock = new HashMap<>();
     private boolean largePackBougth = false;
@@ -110,7 +110,7 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
         Fertilizer fertilizer1 = new Fertilizer();
         fertilizer1.setName("Speed-Gro");
         fertilizer1.setPrice(100);
-        Stock.put(fertilizer1,Integer.MAX_VALUE);
+        Stock.put(fertilizer1, Integer.MAX_VALUE);
 
         TreeSeed treeSeed = new TreeSeed();
         treeSeed.setType(TreeSeedEnums.AppleSapling);
@@ -421,6 +421,6 @@ public class PierresGeneralStoreMarket  implements adaptMapMarket, PictureModel{
 
     @Override
     public String getPath() {
-        return "Store.png";
+        return "PierresGeneralStoreMarket.png";
     }
 }

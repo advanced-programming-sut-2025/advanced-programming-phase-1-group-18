@@ -4,7 +4,8 @@ import io.github.group18.enums.ForagingTreesEnums;
 
 import java.util.ArrayList;
 
-public class ForagingTree extends Tree implements PictureModel{
+public class
+ForagingTree extends Tree implements PictureModel {
     ForagingTreesEnums type;
 
     public ForagingTreesEnums getType() {

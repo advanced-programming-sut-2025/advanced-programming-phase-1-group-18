@@ -95,9 +95,17 @@ public class Hoe extends Tool implements Name, Price, PictureModel {
 
 
     public boolean IsValidForUsing(Kashi kashi) {
-        if (!(kashi.isShokhmZadeh()) && kashi.getInside() == null) {
+        if (!kashi.isShokhmZadeh() && (kashi.getInside() == null || kashi.getInside() instanceof GreenHouse)) {
             return true;
         }
+//        System.out.println("false dadam mashti " + kashi.isShokhmZadeh());
+//        if(kashi.getInside() == null) {
+//            System.out.println("kashi insidesh nulle");
+//        }
+//        if(kashi.getInside() instanceof GreenHouse)
+//        {
+//            System.out.println("inside kashi greenhouse");
+//        }
         return false;
 
     }

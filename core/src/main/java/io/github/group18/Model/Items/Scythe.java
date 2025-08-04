@@ -3,22 +3,23 @@ package io.github.group18.Model.Items;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
-public class Scythe extends Tool implements Name, Price ,PictureModel{
+import java.util.ArrayList;
+
+public class Scythe extends Tool implements Name, Price, PictureModel {
     protected int EnergyUsage;
     protected String usage;
 
-    public String use(Kashi kashi) {
+    public String use(ArrayList<Kashi> kashis, Kashi kashi) {
         Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
-
         if (player.getEnergy() >= getEnergyUsage()) {
             if (isValidForScythe(kashi)) {
                 player.setEnergy(player.getEnergy() - getEnergyUsage());
                 Object plant = kashi.getInside();
-                if (plant instanceof AllTree) {
-                    if (((AllTree) plant).getTotalHarvestTime() == ((AllTree) plant).getDaysGrowCounter()) {
-//                            player.getInventory().addItem(((Tre)),1);
+                if (plant instanceof AllTree allTree) {
+                    if (allTree.getTotalHarvestTime() == allTree.getDaysGrowCounter()) {
+//                        player.getInventory().addItem(allTree, 1);
                         player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
-                        ((AllTree) plant).setDaysGrowCounter(0);
+                        allTree.setDaysGrowCounter(0);
                         GameMenuController.checkSkilRecipe();
 
                         return "Fruit caught";
@@ -27,7 +28,19 @@ public class Scythe extends Tool implements Name, Price ,PictureModel{
                     }
                 } else if (plant instanceof AllCrop) {
                     if (((AllCrop) plant).getTotalHarvestTime() == ((AllCrop) plant).getDaysGrowCounter()) {
-                        player.getInventory().addItem(((AllCrop) plant), 1);
+                        int count = 0;
+                        for (Kashi kashi1 : kashis) {
+                            if (kashi1 != null && kashi1.getInside() != null && kashi1.getInside() instanceof AllCrop allCrop) {
+                                count++;
+                                if (allCrop.isOneTime()) {
+                                    kashi1.setInside(null);
+                                } else {
+                                    allCrop.setDaysGrowCounter(0);
+                                }
+
+                            }
+                        }
+                        player.getInventory().addItem(((AllCrop) plant), count);
                         player.getFarmingSkill().setLevel(player.getFarmingSkill().getLevel() + 5);
                         if (((AllCrop) plant).isOneTime()) {
                             kashi.setInside(null);

@@ -202,7 +202,7 @@ public class ProfileMenuController implements MenuEnter, ShowCurrentMenu {
             issues = issues.substring(0, issues.length() - 2);
             return new Result(false, "Weak password: must contain " + issues);
         }
-        App.getCurrentUser().setPassword(newPassword);
+        App.getCurrentUser().setPassword(RegisterMenuController.hashPasswordSHA256(newPassword));
         return new Result(true, "Password changed successfully");
     }
 

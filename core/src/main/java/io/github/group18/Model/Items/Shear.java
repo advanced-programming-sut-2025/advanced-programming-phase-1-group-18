@@ -3,7 +3,7 @@ package io.github.group18.Model.Items;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 
-public class Shear extends Tool implements Name,Price
+public class Shear extends Tool implements Name,Price,PictureModel
 {
     protected int EnergyUsage = 4;
     protected String usage;
@@ -82,5 +82,10 @@ public class Shear extends Tool implements Name,Price
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String getPath() {
+        return "Tools/Shears.png";
     }
 }
