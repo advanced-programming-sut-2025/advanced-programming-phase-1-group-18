@@ -724,7 +724,6 @@ public class GameView {
         String dateTimeStr = gson.toJson(dateTimeObj);
         DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
         if (time != null) {
-            System.out.println("3");
             clock.render(batch, time, camera);
         }
 
