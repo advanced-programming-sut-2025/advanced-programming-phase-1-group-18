@@ -22,6 +22,8 @@ public class CarpentersShopController extends GameMenuController implements Menu
 //        return counter;
 //    }
 
+    private static int a=0;
+    private static int b=0;
     @Override
     public HashMap<Object, Integer> getStock() {
         return App.getCurrentGame().getCarpentersShopMarket().getStock();
@@ -62,7 +64,8 @@ public class CarpentersShopController extends GameMenuController implements Menu
                         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().setMyTavileh(new Tavileh());
 
                         Tavileh playerTavileh = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getMyTavileh();
-
+                        a=x-7;
+                        b=y-3;
                         ArrayList<Cord> cords = new ArrayList<>(List.of(
                                 new Cord(x, y), new Cord(x + 1, y), new Cord(x + 2, y), new Cord(x + 3, y), new Cord(x + 4, y), new Cord(x + 5, y), new Cord(x + 6, y),
                                 new Cord(x, y + 1), new Cord(x + 1, y + 1), new Cord(x + 2, y + 1), new Cord(x + 3, y + 1), new Cord(x + 4, y + 1), new Cord(x + 5, y + 1), new Cord(x + 6, y + 1),
@@ -527,6 +530,15 @@ public class CarpentersShopController extends GameMenuController implements Menu
                 System.out.println("Invalid menu");
                 break;
         }
+    }
+
+    public static int getA()
+    {
+        return a;
+    }
+    public static int getB()
+    {
+        return b;
     }
 
 }
