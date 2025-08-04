@@ -533,9 +533,6 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void handleInventoryVisibility() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         ClientModel.getPlayer().setShowInventory(!ClientModel.getPlayer().isShowInventory());
     }
 

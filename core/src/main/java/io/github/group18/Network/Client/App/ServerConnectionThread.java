@@ -49,7 +49,7 @@ public class ServerConnectionThread extends ConnectionThread {
             sendMessage(ChangeMenuController.handleMessage(message));
             return true;
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
-            System.out.println("server is telling us to go to game screen " + message.getBody().toString());
+//            System.out.println("server is telling us to go to game screen " + message.getBody().toString());
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
@@ -59,7 +59,7 @@ public class ServerConnectionThread extends ConnectionThread {
                 }
             });
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.add_player_to_Clientmain) {
-            System.out.println("server game us a player to add to clientMain " + message.getBody().toString());
+//            System.out.println("server game us a player to add to clientMain " + message.getBody().toString());
             Gson gson1 = new Gson();
             Object userObj1 = message.getFromBody("owner");
             String userjson1 = gson1.toJson(userObj1);

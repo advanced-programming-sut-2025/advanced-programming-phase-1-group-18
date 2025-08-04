@@ -86,8 +86,13 @@ public class GameView {
     int endX;
     int endY;
     ArrayList<ArrayList<Kashi>> tiles = new ArrayList<>();
+    boolean playerPosUpdated = true;
+    boolean clockTimeUpdated = true;
 
     public GameView(GameController gameController) {
+//        ClientModel.getServerConnectionThread().readMessage();
+//        ClientModel.getServerConnectionThread().readMessage();
+//        ClientModel.getServerConnectionThread().readMessage();
         this.gameController = gameController;
         batch = new SpriteBatch();
         clock = new ClockController();
@@ -196,9 +201,6 @@ public class GameView {
     }
 
     private void loadInventoryItems() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
 
         for (Item item : ClientModel.getPlayer().getInventory().getItems().keySet()) {
             if (item instanceof CraftingItem) {
@@ -221,15 +223,21 @@ public class GameView {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
-//            renderPlayer();
+//        if (playerPosUpdated) {
+        renderPlayer();
+//            playerPosUpdated = false;
+//        }
 
-//        renderInMyHandToolPlayer();
-//        renderInventory();
-//        renderClock();
+        renderInMyHandToolPlayer();
+        renderInventory();
+        if (clockTimeUpdated) {
+            renderClock();
+            clockTimeUpdated = false;
+        }
         energy.render(batch);
 //        renderMarkets();
         renderKalagEffect(batch);
-//        renderBrightness();
+        renderBrightness();
         walking = false;
         batch.end();
     }
@@ -328,9 +336,6 @@ public class GameView {
     }
 
     private void renderInMyHandToolPlayer() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         Player player = ClientModel.getPlayer();
         Tool tool = player.getInMyHandTool();
         if (tool != null) {
@@ -610,10 +615,13 @@ public class GameView {
     private void renderPlayer() {
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        System.out.println("Full response body: " + response.getBody().toString());
+        while (response.getType() != Message.Type.get_players) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+//        System.out.println("Full response body: " + response.getBody().toString());
         String numberOfPlayersSTR = response.getFromBody("numberOfPlayers");
         int numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
-        System.out.println("client received numofplayers: " + numberOfPlayers);
+//        System.out.println("client received numofplayers: " + numberOfPlayers);
         int count = 1;
         for (int i = 0; i < numberOfPlayers; i++) {
             String firstSTR = response.getFromBody(String.valueOf(count));
@@ -660,10 +668,17 @@ public class GameView {
     }
 
     private void renderBrightness() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
-        int currentHour = game.getCurrentDateTime().getHour();
+        Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        while (response.getType() != Message.Type.get_dateTime) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+        System.out.println("server response for datetime(render brightness) " + response.getBody().toString());
+        Gson gson = new Gson();
+        Object dateTimeObj = response.getFromBody("dateTime");
+        String dateTimeStr = gson.toJson(dateTimeObj);
+        DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
+        int currentHour = time.getHour();
         float brightness = 1f;
 
         // Calculate darkness intensity (6PM-6AM)
@@ -701,6 +716,10 @@ public class GameView {
     private void renderClock() {
         Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        while (response.getType() != Message.Type.get_dateTime) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+        System.out.println("server response for datetime(renderclock) " + response.getBody().toString());
         Gson gson = new Gson();
         Object dateTimeObj = response.getFromBody("dateTime");
         String dateTimeStr = gson.toJson(dateTimeObj);
@@ -712,13 +731,9 @@ public class GameView {
     }
 
     private void renderInventory() {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         if (ClientModel.getPlayer().isShowInventory()) {
             loadInventoryItems();
             Player player = ClientModel.getPlayer();
-            Inventory playerInventory = player.getInventory();
             Map<Item, Pair<Integer, Integer>> inventory = player.getInventory().getItems();
             int selectedSlot = player.getInventory().getSelectedSlot();
 
@@ -951,14 +966,17 @@ public class GameView {
                 body.put("y", j);
                 Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-                if (i == 0 && j <= 3) {
-                    System.out.println("server response for first 3 blocks " + response.getBody().toString());
+                while (response.getType() != Message.Type.get_kashi_using_x_y) {
+                    response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
                 }
+//                if (i == 0 && j <= 3) {
+//                    System.out.println("server response for first 3 blocks " + response.getBody().toString());
+//                }
                 Boolean shokhmZadehObj = response.getFromBody("ShokhmZadeh");
                 Boolean entranceObj = response.getFromBody("Enterance");
                 Boolean walkableObj = response.getFromBody("Walkable");
                 String insideState = response.getFromBody("inside");
-                System.out.println("here is kashi ( " + i + " " + j + " ) that we got from server " + shokhmZadehObj + " " + entranceObj + " " + walkableObj);
+//                System.out.println("here is kashi ( " + i + " " + j + " ) that we got from server " + shokhmZadehObj + " " + entranceObj + " " + walkableObj);
                 if (shokhmZadehObj == null) {
                     shokhmZadehObj = false;
                 }

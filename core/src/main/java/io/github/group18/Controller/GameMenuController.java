@@ -1195,11 +1195,11 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public Result dayOfWeek(Player playerrr) {
+    public static Result dayOfWeek(Player playerrr, int day) {
         if (isFainted(playerrr)) {
             return new Result(false, "You are fainted!");
         }
-        int dayOfWeek = App.getCurrentGame().getCurrentDateTime().getDay() % 7;
+        int dayOfWeek = day % 7;
         return switch (dayOfWeek) {
             case 0 -> new Result(true, "Sun");
             case 1 -> new Result(true, "Mon");

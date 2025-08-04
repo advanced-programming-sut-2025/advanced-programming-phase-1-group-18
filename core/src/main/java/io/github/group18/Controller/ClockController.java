@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
-import io.github.group18.Model.App;
-import io.github.group18.Model.DateTime;
-import io.github.group18.Model.GameAssetManager;
-import io.github.group18.Model.Player;
+import io.github.group18.Model.*;
+import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.Message;
+import io.github.group18.enums.WeatherEnum;
+
+import java.util.HashMap;
 
 public class ClockController {
     private BitmapFont hour;
@@ -121,7 +123,14 @@ public class ClockController {
                 Winter.draw(batch);
                 break;
         }
-        switch (App.getCurrentGame().getCurrentWeather()) {
+        Message send = new Message(new HashMap<>(), Message.Type.get_weather, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        while (response.getType() != Message.Type.get_weather) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+        System.out.println("server response for weather " + response.getBody().toString());
+        WeatherEnum weather = WeatherEnum.valueOf(response.getFromBody("weather"));
+        switch (weather) {
             case RAIN:
                 Rain.draw(batch);
                 break;
@@ -136,21 +145,25 @@ public class ClockController {
                 break;
         }
 
-        // Draw text
-        GameMenuController menuController = App.getGameMenuController();
         //Server-TODO
-//        String dayOfWeek = menuController.dayOfWeek().isSuccessful() ?
-//            menuController.dayOfWeek().getMessage() : "Monday";
+        String dayOfWeek = GameMenuController.dayOfWeek(ClientModel.getPlayer(), dateTime.getDay()).isSuccessful() ?
+            GameMenuController.dayOfWeek(ClientModel.getPlayer(), dateTime.getDay()).getMessage() : "Monday";
 
         hour.draw(batch, dateTime.getHour() + " o'clock",
             clockX + 27 * scale, clockY + 23 * scale + hour.getLineHeight());
-        //Server-TODO
-//        day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
-//            clockX + 27*scale, clockY + 45*scale + hour.getLineHeight());
-//Server-TODO
-//        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-//        gold.draw(batch, String.valueOf(currentPlayer.getGold()),
-//            clockX + 17*scale, clockY + 3*scale + gold.getLineHeight());
+        day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
+            clockX + 27 * scale, clockY + 45 * scale + hour.getLineHeight());
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("username", ClientModel.getPlayer().getOwner().getUsername());
+        Message send1 = new Message(new HashMap<>(), Message.Type.get_gold, Message.Menu.game);
+        Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+        while (response1 == null || response1.getType() != Message.Type.get_gold) {
+            response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+        }
+        System.out.println("server response for gold " + response.getBody().toString());
+        int goldd = response1.getIntFromBody("gold");
+        gold.draw(batch, String.valueOf(goldd),
+            clockX + 17 * scale, clockY + 3 * scale + gold.getLineHeight());
 
         // Restore original projection matrix
         batch.setProjectionMatrix(originalMatrix);

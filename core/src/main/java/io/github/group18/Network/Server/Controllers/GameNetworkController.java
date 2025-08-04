@@ -121,6 +121,21 @@ public class GameNetworkController {
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
                 clientConnectionThread.sendMessage(send4);
                 break;
+            case get_gold:
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(message.getFromBody("username"))) {
+                        HashMap map5 = new HashMap<>();
+                        map5.put("gold", player.getGold());
+                        clientConnectionThread.sendMessage(new Message(map5, Message.Type.get_gold, Message.Menu.game));
+                    }
+                }
+                break;
+            case get_weather:
+                HashMap<String, Object> map6 = new HashMap<>();
+                map6.put("weather", App.getCurrentGame().getCurrentWeather());
+//                System.out.println("server is giving weahter: " + new Message(map6, Message.Type.get_weather, Message.Menu.game).getBody().toString());
+                clientConnectionThread.sendMessage(new Message(map6, Message.Type.get_weather, Message.Menu.game));
+                break;
         }
     }
 

@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-    public final DataInputStream dataInputStream;
-    public final DataOutputStream dataOutputStream;
+    public DataInputStream dataInputStream;
+    public DataOutputStream dataOutputStream;
     public final BlockingQueue<Message> receivedMessagesQueue;
     public String otherSideIP;
     public int otherSidePort;
@@ -72,6 +72,27 @@ abstract public class ConnectionThread extends Thread {
             e.printStackTrace();
         }
     }
+
+//    public synchronized void readMessage() {
+//        try {
+//            dataInputStream.readUTF();
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Read message rid");
+//        }
+//    }
+//
+//    public synchronized void clearSockets()
+//    {
+//        try {
+//            receivedMessagesQueue.clear();
+//            this.dataInputStream = new DataInputStream(socket.getInputStream());
+//            this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Override
     public void run() {

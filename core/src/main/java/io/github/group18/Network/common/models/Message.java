@@ -80,7 +80,9 @@ public class Message {
         get_npc,
         get_players,
         get_kashi_row,
-        get_kashi_column
+        get_kashi_column,
+        get_weather,
+        get_gold
     }
 
     public enum Menu {
