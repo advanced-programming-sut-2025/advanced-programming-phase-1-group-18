@@ -15,6 +15,7 @@ import io.github.group18.Model.*;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.Model.Items.Price;
 import io.github.group18.enums.NPCEnums;
+import io.github.group18.enums.QuestStatus;
 
 public class NPCView {
 
@@ -227,9 +228,42 @@ public class NPCView {
 
         currentDialog = new Window("Quests" + npc.getName(), skin);
         currentDialog.setModal(true);
+        int friendShipLevel = Integer.parseInt(GameMenuController.getFriendshipLevelNpc(npc).getMessage());
 
-        Label questsLabel = new Label(GameMenuController.questsList(npc).getMessage(), skin);
-        currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
+        int counter = 1;
+        for (Item item : npc.getQuests().keySet()) {
+            NPCItem npcItem = npc.getQuests().get(item);
+            if (friendShipLevel >= npcItem.getRequiredLevel()) {
+                Label questsLabel = new Label(counter++ + "- Your quest is to get " + npcItem.getQuantity() + " of " + item.getCorrectName() + "\nquest status: " + npcItem.getStatus().toString() + "\n", skin);
+                if (npcItem.getStatus() == QuestStatus.DARYAFT_NASHODE) {
+                    TextButton tb = new TextButton("Daryaft", skin);
+                    tb.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Dialog dialog = new Dialog("", skin);
+                            Label content = new Label("Quest Daryaft shod",
+                                GameAssetManager.getGameAssetManager().getSkin());
+                            npcItem.setStatus(QuestStatus.DARYAFT_SHODE);
+                            content.setWrap(true);
+                            content.setWidth(400);
+
+                            dialog.getContentTable().add(content).width(400).pad(10);
+                            dialog.getContentTable().row();
+
+                            dialog.button("Close", true);
+
+                            dialog.show(stage);
+                        }
+                    });
+                    currentDialog.add(questsLabel).pad(20, 20, 20, 20);
+                    currentDialog.add(tb).pad(20, 20, 20, 20);
+                    currentDialog.row();
+                } else {
+                    currentDialog.add(questsLabel).pad(20, 20, 20, 20).row();
+                }
+            }
+        }
+
 
         TextButton cancelButton = new TextButton("Cancel", skin);
         cancelButton.addListener(new ClickListener() {
@@ -290,7 +324,7 @@ public class NPCView {
 
         Table quantityTable = new Table(skin);
         quantityTable.add(minusButton).width(100);
-        quantityTable.add(quantityLabel).width(100).pad(20,20,20,20);
+        quantityTable.add(quantityLabel).width(100).pad(20, 20, 20, 20);
         quantityTable.add(plusButton).width(100);
 
         currentDialog.add(quantityTable).pad(20, 20, 20, 20).row();
@@ -299,7 +333,7 @@ public class NPCView {
         doButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String result = GameMenuController.questsFinish(npc,quantity[0]).getMessage();
+                String result = GameMenuController.questsFinish(npc, quantity[0]).getMessage();
                 Dialog errorDialog = new Dialog(result, skin);
                 errorDialog.button("OK");
                 errorDialog.show(stage);

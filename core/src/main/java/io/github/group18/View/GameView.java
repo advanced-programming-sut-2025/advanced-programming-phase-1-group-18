@@ -205,6 +205,7 @@ public class GameView {
         Game currentGame = App.getCurrentGame();
         GameAssetManager gameAssetManager = GameAssetManager.getGameAssetManager();
         Texture triangle = gameAssetManager.getUpsidedownredtriangle();
+        Texture RedHeart = gameAssetManager.getRedHeart();
         NPC sebastian = currentGame.getNPCSEBASTIAN();
         NPC abigail = currentGame.getNPCABIGAIL();
         NPC harvey = currentGame.getNPCHARVEY();
@@ -216,6 +217,9 @@ public class GameView {
             Texture npc = gameAssetManager.getSebastian_NPC();
             batch.draw(npc, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
             batch.draw(triangle, sebastian.getX() * Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            if (sebastian.isGiftedToday()) {
+                batch.draw(RedHeart, sebastian.getX() * Game.TILE_SIZE + Game.TILE_SIZE, sebastian.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            }
         }
 
         if (abigail.getX() >= startx && abigail.getX() <= endx &&
@@ -223,6 +227,9 @@ public class GameView {
             Texture npc = gameAssetManager.getAbigail_NPC();
             batch.draw(npc, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
             batch.draw(triangle, abigail.getX() * Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            if (abigail.isGiftedToday()) {
+                batch.draw(RedHeart, abigail.getX() * Game.TILE_SIZE + Game.TILE_SIZE, abigail.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            }
         }
 
         if (harvey.getX() >= startx && harvey.getX() <= endx &&
@@ -230,6 +237,9 @@ public class GameView {
             Texture npc = gameAssetManager.getHarvey_NPC();
             batch.draw(npc, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
             batch.draw(triangle, harvey.getX() * Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            if (harvey.isGiftedToday()) {
+                batch.draw(RedHeart, harvey.getX() * Game.TILE_SIZE + Game.TILE_SIZE, harvey.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            }
         }
 
         if (leah.getX() >= startx && leah.getX() <= endx &&
@@ -237,6 +247,9 @@ public class GameView {
             Texture npc = gameAssetManager.getLeah_NPC();
             batch.draw(npc, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
             batch.draw(triangle, leah.getX() * Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            if (leah.isGiftedToday()) {
+                batch.draw(RedHeart, leah.getX() * Game.TILE_SIZE + Game.TILE_SIZE, leah.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            }
         }
 
         if (robin.getX() >= startx && robin.getX() <= endx &&
@@ -244,6 +257,9 @@ public class GameView {
             Texture npc = gameAssetManager.getRobin_NPC();
             batch.draw(npc, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE * 2);
             batch.draw(triangle, robin.getX() * Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE + 2 * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            if (robin.isGiftedToday()) {
+                batch.draw(RedHeart, robin.getX() * Game.TILE_SIZE + Game.TILE_SIZE, robin.getY() * Game.TILE_SIZE, Game.TILE_SIZE, Game.TILE_SIZE);
+            }
         }
 
         if (currentGame.isSebastian_dialog() || currentGame.isAbigail_dialog()

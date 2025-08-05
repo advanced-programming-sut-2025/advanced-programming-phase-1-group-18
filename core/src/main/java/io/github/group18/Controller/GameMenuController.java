@@ -4488,8 +4488,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return new Result(true, result.toString());
     }
 
-    public static Result questsList(NPC npc) {
-        StringBuilder result = new StringBuilder();
+    public static Result getFriendshipLevelNpc(NPC npc) {
+
         Player currentPlayer = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
         int friendshipLVL = -1;
 
@@ -4499,16 +4499,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 break;
             }
         }
-        result.append(npc.getName() + "\n");
-        int counter = 1;
-        for (Item item : npc.getQuests().keySet()) {
-            NPCItem npcItem = npc.getQuests().get(item);
-            if (friendshipLVL >= npcItem.getRequiredLevel()) {
-                result.append(counter++).append("- ").append("Your quest is to get ").append(npcItem.getQuantity()).append(" of ").append(item.getCorrectName()).append("\n");
-            }
-        }
-
-        return new Result(true, result.toString());
+        return new Result(true, String.valueOf(friendshipLVL));
     }
 
     public static Result questsFinish(NPC npc, int index) {
@@ -4545,7 +4536,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         } else {
                                             currentPlayer.getInventory().addItem(diamond, 2);
                                         }
-                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                         return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
                                     case "pumpkinpie":
                                         if (friendshipLVL == 2) {
@@ -4553,7 +4545,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         } else {
                                             currentPlayer.setGold(currentPlayer.getGold() + 5000);
                                         }
-                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                         return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
                                     case "stone":
                                         Mineral quartz = new Mineral();
@@ -4564,7 +4557,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         } else {
                                             currentPlayer.getInventory().addItem(quartz, 50);
                                         }
-                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+//                                        App.getCurrentGame().getNPCSEBASTIAN().getQuests().remove(object);
+                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                         return new Result(true, "SEBASTIAN: Thanks for giving me " + object.getCorrectName());
                                 }
                             }
@@ -4615,7 +4609,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                     break;
                                                 }
                                             }
-                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                             return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
                                         case "pumpkin":
                                             if (friendshipLVL == 2) {
@@ -4623,12 +4618,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                             } else {
                                                 currentPlayer.setGold(currentPlayer.getGold() + 500);
                                             }
-                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                             return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
                                         case "wheat":
                                             CraftingItem abpash = new CraftingItem((CraftingRecipesEnums.IridiumSprinkler).toString());
                                             currentPlayer.getInventory().addItem(abpash, 1);
-                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+//                                            App.getCurrentGame().getNPCABIGAIL().getQuests().remove(object);
+                                            npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                             return new Result(true, "ABIGAIL: Thanks for giving me " + object.getCorrectName());
                                     }
                                 }
@@ -4669,13 +4666,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                         currentPlayer.getInventory().removeItem(item, npcItem.getQuantity());
                                         switch (object.getCorrectName()) {
                                             case "allcrop":
-                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
                                                 if (friendshipLVL == 2) {
                                                     currentPlayer.setGold(currentPlayer.getGold() + 1500);
                                                 } else {
                                                     currentPlayer.setGold(currentPlayer.getGold() + 750);
                                                     System.out.println("added 750 gold");
                                                 }
+                                                npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                 return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
                                             case "salmon":
                                                 for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
@@ -4688,7 +4686,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                         break;
                                                     }
                                                 }
-                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+                                                npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                 return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
                                             case "wine":
                                                 FoodCooking foodCooking = new FoodCooking();
@@ -4700,7 +4699,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                 } else {
                                                     currentPlayer.getInventory().addItem(foodCooking, 5);
                                                 }
-                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+//                                                App.getCurrentGame().getNPCHARVEY().getQuests().remove(object);
+                                                npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                 return new Result(true, "HARVEY: Thanks for giving me " + object.getCorrectName());
                                         }
                                     }
@@ -4743,18 +4743,20 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                             switch (object.getCorrectName()) {
                                                 case "wood":
                                                     if (npcItem.getRequiredLevel() == 0) {
-                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+//                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
                                                         if (friendshipLVL == 2) {
                                                             currentPlayer.setGold(currentPlayer.getGold() + 1000);
                                                         } else {
                                                             currentPlayer.setGold(currentPlayer.getGold() + 500);
                                                             System.out.println("added 500 gold");
                                                         }
+                                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                         return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
                                                     } else {
                                                         CraftingItem matarsak = new CraftingItem(CraftingRecipesEnums.DeluxeScarecrow.toString());
                                                         currentPlayer.getInventory().addItem(matarsak, 3);
-                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+//                                                        App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+                                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                         return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
                                                     }
                                                 case "salmon":
@@ -4767,7 +4769,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                         cookingrecipe.setPrice(300);
                                                     }
                                                     currentPlayer.getCookingRecipes().add(cookingrecipe);
-                                                    App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+//                                                    App.getCurrentGame().getNPCLEAH().getQuests().remove(object);
+                                                    npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                     return new Result(true, "LEAH: Thanks for giving me " + object.getCorrectName());
                                             }
                                         }
@@ -4809,27 +4812,30 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                                 switch (object.getCorrectName()) {
                                                     case "wood":
                                                         if (npcItem.getRequiredLevel() == 0) {
-                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+//                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
                                                             if (friendshipLVL == 2) {
                                                                 currentPlayer.setGold(currentPlayer.getGold() + 2000);
                                                             } else {
                                                                 currentPlayer.setGold(currentPlayer.getGold() + 1000);
                                                                 System.out.println("added 1000 gold");
                                                             }
+                                                            npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                             return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
                                                         } else {
-                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+//                                                            App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
                                                             if (friendshipLVL == 2) {
                                                                 currentPlayer.setGold(currentPlayer.getGold() + 50000);
                                                             } else {
                                                                 currentPlayer.setGold(currentPlayer.getGold() + 25000);
                                                             }
+                                                            npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                             return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
                                                         }
                                                     case "ironbar":
                                                         CraftingItem zanboor = new CraftingItem(CraftingRecipesEnums.BeeHouse.toString());
                                                         currentPlayer.getInventory().addItem(zanboor, 3);
-                                                        App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+//                                                        App.getCurrentGame().getNPCROBIN().getQuests().remove(object);
+                                                        npcItem.setStatus(QuestStatus.ANJAM_SHODE);
                                                         return new Result(true, "ROBIN: Thanks for giving me " + object.getCorrectName());
                                                 }
                                             }

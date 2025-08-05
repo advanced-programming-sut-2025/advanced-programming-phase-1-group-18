@@ -47,6 +47,8 @@ public class GameAssetManager {
     Texture leah_NPC = new Texture(Gdx.files.internal("NPC/LEAH.jpeg"));
     Texture robin_NPC = new Texture(Gdx.files.internal("NPC/ROBIN.png"));
     Texture upsidedownredtriangle = new Texture(Gdx.files.internal("upsidedownredtriangle.png"));
+    Texture RedHeart = new Texture(Gdx.files.internal("RedHeart.png"));
+
 
     TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("testSpriteSheet/clockAtlas.atlas"));
     TextureAtlas craftingAtlas = new TextureAtlas(Gdx.files.internal("craftingSpriteSheet/crafting.atlas"));
@@ -447,5 +449,13 @@ public class GameAssetManager {
 
     public void setUpsidedownredtriangle(Texture upsidedownredtriangle) {
         this.upsidedownredtriangle = upsidedownredtriangle;
+    }
+
+    public Texture getRedHeart() {
+        return RedHeart;
+    }
+
+    public void setRedHeart(Texture redHeart) {
+        RedHeart = redHeart;
     }
 }

@@ -689,6 +689,7 @@ NPC/LEAH.jpeg
 NPC/ROBIN.png
 NPC/SEBASTIAN.jpeg
 PierresGeneralStoreMarket.png
+RedHeart.png
 RegisterImage.jpg
 SkillsIcon/FarmingSkill.png
 SkillsIcon/FishingSkill.png

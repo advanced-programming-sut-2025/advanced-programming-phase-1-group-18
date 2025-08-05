@@ -1,0 +1,3 @@
+cheat add item -n JazzSeeds -c 5
+cheat add item -n StrawberrySeeds -c 5
+cheat add item -n BasicRetainingSoil -c 5
