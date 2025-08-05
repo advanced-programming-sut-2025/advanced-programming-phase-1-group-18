@@ -24,9 +24,12 @@ import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.InputManager;
 import io.github.group18.enums.CraftingRecipesEnums;
 import io.github.group18.enums.SkillEnum;
 import com.badlogic.gdx.InputMultiplexer;
+
+import static io.github.group18.Network.common.models.InputManager.setupInputProcessor;
 
 public class GameMenu implements Screen {
 
@@ -69,8 +72,16 @@ public class GameMenu implements Screen {
 
     private void initializeGame() {
         gameView = new GameView(gameController);
-        gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
-        Gdx.input.setInputProcessor(gameMenuInputAdapter);
+//        gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
+//        Gdx.input.setInputProcessor(gameMenuInputAdapter);
+//        System.out.println("Setting GameMenuInputAdapter as input processor");
+
+        // Create your adapter and add it to the shared multiplexer.
+        this.gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
+        if (InputManager.getMultiplexer() == null) {
+            setupInputProcessor();
+        }
+        InputManager.getMultiplexer().addProcessor(gameMenuInputAdapter);
         inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
 
         stage.addActor(inventoryView.getWindow());
@@ -78,10 +89,10 @@ public class GameMenu implements Screen {
         stage.addActor(inventoryView.getSkillTooltipLabel());
 
 
-        inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(stage);
-        inputMultiplexer.addProcessor(gameMenuInputAdapter);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+//        inputMultiplexer = new InputMultiplexer();
+//        inputMultiplexer.addProcessor(stage);
+//        inputMultiplexer.addProcessor(gameMenuInputAdapter);
+//        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -91,13 +102,14 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
+//        System.out.println("GameMenu render called");
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameView.update(delta);
         lightningEffect.update(delta);
         gameView.render();
         lightningEffect.render(Main.getBatch());
-        gameMenuInputAdapter.update(delta,gameView.getBatch());
+        gameMenuInputAdapter.update(delta, gameView.getBatch());
         handleNightSleepFade(delta);
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -207,7 +219,7 @@ public class GameMenu implements Screen {
 
     @Override
     public void hide() {
-
+        InputManager.getMultiplexer().removeProcessor(gameMenuInputAdapter);
     }
 
     @Override
@@ -321,11 +333,11 @@ public class GameMenu implements Screen {
         try {
             buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
                 getSkillAtlas().findRegion(buff.getBuffSkillType().name()));
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             buffTexture = new TextureRegionDrawable(GameAssetManager.getGameAssetManager().
                 getSkillAtlas().findRegion(SkillEnum.MiningSkill.name()));
         }
-        buffTexture.setMinSize(buffTexture.getMinWidth()*scale, buffTexture.getMinHeight()*scale);
+        buffTexture.setMinSize(buffTexture.getMinWidth() * scale, buffTexture.getMinHeight() * scale);
         Image buffImage = new Image(buffTexture);
 
         // تنظیم سایز و جایگاه دلخواه در صفحه (مثلا وسط)
@@ -341,7 +353,7 @@ public class GameMenu implements Screen {
         // اضافه به stage
 //        stage.addActor(buffImage);
 
-        buffImage.draw(Main.getBatch(),buffImage.getColor().a);
+        buffImage.draw(Main.getBatch(), buffImage.getColor().a);
 //        Main.getBatch().draw(buffImage,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
 
         // اکشن fade in -> مکث -> fade out -> حذف
@@ -385,8 +397,8 @@ public class GameMenu implements Screen {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    public InputMultiplexer getInputMultiplexer()
-    {
+
+    public InputMultiplexer getInputMultiplexer() {
         return inputMultiplexer;
     }
 }

@@ -36,19 +36,19 @@ public class GameMenuInputAdapter extends InputAdapter {
 
     public GameMenuInputAdapter(GameController gameController) {
         this.gameController = gameController;
-        //Server-TODO
-//        ClientModel.getPlayer().setShowInventory(true);
+        ClientModel.getPlayer().setShowInventory(true);
     }
 
     @Override
     public boolean keyDown(int keycode) {
         keysHeld.add(keycode);
-
+        System.out.println("pppppppppppppppppp????????????????");
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
             switchInventorySlot(keycode);
         }
 
         if (keycode == Input.Keys.P) {
+            System.out.println("pppppppppppppppppp");
             handleCheatCodeDialog();
         }
 
