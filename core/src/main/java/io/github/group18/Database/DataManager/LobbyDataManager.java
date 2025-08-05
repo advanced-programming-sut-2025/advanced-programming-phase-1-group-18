@@ -1,6 +1,7 @@
 package io.github.group18.Database.DataManager;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
+import io.github.group18.enums.ppEnum;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class LobbyDataManager {
 //===========================================
 
     private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/mygamedb", "root", "computer@");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/mygamedb", "root", "computer");
     }
 
     public static void saveLobby(Lobby lobby) {
@@ -138,5 +139,74 @@ public class LobbyDataManager {
         }
 
         return false;
+    }
+    public static void changeLobbyAdmin(int lobbyId, int newAdminId) {
+        String sql = "UPDATE lobbies SET admin_id = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, newAdminId);
+            stmt.setInt(2, lobbyId);
+
+            int rows = stmt.executeUpdate();
+            if (rows == 0) {
+                System.out.println("No lobby found with id: " + lobbyId);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Lobby> getAllLobbies() {
+        List<Lobby> lobbies = new ArrayList<>();
+        String sql = "SELECT * FROM lobbies";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Lobby lobby = null;
+                int adminId = rs.getInt("admin_id");
+                User admin = new User();
+                for (User user : UserDataManager.loadAllUsers()){
+                    if (user.getID() == adminId){
+                      admin = user;
+                    }
+                }
+                switch (ppEnum.valueOf(rs.getString("access_level"))){
+                    case PUBLIC -> lobby = new Lobby(rs.getString("name"),ppEnum.PUBLIC,
+                        rs.getBoolean("is_visible"),admin);
+                    case PRIVATE -> lobby = new Lobby(rs.getString("name"),ppEnum.PRIVATE,
+                        rs.getString("password"),rs.getBoolean("is_visible"),admin);
+                }
+                lobby.setId(rs.getInt("id"));
+//                lobby.setName(rs.getString("name"));
+//                lobby.setAccessLevel(ppEnum.valueOf(rs.getString("access_level")));
+//                lobby.setVisible(rs.getBoolean("is_visible"));
+//                lobby.setPassword(rs.getString("password"));
+//                lobby.setCreationTime(rs.getLong("creation_time"));
+
+//
+//                User admin = UserDataManager.loadAllUsers()getUserById(adminId); // توابعی مثل getUserById باید داشته باشی
+//                lobby.setAdmin(admin);
+
+                List<Integer> users = getUsersInLobby(lobby.getId());
+//                ArrayList<User> users1 = new ArrayList<>();setUsers(users);
+                for (User user : UserDataManager.loadAllUsers()){
+                    if (user.getID() == adminId){
+                        admin = user;
+                    }
+                }
+                lobbies.add(lobby);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lobbies;
     }
 }
