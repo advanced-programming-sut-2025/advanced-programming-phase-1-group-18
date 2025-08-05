@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import io.github.group18.Model.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.group18.Model.Items.CraftingItem;
@@ -182,7 +183,7 @@ public class InventoryView {
             case 2: showCraftTab(); break;
             case 3: showCookTab(); break;
             case 4: showSettingsTab(); break;
-            //case 5: showMapTab(); break;
+            case 5: showMapTab(); break;
             case 6: showChatTab(); break;
         }
     }
@@ -358,7 +359,7 @@ public class InventoryView {
             }
 
             inventoryTable.add(slotStack).size(48, 48).pad(5);
-            if ((i + 1) % 8 == 0)
+            if ((i + 1) % 6 == 0)
                 inventoryTable.row();
         }
 
@@ -489,6 +490,19 @@ public class InventoryView {
 
     }
 
+    private void showMapTab() {
+        contentTable.clear();
+        contentTable.top().left();
+
+        Texture mapTexture = new Texture(Gdx.files.internal("map/map_placeholder.jpg"));
+        Image mapImage = new Image(new TextureRegionDrawable(new TextureRegion(mapTexture)));
+
+        mapImage.setScaling(Scaling.fit);
+
+        contentTable.add(mapImage).expand().fill();
+    }
+
+
 
 
     //
@@ -596,7 +610,7 @@ public class InventoryView {
         inventoryWindow.clearActions();
         inventoryWindow.getColor().a = 0f;
         inventoryWindow.setVisible(true);
-        selectTab(0);
+        selectTab(1);
         inventoryWindow.addAction(sequence(
             fadeIn(0.6f),
             run(() -> {
