@@ -72,16 +72,15 @@ public class GameMenu implements Screen {
 
     private void initializeGame() {
         gameView = new GameView(gameController);
-//        gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
-//        Gdx.input.setInputProcessor(gameMenuInputAdapter);
-//        System.out.println("Setting GameMenuInputAdapter as input processor");
+        gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
+        Gdx.input.setInputProcessor(gameMenuInputAdapter);
 
         // Create your adapter and add it to the shared multiplexer.
-        this.gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
-        if (InputManager.getMultiplexer() == null) {
-            setupInputProcessor();
-        }
-        InputManager.getMultiplexer().addProcessor(gameMenuInputAdapter);
+//        this.gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
+//        if (InputManager.getMultiplexer() == null) {
+//            setupInputProcessor();
+//        }
+//        InputManager.getMultiplexer().addProcessor(gameMenuInputAdapter);
         inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
 
         stage.addActor(inventoryView.getWindow());
@@ -89,10 +88,10 @@ public class GameMenu implements Screen {
         stage.addActor(inventoryView.getSkillTooltipLabel());
 
 
-//        inputMultiplexer = new InputMultiplexer();
-//        inputMultiplexer.addProcessor(stage);
-//        inputMultiplexer.addProcessor(gameMenuInputAdapter);
-//        Gdx.input.setInputProcessor(inputMultiplexer);
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(gameMenuInputAdapter);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
