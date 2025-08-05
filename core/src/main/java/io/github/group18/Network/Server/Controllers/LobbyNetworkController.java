@@ -1,6 +1,7 @@
 package io.github.group18.Network.Server.Controllers;
 
 import com.google.gson.Gson;
+import io.github.group18.Database.DataManager.LobbyDataManager;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Server.App.ChangeScreenMsgHandler;
@@ -36,6 +37,7 @@ public class LobbyNetworkController {
                     if (lobby.getId() == newLobby.getId()) {
                         if (lobby.getUsers().isEmpty()) lobby.setAdmin(newUser);
                         lobby.getUsers().add(newUser);
+                        LobbyDataManager.addUserToLobby(lobby.getId(),newUser.getID());
                         break;
                     }
                 }
@@ -54,11 +56,13 @@ public class LobbyNetworkController {
                     Lobby lobby = new Lobby(lobbyname, accessLevel, password, isVisible, admin);
                     lobby.setAdmin(admin);
                     ServerModel.getLobbies().add(lobby);
+                    LobbyDataManager.saveLobby(lobby);
                 } else {
                     try {
                         Lobby lobby = new Lobby(lobbyname, accessLevel, isVisible, admin);
                         lobby.setAdmin(admin);
                         ServerModel.getLobbies().add(lobby);
+                        LobbyDataManager.saveLobby(lobby);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
