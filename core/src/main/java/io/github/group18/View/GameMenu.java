@@ -101,7 +101,12 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
-//        System.out.println("GameMenu render called");
+        if (Gdx.input.getInputProcessor() != null) {
+//            System.out.println("current input handler " + Gdx.input.getInputProcessor().toString());
+        } else {
+            Gdx.input.setInputProcessor(gameMenuInputAdapter);
+//            System.out.println("current input handler " + Gdx.input.getInputProcessor().toString());
+        }
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameView.update(delta);
