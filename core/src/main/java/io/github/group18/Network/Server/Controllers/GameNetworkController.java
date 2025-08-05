@@ -32,17 +32,11 @@ public class GameNetworkController {
             case get_kashi_using_x_y:
                 int x = message.getIntFromBody("x");
                 int y = message.getIntFromBody("y");
-//                if (x == 0 && y <= 3) {
-//                    System.out.println("client wants the block " + x + " " + y);
-//                }
                 HashMap<String, Object> map = new HashMap<>();
                 Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
                 map.put("ShokhmZadeh", kashi.isShokhmZadeh());
                 map.put("Enterance", kashi.getEnterance());
                 map.put("Walkable", kashi.getWalkable());
-//                if (x == 0 && y <= 3) {
-//                    System.out.println("exception block 0 ta 3 " + kashi.isShokhmZadeh() + " " + kashi.getEnterance() + " " + kashi.getWalkable());
-//                }
                 if (kashi.getInside() == null) {
                     map.put("inside", "null");
                 } else {
@@ -53,6 +47,25 @@ public class GameNetworkController {
 
                 Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
                 clientConnectionThread.sendMessage(send);
+                break;
+            case get_kashi_using_x1_y:
+                int xx = message.getIntFromBody("x");
+                int yy = message.getIntFromBody("y");
+                HashMap<String, Object> mapp = new HashMap<>();
+                Kashi kashii = App.getCurrentGame().getMap().get(xx).get(yy);
+                mapp.put("ShokhmZadeh", kashii.isShokhmZadeh());
+                mapp.put("Enterance", kashii.getEnterance());
+                mapp.put("Walkable", kashii.getWalkable());
+                if (kashii.getInside() == null) {
+                    mapp.put("inside", "null");
+                } else {
+                    mapp.put("inside", "full");
+                    mapp.put("insideOBJ", kashii.getInside());
+                    mapp.put("insideCLASS", kashii.getInside().getClass().getName());
+                }
+
+                Message sendd = new Message(mapp, Message.Type.get_kashi_using_x1_y, Message.Menu.game);
+                clientConnectionThread.sendMessage(sendd);
                 break;
 //            case get_kashis_using_2x_2y:
 //                int startx = message.getIntFromBody("startX");
@@ -105,7 +118,6 @@ public class GameNetworkController {
             case get_players:
                 HashMap<String, Object> map4 = new HashMap<>();
                 map4.put("numberOfPlayers", String.valueOf(App.getCurrentGame().getPlayers().size()));
-//                System.out.println("numOfPlayers: " + App.getCurrentGame().getPlayers().size());
                 int count = 1;
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     map4.put(String.valueOf(count), String.valueOf(player.getX()));
@@ -117,8 +129,8 @@ public class GameNetworkController {
                     map4.put(String.valueOf(count + 6), player.getFoodBuff());
                     count += 7;
                 }
-//                System.out.println(map4.toString());
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
+                System.out.println("get players message " + map4.toString());
                 clientConnectionThread.sendMessage(send4);
                 break;
             case get_gold:
@@ -133,8 +145,21 @@ public class GameNetworkController {
             case get_weather:
                 HashMap<String, Object> map6 = new HashMap<>();
                 map6.put("weather", App.getCurrentGame().getCurrentWeather());
-//                System.out.println("server is giving weahter: " + new Message(map6, Message.Type.get_weather, Message.Menu.game).getBody().toString());
                 clientConnectionThread.sendMessage(new Message(map6, Message.Type.get_weather, Message.Menu.game));
+                break;
+            case player_pos_update:
+                String username = message.getFromBody("username");
+                double x_player = Double.parseDouble(message.getFromBody("x"));
+                double y_player = Double.parseDouble(message.getFromBody("y"));
+                int movingDirection = Integer.parseInt(message.getFromBody("movingDirection"));
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(username)) {
+                        player.setX(x_player);
+                        player.setY(y_player);
+                        player.setMovingDirection(movingDirection);
+                        break;
+                    }
+                }
                 break;
         }
     }
@@ -142,7 +167,6 @@ public class GameNetworkController {
     private static void startNewGame(ArrayList<String> users, ArrayList<Integer> maps, User newUser) {
         try {
             Result result = GameMenuController.gameNew(users, maps, newUser);
-//            System.out.println("init players done(owner + energy + x + y are set)");
             if (result.isSuccessful()) {
                 ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
                 for (ClientConnectionThread connection : connections) {

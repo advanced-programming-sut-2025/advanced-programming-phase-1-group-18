@@ -90,9 +90,6 @@ public class GameView {
     boolean clockTimeUpdated = true;
 
     public GameView(GameController gameController) {
-//        ClientModel.getServerConnectionThread().readMessage();
-//        ClientModel.getServerConnectionThread().readMessage();
-//        ClientModel.getServerConnectionThread().readMessage();
         this.gameController = gameController;
         batch = new SpriteBatch();
         clock = new ClockController();
@@ -231,7 +228,6 @@ public class GameView {
         renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
-        clockTimeUpdated = false;
 
         energy.render(batch);
 //        renderMarkets();
@@ -357,7 +353,7 @@ public class GameView {
         }
     }
 
-    private boolean renderTiles() {
+    private void renderTiles() {
 
         OrthographicCamera cam = camera;
         int tileSize = ClientModel.TILE_SIZE;
@@ -386,7 +382,6 @@ public class GameView {
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
 //        renderNPC(startX, startY, endX, endY);
-        return true;
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
@@ -513,101 +508,106 @@ public class GameView {
 
     public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
 
-        if (tiles == null || kashi == null || kashi.getInside() == null) {
-            return;
-        }
-
-        if (x < 0 || y < 0 || x >= tiles.size()) {
-            return;
-        }
-
-        ArrayList<Kashi> row = tiles.get(x - startX);
-        if (row == null || y >= row.size()) {
-            return;
-        }
-
-        Kashi tile = row.get(y - startY);
-        if (tile == null || tile.getInside() == null) {
-            return;
-        }
-
-        Class<?> clazz = kashi.getInside().getClass();
-        if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
-            kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
-            return;
-        }
-
-        while (x >= 0) {
-            Kashi currentTile = tiles.get(x - startX).get(y - startY);
-            if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                break;
+        try {
+            if (tiles == null || kashi == null || kashi.getInside() == null) {
+                return;
             }
-            x--;
-        }
-        x++;
 
-        while (y >= 0) {
-            Kashi currentTile = tiles.get(x - startX).get(y - startY);
-            if (currentTile == null || currentTile.getInside() == null ||
-                !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                break;
+            if (x < 0 || y < 0 || x >= tiles.size()) {
+                return;
             }
-            y--;
-        }
-        y++;
 
-        int startX = x;
-        int startY = y;
-        int currentY;
-        int widthcounter = 0;
-        int heightcounter = 0;
-
-        for (int i = startX; i < tiles.size(); i++) {
-            Kashi rowTile = tiles.get(i - startX).get(startY - startY);
-            if (rowTile == null || rowTile.getInside() == null ||
-                !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                break;
+            ArrayList<Kashi> row = tiles.get(x - startX);
+            if (row == null || y >= row.size()) {
+                return;
             }
-            widthcounter++;
 
-            for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
-                Kashi colTile = tiles.get(i).get(currentY - startY);
-                if (colTile == null || colTile.getInside() == null ||
-                    !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+            Kashi tile = row.get(y - startY);
+            if (tile == null || tile.getInside() == null) {
+                return;
+            }
+
+            Class<?> clazz = kashi.getInside().getClass();
+            if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
+                kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+                return;
+            }
+
+            while (x >= 0) {
+                Kashi currentTile = tiles.get(x - startX).get(y - startY);
+                if (currentTile == null || currentTile.getInside() == null ||
+                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
                 }
-                heightcounter++;
+                x--;
             }
-        }
+            x++;
 
-        BottomLeft bottomLeft;
-        if (widthcounter > 1 || heightcounter > 1) {
-            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
-            bottomLeftTiles.add(bottomLeft);
+            while (y >= 0) {
+                Kashi currentTile = tiles.get(x - startX).get(y - startY);
+                if (currentTile == null || currentTile.getInside() == null ||
+                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                    break;
+                }
+                y--;
+            }
+            y++;
+
+            int startX = x;
+            int startY = y;
+            int currentY;
+            int widthcounter = 0;
+            int heightcounter = 0;
+
             for (int i = startX; i < tiles.size(); i++) {
                 Kashi rowTile = tiles.get(i - startX).get(startY - startY);
                 if (rowTile == null || rowTile.getInside() == null ||
                     !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                     break;
                 }
+                widthcounter++;
 
                 for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
-                    if (i == startX && currentY == startY) continue;
-                    Kashi colTile = tiles.get(i - startX).get(currentY - startY);
+                    Kashi colTile = tiles.get(i).get(currentY - startY);
                     if (colTile == null || colTile.getInside() == null ||
                         !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
                         break;
                     }
-
-                    Pair<Integer, Integer> coord = new Pair<>(i, currentY);
-                    if (!alreadyRenderedTiles.contains(coord)) {
-                        alreadyRenderedTiles.add(coord);
-                    }
+                    heightcounter++;
                 }
             }
-        } else {
-            bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
+
+            BottomLeft bottomLeft;
+            if (widthcounter > 1 || heightcounter > 1) {
+                System.out.println("this is a big block my boy: " + x + " " + y + " " + widthcounter + " " + heightcounter + " " + widthcounter + " " + kashi.getInside().getClass().getSimpleName());
+                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
+                bottomLeftTiles.add(bottomLeft);
+                for (int i = startX; i < tiles.size(); i++) {
+                    Kashi rowTile = tiles.get(i - startX).get(startY - startY);
+                    if (rowTile == null || rowTile.getInside() == null ||
+                        !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                        break;
+                    }
+
+                    for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
+                        if (i == startX && currentY == startY) continue;
+                        Kashi colTile = tiles.get(i - startX).get(currentY - startY);
+                        if (colTile == null || colTile.getInside() == null ||
+                            !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+                            break;
+                        }
+
+                        Pair<Integer, Integer> coord = new Pair<>(i, currentY);
+                        if (!alreadyRenderedTiles.contains(coord)) {
+                            alreadyRenderedTiles.add(coord);
+                        }
+                    }
+                }
+            } else {
+                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -1016,7 +1016,7 @@ public class GameView {
             countX++;
             countY = 0;
         }
-        System.out.println("filled the map from " + startX + " " + startY + " to " + endX + " " + endY);
+//        System.out.println("filled the map from " + startX + " " + startY + " to " + endX + " " + endY);
     }
 
     public float getRedFlashTimer() {

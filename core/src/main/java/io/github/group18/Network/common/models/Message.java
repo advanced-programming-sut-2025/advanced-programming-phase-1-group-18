@@ -82,7 +82,9 @@ public class Message {
         get_kashi_row,
         get_kashi_column,
         get_weather,
-        get_gold
+        get_gold,
+        get_kashi_using_x1_y,
+        player_pos_update
     }
 
     public enum Menu {
