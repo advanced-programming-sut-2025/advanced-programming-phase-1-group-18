@@ -601,7 +601,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             map.put("x", player.getX());
             map.put("y", player.getY());
             Message msg = new Message(map, Message.Type.add_player_to_Clientmain, Message.Menu.game_menu);
-            System.out.println("we have sent a message to the client " + clientConnectionThread.getUser().getUsername() + " to fill the player object in clientmodel, here is x and y + " + player.getX() + " " + player.getY());
+//            System.out.println("we have sent a message to the client " + clientConnectionThread.getUser().getUsername() + " to fill the player object in clientmodel, here is x and y + " + player.getX() + " " + player.getY());
             clientConnectionThread.sendMessage(msg);
         }
         NewGame.initializeFriendships();
