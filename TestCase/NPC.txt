@@ -1,0 +1,2 @@
+cheat add item -n IronOre -c 500
+walk -l 480,100
