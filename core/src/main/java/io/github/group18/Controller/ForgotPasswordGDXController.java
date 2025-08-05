@@ -32,11 +32,19 @@ public class ForgotPasswordGDXController
             }
             if(view.getVerifyButton().isChecked())
             {
+
                 int answer = 0;
                 String username = view.getUsername().getText();
                 String number = view.getNumber().getText();
-                String answerr  = view.getAnswer().getText();
-                answer = Integer.parseInt(answerr);
+                try{
+                    String answerr  = view.getAnswer().getText();
+                    answer = Integer.parseInt(answerr);
+                }
+                catch(Exception e)
+                {
+                    view.setAnswerErrorLabel("answer should be a number");
+                }
+
                 String password = view.getNewPassword().getText();
                 //errors
 

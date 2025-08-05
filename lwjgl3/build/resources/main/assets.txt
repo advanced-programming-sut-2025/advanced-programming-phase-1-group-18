@@ -1005,6 +1005,7 @@ inventory/tools/Pickaxe.png
 inventory/tools/Scythe.png
 libgdx.png
 map.png
+map/map_placeholder.jpg
 map1.png
 map2.png
 map3.png
