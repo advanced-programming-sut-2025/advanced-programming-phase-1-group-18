@@ -89,9 +89,6 @@ public class GameView {
     ArrayList<ArrayList<Kashi>> tiles = new ArrayList<>();
 
 
-    boolean numberOfPlayersInit = false;
-    int numberOfPlayers;
-    ArrayList<PlayerPosition> playersPositions;
     boolean playerPosUpdated = false;
 
     boolean datetimeinit = false;
@@ -626,110 +623,58 @@ public class GameView {
 //    }
 
     private void renderPlayer() {
+        Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
+        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        while (response.getType() != Message.Type.get_players) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+//        System.out.println("Full response body: " + response.getBody().toString());
+        String numberOfPlayersSTR = response.getFromBody("numberOfPlayers");
+        int numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
+//        System.out.println("client received numofplayers: " + numberOfPlayers);
+        int count = 1;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            String firstSTR = response.getFromBody(String.valueOf(count));
+            double first = Double.parseDouble(firstSTR);
+            String secondSTR = response.getFromBody(String.valueOf(count + 1));
+            double second = Double.parseDouble(secondSTR);
+            String movingDirectionSTR = response.getFromBody(String.valueOf(count + 2));
+            int movingDirection = Integer.parseInt(movingDirectionSTR);
+            String stateSTR = response.getFromBody(String.valueOf(count + 3));
+            int state = Integer.parseInt(stateSTR);
+            String faintTimerSTR = response.getFromBody(String.valueOf(count + 4));
+            float faintTimer = Float.parseFloat(faintTimerSTR);
+            String eatingTimerSTR = response.getFromBody(String.valueOf(count + 5));
+            float eatingTimer = Float.parseFloat(eatingTimerSTR);
+            Gson gson = new Gson();
+            Object buffObj = response.getFromBody(String.valueOf(count + 6));
+            String buffSTR = gson.toJson(buffObj);
+            Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
+            stateTime += Gdx.graphics.getDeltaTime();
 
-        if (!numberOfPlayersInit) {
-            Message send1 = new Message(new HashMap<>(), Message.Type.get_num_players, Message.Menu.game);
-            Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
-            while (response1.getType() != Message.Type.get_num_players) {
-                response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+            TextureRegion currentFrame = new TextureRegion();
+
+            switch (state) {
+                case Player.STATE_FAINTING:
+                    currentFrame = playerAnimations.get(5)
+                        .getKeyFrame(faintTimer, false);
+                    break;
+                case Player.STATE_IDLE:
+                    currentFrame = playerAnimations.get(movingDirection)
+                        .getKeyFrame(stateTime, true);
+                    break;
+                case Player.EATING_STATE:
+                    currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
+                    Texture buff = showBuffEffect(foodBuff);
+                    batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
+                    break;
             }
-            String numberOfPlayersSTR = response1.getFromBody("numberOfPlayers");
-            numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
-            numberOfPlayersInit = true;
+
+            batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
+                ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            count += 7;
         }
 
-
-        if (playersPositions == null || playerPosUpdated) {
-            playerPosUpdated = false;
-            playersPositions = new ArrayList<>();
-            Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
-            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-            while (response.getType() != Message.Type.get_players) {
-                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-            }
-
-            int count = 1;
-            for (int i = 0; i < numberOfPlayers; i++) {
-                String firstSTR = response.getFromBody(String.valueOf(count));
-                double first = Double.parseDouble(firstSTR);
-                String secondSTR = response.getFromBody(String.valueOf(count + 1));
-                double second = Double.parseDouble(secondSTR);
-                String movingDirectionSTR = response.getFromBody(String.valueOf(count + 2));
-                int movingDirection = Integer.parseInt(movingDirectionSTR);
-                String stateSTR = response.getFromBody(String.valueOf(count + 3));
-                int state = Integer.parseInt(stateSTR);
-                String faintTimerSTR = response.getFromBody(String.valueOf(count + 4));
-                float faintTimer = Float.parseFloat(faintTimerSTR);
-                String eatingTimerSTR = response.getFromBody(String.valueOf(count + 5));
-                float eatingTimer = Float.parseFloat(eatingTimerSTR);
-                Gson gson = new Gson();
-                Object buffObj = response.getFromBody(String.valueOf(count + 6));
-                String buffSTR = gson.toJson(buffObj);
-                Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
-
-                playersPositions.add(new PlayerPosition(first, second, movingDirection, state, faintTimer, eatingTimer, foodBuff));
-
-
-                stateTime += Gdx.graphics.getDeltaTime();
-
-                TextureRegion currentFrame = new TextureRegion();
-
-                switch (state) {
-                    case Player.STATE_FAINTING:
-                        currentFrame = playerAnimations.get(5)
-                            .getKeyFrame(faintTimer, false);
-                        break;
-                    case Player.STATE_IDLE:
-                        currentFrame = playerAnimations.get(movingDirection)
-                            .getKeyFrame(stateTime, true);
-                        break;
-                    case Player.EATING_STATE:
-                        currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
-                        Texture buff = showBuffEffect(foodBuff);
-                        batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
-                        break;
-                }
-
-                batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
-                    ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-                count += 7;
-            }
-        } else {
-//            System.out.println("noone has moved so we use memory");
-            for (int i = 0; i < numberOfPlayers; i++) {
-                PlayerPosition playerPosition = playersPositions.get(i);
-                double first = playerPosition.getFirst();
-                double second = playerPosition.getSecond();
-                int movingDirection = playerPosition.getMovingDirection();
-                int state = playerPosition.getState();
-                float faintTimer = playerPosition.getFaintTimer();
-                float eatingTimer = playerPosition.getEatingTimer();
-                Buff foodBuff = playerPosition.getFoodBuff();
-
-                stateTime += Gdx.graphics.getDeltaTime();
-
-                TextureRegion currentFrame = new TextureRegion();
-
-                switch (state) {
-                    case Player.STATE_FAINTING:
-                        currentFrame = playerAnimations.get(5)
-                            .getKeyFrame(faintTimer, false);
-                        break;
-                    case Player.STATE_IDLE:
-                        currentFrame = playerAnimations.get(movingDirection)
-                            .getKeyFrame(stateTime, true);
-                        break;
-                    case Player.EATING_STATE:
-                        currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
-                        Texture buff = showBuffEffect(foodBuff);
-                        batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
-                        break;
-                }
-
-                batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
-                    ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            }
-        }
     }
 
     private void renderBrightness() {
