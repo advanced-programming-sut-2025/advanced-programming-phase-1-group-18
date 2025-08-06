@@ -13,6 +13,7 @@ public class ClientModel {
     public static Socket trackerSocket;
 
     private static Player player;
+    private static boolean windowOpen = false;
 
     public static final int player1TopLeftx = 0;
     public static final int player1TopLefty = 0;
@@ -599,5 +600,13 @@ public class ClientModel {
 
     public static void setPlayer(Player player) {
         ClientModel.player = player;
+    }
+
+    public static boolean isWindowOpen() {
+        return windowOpen;
+    }
+
+    public static void setWindowOpen(boolean windowOpen) {
+        ClientModel.windowOpen = windowOpen;
     }
 }

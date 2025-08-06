@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Network.Client.App.ClientModel;
 
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class CheatCodeDialog extends Window {
         setMovable(true);
         pad(10);
 
-        cheatInput = new TextField("cheat add item -n copperOre -c 50", skin);
+        cheatInput = new TextField("", skin);
         cheatInput.setMessageText("Enter your cheat code here...");
 
         TextButton sendButton = new TextButton("Send", skin);
@@ -35,10 +36,11 @@ public class CheatCodeDialog extends Window {
                 String code = cheatInput.getText().trim();
                 processCheatCode(code);
                 remove();  // بستن پنجره
+                ClientModel.setWindowOpen(false);
                 // بعد از بستن، ورودی رو به استیج بازگردان
-                if (getStage() != null) {
-                    Gdx.input.setInputProcessor(getStage());
-                }
+//                if (getStage() != null) {
+//                    Gdx.input.setInputProcessor(getStage());
+//                }
             }
         });
 
@@ -47,14 +49,15 @@ public class CheatCodeDialog extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 remove();
-                if (getStage() != null) {
-                    Gdx.input.setInputProcessor(getStage());
-                }
+                ClientModel.setWindowOpen(false);
+//                if (getStage() != null) {
+//                    Gdx.input.setInputProcessor(getStage());
+//                }
             }
         });
 
         // اضافه کردن ویجت‌ها به لایه
-        add(cheatInput).width(460).row();
+        add(cheatInput).width(500).row();
         add(sendButton).padTop(10).left();
         add(closeButton).padTop(10).left();
 
@@ -63,13 +66,12 @@ public class CheatCodeDialog extends Window {
             (Gdx.graphics.getWidth() - getWidth()) / 2f,
             (Gdx.graphics.getHeight() - getHeight()) / 2f
         );
+
     }
 
     private void processCheatCode(String code) {
         Scanner scanner = new Scanner(System.in);
-        GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(),
-            GameAssetManager.getGameAssetManager().getSkin());
-        //Server-TODO
-//        gameMenuMenu.check(code, scanner, gameController);
+        GameMenuMenu gameMenuMenu = new GameMenuMenu(App.getGameMenuController(), GameAssetManager.getGameAssetManager().getSkin());
+        gameMenuMenu.check(code, scanner, gameController);
     }
 }

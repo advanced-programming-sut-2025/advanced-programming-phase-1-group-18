@@ -75,13 +75,6 @@ public class GameMenu implements Screen {
         ClientModel.getServerConnectionThread().setGameView(gameView);
         gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
-
-        // Create your adapter and add it to the shared multiplexer.
-//        this.gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
-//        if (InputManager.getMultiplexer() == null) {
-//            setupInputProcessor();
-//        }
-//        InputManager.getMultiplexer().addProcessor(gameMenuInputAdapter);
         inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
 
         stage.addActor(inventoryView.getWindow());
@@ -102,12 +95,8 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        if (Gdx.input.getInputProcessor() != null) {
-//            System.out.println("current input handler " + Gdx.input.getInputProcessor().toString());
-        } else {
+        if (!ClientModel.isWindowOpen() && gameMenuInputAdapter != Gdx.input.getInputProcessor())
             Gdx.input.setInputProcessor(gameMenuInputAdapter);
-//            System.out.println("current input handler " + Gdx.input.getInputProcessor().toString());
-        }
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameView.update(delta);

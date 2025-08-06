@@ -43,13 +43,12 @@ public class GameMenuInputAdapter extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         keysHeld.add(keycode);
-//        System.out.println("pppppppppppppppppp????????????????");
         if (keycode >= Input.Keys.NUM_1 && keycode <= Input.Keys.NUM_9) {
             switchInventorySlot(keycode);
         }
 
         if (keycode == Input.Keys.P) {
-//            System.out.println("pppppppppppppppppp");
+            ClientModel.setWindowOpen(true);
             handleCheatCodeDialog();
         }
 
@@ -732,12 +731,14 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void handleCheatCodeDialog() {
-        Stage stage = gameController.getGameMenu().getCheatCodeStage();
         CheatCodeDialog cheatWindow = new CheatCodeDialog(
             GameAssetManager.getGameAssetManager().getSkin(),
             this.gameController
         );
-        gameController.getGameMenu().getStage().addActor(cheatWindow);
+        Stage stage = gameController.getGameMenu().getStage();
+        stage.addActor(cheatWindow);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     //for building

@@ -13,6 +13,7 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.enums.GameMenuCommands;
 import io.github.group18.enums.LoginMenuCommands;
 
@@ -55,80 +56,65 @@ public class GameMenuMenu extends AppMenu implements Screen {
 
     }
 
-    //Server-TODO
-//    public void check(String input, Scanner scanner, GameController gameController) {
-//        if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
-//            controller.showCurrentMenu();
-//        } else if (GameMenuCommands.GameNew.getMather(input) != null) {
-////            try {
-////                System.out.println(controller.gameNew(input, scanner));
-////            } catch (Exception e) {
-////                System.out.println(e.getMessage());
-////            }
-//            //Matched with graphics
-//        } else if (GameMenuCommands.ExitGame.getMather(input) != null) {
-//            System.out.println(controller.exitGame());
-//        } else if (GameMenuCommands.VoteTerminateGame.getMather(input) != null) {
-//            System.out.println(controller.voteTerminateGame(scanner));
-//        } else if (GameMenuCommands.NextTurn.getMather(input) != null) {
-////            controller.nextTurn();
-//        } else if (GameMenuCommands.Plant.getMather(input) != null) {
-////            System.out.println(controller.plant(GameMenuCommands.Plant.getMather(input).group("seed"),null ));
-//        } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
-//            System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2))));
-//        } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
-////            System.out.println(controller.howMuchWater());
-//        } else if (GameMenuCommands.Fertilize.getMather(input) != null) {
-////            System.out.println(controller.fertilize(GameMenuCommands.Fertilize.getMather(input).group(1), GameMenuCommands.Fertilize.getMather(input).group(2)));
-//        } else if (GameMenuCommands.TIME.getMather(input) != null) {
-//            System.out.println(controller.time());
-//        } else if (GameMenuCommands.DATE.getMather(input) != null) {
-//            System.out.println(controller.date());
-//        } else if (GameMenuCommands.DATETIME.getMather(input) != null) {
-//            System.out.println(controller.dateTime());
-//        } else if (GameMenuCommands.DAY_OF_WEEK.getMather(input) != null) {
-//            System.out.println(controller.dayOfWeek());
-//        } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
-//            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
-//                getMather(input).group(1).trim()), App.getGameController().getGameMenu(),App.getGameController().getGameMenu().getGameView()));
-//        } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
-////            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1))));
-//        } else if (GameMenuCommands.SEASON.getMather(input) != null) {
-//            System.out.println(controller.season());
-//        } else if (GameMenuCommands.CHEAT_THOR.getMather(input) != null) {
-//            System.out.println(controller.cheatThor(Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(1)),
-//                Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2))));
-//        } else if (GameMenuCommands.WEATHER.getMather(input) != null) {
-//            System.out.println(controller.weather());
-//        } else if (GameMenuCommands.WEATHER_FORECAST.getMather(input) != null) {
-//            System.out.println(controller.weatherForecast());
-//        } else if (GameMenuCommands.CHEAT_WEATHER_SET.getMather(input) != null) {
-//            System.out.println(controller.cheatWeather(GameMenuCommands.CHEAT_WEATHER_SET.getMather(input).group(1)));
-//        } else if (GameMenuCommands.GREENHOUSE_BUILD.getMather(input) != null) {
-//            System.out.println(controller.greenHouseBiuld());
-//        } else if (GameMenuCommands.Walk.getMather(input) != null) {
-//            System.out.println(controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2))));
-//        } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
-//            controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
-//                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
-//                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
-//                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
-//
-//        } else if (GameMenuCommands.HelpReadingMap.getMather(input) != null) {
-//            controller.helpReadingMap();
-//        } else if (GameMenuCommands.EnergyShow.getMather(input) != null) {
-//            controller.energyShow();
-//        } else if (GameMenuCommands.EnergySet.getMather(input) != null) {
-//            System.out.println(controller.energySet(Integer.parseInt(GameMenuCommands.EnergySet.getMather(input).group(1))));
-//        } else if (GameMenuCommands.EnergyUnlimited.getMather(input) != null) {
-//            controller.energyUnlimited();
-//        } else if (GameMenuCommands.INVENTORYSHOW.getMather(input) != null) {
-////            controller.inventoryShow();
-//        } else if (GameMenuCommands.INVENTORYTRASH.getMather(input) != null) {
-//            String item = GameMenuCommands.INVENTORYTRASH.getMather(input).group(1);
-//            int number = Integer.parseInt(GameMenuCommands.INVENTORYTRASH.getMather(input).group(2));
-////            System.out.println(controller.inventoryTrash(item, number));
-//        } else if (GameMenuCommands.TOOLEQUIP.getMather(input) != null) {
+
+    public void check(String input, Scanner scanner, GameController gameController) {
+        if (controller == null) {
+            controller = new GameMenuController();
+        }
+        if (GameMenuCommands.ShowCurrentMenu.getMather(input) != null) {
+            controller.showCurrentMenu();
+        } else if (GameMenuCommands.GameNew.getMather(input) != null) {
+        } else if (GameMenuCommands.ExitGame.getMather(input) != null) {
+            System.out.println(controller.exitGame(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.VoteTerminateGame.getMather(input) != null) {
+            System.out.println(controller.voteTerminateGame(scanner, ClientModel.getPlayer()));
+        } else if (GameMenuCommands.ShowPlant.getMather(input) != null) {
+            System.out.println(controller.showPlant(Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(1)), Integer.parseInt(GameMenuCommands.ShowPlant.getMather(input).group(2)), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.HowMuchWater.getMather(input) != null) {
+            System.out.println(controller.howMuchWater(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.TIME.getMather(input) != null) {
+            System.out.println(controller.time(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.DATE.getMather(input) != null) {
+            System.out.println(controller.date(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.DATETIME.getMather(input) != null) {
+            System.out.println(controller.dateTime(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.CHEAT_ADVANCE_DATE.getMather(input) != null) {
+            System.out.println(controller.cheatAdvanceDate(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_DATE.
+                getMather(input).group(1).trim()), gameController.getGameMenu(), gameController.getGameMenu().getGameView(), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input) != null) {
+            System.out.println(controller.cheatAdvanceTime(Integer.parseInt(GameMenuCommands.CHEAT_ADVANCE_TIME.getMather(input).group(1)), gameController.getGameMenu(), gameController.getGameMenu().getGameView(), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.SEASON.getMather(input) != null) {
+            System.out.println(controller.season(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.CHEAT_THOR.getMather(input) != null) {
+            System.out.println(controller.cheatThor(Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(1)),
+                Integer.parseInt(GameMenuCommands.CHEAT_THOR.getMather(input).group(2)), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.WEATHER.getMather(input) != null) {
+            System.out.println(controller.weather(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.WEATHER_FORECAST.getMather(input) != null) {
+            System.out.println(controller.weatherForecast(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.CHEAT_WEATHER_SET.getMather(input) != null) {
+            System.out.println(controller.cheatWeather(GameMenuCommands.CHEAT_WEATHER_SET.getMather(input).group(1), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.GREENHOUSE_BUILD.getMather(input) != null) {
+            System.out.println(controller.greenHouseBiuld(ClientModel.getPlayer()));
+        } else if (GameMenuCommands.PrintMap.getMather(input) != null) {
+            controller.printMap(Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(1)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(2)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(3)),
+                Integer.parseInt(GameMenuCommands.PrintMap.getMather(input).group(4)));
+        } else if (GameMenuCommands.HelpReadingMap.getMather(input) != null) {
+            controller.helpReadingMap();
+        } else if (GameMenuCommands.EnergyShow.getMather(input) != null) {
+            controller.energyShow(ClientModel.getPlayer());
+        } else if (GameMenuCommands.EnergySet.getMather(input) != null) {
+            System.out.println(controller.energySet(Integer.parseInt(GameMenuCommands.EnergySet.getMather(input).group(1)), ClientModel.getPlayer()));
+        } else if (GameMenuCommands.EnergyUnlimited.getMather(input) != null) {
+            controller.energyUnlimited(ClientModel.getPlayer());
+        } else if (GameMenuCommands.Walk.getMather(input) != null) {
+            controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)),
+                Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2)), ClientModel.getPlayer());
+        }
+    }
+//        else if (GameMenuCommands.TOOLEQUIP.getMather(input) != null) {
 //            String name = GameMenuCommands.TOOLEQUIP.getMather(input).group(1);
 ////            System.out.println(controller.toolEquip(name));
 //        } else if (GameMenuCommands.TOOLSSHOWCURRENT.getMather(input) != null) {
@@ -195,7 +181,7 @@ public class GameMenuMenu extends AppMenu implements Screen {
 //            Matcher matcher = GameMenuCommands.Flower.getMather(input);
 ////            System.out.println(controller.flower(matcher.group(1)));
 //        } else if (GameMenuCommands.CRAFT_INFO.getMather(input) != null) {
-//            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1),gameController));
+//            System.out.println(controller.craftInfo(GameMenuCommands.CRAFT_INFO.getMather(input).group(1), gameController));
 //        } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
 //            System.out.println(controller.craftingShowRecipes());
 //        } else if (GameMenuCommands.CRAFT_ITEM.getMather(input) != null) {
@@ -264,7 +250,8 @@ public class GameMenuMenu extends AppMenu implements Screen {
 //        } else if (GameMenuCommands.TRADERESPONSE.getMather(input) != null) {
 //            int id = Integer.parseInt(GameMenuCommands.TRADERESPONSE.getMather(input).group(2));
 //            String acceptOrReject = GameMenuCommands.TRADERESPONSE.getMather(input).group(1);
-////            System.out.println(tradeController.tradeResponse(acceptOrReject, id));
+
+    /// /            System.out.println(tradeController.tradeResponse(acceptOrReject, id));
 //        } else if (GameMenuCommands.TRADEHISTORY.getMather(input) != null) {
 //            tradeController.tradeHistory();
 //        }
@@ -298,16 +285,11 @@ public class GameMenuMenu extends AppMenu implements Screen {
 //            System.out.println(controller.sellAnimal(name));
 //        } else if (GameMenuCommands.CHEATADD.getMather(input) != null) {
 //            controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)));
+//        } else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
+//            controller.showMyMarriageProposals();
 //        } else {
 //            System.out.println("Invalid command");
 //        }
-//
-
-    /// /         else if (GameMenuCommands.SHOW_RECIPES.getMather(input) != null) {
-    /// /            controller.showMyMarriageProposals();
-    /// /        }
-//    }
-
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
