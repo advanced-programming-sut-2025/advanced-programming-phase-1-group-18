@@ -61,22 +61,28 @@ public class LobbyController {
         Main.getMain().setScreen(new MainMenu(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
-    public void chooseMap(User user, Stage stage) {
+    public void chooseMap(User user, Stage stage,Lobby lobby) {
         HashMap<String, Object> body = new HashMap<>();
         body.put("user", user);
+        body.put("lobby", lobby.getId());
         Message message = new Message(body, Message.Type.choose_map, Message.Menu.lobby);
+//        GameMessageHandler.startNewGame(App.getCurrentUser());
         Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(message, ClientModel.TIMEOUT_MILLIS);
-        if (res == null) return;
-//        if (res.getFromBody("success")) {
-//            System.out.println("choose map got the message " + res.getBody().toString());
-            GameMessageHandler.startNewGame(App.getCurrentUser());
 
-//        } else {
-//            Dialog error = new Dialog("error", GameAssetManager.getGameAssetManager().getSkin());
-//            error.text((String) res.getFromBody("error"));
-//            error.button("close");
-//            error.show(stage);
-//        }
+        if (res==null) return;
+        if(res.getFromBody("success")){
+            int lobbyId = res.getIntFromBody("lobby");
+            System.out.println("From lobby go to choose menu");
+//            Main.getMain().getScreen().dispose();
+//            Main.getMain().setScreen(new ChoosingMapView(new ChoosingMapController(), GameAssetManager.getGameAssetManager().getSkin()));
+//            lobby.initMaps();
+            ChangeMenuHandler.changeMenu(App.getCurrentUser(),lobbyId);
+        }else{
+            Dialog error = new Dialog("error",GameAssetManager.getGameAssetManager().getSkin());
+            error.text((String) res.getFromBody("error"));
+            error.button("close");
+            error.show(stage);
+        }
     }
 
     public String showInvisibleLobbyInfo(int id) {

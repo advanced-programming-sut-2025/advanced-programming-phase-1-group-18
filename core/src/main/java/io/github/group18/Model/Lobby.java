@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Lobby {
     private final String name;
-    private final int id;
+    private int id;
     private static int idcounter = 0;
     private final ppEnum accessLevel;
     private final boolean isVisible;
@@ -58,6 +58,10 @@ public class Lobby {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public static int getIdcounter() {
         return idcounter;
     }
@@ -96,7 +100,7 @@ public class Lobby {
     public void initMaps(){
         choseMap = new ArrayList<>();
         for (User user : users) {
-            choseMap.add(0);
+            choseMap.add(1);
         }
     }
 

@@ -27,6 +27,7 @@ public class GameNetworkController {
                     usernames.add(user.getUsername());
                 }
                 maps.add(1);
+                maps = lobby.getChoseMap();
                 startNewGame(usernames, maps, newUser);
                 break;
             case get_kashi_using_x_y:
@@ -152,7 +153,7 @@ public class GameNetworkController {
                     }
                 }
             } else {
-                System.out.println("game be gaj raft");
+                System.out.println("game be raft");
             }
         } catch (Exception e) {
 
