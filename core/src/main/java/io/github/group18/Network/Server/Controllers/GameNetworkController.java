@@ -158,13 +158,13 @@ public class GameNetworkController {
                         break;
                     }
                 }
-                ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
-                for (ClientConnectionThread connection : connections) {
-                    if (clientConnectionIsaPlayer(connection)) {
-                        Message msg = new Message(new HashMap<>(), Message.Type.player_pos_update, Message.Menu.game_menu);
-                        connection.sendMessage(msg);
-                    }
-                }
+//                ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
+//                for (ClientConnectionThread connection : connections) {
+//                    if (clientConnectionIsaPlayer(connection)) {
+//                        Message msg = new Message(new HashMap<>(), Message.Type.player_pos_update, Message.Menu.game_menu);
+//                        connection.sendMessage(msg);
+//                    }
+//                }
                 break;
             case player_movingdirection_update:
                 String movedplayer_username = message.getFromBody("username");
