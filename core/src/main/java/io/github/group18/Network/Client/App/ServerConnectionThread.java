@@ -11,6 +11,7 @@ import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.Client.Controller.ChangeMenuController;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.View.GameView;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -18,6 +19,7 @@ import java.net.Socket;
 import static io.github.group18.Network.Client.App.ClientModel.TIMEOUT_MILLIS;
 
 public class ServerConnectionThread extends ConnectionThread {
+    GameView gameView;
 
     public ServerConnectionThread(Socket socket) throws IOException {
         super(socket);
@@ -73,6 +75,9 @@ public class ServerConnectionThread extends ConnectionThread {
             player.setX(x);
             player.setY(y);
             ClientModel.setPlayer(player);
+        } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.update_player_pos) {
+            gameView.setPlayerPosUpdated(true);
+            System.out.println("setted players gameview position to true so it updates");
         }
         return false;
     }
@@ -81,5 +86,13 @@ public class ServerConnectionThread extends ConnectionThread {
     public void run() {
         super.run();
         ClientModel.endAll();
+    }
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
     }
 }

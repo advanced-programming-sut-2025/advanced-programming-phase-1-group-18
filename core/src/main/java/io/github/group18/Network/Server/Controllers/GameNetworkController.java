@@ -104,8 +104,6 @@ public class GameNetworkController {
                 break;
             case get_players:
                 HashMap<String, Object> map4 = new HashMap<>();
-                map4.put("numberOfPlayers", String.valueOf(App.getCurrentGame().getPlayers().size()));
-//                System.out.println("numOfPlayers: " + App.getCurrentGame().getPlayers().size());
                 int count = 1;
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     map4.put(String.valueOf(count), String.valueOf(player.getX()));
@@ -117,7 +115,6 @@ public class GameNetworkController {
                     map4.put(String.valueOf(count + 6), player.getFoodBuff());
                     count += 7;
                 }
-//                System.out.println(map4.toString());
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
                 clientConnectionThread.sendMessage(send4);
                 break;
@@ -135,6 +132,34 @@ public class GameNetworkController {
                 map6.put("weather", App.getCurrentGame().getCurrentWeather());
 //                System.out.println("server is giving weahter: " + new Message(map6, Message.Type.get_weather, Message.Menu.game).getBody().toString());
                 clientConnectionThread.sendMessage(new Message(map6, Message.Type.get_weather, Message.Menu.game));
+                break;
+            case get_num_players:
+                HashMap<String, Object> map7 = new HashMap<>();
+                map7.put("numberOfPlayers", String.valueOf(App.getCurrentGame().getPlayers().size()));
+                Message send5 = new Message(map7, Message.Type.get_num_players, Message.Menu.game);
+                clientConnectionThread.sendMessage(send5);
+                break;
+            case update_player_pos:
+                double movedplayer_x = Double.parseDouble(message.getFromBody("x"));
+                double movedplayer_y = Double.parseDouble(message.getFromBody("y"));
+                String movedplayer_username = message.getFromBody("username");
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(movedplayer_username)) {
+                        System.out.println("update player: " + movedplayer_username + " 's position in app.currentgame server");
+                        player.setX(movedplayer_x);
+                        player.setY(movedplayer_y);
+                        break;
+                    }
+                }
+                System.out.println("someone moved to they are sending update for everyone");
+                ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
+                for (ClientConnectionThread connection : connections) {
+                    if (clientConnectionIsaPlayer(connection)) {
+                        System.out.println("updating " + connection.getUser().getUsername() + " 's GameView");
+                        Message msg = new Message(new HashMap<>(), Message.Type.update_player_pos, Message.Menu.game_menu);
+                        connection.sendMessage(msg);
+                    }
+                }
                 break;
         }
     }
@@ -163,6 +188,15 @@ public class GameNetworkController {
     private static boolean clientConnectionIsaPlayer(ClientConnectionThread connection, ArrayList<String> users) {
         for (String user : users) {
             if (connection.getUser().getUsername().equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean clientConnectionIsaPlayer(ClientConnectionThread connection) {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (connection.getUser().getUsername().equals(player.getOwner().getUsername())) {
                 return true;
             }
         }

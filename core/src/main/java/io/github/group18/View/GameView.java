@@ -8,17 +8,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 
 import java.awt.*;
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.List;
 
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.github.group18.Controller.ClockController;
 import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.GameController;
@@ -26,6 +21,7 @@ import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.enums.WeatherEnum;
 
 public class GameView {
     private final GameController gameController;
@@ -86,13 +82,25 @@ public class GameView {
     int endX;
     int endY;
     ArrayList<ArrayList<Kashi>> tiles = new ArrayList<>();
-    boolean playerPosUpdated = true;
-    boolean clockTimeUpdated = true;
+
+    boolean numberOfPlayersInit = false;
+    int numberOfPlayers;
+    ArrayList<PlayerPosition> playersPositions;
+    boolean playerPosUpdated = false;
+
+    boolean datetimeinit = false;
+    DateTime datetime;
+    boolean datetimeupdated = false;
+
+    boolean weatherinit = false;
+    WeatherEnum weather;
+    boolean weatherupdated = false;
+
+    boolean goldinit = false;
+    int gold;
+    boolean goldupdated = false;
 
     public GameView(GameController gameController) {
-//        ClientModel.getServerConnectionThread().readMessage();
-//        ClientModel.getServerConnectionThread().readMessage();
-//        ClientModel.getServerConnectionThread().readMessage();
         this.gameController = gameController;
         batch = new SpriteBatch();
         clock = new ClockController();
@@ -220,21 +228,16 @@ public class GameView {
     }
 
     public void render() {
+        System.out.println("player pos updated situatuoin: " + playerPosUpdated);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
-//        if (playerPosUpdated) {
         renderPlayer();
-//            playerPosUpdated = false;
-//        }
-
         renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
-        clockTimeUpdated = false;
-
         energy.render(batch);
-//        renderMarkets();
+        renderMarkets();
         renderKalagEffect(batch);
         renderBrightness();
         walking = false;
@@ -612,58 +615,113 @@ public class GameView {
     }
 
     private void renderPlayer() {
-        Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        while (response.getType() != Message.Type.get_players) {
-            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+
+        if (!numberOfPlayersInit) {
+            Message send1 = new Message(new HashMap<>(), Message.Type.get_num_players, Message.Menu.game);
+            Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+            while (response1.getType() != Message.Type.get_num_players) {
+                response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+            }
+            String numberOfPlayersSTR = response1.getFromBody("numberOfPlayers");
+            numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
+            numberOfPlayersInit = true;
         }
-//        System.out.println("Full response body: " + response.getBody().toString());
-        String numberOfPlayersSTR = response.getFromBody("numberOfPlayers");
-        int numberOfPlayers = Integer.parseInt(numberOfPlayersSTR);
-//        System.out.println("client received numofplayers: " + numberOfPlayers);
-        int count = 1;
-        for (int i = 0; i < numberOfPlayers; i++) {
-            String firstSTR = response.getFromBody(String.valueOf(count));
-            double first = Double.parseDouble(firstSTR);
-            String secondSTR = response.getFromBody(String.valueOf(count + 1));
-            double second = Double.parseDouble(secondSTR);
-            String movingDirectionSTR = response.getFromBody(String.valueOf(count + 2));
-            int movingDirection = Integer.parseInt(movingDirectionSTR);
-            String stateSTR = response.getFromBody(String.valueOf(count + 3));
-            int state = Integer.parseInt(stateSTR);
-            String faintTimerSTR = response.getFromBody(String.valueOf(count + 4));
-            float faintTimer = Float.parseFloat(faintTimerSTR);
-            String eatingTimerSTR = response.getFromBody(String.valueOf(count + 5));
-            float eatingTimer = Float.parseFloat(eatingTimerSTR);
-            Gson gson = new Gson();
-            Object buffObj = response.getFromBody(String.valueOf(count + 6));
-            String buffSTR = gson.toJson(buffObj);
-            Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
-            stateTime += Gdx.graphics.getDeltaTime();
-
-            TextureRegion currentFrame = new TextureRegion();
-
-            switch (state) {
-                case Player.STATE_FAINTING:
-                    currentFrame = playerAnimations.get(5)
-                        .getKeyFrame(faintTimer, false);
-                    break;
-                case Player.STATE_IDLE:
-                    currentFrame = playerAnimations.get(movingDirection)
-                        .getKeyFrame(stateTime, true);
-                    break;
-                case Player.EATING_STATE:
-                    currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
-                    Texture buff = showBuffEffect(foodBuff);
-                    batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
-                    break;
+        if (playersPositions == null || playerPosUpdated) {
+            if (playersPositions == null) {
+                System.out.println("init player pos done");
+            } else {
+                System.out.println("someone moved so we are trying to read from server");
+            }
+            playerPosUpdated = false;
+            playersPositions = new ArrayList<>();
+            Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            while (response.getType() != Message.Type.get_players) {
+                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
             }
 
-            batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
-                ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            count += 7;
-        }
+            int count = 1;
+            for (int i = 0; i < numberOfPlayers; i++) {
+                String firstSTR = response.getFromBody(String.valueOf(count));
+                double first = Double.parseDouble(firstSTR);
+                String secondSTR = response.getFromBody(String.valueOf(count + 1));
+                double second = Double.parseDouble(secondSTR);
+                String movingDirectionSTR = response.getFromBody(String.valueOf(count + 2));
+                int movingDirection = Integer.parseInt(movingDirectionSTR);
+                String stateSTR = response.getFromBody(String.valueOf(count + 3));
+                int state = Integer.parseInt(stateSTR);
+                String faintTimerSTR = response.getFromBody(String.valueOf(count + 4));
+                float faintTimer = Float.parseFloat(faintTimerSTR);
+                String eatingTimerSTR = response.getFromBody(String.valueOf(count + 5));
+                float eatingTimer = Float.parseFloat(eatingTimerSTR);
+                Gson gson = new Gson();
+                Object buffObj = response.getFromBody(String.valueOf(count + 6));
+                String buffSTR = gson.toJson(buffObj);
+                Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
 
+                playersPositions.add(new PlayerPosition(first, second, movingDirection, state, faintTimer, eatingTimer, foodBuff));
+
+
+                stateTime += Gdx.graphics.getDeltaTime();
+
+                TextureRegion currentFrame = new TextureRegion();
+
+                switch (state) {
+                    case Player.STATE_FAINTING:
+                        currentFrame = playerAnimations.get(5)
+                            .getKeyFrame(faintTimer, false);
+                        break;
+                    case Player.STATE_IDLE:
+                        currentFrame = playerAnimations.get(movingDirection)
+                            .getKeyFrame(stateTime, true);
+                        break;
+                    case Player.EATING_STATE:
+                        currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
+                        Texture buff = showBuffEffect(foodBuff);
+                        batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
+                        break;
+                }
+
+                batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
+                    ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+                count += 7;
+            }
+        } else {
+            System.out.println("noone has moved so we use memory");
+            for (int i = 0; i < numberOfPlayers; i++) {
+                PlayerPosition playerPosition = playersPositions.get(i);
+                double first = playerPosition.getFirst();
+                double second = playerPosition.getSecond();
+                int movingDirection = playerPosition.getMovingDirection();
+                int state = playerPosition.getState();
+                float faintTimer = playerPosition.getFaintTimer();
+                float eatingTimer = playerPosition.getEatingTimer();
+                Buff foodBuff = playerPosition.getFoodBuff();
+
+                stateTime += Gdx.graphics.getDeltaTime();
+
+                TextureRegion currentFrame = new TextureRegion();
+
+                switch (state) {
+                    case Player.STATE_FAINTING:
+                        currentFrame = playerAnimations.get(5)
+                            .getKeyFrame(faintTimer, false);
+                        break;
+                    case Player.STATE_IDLE:
+                        currentFrame = playerAnimations.get(movingDirection)
+                            .getKeyFrame(stateTime, true);
+                        break;
+                    case Player.EATING_STATE:
+                        currentFrame = playerAnimations.get(6).getKeyFrame(eatingTimer, false);
+                        Texture buff = showBuffEffect(foodBuff);
+                        batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
+                        break;
+                }
+
+                batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
+                    ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+            }
+        }
     }
 
     private void renderBrightness() {
@@ -713,18 +771,24 @@ public class GameView {
     }
 
     private void renderClock() {
-        Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        while (response.getType() != Message.Type.get_dateTime) {
-            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        DateTime time;
+        if (!datetimeinit || datetimeupdated) {
+            Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            while (response.getType() != Message.Type.get_dateTime) {
+                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            }
+            Gson gson = new Gson();
+            Object dateTimeObj = response.getFromBody("dateTime");
+            String dateTimeStr = gson.toJson(dateTimeObj);
+            time = gson.fromJson(dateTimeStr, DateTime.class);
+
+            datetime = time;
+        } else {
+            time = datetime;
         }
-//        System.out.println("server response for datetime(renderclock) " + response.getBody().toString());
-        Gson gson = new Gson();
-        Object dateTimeObj = response.getFromBody("dateTime");
-        String dateTimeStr = gson.toJson(dateTimeObj);
-        DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
         if (time != null) {
-            clock.render(batch, time, camera);
+            clock.render(batch, time, camera, this);
         }
 
     }
@@ -1016,7 +1080,7 @@ public class GameView {
             countX++;
             countY = 0;
         }
-        System.out.println("filled the map from " + startX + " " + startY + " to " + endX + " " + endY);
+//        System.out.println("filled the map from " + startX + " " + startY + " to " + endX + " " + endY);
     }
 
     public float getRedFlashTimer() {
@@ -1365,5 +1429,149 @@ public class GameView {
 
     public void setPendingPlacementName(String pendingPlacementName) {
         this.pendingPlacementName = pendingPlacementName;
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
+    }
+
+    public int getEndX() {
+        return endX;
+    }
+
+    public void setEndX(int endX) {
+        this.endX = endX;
+    }
+
+    public int getEndY() {
+        return endY;
+    }
+
+    public void setEndY(int endY) {
+        this.endY = endY;
+    }
+
+    public ArrayList<ArrayList<Kashi>> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<ArrayList<Kashi>> tiles) {
+        this.tiles = tiles;
+    }
+
+    public boolean isNumberOfPlayersInit() {
+        return numberOfPlayersInit;
+    }
+
+    public void setNumberOfPlayersInit(boolean numberOfPlayersInit) {
+        this.numberOfPlayersInit = numberOfPlayersInit;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public ArrayList<PlayerPosition> getPlayersPositions() {
+        return playersPositions;
+    }
+
+    public void setPlayersPositions(ArrayList<PlayerPosition> playersPositions) {
+        this.playersPositions = playersPositions;
+    }
+
+    public boolean isPlayerPosUpdated() {
+        return playerPosUpdated;
+    }
+
+    public void setPlayerPosUpdated(boolean playerPosUpdated) {
+        this.playerPosUpdated = playerPosUpdated;
+    }
+
+    public boolean isDatetimeinit() {
+        return datetimeinit;
+    }
+
+    public void setDatetimeinit(boolean datetimeinit) {
+        this.datetimeinit = datetimeinit;
+    }
+
+    public DateTime getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(DateTime datetime) {
+        this.datetime = datetime;
+    }
+
+    public boolean isDatetimeupdated() {
+        return datetimeupdated;
+    }
+
+    public void setDatetimeupdated(boolean datetimeupdated) {
+        this.datetimeupdated = datetimeupdated;
+    }
+
+    public boolean isWeatherinit() {
+        return weatherinit;
+    }
+
+    public void setWeatherinit(boolean weatherinit) {
+        this.weatherinit = weatherinit;
+    }
+
+    public WeatherEnum getWeather() {
+        return weather;
+    }
+
+    public void setWeather(WeatherEnum weather) {
+        this.weather = weather;
+    }
+
+    public boolean isWeatherupdated() {
+        return weatherupdated;
+    }
+
+    public void setWeatherupdated(boolean weatherupdated) {
+        this.weatherupdated = weatherupdated;
+    }
+
+    public boolean isGoldinit() {
+        return goldinit;
+    }
+
+    public void setGoldinit(boolean goldinit) {
+        this.goldinit = goldinit;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public boolean isGoldupdated() {
+        return goldupdated;
+    }
+
+    public void setGoldupdated(boolean goldupdated) {
+        this.goldupdated = goldupdated;
     }
 }

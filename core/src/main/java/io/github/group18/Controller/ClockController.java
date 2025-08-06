@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Matrix4;
 import io.github.group18.Model.*;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.View.GameView;
 import io.github.group18.enums.WeatherEnum;
 
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class ClockController {
         clockArrow.setOrigin(clockArrow.getWidth() / 2, 0);
     }
 
-    public void render(SpriteBatch batch, DateTime dateTime, OrthographicCamera camera) {
+    public void render(SpriteBatch batch, DateTime dateTime, OrthographicCamera camera, GameView gameView) {
         // Save original projection matrix
         Matrix4 originalMatrix = batch.getProjectionMatrix();
 
@@ -122,13 +123,18 @@ public class ClockController {
                 Winter.draw(batch);
                 break;
         }
-        Message send = new Message(new HashMap<>(), Message.Type.get_weather, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        while (response.getType() != Message.Type.get_weather) {
-            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        WeatherEnum weather;
+        if (!gameView.isWeatherinit() || gameView.isWeatherupdated()) {
+            Message send = new Message(new HashMap<>(), Message.Type.get_weather, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            while (response.getType() != Message.Type.get_weather) {
+                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            }
+            weather = WeatherEnum.valueOf(response.getFromBody("weather"));
+            gameView.setWeather(weather);
+        } else {
+            weather = gameView.getWeather();
         }
-//        System.out.println("server response for weather " + response.getBody().toString());
-        WeatherEnum weather = WeatherEnum.valueOf(response.getFromBody("weather"));
         switch (weather) {
             case RAIN:
                 Rain.draw(batch);
@@ -149,15 +155,23 @@ public class ClockController {
             clockX + 27 * scale, clockY + 23 * scale + hour.getLineHeight());
         day.draw(batch, dayOfWeek + ". " + dateTime.getDay(),
             clockX + 27 * scale, clockY + 45 * scale + hour.getLineHeight());
-        HashMap<String, Object> body = new HashMap<>();
-        body.put("username", ClientModel.getPlayer().getOwner().getUsername());
-        Message send1 = new Message(body, Message.Type.get_gold, Message.Menu.game);
-        Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
-        while (response1 == null || response1.getType() != Message.Type.get_gold) {
-            response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
-        }
+
+        int goldd;
+        if (!gameView.isGoldinit() || gameView.isGoldupdated()) {
+
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("username", ClientModel.getPlayer().getOwner().getUsername());
+            Message send1 = new Message(body, Message.Type.get_gold, Message.Menu.game);
+            Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+            while (response1 == null || response1.getType() != Message.Type.get_gold) {
+                response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+            }
 //        System.out.println("server response for gold " + response.getBody().toString());
-        int goldd = response1.getIntFromBody("gold");
+            goldd = response1.getIntFromBody("gold");
+            gameView.setGold(goldd);
+        } else {
+            goldd = gameView.getGold();
+        }
         gold.draw(batch, String.valueOf(goldd),
             clockX + 17 * scale, clockY + 3 * scale + gold.getLineHeight());
 

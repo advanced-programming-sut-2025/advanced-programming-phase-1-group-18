@@ -420,7 +420,7 @@ public class Player extends User {
         int newX = (int) (x + dx);
         int newY = (int) (y + dy);
 
-        HashMap<String,Object> body = new HashMap<>();
+        HashMap<String, Object> body = new HashMap<>();
         body.put("x", newX);
         body.put("y", newY);
         Message send = new Message(body, Message.Type.get_kashi_using_x_y, Message.Menu.game);
@@ -459,20 +459,24 @@ public class Player extends User {
         }
 
 
-
         if (newX < 1 || newX >= ClientModel.mapWidth - 1 || newY < 1 || newY >= ClientModel.mapHeight - 1) return false;
 
         if (!(tile.getInside() instanceof Lake || tile.getInside() instanceof Tavileh ||
             tile.getInside() instanceof BigBarn || tile.getInside() instanceof DeluxeBarn ||
             tile.getInside() instanceof Cage || tile.getInside() instanceof BigCoop || tile.getInside() instanceof DeluxeCoop
-        || tile.getInside() instanceof CarpentersShopMarket || tile.getInside() instanceof MarniesRanchMarket || tile.getInside() instanceof PierresGeneralStoreMarket  || tile.getInside() instanceof BlackSmithMarket || tile.getInside() instanceof JojoMartMarket || tile.getInside() instanceof TheStardropSaloonMarket ))
-        {
+            || tile.getInside() instanceof CarpentersShopMarket || tile.getInside() instanceof MarniesRanchMarket || tile.getInside() instanceof PierresGeneralStoreMarket || tile.getInside() instanceof BlackSmithMarket || tile.getInside() instanceof JojoMartMarket || tile.getInside() instanceof TheStardropSaloonMarket)) {
             x += dx;
             y += dy;
             if (dx != 0 || dy != 0) {
                 gameView.setWalking(true);
                 Energy -= 10 * (dx * dx + dy * dy);
                 Energy = Math.max(Energy, 0);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("x", String.valueOf(x));
+                map.put("y", String.valueOf(y));
+                map.put("username", this.getOwner().getUsername());
+                Message send1 = new Message(map, Message.Type.update_player_pos, Message.Menu.game);
+                ClientModel.getServerConnectionThread().sendMessage(send1);
             }
             return true;
         }
@@ -485,6 +489,7 @@ public class Player extends User {
             faintTimer = 0f;
         }
     }
+
     public void eat() {
         if (state != EATING_STATE) {
             state = EATING_STATE;
