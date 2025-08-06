@@ -3,13 +3,13 @@ package io.github.group18.Network.Server.Controllers;
 import com.google.gson.Gson;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GameNetworkController {
     public static void handleMessage(Message message, ClientConnectionThread clientConnectionThread) {
@@ -67,6 +67,25 @@ public class GameNetworkController {
                 Message sendd = new Message(mapp, Message.Type.get_kashi_using_x1_y, Message.Menu.game);
                 clientConnectionThread.sendMessage(sendd);
                 break;
+            case get_kashi_using_x1_y1:
+                int xxx = message.getIntFromBody("x");
+                int yyy = message.getIntFromBody("y");
+                HashMap<String, Object> mappp = new HashMap<>();
+                Kashi kashiii = App.getCurrentGame().getMap().get(xxx).get(yyy);
+                mappp.put("ShokhmZadeh", kashiii.isShokhmZadeh());
+                mappp.put("Enterance", kashiii.getEnterance());
+                mappp.put("Walkable", kashiii.getWalkable());
+                if (kashiii.getInside() == null) {
+                    mappp.put("inside", "null");
+                } else {
+                    mappp.put("inside", "full");
+                    mappp.put("insideOBJ", kashiii.getInside());
+                    mappp.put("insideCLASS", kashiii.getInside().getClass().getName());
+                }
+
+                Message senddd = new Message(mappp, Message.Type.get_kashi_using_x1_y1, Message.Menu.game);
+                clientConnectionThread.sendMessage(senddd);
+                break;
 //            case get_kashis_using_2x_2y:
 //                int startx = message.getIntFromBody("startX");
 //                int starty = message.getIntFromBody("startY");
@@ -105,14 +124,20 @@ public class GameNetworkController {
                 Message send2 = new Message(map2, Message.Type.get_dateTime, Message.Menu.game);
                 clientConnectionThread.sendMessage(send2);
                 break;
-            case get_npc:
+            case get_npc_position:
                 HashMap<String, Object> map3 = new HashMap<>();
-                map3.put("sebastian", App.getCurrentGame().getNPCSEBASTIAN());
-                map3.put("abigail", App.getCurrentGame().getNPCABIGAIL());
-                map3.put("harvey", App.getCurrentGame().getNPCHARVEY());
-                map3.put("leah", App.getCurrentGame().getNPCLEAH());
-                map3.put("robin", App.getCurrentGame().getNPCROBIN());
-                Message send3 = new Message(map3, Message.Type.get_npc, Message.Menu.game);
+                map3.put("sebastianx", String.valueOf(App.getCurrentGame().getNPCSEBASTIAN().getX()));
+                map3.put("abigailx", String.valueOf(App.getCurrentGame().getNPCABIGAIL().getX()));
+                map3.put("harveyx", String.valueOf(App.getCurrentGame().getNPCHARVEY().getX()));
+                map3.put("leahx", String.valueOf(App.getCurrentGame().getNPCLEAH().getX()));
+                map3.put("robinx", String.valueOf(App.getCurrentGame().getNPCROBIN().getX()));
+                map3.put("sebastiany", String.valueOf(App.getCurrentGame().getNPCSEBASTIAN().getY()));
+                map3.put("abigaily", String.valueOf(App.getCurrentGame().getNPCABIGAIL().getY()));
+                map3.put("harveyy", String.valueOf(App.getCurrentGame().getNPCHARVEY().getY()));
+                map3.put("leahy", String.valueOf(App.getCurrentGame().getNPCLEAH().getY()));
+                map3.put("robiny", String.valueOf(App.getCurrentGame().getNPCROBIN().getY()));
+//                System.out.println("here is the thing about them npcs man: " + map3.toString());
+                Message send3 = new Message(map3, Message.Type.get_npc_position, Message.Menu.game);
                 clientConnectionThread.sendMessage(send3);
                 break;
             case get_players:
@@ -179,8 +204,121 @@ public class GameNetworkController {
                 break;
             case get_num_players:
                 HashMap<String, Object> map7 = new HashMap<>();
-                map7.put("numberOfPlayers",String.valueOf(App.getCurrentGame().getPlayers().size()));
+                map7.put("numberOfPlayers", String.valueOf(App.getCurrentGame().getPlayers().size()));
                 clientConnectionThread.sendMessage(new Message(map7, Message.Type.get_num_players, Message.Menu.game));
+                break;
+            case get_npc_friendship_and_talktoday:
+                String user_name = message.getFromBody("username");
+                String npc_name = message.getFromBody("npc");
+                HashMap<String, Object> map8 = new HashMap<>();
+
+                int friendshipLevel = -1;
+                boolean isTalkedWithToday = false;
+                switch (npc_name) {
+                    case "SEBASTIAN":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
+                                friendshipLevel = friendship.getFriendshipLevel();
+                                isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "ABIGAIL":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
+                                friendshipLevel = friendship.getFriendshipLevel();
+                                isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "HARVEY":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
+                                friendshipLevel = friendship.getFriendshipLevel();
+                                isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "LEAH":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
+                                friendshipLevel = friendship.getFriendshipLevel();
+                                isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "ROBIN":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
+                                friendshipLevel = friendship.getFriendshipLevel();
+                                isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                }
+                map8.put("friendshipLevel", String.valueOf(friendshipLevel));
+                map8.put("talkedwithtoday", isTalkedWithToday);
+                clientConnectionThread.sendMessage(new Message(map8, Message.Type.get_npc_friendship_and_talktoday, Message.Menu.game));
+                break;
+            case set_npc_friendship_and_talktoday:
+                String _username = message.getFromBody("username");
+                String _npcname = message.getFromBody("npc");
+                int friendShipLeveltoSet = message.getFromBody("friendshipLevel");
+                Boolean talkedwithtodaytoSet = message.getFromBody("talkedwithtoday") == "TRUE" ? true : false;
+
+                switch (_npcname) {
+                    case "SEBASTIAN":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);
+                                App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
+                                break;
+                            }
+                        }
+                        break;
+                    case "ABIGAIL":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);                                      App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
+                                isTalkedWithToday = App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "HARVEY":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);
+                                App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
+                                isTalkedWithToday = App.getCurrentGame().getNPCHARVEY().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "LEAH":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);
+                                isTalkedWithToday = App.getCurrentGame().getNPCLEAH().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                    case "ROBIN":
+                        for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+                            if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);
+                                isTalkedWithToday = App.getCurrentGame().getNPCROBIN().isTalkedWithToday();
+                                break;
+                            }
+                        }
+                        break;
+                }
                 break;
         }
     }
