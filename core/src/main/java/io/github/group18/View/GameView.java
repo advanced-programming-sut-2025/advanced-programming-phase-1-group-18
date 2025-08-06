@@ -26,6 +26,7 @@ import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.enums.WeatherEnum;
 
 public class GameView {
     private final GameController gameController;
@@ -87,7 +88,19 @@ public class GameView {
     int endY;
     ArrayList<ArrayList<Kashi>> tiles = new ArrayList<>();
     boolean playerPosUpdated = true;
-    boolean clockTimeUpdated = true;
+
+    boolean datetimeinit = false;
+    DateTime datetime;
+    boolean datetimeupdated = false;
+
+    boolean weatherinit = false;
+    WeatherEnum weather;
+    boolean weatherupdated = false;
+
+    boolean goldinit = false;
+    int gold;
+    boolean goldupdated = false;
+
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -220,11 +233,7 @@ public class GameView {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTiles();
-//        if (playerPosUpdated) {
         renderPlayer();
-//            playerPosUpdated = false;
-//        }
-
         renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
@@ -412,7 +421,7 @@ public class GameView {
         int tileSize = ClientModel.TILE_SIZE;
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                getBottomLeftCorner(x, y, tiles.get(x - startX).get(y - startY), tiles, alreadyRenderedTiles, bottomLeftTiles);
+//                getBottomLeftCorner(x, y, tiles.get(x - startX).get(y - startY), tiles, alreadyRenderedTiles, bottomLeftTiles);
 
                 if (alreadyRenderedTiles.contains(new Pair<>(x, y))) {
                     //this is for blocks that are covered with big pics so they dont draw anything
@@ -506,110 +515,110 @@ public class GameView {
         }
     }
 
-    public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
-
-        try {
-            if (tiles == null || kashi == null || kashi.getInside() == null) {
-                return;
-            }
-
-            if (x < 0 || y < 0 || x >= tiles.size()) {
-                return;
-            }
-
-            ArrayList<Kashi> row = tiles.get(x - startX);
-            if (row == null || y >= row.size()) {
-                return;
-            }
-
-            Kashi tile = row.get(y - startY);
-            if (tile == null || tile.getInside() == null) {
-                return;
-            }
-
-            Class<?> clazz = kashi.getInside().getClass();
-            if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
-                kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
-                return;
-            }
-
-            while (x >= 0) {
-                Kashi currentTile = tiles.get(x - startX).get(y - startY);
-                if (currentTile == null || currentTile.getInside() == null ||
-                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                    break;
-                }
-                x--;
-            }
-            x++;
-
-            while (y >= 0) {
-                Kashi currentTile = tiles.get(x - startX).get(y - startY);
-                if (currentTile == null || currentTile.getInside() == null ||
-                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                    break;
-                }
-                y--;
-            }
-            y++;
-
-            int startX = x;
-            int startY = y;
-            int currentY;
-            int widthcounter = 0;
-            int heightcounter = 0;
-
-            for (int i = startX; i < tiles.size(); i++) {
-                Kashi rowTile = tiles.get(i - startX).get(startY - startY);
-                if (rowTile == null || rowTile.getInside() == null ||
-                    !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                    break;
-                }
-                widthcounter++;
-
-                for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
-                    Kashi colTile = tiles.get(i).get(currentY - startY);
-                    if (colTile == null || colTile.getInside() == null ||
-                        !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                        break;
-                    }
-                    heightcounter++;
-                }
-            }
-
-            BottomLeft bottomLeft;
-            if (widthcounter > 1 || heightcounter > 1) {
-                System.out.println("this is a big block my boy: " + x + " " + y + " " + widthcounter + " " + heightcounter + " " + widthcounter + " " + kashi.getInside().getClass().getSimpleName());
-                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
-                bottomLeftTiles.add(bottomLeft);
-                for (int i = startX; i < tiles.size(); i++) {
-                    Kashi rowTile = tiles.get(i - startX).get(startY - startY);
-                    if (rowTile == null || rowTile.getInside() == null ||
-                        !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                        break;
-                    }
-
-                    for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
-                        if (i == startX && currentY == startY) continue;
-                        Kashi colTile = tiles.get(i - startX).get(currentY - startY);
-                        if (colTile == null || colTile.getInside() == null ||
-                            !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
-                            break;
-                        }
-
-                        Pair<Integer, Integer> coord = new Pair<>(i, currentY);
-                        if (!alreadyRenderedTiles.contains(coord)) {
-                            alreadyRenderedTiles.add(coord);
-                        }
-                    }
-                }
-            } else {
-                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public void getBottomLeftCorner(int x, int y, Kashi kashi, ArrayList<ArrayList<Kashi>> tiles, ArrayList<Pair<Integer, Integer>> alreadyRenderedTiles, ArrayList<BottomLeft> bottomLeftTiles) {
+//
+//        try {
+//            if (tiles == null || kashi == null || kashi.getInside() == null) {
+//                return;
+//            }
+//
+//            if (x < 0 || y < 0 || x >= tiles.size()) {
+//                return;
+//            }
+//
+//            ArrayList<Kashi> row = tiles.get(x - startX);
+//            if (row == null || y >= row.size()) {
+//                return;
+//            }
+//
+//            Kashi tile = row.get(y - startY);
+//            if (tile == null || tile.getInside() == null) {
+//                return;
+//            }
+//
+//            Class<?> clazz = kashi.getInside().getClass();
+//            if (kashi.getInside() instanceof ForagingTree || kashi.getInside() instanceof ForagingCrop ||
+//                kashi.getInside() instanceof AllTree || kashi.getInside() instanceof AllCrop) {
+//                return;
+//            }
+//
+//            while (x >= 0) {
+//                Kashi currentTile = tiles.get(x - startX).get(y - startY);
+//                if (currentTile == null || currentTile.getInside() == null ||
+//                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                    break;
+//                }
+//                x--;
+//            }
+//            x++;
+//
+//            while (y >= 0) {
+//                Kashi currentTile = tiles.get(x - startX).get(y - startY);
+//                if (currentTile == null || currentTile.getInside() == null ||
+//                    !currentTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                    break;
+//                }
+//                y--;
+//            }
+//            y++;
+//
+//            int startX = x;
+//            int startY = y;
+//            int currentY;
+//            int widthcounter = 0;
+//            int heightcounter = 0;
+//
+//            for (int i = startX; i < tiles.size(); i++) {
+//                Kashi rowTile = tiles.get(i - startX).get(startY - startY);
+//                if (rowTile == null || rowTile.getInside() == null ||
+//                    !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                    break;
+//                }
+//                widthcounter++;
+//
+//                for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
+//                    Kashi colTile = tiles.get(i).get(currentY - startY);
+//                    if (colTile == null || colTile.getInside() == null ||
+//                        !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                        break;
+//                    }
+//                    heightcounter++;
+//                }
+//            }
+//
+//            BottomLeft bottomLeft;
+//            if (widthcounter > 1 || heightcounter > 1) {
+//                System.out.println("this is a big block my boy: " + x + " " + y + " " + widthcounter + " " + heightcounter + " " + widthcounter + " " + kashi.getInside().getClass().getSimpleName());
+//                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, true);
+//                bottomLeftTiles.add(bottomLeft);
+//                for (int i = startX; i < tiles.size(); i++) {
+//                    Kashi rowTile = tiles.get(i - startX).get(startY - startY);
+//                    if (rowTile == null || rowTile.getInside() == null ||
+//                        !rowTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                        break;
+//                    }
+//
+//                    for (currentY = startY; currentY < tiles.get(i - startX).size(); currentY++) {
+//                        if (i == startX && currentY == startY) continue;
+//                        Kashi colTile = tiles.get(i - startX).get(currentY - startY);
+//                        if (colTile == null || colTile.getInside() == null ||
+//                            !colTile.getInside().getClass().equals(clazz) && clazz != ForagingTree.class && clazz != ForagingCrop.class && clazz != AllTree.class && clazz != AllCrop.class) {
+//                            break;
+//                        }
+//
+//                        Pair<Integer, Integer> coord = new Pair<>(i, currentY);
+//                        if (!alreadyRenderedTiles.contains(coord)) {
+//                            alreadyRenderedTiles.add(coord);
+//                        }
+//                    }
+//                }
+//            } else {
+//                bottomLeft = new BottomLeft(x, y, widthcounter, heightcounter, false);
+//            }
+//        } catch (Exception e) {
+//
+//        }
+//    }
 
     private void renderPlayer() {
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
@@ -713,18 +722,24 @@ public class GameView {
     }
 
     private void renderClock() {
-        Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        while (response.getType() != Message.Type.get_dateTime) {
-            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        DateTime time;
+        if (!datetimeinit || datetimeupdated) {
+            Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
+            Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            while (response.getType() != Message.Type.get_dateTime) {
+                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            }
+            Gson gson = new Gson();
+            Object dateTimeObj = response.getFromBody("dateTime");
+            String dateTimeStr = gson.toJson(dateTimeObj);
+            time = gson.fromJson(dateTimeStr, DateTime.class);
+
+            datetime = time;
+        } else {
+            time = datetime;
         }
-//        System.out.println("server response for datetime(renderclock) " + response.getBody().toString());
-        Gson gson = new Gson();
-        Object dateTimeObj = response.getFromBody("dateTime");
-        String dateTimeStr = gson.toJson(dateTimeObj);
-        DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
         if (time != null) {
-            clock.render(batch, time, camera);
+            clock.render(batch, time, camera, this);
         }
 
     }
@@ -1365,5 +1380,125 @@ public class GameView {
 
     public void setPendingPlacementName(String pendingPlacementName) {
         this.pendingPlacementName = pendingPlacementName;
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
+    }
+
+    public int getEndX() {
+        return endX;
+    }
+
+    public void setEndX(int endX) {
+        this.endX = endX;
+    }
+
+    public int getEndY() {
+        return endY;
+    }
+
+    public void setEndY(int endY) {
+        this.endY = endY;
+    }
+
+    public ArrayList<ArrayList<Kashi>> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<ArrayList<Kashi>> tiles) {
+        this.tiles = tiles;
+    }
+
+    public boolean isPlayerPosUpdated() {
+        return playerPosUpdated;
+    }
+
+    public void setPlayerPosUpdated(boolean playerPosUpdated) {
+        this.playerPosUpdated = playerPosUpdated;
+    }
+
+    public boolean isDatetimeinit() {
+        return datetimeinit;
+    }
+
+    public void setDatetimeinit(boolean datetimeinit) {
+        this.datetimeinit = datetimeinit;
+    }
+
+    public DateTime getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(DateTime datetime) {
+        this.datetime = datetime;
+    }
+
+    public boolean isDatetimeupdated() {
+        return datetimeupdated;
+    }
+
+    public void setDatetimeupdated(boolean datetimeupdated) {
+        this.datetimeupdated = datetimeupdated;
+    }
+
+    public boolean isWeatherinit() {
+        return weatherinit;
+    }
+
+    public void setWeatherinit(boolean weatherinit) {
+        this.weatherinit = weatherinit;
+    }
+
+    public WeatherEnum getWeather() {
+        return weather;
+    }
+
+    public void setWeather(WeatherEnum weather) {
+        this.weather = weather;
+    }
+
+    public boolean isWeatherupdated() {
+        return weatherupdated;
+    }
+
+    public void setWeatherupdated(boolean weatherupdated) {
+        this.weatherupdated = weatherupdated;
+    }
+
+    public boolean isGoldinit() {
+        return goldinit;
+    }
+
+    public void setGoldinit(boolean goldinit) {
+        this.goldinit = goldinit;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public boolean isGoldupdated() {
+        return goldupdated;
+    }
+
+    public void setGoldupdated(boolean goldupdated) {
+        this.goldupdated = goldupdated;
     }
 }

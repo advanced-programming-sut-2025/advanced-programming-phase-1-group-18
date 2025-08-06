@@ -130,7 +130,7 @@ public class GameNetworkController {
                     count += 7;
                 }
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
-                System.out.println("get players message " + map4.toString());
+//                System.out.println("get players message " + map4.toString());
                 clientConnectionThread.sendMessage(send4);
                 break;
             case get_gold:
@@ -151,11 +151,20 @@ public class GameNetworkController {
                 String username = message.getFromBody("username");
                 double x_player = Double.parseDouble(message.getFromBody("x"));
                 double y_player = Double.parseDouble(message.getFromBody("y"));
-                int movingDirection = Integer.parseInt(message.getFromBody("movingDirection"));
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     if (player.getOwner().getUsername().equals(username)) {
                         player.setX(x_player);
                         player.setY(y_player);
+                        break;
+                    }
+                }
+                break;
+            case player_movingdirection_update:
+                String movedplayer_username = message.getFromBody("username");
+                int movingDirection = Integer.parseInt(message.getFromBody("movingdirection"));
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(movedplayer_username)) {
+//                        System.out.println("moving direction for: " + movedplayer_username + "set to: " + movingDirection);
                         player.setMovingDirection(movingDirection);
                         break;
                     }

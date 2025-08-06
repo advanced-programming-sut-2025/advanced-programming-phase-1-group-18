@@ -84,7 +84,8 @@ public class Message {
         get_weather,
         get_gold,
         get_kashi_using_x1_y,
-        player_pos_update
+        player_pos_update,
+        player_movingdirection_update
     }
 
     public enum Menu {
