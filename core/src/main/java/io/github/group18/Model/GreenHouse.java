@@ -4,24 +4,15 @@ import java.util.ArrayList;
 
 public class GreenHouse implements PictureModel{
     public boolean Status = false;
-    public ArrayList<Matarsak> Matarsaks = new ArrayList<>();
 
-    // Getter and Setter for Status
+
+
     public boolean isStatus() {
         return Status;
     }
 
     public void setStatus(boolean Status) {
         this.Status = Status;
-    }
-
-    // Getter and Setter for Matarsaks
-    public ArrayList<Matarsak> getMatarsaks() {
-        return Matarsaks;
-    }
-
-    public void setMatarsaks(ArrayList<Matarsak> Matarsaks) {
-        this.Matarsaks = Matarsaks;
     }
 
     public void adaptMap(ArrayList<Cord> cords, int Enterancex, int Enterancey, int borderlowx, int borderlowy, int borderhighx, int borderhighy) {
