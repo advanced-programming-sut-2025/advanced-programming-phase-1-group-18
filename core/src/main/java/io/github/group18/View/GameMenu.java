@@ -72,6 +72,7 @@ public class GameMenu implements Screen {
 
     private void initializeGame() {
         gameView = new GameView(gameController);
+        ClientModel.getServerConnectionThread().setGameView(gameView);
         gameMenuInputAdapter = new GameMenuInputAdapter(gameController);
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
 

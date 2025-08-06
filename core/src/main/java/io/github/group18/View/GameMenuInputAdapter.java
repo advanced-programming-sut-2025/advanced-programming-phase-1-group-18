@@ -402,7 +402,6 @@ public class GameMenuInputAdapter extends InputAdapter {
         map.put("username", ClientModel.getPlayer().getOwner().getUsername());
         map.put("movingdirection", String.valueOf(dir));
         Message send = new Message(map, Message.Type.player_movingdirection_update, Message.Menu.game);
-//        System.out.println("player moved so we are sending moving dir to server " + map.toString());
         ClientModel.getServerConnectionThread().sendMessage(send);
 
         float speed = player.getSpeed();

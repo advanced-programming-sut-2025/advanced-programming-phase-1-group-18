@@ -158,6 +158,13 @@ public class GameNetworkController {
                         break;
                     }
                 }
+                ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
+                for (ClientConnectionThread connection : connections) {
+                    if (clientConnectionIsaPlayer(connection)) {
+                        Message msg = new Message(new HashMap<>(), Message.Type.player_pos_update, Message.Menu.game_menu);
+                        connection.sendMessage(msg);
+                    }
+                }
                 break;
             case player_movingdirection_update:
                 String movedplayer_username = message.getFromBody("username");
@@ -169,6 +176,11 @@ public class GameNetworkController {
                         break;
                     }
                 }
+                break;
+            case get_num_players:
+                HashMap<String, Object> map7 = new HashMap<>();
+                map7.put("numberOfPlayers",String.valueOf(App.getCurrentGame().getPlayers().size()));
+                clientConnectionThread.sendMessage(new Message(map7, Message.Type.get_num_players, Message.Menu.game));
                 break;
         }
     }
@@ -196,6 +208,15 @@ public class GameNetworkController {
     private static boolean clientConnectionIsaPlayer(ClientConnectionThread connection, ArrayList<String> users) {
         for (String user : users) {
             if (connection.getUser().getUsername().equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean clientConnectionIsaPlayer(ClientConnectionThread connection) {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (connection.getUser().getUsername().equals(player.getOwner().getUsername())) {
                 return true;
             }
         }
