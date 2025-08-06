@@ -6,8 +6,10 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Network.Client.App.ChooseMapMessageHandler;
+import io.github.group18.Network.Client.App.GameMessageHandler;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.ChoosingMapView;
+import io.github.group18.View.GameView;
 import io.github.group18.View.StartNewGame;
 
 import java.util.ArrayList;
@@ -40,9 +42,9 @@ public class ChoosingMapController {
 
     public void arrangeVisibily() {
         Message res = ChooseMapMessageHandler.refreshMaps(App.getCurrentUser());
-        System.out.println(res.getBody());
-        System.out.println(res.getMenu());
-        int usersNum = res.getFromBody("usersNum");
+//        System.out.println(res.getBody());
+//        System.out.println(res.getMenu());
+        int usersNum = res.getIntFromBody("usersNum");
 
         if (usersNum < 3) {
             view.getMap3().dispose();
@@ -53,12 +55,16 @@ public class ChoosingMapController {
         for (int i = 0; i < usersNum; i++) {
             if (i == 0) {
                 view.setMap1(getMap(res.getIntFromBody("0")));
+                map1=res.getIntFromBody("0");
             } else if (i == 1) {
                 view.setMap2(getMap(res.getIntFromBody("1")));
+                map2=res.getIntFromBody("1");
             } else if (i == 2) {
                 view.setMap3(getMap(res.getIntFromBody("2")));
+                map3=res.getIntFromBody("2");
             } else if (i == 3) {
                 view.setMap4(getMap(res.getIntFromBody("3")));
+                map4=res.getIntFromBody("3");
             }
         }
 
@@ -89,48 +95,47 @@ public class ChoosingMapController {
 //                view.setMap4(getMap(map4));
 //                view.getPlayButton().setVisible(true);
             }
-//            else if (view.getPlayButton().isPressed()&& view.getPlayButton().isVisible()) {
-//                view.getPlayButton().setVisible(false);
-//                if(map1 != 0){
-//                    maps.add(map1);
-//                    if (map2!=0){
-//                        maps.add(map2);
-//                        if (map3!=0){
-//                            maps.add(map3);
-//                            if (map4!=0){
-//                                maps.add(map4);
-//                            }
-//                        }
-//                    }
-//                }
-//                if (maps.size()==users.size()) {
-//                    try {
+            else if (view.getPlayButton().isPressed()&& view.getPlayButton().isVisible()) {
+                view.getPlayButton().setVisible(false);
+                if(map1 != 0){
+                    maps.add(map1);
+                    if (map2!=0){
+                        maps.add(map2);
+                        if (map3!=0){
+                            maps.add(map3);
+                            if (map4!=0){
+                                maps.add(map4);
+                            }
+                        }
+                    }
+                }
+                if (maps.size()==users.size()) {
+                    try {
+                        GameMessageHandler.startNewGame(App.getCurrentUser());
 //                        ArrayList<String>adaptedUsers = new ArrayList<>();
 //                        for (int i = 0; i < users.size()-1; i++) {adaptedUsers.add(users.get(i));}
-//                        Result result = gameMenuController.gameNew(adaptedUsers,maps);
+//                        System.out.println(GameMessageHandler.startNewGame(App.getCurrentUser()).getMessage());
+//                        Result result = gameMenuController.gameNew(adaptedUsers,maps,App.getCurrentUser());
 //                        if (!result.isSuccessful()){
 //                            view.getNotif().setText(result.getMessage());
 //                        }else {
-//                            App.setGameMenuController(gameMenuController);
-//                            GameController gameController = new GameController(Main.getMain());
-//                            App.setGameController(gameController);
-//                            gameController.init(App.getCurrentGame());
-//                            gameController.run();
 ////                            mainMenu.hide();
 //
-////                            GameView gameView = new GameView(new GameController(),view.getSkin());
+////                            GameView gameView = new GameView(new GameController(Main.getMain()));
 ////                            gameView.setMenuController(gameMenuController);
 ////                            Main.getMain().getScreen().dispose();
-////                            Main.getMain().setScreen(gameView);
+////                            Main.getMain().setScreen(gameView.getGameController().getGameMenu());
 //                        }
-//                    }catch (Exception e){
-//                        view.getNotif().setText(e.getMessage());
-//                        e.printStackTrace();
-//                    }
-//                }else {
-//                    view.getNotif().setText("Choose maps complete");
-//                }
-//            }else if (view.getBackButton().isPressed()){
+                    }catch (Exception e){
+                        view.getNotif().setText(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }else {
+                    System.out.println("From ChoosingMapController: maps size is " + maps.size()+ " and users size is " + users.size()  );
+                    view.getNotif().setText("Choose maps complete");
+                }
+            }
+//            else if (view.getBackButton().isPressed()){
 //                users = new ArrayList<>();
 //                maps = new ArrayList<>();
 //                Main.getMain().getScreen().dispose();

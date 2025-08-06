@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import io.github.group18.Model.App;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
-import io.github.group18.Network.Server.App.ChangeScreenMsgHandler;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
@@ -78,12 +77,15 @@ public class LobbyNetworkController {
                 HashMap<String, Object> body2 = new HashMap<>();
                 boolean flag = false;
                 boolean success = false;
+                int lobbyId = message.getIntFromBody("lobby");
                 for (Lobby lobby : ServerModel.getLobbies()) {
-                    if (lobby.getUsers().contains(user1)){
+                    if (lobby.getId()==lobbyId){
                         flag = true;
                         if(lobby.getAdmin().equals(user1)){
                             if (lobby.getUsers().size()>1){
                                 body2.put("success", true);
+                                body2.put("lobby", lobby.getId());
+                                lobby.initMaps();
                                 clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
                                 success = true;
 //                                ChangeScreenMsgHandler.ChangeScreenToMap(lobby.getUsers());
@@ -105,7 +107,7 @@ public class LobbyNetworkController {
                 if (!success){
                     body2.put("success", false);
                 }
-                System.out.println(body2);
+//                System.out.println(body2);
                 clientConnectionThread.sendMessage(new Message(body2, Message.Type.choose_map, Message.Menu.lobby));
 //                ChangeScreenMsgHandler.ChangeScreenToMap(ServerModel.getOnlineUsers());
                 break;

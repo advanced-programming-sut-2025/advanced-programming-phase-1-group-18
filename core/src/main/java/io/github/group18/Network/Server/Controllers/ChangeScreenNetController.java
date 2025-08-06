@@ -11,17 +11,16 @@ import io.github.group18.Network.common.models.Message;
 import java.util.HashMap;
 
 public class ChangeScreenNetController {
-    public static Message handleMessage(Message message) {
+    public static void handleMessage(Message message) {
         switch (message.getType()) {
             case change_menu:
                 Gson gson = new Gson();
                 Object userObj = message.getFromBody("user");
                 String userjson = gson.toJson(userObj);
                 User newUser = gson.fromJson(userjson, User.class);
-                Lobby lobby = ServerModel.getLobbyByUser(newUser);
-                return changeScreen(lobby);
+                Lobby lobby = ServerModel.getLobbyById(message.getIntFromBody("lobby"));
+                changeScreen(lobby);
             default:
-                return message;
         }
     }
 

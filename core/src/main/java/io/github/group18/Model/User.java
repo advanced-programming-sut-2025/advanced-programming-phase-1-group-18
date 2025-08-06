@@ -4,17 +4,17 @@ import io.github.group18.Controller.RegisterMenuController;
 
 public class User {
 
-    public String Username;
-    public String Password;
-    public String Email;
-    public String Gender;
-    public String NickName;
-    public boolean stayLoggedIn;
-    public int timesPlayed;
-    public int highestGold;
-    public String avatar;
-    public int ID;
-
+    protected String Username;
+    protected String Password;
+    protected String Email;
+    protected String Gender;
+    protected String NickName;
+    protected boolean stayLoggedIn;
+    protected int timesPlayed;
+    protected int highestGold;
+    protected String avatar;
+    protected int ID;
+    boolean isChangedScreen=false;
     public String getUsername() {
         return Username;
     }
@@ -127,5 +127,13 @@ public class User {
         if (highestGold != user.highestGold) return false;
         if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
         return true;
+    }
+
+    public boolean isChangedScreen() {
+        return isChangedScreen;
+    }
+
+    public void setChangedScreen(boolean changedScreen) {
+        isChangedScreen = changedScreen;
     }
 }
