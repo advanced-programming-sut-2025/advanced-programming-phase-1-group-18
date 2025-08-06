@@ -92,7 +92,6 @@ public class ChoosingMapView implements Screen{
 //        table.add(selectMapButton4);
 //        table.row();
         table.add(playButton);
-        table.add(backButton);
         table.row();
         table.add(notif);
         stage.addActor(table);

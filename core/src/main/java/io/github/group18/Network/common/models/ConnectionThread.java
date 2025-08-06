@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class ConnectionThread extends Thread {
-    public DataInputStream dataInputStream;
-    public DataOutputStream dataOutputStream;
-    public final BlockingQueue<Message> receivedMessagesQueue;
-    public String otherSideIP;
-    public int otherSidePort;
-    public Socket socket;
-    public AtomicBoolean end;
-    public boolean initialized = false;
+    protected final DataInputStream dataInputStream;
+    protected final DataOutputStream dataOutputStream;
+    protected final BlockingQueue<Message> receivedMessagesQueue;
+    protected String otherSideIP;
+    protected int otherSidePort;
+    protected Socket socket;
+    protected AtomicBoolean end;
+    protected boolean initialized = false;
 
     public ConnectionThread(Socket socket) throws IOException {
         this.socket = socket;
@@ -48,7 +48,7 @@ abstract public class ConnectionThread extends Thread {
             socket.setSoTimeout(0);
             return result;
         } catch (Exception e) {
-//            System.out.println("5");
+            e.printStackTrace();
             System.err.println("Request Timed out.");
             return null;
         }
