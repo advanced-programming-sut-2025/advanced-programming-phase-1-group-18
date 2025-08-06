@@ -474,10 +474,9 @@ public class Player extends User {
                 Energy -= 10 * (dx * dx + dy * dy);
                 Energy = Math.max(Energy, 0);
                 HashMap<String, Object> body1 = new HashMap<>();
-                body1.put("username",ClientModel.getPlayer().getOwner().getUsername());
+                body1.put("username", ClientModel.getPlayer().getOwner().getUsername());
                 body1.put("x", String.valueOf(x));
                 body1.put("y", String.valueOf(y));
-                body1.put("movingDirection", String.valueOf(movingDirection));
                 Message send1 = new Message(body1, Message.Type.player_pos_update, Message.Menu.game);
                 ClientModel.getServerConnectionThread().sendMessage(send1);
             }
@@ -521,5 +520,9 @@ public class Player extends User {
         if (item instanceof Tool tool) {
             inMyHandTool = tool;
         }
+    }
+
+    public String getUsername() {
+        return getOwner().Username;
     }
 }

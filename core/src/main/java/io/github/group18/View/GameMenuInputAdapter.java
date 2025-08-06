@@ -26,6 +26,7 @@ import io.github.group18.Model.*;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.TavilehAnimalEnums;
 
 public class GameMenuInputAdapter extends InputAdapter {
@@ -396,6 +397,12 @@ public class GameMenuInputAdapter extends InputAdapter {
         } else {
             player.setMovingDirection(0);
         }
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("username", ClientModel.getPlayer().getOwner().getUsername());
+        map.put("movingdirection", String.valueOf(dir));
+        Message send = new Message(map, Message.Type.player_movingdirection_update, Message.Menu.game);
+        ClientModel.getServerConnectionThread().sendMessage(send);
 
         float speed = player.getSpeed();
         player.setVelocity(vx * speed, vy * speed);
