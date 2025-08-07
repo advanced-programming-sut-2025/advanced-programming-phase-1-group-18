@@ -69,7 +69,7 @@ public class Player extends User {
         this.CraftingRecipes = new ArrayList<>();
         this.artisansInProduce = new ArrayList<>();
 
-        this.inventory = new Inventory(12, "initial");
+        this.inventory = new Inventory(16, "initial");
 
         WateringCan wateringCan = new WateringCan("initial", 5, 40, 40);
         this.inventory.addItem(wateringCan, 1);
