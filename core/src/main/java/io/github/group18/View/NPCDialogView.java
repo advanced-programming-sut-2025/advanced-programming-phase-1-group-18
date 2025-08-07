@@ -45,6 +45,7 @@ public class NPCDialogView {
         Window npcWindow = new Window("NPC Dialog", skin);
         npcWindow.setModal(true);
 
+        System.out.println("before going to gamemenucontroller meetnpc: " + npc + " " + ClientModel.getPlayer().getOwner().getUsername());
         Label npctalk = new Label(GameMenuController.meetNPC(npc, ClientModel.getPlayer()).getMessage(), skin);
 
         Table headerTable = new Table(skin);

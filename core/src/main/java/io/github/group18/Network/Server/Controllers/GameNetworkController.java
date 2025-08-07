@@ -217,6 +217,7 @@ public class GameNetworkController {
                 switch (npc_name) {
                     case "SEBASTIAN":
                         for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+                            System.out.println("server side, this is all the frienships sebastian has: ");
                             if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
                                 friendshipLevel = friendship.getFriendshipLevel();
                                 isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
