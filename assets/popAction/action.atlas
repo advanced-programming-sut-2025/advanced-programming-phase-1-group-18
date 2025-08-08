@@ -1,0 +1,24 @@
+action.png
+size: 1152, 128
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+cross
+  bounds: 0, 0, 128, 128
+exclamination
+  bounds: 128, 0, 128, 128
+heart
+  bounds: 256, 0, 128, 128
+question
+  bounds: 384, 0, 128, 128
+sos
+  bounds: 512, 0, 128, 128
+star
+  bounds: 640, 0, 128, 128
+thx
+  bounds: 768, 0, 128, 128
+tick
+  bounds: 896, 0, 128, 128
+yes
+  bounds: 1024, 0, 128, 128

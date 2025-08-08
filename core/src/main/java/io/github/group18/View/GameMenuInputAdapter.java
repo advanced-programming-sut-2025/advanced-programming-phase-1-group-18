@@ -51,7 +51,10 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.Q) {
             Sell();
         }
-
+        if (keycode == Input.Keys.O){
+            ClientModel.setWindowOpen(true);
+            handleActionMenu();
+        }
         if (keycode == Input.Keys.R) {
             //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
@@ -180,6 +183,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         if (keycode == Input.Keys.C) {
+            ClientModel.setWindowOpen(true);
             handleCookingMenu();
         }
 
@@ -639,6 +643,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         return keysHeld;
     }
 
+
     private void Sell() {
         InputProcessor originalInputProcessor = Gdx.input.getInputProcessor();
         Stage stage = gameController.getGameMenu().getStage();
@@ -731,6 +736,12 @@ public class GameMenuInputAdapter extends InputAdapter {
         gameController.getGameMenu().getCookingMenu().setActive(true);
         gameController.getGameMenu().getCookingMenu().setGameMenuInputAdapter(this);
         Gdx.input.setInputProcessor(gameController.getGameMenu().getCookingMenu().getStage());
+    }
+
+    private void handleActionMenu() {
+        gameController.getGameMenu().getActionMenu().setActive(true);
+        gameController.getGameMenu().getActionMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(gameController.getGameMenu().getActionMenu().getStage());
     }
 
     private void handleCheatCodeDialog() {

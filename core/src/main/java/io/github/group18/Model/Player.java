@@ -5,10 +5,12 @@ import io.github.group18.Model.Items.*;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.GameView;
+import io.github.group18.enums.ActionEnum;
 import io.github.group18.enums.CraftingRecipesEnums;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Player extends User {
     private int daysAfterGash = 0;
@@ -42,6 +44,7 @@ public class Player extends User {
     private float speed = 4f;
     private float vx = 0, vy = 0;
     private boolean showInventory;
+    private boolean showActions;
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_FAINTING = 5; // After your existing states
@@ -51,8 +54,12 @@ public class Player extends User {
     private float eatingTimer;
     private boolean isPlacingItem = false;
 
-    public Tool inMyHandTool;
-    public CraftingItem craftingInHand;
+    private ActionEnum action;
+    private float actionTimer;
+    private LinkedList<ActionEnum> actionQueue = new LinkedList<>();
+
+    protected Tool inMyHandTool;
+    protected CraftingItem craftingInHand;
 
     public Player() {
         //super(this.getUsername(),this.getPassword(),this.getEmail(),this.getGender(),this.getNickName());
@@ -72,6 +79,7 @@ public class Player extends User {
         this.CookingRecipes = new ArrayList<>();
         this.CraftingRecipes = new ArrayList<>();
         this.artisansInProduce = new ArrayList<>();
+        initActions();
 
         this.inventory = new Inventory(12, "initial");
 
@@ -348,6 +356,14 @@ public class Player extends User {
         this.showInventory = showInventory;
     }
 
+    public boolean isShowActions() {
+        return showActions;
+    }
+
+    public void setShowActions(boolean showActions) {
+        this.showActions = showActions;
+    }
+
     public int getState() {
         return state;
     }
@@ -362,6 +378,14 @@ public class Player extends User {
 
     public float getEatingTimer() {
         return eatingTimer;
+    }
+
+    public float getActionTimer() {
+        return actionTimer;
+    }
+
+    public void setActionTimer(float actionTimer) {
+        this.actionTimer = actionTimer;
     }
 
     public void setEatingTimer(float eatingTimer) {
@@ -382,6 +406,14 @@ public class Player extends User {
             faint();
         }
 
+        if (action != null){
+            actionTimer += delta;
+            if (actionTimer >= 5f) {
+                action = null;
+                System.out.println("From Player");
+                actionTimer=0f;
+            }
+        }
         // Handle current state
         switch (state) {
             case STATE_FAINTING:
@@ -520,5 +552,31 @@ public class Player extends User {
 
     public String getUsername() {
         return getOwner().Username;
+    }
+    public ActionEnum getAction() {
+        return action;
+    }
+
+    public void setAction(ActionEnum action) {
+        this.action = action;
+    }
+
+    public LinkedList<ActionEnum> getActionQueue() {
+        return actionQueue;
+    }
+
+    public void setActionQueue(LinkedList<ActionEnum> actionQueue) {
+        this.actionQueue = actionQueue;
+    }
+
+    public void initActions() {
+        for (ActionEnum action : ActionEnum.values()) {
+            actionQueue.add(action);
+        }
+    }
+
+    public void moveToFront(ActionEnum selectedAction) {
+        actionQueue.remove(selectedAction);
+        actionQueue.addFirst(selectedAction);
     }
 }
