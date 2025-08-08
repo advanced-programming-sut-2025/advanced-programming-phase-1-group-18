@@ -30,8 +30,10 @@ import io.github.group18.Controller.EnergyController;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
+import io.github.group18.Network.Client.App.ActionMessageHandler;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.enums.ActionEnum;
 import io.github.group18.enums.WeatherEnum;
 
 public class GameView {
@@ -76,6 +78,9 @@ public class GameView {
     private boolean harvey_view = false;
     private boolean leah_view = false;
     private boolean robin_view = false;
+
+    boolean isActionOn =false;
+    float actionTime = 0f;
 
     private OrthographicCamera camera;
     private boolean cameraInitialized = false;
@@ -801,6 +806,7 @@ public class GameView {
 //    }
 
     private void renderPlayer() {
+
         Message send = new Message(new HashMap<>(), Message.Type.get_players, Message.Menu.game);
         Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         while (response.getType() != Message.Type.get_players) {
@@ -812,6 +818,7 @@ public class GameView {
 //        System.out.println("client received numofplayers: " + numberOfPlayers);
         int count = 1;
         for (int i = 0; i < numberOfPlayers; i++) {
+            String actionName = null;
             String firstSTR = response.getFromBody(String.valueOf(count));
             double first = Double.parseDouble(firstSTR);
             String secondSTR = response.getFromBody(String.valueOf(count + 1));
@@ -828,6 +835,14 @@ public class GameView {
             Object buffObj = response.getFromBody(String.valueOf(count + 6));
             String buffSTR = gson.toJson(buffObj);
             Buff foodBuff = gson.fromJson(buffSTR, Buff.class);
+
+            Object acObj = response.getFromBody(String.valueOf(count + 7));
+            buffSTR = gson.toJson(acObj);
+            ActionEnum actionEnum = gson.fromJson(buffSTR, ActionEnum.class);
+            if (actionEnum != null) {
+                actionName = actionEnum.name();
+            }
+
             stateTime += Gdx.graphics.getDeltaTime();
 
             TextureRegion currentFrame = new TextureRegion();
@@ -847,10 +862,16 @@ public class GameView {
                     batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
                     break;
             }
+            if (actionName!= null){
+
+                TextureRegion actionPop = GameAssetManager.getGameAssetManager().getActionAtlas().
+                    findRegion(actionName);
+                batch.draw(actionPop,(float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + currentFrame.getRegionHeight());
+            }
 
             batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
                 ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            count += 7;
+            count += 8;
         }
 
     }
@@ -1145,6 +1166,15 @@ public class GameView {
             camera.position.y = Math.max(halfHeight, Math.min(playerY, ClientModel.mapHeight * ClientModel.TILE_SIZE - halfHeight));
 
             camera.update();
+            if(ClientModel.getPlayer().getAction() != null){
+                actionTime += deltaTime;
+                if (actionTime >= 5f) {
+                    ClientModel.getPlayer().setAction(null);
+                    ActionMessageHandler.actionOff(App.getCurrentUser().getID());
+                    System.out.println("From Client: stop Action");
+                    actionTime=0f;
+                }
+            }
         }
     }
 

@@ -53,6 +53,7 @@ public class GameAssetManager {
     TextureAtlas cookingAtlas = new TextureAtlas(Gdx.files.internal("cookingRecipes/cooking.atlas"));
     TextureAtlas skillAtlas = new TextureAtlas(Gdx.files.internal("SkillsIcon/SkillIcons.atlas"));
     TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal("game/character/sprites_player.atlas"));
+    TextureAtlas actionAtlas = new TextureAtlas(Gdx.files.internal("popAction/action.atlas"));
 
     TextureRegion grass = new TextureRegion(new Texture(Gdx.files.internal("game/tiles/grass.png")));
     TextureRegion greenhouseBroken = new TextureRegion(new Texture(Gdx.files.internal("Greenhouse/greenhouse-broken.png")));
@@ -447,5 +448,13 @@ public class GameAssetManager {
 
     public void setUpsidedownredtriangle(Texture upsidedownredtriangle) {
         this.upsidedownredtriangle = upsidedownredtriangle;
+    }
+
+    public TextureAtlas getActionAtlas() {
+        return actionAtlas;
+    }
+
+    public void setActionAtlas(TextureAtlas actionAtlas) {
+        this.actionAtlas = actionAtlas;
     }
 }

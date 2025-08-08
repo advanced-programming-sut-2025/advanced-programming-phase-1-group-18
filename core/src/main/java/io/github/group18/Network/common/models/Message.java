@@ -71,6 +71,7 @@ public class Message {
         refresh_maps,
         select_map,
         start_game,
+        action_pop,
         status,
         load_game_screen,
         add_player_to_Clientmain,
@@ -95,7 +96,11 @@ public class Message {
         set_gold,
         set_gold1,
         set_fishing_stock,
-        get_ScoreBoard_info
+        get_ScoreBoard_info,
+        get_linked_list,
+        move_to_front,
+        set_action,
+        action_off
     }
 
     public enum Menu {

@@ -14,4 +14,11 @@ public class GameMessageHandler {
         Message msg = new Message(message, Message.Type.start_game, Message.Menu.game_menu);
         ClientModel.getServerConnectionThread().sendMessage(msg);
     }
+    public static void playerActionPop (int Id, String action) {
+        HashMap<String,Object> message = new HashMap<>();
+        message.put("Id", Id);
+        message.put("Action", action);
+        Message msg = new Message(message, Message.Type.action_pop, Message.Menu.game_menu);
+        Message res = ClientModel.getServerConnectionThread().sendAndWaitForResponse(msg, ClientModel.TIMEOUT_MILLIS);
+    }
 }

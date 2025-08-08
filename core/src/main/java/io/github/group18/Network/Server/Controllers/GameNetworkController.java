@@ -9,6 +9,7 @@ import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.enums.ActionEnum;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +112,8 @@ public class GameNetworkController {
                     map4.put(String.valueOf(count + 4), String.valueOf(player.getFaintTimer()));
                     map4.put(String.valueOf(count + 5), String.valueOf(player.getEatingTimer()));
                     map4.put(String.valueOf(count + 6), player.getFoodBuff());
-                    count += 7;
+                    map4.put(String.valueOf(count + 7), player.getAction());
+                    count += 8;
                 }
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
                 clientConnectionThread.sendMessage(send4);
@@ -354,6 +356,52 @@ public class GameNetworkController {
                 HashMap<String, Object> board = new HashMap<>();
                 board.put("players", infos);
                 clientConnectionThread.sendMessage(new Message(board, Message.Type.get_ScoreBoard_info, Message.Menu.game));
+                break;
+            case get_linked_list:
+                HashMap<String, Object> bdy = new HashMap<>();
+                int userId = message.getIntFromBody("userId");
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getID() == userId) {
+                        bdy.put("linkedList", player.getActionQueue());
+                        break;
+                    }
+                }
+                clientConnectionThread.sendMessage(new Message(bdy, Message.Type.get_linked_list, Message.Menu.game));
+                break;
+            case move_to_front:
+                System.out.println("message received");
+                int userId1 = message.getIntFromBody("userId");
+                String action = message.getFromBody("action");
+                ActionEnum actionEnum = ActionEnum.valueOf(action);
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getID() == userId1) {
+                        System.out.println("From Server: move to front");
+                        player.moveToFront(actionEnum);
+                        break;
+                    }
+                }
+                break;
+            case set_action:
+                System.out.println("message received");
+                userId = message.getIntFromBody("userId");
+                action = message.getFromBody("action");
+                actionEnum = ActionEnum.valueOf(action);
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getID() == userId) {
+                        player.setAction(actionEnum);
+                        System.out.println("From Server: set action");
+                        break;
+                    }
+                }
+                break;
+            case action_off:
+                userId = message.getIntFromBody("userId");
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getID() == userId) {
+                        player.setAction(null);
+                        break;
+                    }
+                }
                 break;
         }
     }
