@@ -89,7 +89,12 @@ public class Message {
         get_num_players,
         get_kashi_using_x1_y1,
         get_npc_friendship_and_talktoday,
-        set_npc_friendship_and_talktoday
+        set_npc_friendship_and_talktoday,
+        get_gold1,
+        get_store_stock,
+        set_gold,
+        set_gold1,
+        set_fishing_stock
     }
 
     public enum Menu {

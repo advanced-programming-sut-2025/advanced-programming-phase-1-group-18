@@ -2,8 +2,7 @@ package io.github.group18.Model;
 
 import io.github.group18.Model.Items.Item;
 
-public class Kashi
-{
+public class Kashi {
     public Boolean ShokhmZadeh;
     public Object inside;
     public Boolean Enterance;
@@ -45,4 +44,12 @@ public class Kashi
         Walkable = walkable;
     }
 
+    public String toString() {
+        if(inside == null) {
+            return "niggers";
+        }
+        else {
+            return inside.toString();
+        }
+    }
 }

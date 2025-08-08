@@ -112,6 +112,8 @@ public class GameMenuMenu extends AppMenu implements Screen {
         } else if (GameMenuCommands.Walk.getMather(input) != null) {
             controller.walk(Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(1)),
                 Integer.parseInt(GameMenuCommands.Walk.getMather(input).group(2)), ClientModel.getPlayer());
+        }else if (GameMenuCommands.CHEATADD.getMather(input) != null) {
+            controller.cheatAdd(Integer.parseInt(MarketMenuEnums.CHEATADD.getMather(input).group(1)),ClientModel.getPlayer());
         }
     }
 //        else if (GameMenuCommands.TOOLEQUIP.getMather(input) != null) {

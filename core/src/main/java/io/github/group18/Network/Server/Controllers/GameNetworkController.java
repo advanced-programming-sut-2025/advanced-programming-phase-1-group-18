@@ -1,8 +1,10 @@
 package io.github.group18.Network.Server.Controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
+import io.github.group18.Model.Items.FishingPole;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
 import io.github.group18.Network.Server.App.ServerModel;
@@ -10,6 +12,8 @@ import io.github.group18.Network.common.models.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameNetworkController {
     public static void handleMessage(Message message, ClientConnectionThread clientConnectionThread) {
@@ -30,61 +34,16 @@ public class GameNetworkController {
                 startNewGame(usernames, maps, newUser);
                 break;
             case get_kashi_using_x_y:
-                int x = message.getIntFromBody("x");
-                int y = message.getIntFromBody("y");
-                HashMap<String, Object> map = new HashMap<>();
-                Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
-                map.put("ShokhmZadeh", kashi.isShokhmZadeh());
-                map.put("Enterance", kashi.getEnterance());
-                map.put("Walkable", kashi.getWalkable());
-                if (kashi.getInside() == null) {
-                    map.put("inside", "null");
-                } else {
-                    map.put("inside", "full");
-                    map.put("insideOBJ", kashi.getInside());
-                    map.put("insideCLASS", kashi.getInside().getClass().getName());
-                }
-
-                Message send = new Message(map, Message.Type.get_kashi_using_x_y, Message.Menu.game);
-                clientConnectionThread.sendMessage(send);
+                Message send_map = new Message(get_kashi(message, clientConnectionThread), Message.Type.get_kashi_using_x_y, Message.Menu.game);
+                clientConnectionThread.sendMessage(send_map);
                 break;
             case get_kashi_using_x1_y:
-                int xx = message.getIntFromBody("x");
-                int yy = message.getIntFromBody("y");
-                HashMap<String, Object> mapp = new HashMap<>();
-                Kashi kashii = App.getCurrentGame().getMap().get(xx).get(yy);
-                mapp.put("ShokhmZadeh", kashii.isShokhmZadeh());
-                mapp.put("Enterance", kashii.getEnterance());
-                mapp.put("Walkable", kashii.getWalkable());
-                if (kashii.getInside() == null) {
-                    mapp.put("inside", "null");
-                } else {
-                    mapp.put("inside", "full");
-                    mapp.put("insideOBJ", kashii.getInside());
-                    mapp.put("insideCLASS", kashii.getInside().getClass().getName());
-                }
-
-                Message sendd = new Message(mapp, Message.Type.get_kashi_using_x1_y, Message.Menu.game);
-                clientConnectionThread.sendMessage(sendd);
+                Message send1_map = new Message(get_kashi(message, clientConnectionThread), Message.Type.get_kashi_using_x1_y, Message.Menu.game);
+                clientConnectionThread.sendMessage(send1_map);
                 break;
             case get_kashi_using_x1_y1:
-                int xxx = message.getIntFromBody("x");
-                int yyy = message.getIntFromBody("y");
-                HashMap<String, Object> mappp = new HashMap<>();
-                Kashi kashiii = App.getCurrentGame().getMap().get(xxx).get(yyy);
-                mappp.put("ShokhmZadeh", kashiii.isShokhmZadeh());
-                mappp.put("Enterance", kashiii.getEnterance());
-                mappp.put("Walkable", kashiii.getWalkable());
-                if (kashiii.getInside() == null) {
-                    mappp.put("inside", "null");
-                } else {
-                    mappp.put("inside", "full");
-                    mappp.put("insideOBJ", kashiii.getInside());
-                    mappp.put("insideCLASS", kashiii.getInside().getClass().getName());
-                }
-
-                Message senddd = new Message(mappp, Message.Type.get_kashi_using_x1_y1, Message.Menu.game);
-                clientConnectionThread.sendMessage(senddd);
+                Message send2_map = new Message(get_kashi(message, clientConnectionThread), Message.Type.get_kashi_using_x1_y1, Message.Menu.game);
+                clientConnectionThread.sendMessage(send2_map);
                 break;
 //            case get_kashis_using_2x_2y:
 //                int startx = message.getIntFromBody("startX");
@@ -136,7 +95,6 @@ public class GameNetworkController {
                 map3.put("harveyy", String.valueOf(App.getCurrentGame().getNPCHARVEY().getY()));
                 map3.put("leahy", String.valueOf(App.getCurrentGame().getNPCLEAH().getY()));
                 map3.put("robiny", String.valueOf(App.getCurrentGame().getNPCROBIN().getY()));
-//                System.out.println("here is the thing about them npcs man: " + map3.toString());
                 Message send3 = new Message(map3, Message.Type.get_npc_position, Message.Menu.game);
                 clientConnectionThread.sendMessage(send3);
                 break;
@@ -155,7 +113,6 @@ public class GameNetworkController {
                     count += 7;
                 }
                 Message send4 = new Message(map4, Message.Type.get_players, Message.Menu.game);
-//                System.out.println("get players message " + map4.toString());
                 clientConnectionThread.sendMessage(send4);
                 break;
             case get_gold:
@@ -164,6 +121,15 @@ public class GameNetworkController {
                         HashMap map5 = new HashMap<>();
                         map5.put("gold", player.getGold());
                         clientConnectionThread.sendMessage(new Message(map5, Message.Type.get_gold, Message.Menu.game));
+                    }
+                }
+                break;
+            case get_gold1:
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(message.getFromBody("username"))) {
+                        HashMap map55 = new HashMap<>();
+                        map55.put("gold", player.getGold());
+                        clientConnectionThread.sendMessage(new Message(map55, Message.Type.get_gold1, Message.Menu.game));
                     }
                 }
                 break;
@@ -183,13 +149,6 @@ public class GameNetworkController {
                         break;
                     }
                 }
-//                ArrayList<ClientConnectionThread> connections = ServerModel.getConnections();
-//                for (ClientConnectionThread connection : connections) {
-//                    if (clientConnectionIsaPlayer(connection)) {
-//                        Message msg = new Message(new HashMap<>(), Message.Type.player_pos_update, Message.Menu.game_menu);
-//                        connection.sendMessage(msg);
-//                    }
-//                }
                 break;
             case player_movingdirection_update:
                 String movedplayer_username = message.getFromBody("username");
@@ -208,16 +167,19 @@ public class GameNetworkController {
                 clientConnectionThread.sendMessage(new Message(map7, Message.Type.get_num_players, Message.Menu.game));
                 break;
             case get_npc_friendship_and_talktoday:
+                System.out.println("we are in get_npc_friendship_and_talktoday switch case");
                 String user_name = message.getFromBody("username");
                 String npc_name = message.getFromBody("npc");
+                System.out.println("server side: " + user_name + " " + npc_name);
                 HashMap<String, Object> map8 = new HashMap<>();
 
                 int friendshipLevel = -1;
                 boolean isTalkedWithToday = false;
-                switch (npc_name) {
+                switch (npc_name.toUpperCase()) {
                     case "SEBASTIAN":
+                        System.out.println("server side: in case sebastian");
                         for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                            System.out.println("server side, this is all the frienships sebastian has: ");
+                            System.out.println("server side, this is all the frienships sebastian has: " + friendship.getPlayer().getOwner().getUsername());
                             if (friendship.getPlayer().getOwner().getUsername().equals(user_name)) {
                                 friendshipLevel = friendship.getFriendshipLevel();
                                 isTalkedWithToday = App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday();
@@ -285,8 +247,8 @@ public class GameNetworkController {
                     case "ABIGAIL":
                         for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
                             if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
-                                friendship.setFriendshipLevel(friendShipLeveltoSet);                                      App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
-                                isTalkedWithToday = App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday();
+                                friendship.setFriendshipLevel(friendShipLeveltoSet);
+                                App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
                                 break;
                             }
                         }
@@ -296,7 +258,6 @@ public class GameNetworkController {
                             if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
                                 friendship.setFriendshipLevel(friendShipLeveltoSet);
                                 App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(talkedwithtodaytoSet);
-                                isTalkedWithToday = App.getCurrentGame().getNPCHARVEY().isTalkedWithToday();
                                 break;
                             }
                         }
@@ -305,7 +266,6 @@ public class GameNetworkController {
                         for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
                             if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
                                 friendship.setFriendshipLevel(friendShipLeveltoSet);
-                                isTalkedWithToday = App.getCurrentGame().getNPCLEAH().isTalkedWithToday();
                                 break;
                             }
                         }
@@ -314,14 +274,94 @@ public class GameNetworkController {
                         for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
                             if (friendship.getPlayer().getOwner().getUsername().equals(_username)) {
                                 friendship.setFriendshipLevel(friendShipLeveltoSet);
-                                isTalkedWithToday = App.getCurrentGame().getNPCROBIN().isTalkedWithToday();
                                 break;
                             }
                         }
                         break;
                 }
                 break;
+            case get_store_stock:
+                String market_name = message.getFromBody("store");
+                HashMap<String, Object> stockbody = new HashMap<>();
+                if (market_name.equalsIgnoreCase("BlackSmith")) {
+                    stockbody.put("type", "Mineral");
+                    stockbody.put("stock", App.getCurrentGame().getBlackSmithMarket().getStock());
+                } else if (market_name.equalsIgnoreCase("CarpentersShop")) {
+                    stockbody.put("type", "Object");
+                    stockbody.put("stock", App.getCurrentGame().getCarpentersShopMarket().getStock());
+                } else if (market_name.equalsIgnoreCase("FishShop")) {
+                    HashMap<FishingPole, Integer> rawStock = App.getCurrentGame().getFishShopMarket().getStock();
+                    ArrayList<StockEntry> stockList = new ArrayList<>();
+
+                    for (Map.Entry<FishingPole, Integer> entry : rawStock.entrySet()) {
+                        stockList.add(new StockEntry(entry.getKey(), entry.getValue()));
+                    }
+
+                    stockbody.put("type", "Item");
+                    stockbody.put("stock", stockList);
+                } else if (market_name.equalsIgnoreCase("JojaMart")) {
+                    stockbody.put("type", "Object");
+                    stockbody.put("stock", App.getCurrentGame().getJojoMartMarket().getStock());
+                } else if (market_name.equalsIgnoreCase("MarniesRanch")) {
+                    stockbody.put("type", "Item");
+                    stockbody.put("stock", App.getCurrentGame().getMarniesRanchMarket().getStock());
+                } else if (market_name.equalsIgnoreCase("PierresGeneralStore")) {
+                    stockbody.put("type", "Object");
+                    stockbody.put("stock", App.getCurrentGame().getPierresGeneralStoreMarket().getStock());
+                } else if (market_name.equalsIgnoreCase("TheStardropSaloon")) {
+                    stockbody.put("type", "Object");
+                    stockbody.put("stock", App.getCurrentGame().getTheStardropSaloonMarket().getStock());
+                }
+                Message send_stock = new Message(stockbody, Message.Type.get_store_stock, Message.Menu.game);
+                clientConnectionThread.sendMessage(send_stock);
+                break;
+            case set_gold:
+                String gold_name = message.getFromBody("username");
+                int goldint = Integer.parseInt(message.getFromBody("gold"));
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(gold_name)) {
+                        player.setGold(player.getGold() + goldint);
+                    }
+                }
+                break;
+            case set_gold1:
+                String gold_name1 = message.getFromBody("username");
+                int goldint1 = Integer.parseInt(message.getFromBody("gold"));
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.getOwner().getUsername().equals(gold_name1)) {
+                        player.setGold(player.getGold() + goldint1);
+                    }
+                }
+                break;
+            case set_fishing_stock:
+                String item_name = message.getFromBody("item");
+                int item_quantity = Integer.parseInt(message.getFromBody("quantity"));
+                for (FishingPole fishingPole : App.getCurrentGame().getFishShopMarket().getStock().keySet()) {
+                    if (fishingPole.getCorrectName().equalsIgnoreCase(item_name)) {
+                        App.getCurrentGame().getFishShopMarket().removeItem(fishingPole, item_quantity);
+                        break;
+                    }
+                }
+                break;
         }
+    }
+
+    private static HashMap<String, Object> get_kashi(Message message, ClientConnectionThread clientConnectionThread) {
+        int x = message.getIntFromBody("x");
+        int y = message.getIntFromBody("y");
+        HashMap<String, Object> map = new HashMap<>();
+        Kashi kashi = App.getCurrentGame().getMap().get(x).get(y);
+        map.put("ShokhmZadeh", kashi.isShokhmZadeh());
+        map.put("Enterance", kashi.getEnterance());
+        map.put("Walkable", kashi.getWalkable());
+        if (kashi.getInside() == null) {
+            map.put("inside", "null");
+        } else {
+            map.put("inside", "full");
+            map.put("insideOBJ", kashi.getInside());
+            map.put("insideCLASS", kashi.getInside().getClass().getName());
+        }
+        return map;
     }
 
     private static void startNewGame(ArrayList<String> users, ArrayList<Integer> maps, User newUser) {

@@ -244,7 +244,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 }
                 ClientModel.getPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
-                openNpcDialog(screenX, screenY);
+//                openNpcDialog(screenX, screenY);
 //                openNpcPage(screenX, screenY);
                 return true;
             }
@@ -331,23 +331,23 @@ public class GameMenuInputAdapter extends InputAdapter {
         GameView gameView = gameController.getGameMenu().getGameView();
         if (tileX == gameView.getSebastianx() && tileY == gameView.getSebastiany() + 2) {
             gameController.getGameMenu().getGameView().setSebastian_dialog(true);
-            openDialogPage("Sebastian",gameController);
+            openDialogPage("Sebastian", gameController);
         }
         if (tileX == gameView.getAbigailx() && tileY == gameView.getAbigaily() + 2) {
             gameController.getGameMenu().getGameView().setAbigail_dialog(true);
-            openDialogPage("ABIGAIL",gameController);
+            openDialogPage("ABIGAIL", gameController);
         }
         if (tileX == gameView.getHarveyx() && tileY == gameView.getHarveyy() + 2) {
             gameController.getGameMenu().getGameView().setHarvey_dialog(true);
-            openDialogPage("HARVEY",gameController);
+            openDialogPage("HARVEY", gameController);
         }
         if (tileX == gameView.getLeahx() && tileY == gameView.getLeahy() + 2) {
             gameController.getGameMenu().getGameView().setLeah_dialog(true);
-            openDialogPage("LEAH",gameController);
+            openDialogPage("LEAH", gameController);
         }
         if (tileX == gameView.getRobinx() && tileY == gameView.getRobiny() + 2) {
             gameController.getGameMenu().getGameView().setRobin_dialog(true);
-            openDialogPage("ROBIN",gameController);
+            openDialogPage("ROBIN", gameController);
         }
     }
 
@@ -497,8 +497,19 @@ public class GameMenuInputAdapter extends InputAdapter {
             System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
             Object insideClassObj = response.getFromBody("insideCLASS");
             Object insideRaw = response.getFromBody("insideOBJ");
-
-            if (insideClassObj instanceof Class<?>) {
+            if (response.getFromBody("insideCLASS").equals("io.github.group18.Model.FishShopMarketali")) {
+                System.out.println("fish1");
+                tile.setInside(new FishShopMarketali());
+                System.out.println("fish2");
+                GameView gameView = gameController.getGameMenu().getGameView();
+                System.out.println("fish3");
+                ClientModel.setWindowOpen(true);
+                System.out.println("fish3.5");
+                gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
+                System.out.println("fish4");
+                Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
+                System.out.println("fish5");
+            } else if (insideClassObj instanceof Class<?>) {
                 Class<?> clazz = (Class<?>) insideClassObj;
 
                 Gson gson = new Gson();
@@ -506,51 +517,12 @@ public class GameMenuInputAdapter extends InputAdapter {
                 Object insideDeserialized = gson.fromJson(insideJson, clazz);
 
                 tile.setInside(insideDeserialized);
-            } else {
-                System.out.println("Warning: insideCLASS is not a Class<?>. Got: " + insideClassObj);
             }
         } else {
             tile.setInside(null);
         }
-        Kashi kashi = tile;
-        if (kashi.getInside() instanceof adaptMapMarket) {
-            if (kashi.getInside() instanceof NPC) {
-                //goto NPC
-            } else {
-                GameView gameView = gameController.getGameMenu().getGameView();
-                if (kashi.getInside() instanceof BlackSmithMarket) {
-                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getBlackSmith().getStage());
-                }
-                if (kashi.getInside() instanceof CarpentersShopMarket) {
-                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getCarpentersShop().getStage());
-                }
-                if (kashi.getInside() instanceof FishShopMarket) {
-                    gameView.setFishShop(new StoreUI(new FishShopController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
-                }
-                if (kashi.getInside() instanceof JojoMartMarket) {
-                    gameView.setJojaMart(new StoreUI(new JojaMartController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getJojaMart().getStage());
-                }
-                if (kashi.getInside() instanceof MarniesRanchMarket) {
-                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getMarniesRanch().getStage());
-                }
-                if (kashi.getInside() instanceof PierresGeneralStoreMarket) {
-                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getPirresGeneralStore().getStage());
-                }
-                if (kashi.getInside() instanceof TheStardropSaloonMarket) {
-                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getTheStarDropSalooon().getStage());
-                }
-                //goto store
-            }
-        }
-
     }
+
 
     private void handleInevtnoryView() {
         gameController.getGameMenu().getInventoryView().toggle();

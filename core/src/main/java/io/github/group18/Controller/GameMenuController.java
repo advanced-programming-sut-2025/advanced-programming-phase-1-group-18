@@ -3734,7 +3734,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         int friendshipLevel = Integer.parseInt(response.getFromBody("friendshipLevel"));
         Boolean talkedWithToday = response.getFromBody("talkedwithtoday");
         System.out.println("we got the response from server: " + friendshipLevel + " " + talkedWithToday);
-        switch (npc) {
+        switch (npc.toUpperCase()) {
             case "SEBASTIAN":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
@@ -4643,7 +4643,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public void cheatAdd(int count, Player playerrr) {
-        playerrr.setGold(playerrr.getGold() + count);
+        HashMap<String,Object> body = new HashMap<>();
+        body.put("username",playerrr.getOwner().getUsername());
+        body.put("gold",String.valueOf(count));
+        Message send = new Message(body, Message.Type.set_gold, Message.Menu.game);
+        ClientModel.getServerConnectionThread().sendMessage(send);
+//        playerrr.setGold(playerrr.getGold() + count);
         System.out.println("new Balance: " + playerrr.getGold());
     }
 

@@ -8,21 +8,21 @@ import io.github.group18.Model.Items.Item;
 import java.util.HashMap;
 
 public class FishShopMarket implements adaptMapMarket ,PictureModel{
-    HashMap<Item, Integer> Stock = new HashMap<>();
+    HashMap<FishingPole, Integer> Stock = new HashMap<>();
 
-    public HashMap<Item, Integer> getStock() {
+    public HashMap<FishingPole, Integer> getStock() {
         return Stock;
     }
 
-    public void setStock(HashMap<Item, Integer> stock) {
+    public void setStock(HashMap<FishingPole, Integer> stock) {
         Stock = stock;
     }
 
-    public void addItem(Item item, int quantity) {
+    public void addItem(FishingPole item, int quantity) {
         Stock.put(item, Stock.getOrDefault(item, 0) + quantity);
     }
 
-    public void removeItem(Item item, int quantity) {
+    public void removeItem(FishingPole item, int quantity) {
         if (Stock.containsKey(item)) {
             int currentQuantity = Stock.get(item);
             if (currentQuantity > quantity) {
@@ -39,8 +39,8 @@ public class FishShopMarket implements adaptMapMarket ,PictureModel{
         }
         Stock = new HashMap<>();
 
-        CraftingItem craftingItem = new CraftingItem("FishSmoker");
-        Stock.put(craftingItem, 1);
+//        CraftingItem craftingItem = new CraftingItem("FishSmoker");
+//        Stock.put(craftingItem, 1);
 
         FishingPole f1 = new FishingPole();
         f1.setJens("Bamboo");

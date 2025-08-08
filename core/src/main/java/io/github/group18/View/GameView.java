@@ -1015,9 +1015,6 @@ public class GameView {
                 tile.setWalkable(walkableObj);
 
                 if ("full".equals(insideState)) {
-//                    System.out.println("inside: " + response.getFromBody("inside"));
-//                    System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
-//                    System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
                     String className = response.getFromBody("insideCLASS");
                     Object insideRaw = response.getFromBody("insideOBJ");
 
