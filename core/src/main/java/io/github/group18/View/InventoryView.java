@@ -11,12 +11,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import io.github.group18.Controller.MainMenuController;
+import io.github.group18.Main;
 import io.github.group18.Model.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.group18.Model.Items.CraftingItem;
@@ -25,9 +28,7 @@ import io.github.group18.Model.Items.Item;
 import javax.swing.event.ChangeEvent;
 
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -73,7 +74,8 @@ public class InventoryView {
             new Texture(Gdx.files.internal("inventory/tab_cooking.png")),
             new Texture(Gdx.files.internal("inventory/settings.png")),
             new Texture(Gdx.files.internal("inventory/tab_map.png")),
-            new Texture(Gdx.files.internal("inventory/tab_chat.png"))
+            new Texture(Gdx.files.internal("inventory/tab_chat.png")),
+            new Texture(Gdx.files.internal("inventory/tab_journal.png"))
         };
 
         inventoryWindow = new Window("", skin);
@@ -185,6 +187,7 @@ public class InventoryView {
             case 4: showSettingsTab(); break;
             case 5: showMapTab(); break;
             case 6: showChatTab(); break;
+            case 7: showJournalTab(); break;
         }
     }
 
@@ -479,6 +482,20 @@ public class InventoryView {
             }
         });
 
+        // ===== BACK TO MAIN MENU BUTTON =====
+        TextButton backButton = new TextButton("Exit to Main Menu", skin);
+
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
+            }
+        });
+
+        settingsTable.add(backButton).colspan(2).left();
+        settingsTable.row().padTop(20);
+
+
         settingsTable.add(fullscreenCheckBox).colspan(2).left();
         settingsTable.row().padTop(20);
 
@@ -487,8 +504,46 @@ public class InventoryView {
     }
 
     private void showChatTab() {
+        contentTable.clear();
+        contentTable.top().left();
 
+        Table chatTable = new Table();
+
+        Label friendsLabel = new Label("Your Friends:", skin);
+        chatTable.add(friendsLabel).left();
+        chatTable.row().padTop(20);
+
+        ArrayList<Player> friends =Game.getFriendsOf(App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()));
+
+        if (friends.isEmpty()) {
+            Label noFriendsLabel = new Label("No Friends", skin);
+            chatTable.add(noFriendsLabel).left();
+        } else {
+            for (Player friend : friends) {
+                Label friendLabel = new Label("- " + friend.getOwner().getUsername(), skin);
+                chatTable.add(friendLabel).left();
+                chatTable.row().padTop(10);
+            }
+        }
+
+        contentTable.add(chatTable).top().left().pad(20);
+
+
+        Label npcLabel = new Label("(NPC):", skin);
+        chatTable.add(npcLabel).left();
+        chatTable.row().padTop(10);
+
+        String[] npcNames = {"SEBASTIAN", "ABIGAIL", "HARVEY", "LEAH", "ROBIN"};
+        for (String npcName : npcNames) {
+            Label npcNameLabel = new Label("- " + npcName, skin);
+            npcNameLabel.setColor(Color.RED);
+            chatTable.add(npcNameLabel).left();
+            chatTable.row().padTop(5);
+        }
+
+        contentTable.add(chatTable).top().left().pad(20);
     }
+
 
     private void showMapTab() {
         contentTable.clear();
@@ -501,6 +556,54 @@ public class InventoryView {
 
         contentTable.add(mapImage).expand().fill();
     }
+
+    private void showJournalTab() {
+        contentTable.clear();
+        contentTable.top().left();
+
+        Table journalTable = new Table();
+
+        Label journalLabel = new Label("Mission Journal", skin);
+        journalTable.add(journalLabel).left();
+        journalTable.row().padTop(20);
+
+        // List of possible quests (in English)
+        String[] allQuests = {
+            "Collect 10 wildflowers",
+            "Plant 5 medicinal herbs",
+            "Water your crops for 3 days",
+            "Build a small greenhouse",
+            "Give gifts to 3 villagers",
+            "Catch 5 fish",
+            "Produce 3 compost using waste",
+            "Tame a chicken",
+            "Build a fence around your farm",
+            "Find rare mushrooms in the forest"
+        };
+
+        // Random generator based on current player name
+        int seed = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getOwner().getUsername().hashCode();
+        Random random = new Random(seed);
+
+        HashSet<Integer> selectedIndexes = new HashSet<>();
+        int numberOfQuests = 3; // Number of quests to show
+
+        for (int i = 0; i < numberOfQuests; i++) {
+            int index;
+            do {
+                index = random.nextInt(allQuests.length);
+            } while (selectedIndexes.contains(index));
+            selectedIndexes.add(index);
+
+            String questText = "- " + allQuests[index];
+            Label questLabel = new Label(questText, skin);
+            journalTable.add(questLabel).left();
+            journalTable.row().padTop(10);
+        }
+
+        contentTable.add(journalTable).top().left().pad(20);
+    }
+
 
 
 
