@@ -95,6 +95,9 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
+//        if(Gdx.input.getInputProcessor() != null) {
+//            System.out.println("processor " + Gdx.input.getInputProcessor());
+//        }
         if (!ClientModel.isWindowOpen() && gameMenuInputAdapter != Gdx.input.getInputProcessor())
             Gdx.input.setInputProcessor(gameMenuInputAdapter);
         Gdx.gl.glClearColor(1, 1, 1, 1);
