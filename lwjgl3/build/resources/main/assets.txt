@@ -621,6 +621,7 @@ Market/Jojamart.png
 Market/Ranch.png
 Market/Saloon.png
 Market/Store.png
+MathBG.jpg
 Mineral/Aerinite.png
 Mineral/Alamite.png
 Mineral/Amethyst.png
@@ -998,6 +999,7 @@ inventory/tab_chat.png
 inventory/tab_cooking.png
 inventory/tab_crafting.png
 inventory/tab_inventory.png
+inventory/tab_journal.png
 inventory/tab_map.png
 inventory/tab_social.png
 inventory/tools/Axe.png

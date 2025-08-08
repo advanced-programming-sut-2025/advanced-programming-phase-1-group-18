@@ -124,7 +124,8 @@ public class ForgotPasswordGDXController
                 if(isOkay)
                 {
                     User user = LoginMenuController.findUserByUsername(username);
-                    user.setPassword(password);
+                    String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
+                    user.setPassword(hashedPassword);
                     view.setNewPasswordErrorLabel("Your Password Changed Successfully!");
                 }
             }

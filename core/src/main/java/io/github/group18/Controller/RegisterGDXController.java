@@ -123,7 +123,7 @@ public class RegisterGDXController
                     App.setCurrentUser(newUser);
                     App.setCurrentMenu(Menu.MainMenu);
                     RegisterMenuController.saveUsersToFile();
-                    Main.getMain().setScreen(new MainMenu(new MainMenuController(),GameAssetManager.getGameAssetManager().getSkin()));
+                    Main.getMain().setScreen(new MathQuestionGDXView(new MathQuestionGDXController(), GameAssetManager.getGameAssetManager().getSkin()));
                 }
             }
 
