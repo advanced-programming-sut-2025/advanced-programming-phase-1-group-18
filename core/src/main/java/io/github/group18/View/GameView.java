@@ -13,8 +13,14 @@ import java.util.*;
 import java.util.List;
 
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.google.gson.Gson;
@@ -109,6 +115,13 @@ public class GameView {
     int harveyx, harveyy;
     int leahx, leahy;
     int robinx, robiny;
+
+    boolean showScoreBoard = false;
+    Table scoreBoardTable;
+    final String[] userChoice = {"gold"};
+    ArrayList<ScoreBoardPlayerInfo> infos;
+    float scoreboardUpdateTimer = 0f;
+    final float scoreboardUpdateInterval = 1.0f;
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -250,8 +263,166 @@ public class GameView {
         renderKalagEffect(batch);
         renderBrightness();
         walking = false;
+        if (showScoreBoard) {
+            if (scoreBoardTable == null) {
+                scoreBoardPage(); // initialize table
+            }
+
+            scoreboardUpdateTimer += Gdx.graphics.getDeltaTime();
+            if (scoreboardUpdateTimer >= scoreboardUpdateInterval) {
+                scoreboardUpdateTimer = 0f;
+                updateScoreBoard();
+            }
+        }
         batch.end();
     }
+
+    private void scoreBoardPage() {
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+        Stage stage = gameController.getGameMenu().getStage();
+        scoreBoardTable = new Table(skin);
+        scoreBoardTable.setFillParent(true);
+
+        TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
+        TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
+
+        sortByGoldButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "gold";
+            }
+        });
+
+        sortBySkillButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "skill";
+            }
+        });
+
+        scoreBoardTable.add(sortByGoldButton).pad(10);
+        scoreBoardTable.add(sortBySkillButton).pad(10);
+
+
+        scoreBoardTable.add("Rank").pad(10);
+        scoreBoardTable.add("Player Name").pad(10);
+        scoreBoardTable.add("Gold").pad(10);
+        scoreBoardTable.add("Skill").pad(10);
+        scoreBoardTable.add("Sort: " + userChoice[0]).pad(10);
+        scoreBoardTable.row();
+
+        updateScoreBoard();
+
+
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ClientModel.setWindowOpen(false);
+                showScoreBoard = false;
+                scoreBoardTable.remove();
+                scoreBoardTable = null;
+                scoreboardUpdateTimer = 0f;
+                Gdx.input.setInputProcessor(null);
+            }
+        });
+
+
+        scoreBoardTable.row();
+        scoreBoardTable.add(closeButton).colspan(4).padTop(20);
+
+        stage.addActor(scoreBoardTable);
+        Gdx.input.setInputProcessor(stage);
+//        System.out.println("scoreboard inputprosesor ro update kard: " + Gdx.input.getInputProcessor());
+    }
+
+    private void updateScoreBoard() {
+        Message send = new Message(new HashMap<>(), Message.Type.get_ScoreBoard_info, Message.Menu.game);
+        Message response = null;
+        while (response == null || response.getType() != Message.Type.get_ScoreBoard_info) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+        }
+
+        Gson gson = new Gson();
+        Object stockOBJ = response.getBody().get("players");
+        String stockArraylist = gson.toJson(stockOBJ);
+        Type userListType = new TypeToken<ArrayList<ScoreBoardPlayerInfo>>() {}.getType();
+        this.infos = gson.fromJson(stockArraylist, userListType);
+
+        if ("gold".equalsIgnoreCase(userChoice[0])) {
+            infos.sort(Comparator.comparingInt(ScoreBoardPlayerInfo::getGold)
+                .thenComparingInt(ScoreBoardPlayerInfo::getSkill).reversed());
+        } else {
+            infos.sort(Comparator.comparingInt(ScoreBoardPlayerInfo::getSkill)
+                .thenComparingInt(ScoreBoardPlayerInfo::getGold).reversed());
+        }
+
+        // Clear and rebuild the table
+        scoreBoardTable.clearChildren();
+
+        // Buttons
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+        TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
+        TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
+        TextButton closeButton = new TextButton("Close", skin);
+
+        sortByGoldButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "gold";
+                updateScoreBoard();
+            }
+        });
+
+        sortBySkillButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "skill";
+                updateScoreBoard();
+            }
+        });
+
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ClientModel.setWindowOpen(false);
+                showScoreBoard = false;
+                scoreBoardTable.remove();
+                scoreBoardTable = null;
+                scoreboardUpdateTimer = 0f;
+                Gdx.input.setInputProcessor(null);
+            }
+        });
+
+        scoreBoardTable.add(sortByGoldButton).pad(10);
+        scoreBoardTable.add(sortBySkillButton).pad(10);
+        scoreBoardTable.row();
+
+        // Header
+        scoreBoardTable.add("Rank").pad(10);
+        scoreBoardTable.add("Player Name").pad(10);
+        scoreBoardTable.add("Gold").pad(10);
+        scoreBoardTable.add("Skill").pad(10);
+        scoreBoardTable.add("Sort: " + userChoice[0]).pad(10);
+        scoreBoardTable.row();
+
+        // Add rows
+        for (int i = 0; i < infos.size(); i++) {
+            ScoreBoardPlayerInfo info = infos.get(i);
+            scoreBoardTable.add(String.valueOf(i + 1)).pad(10);
+            scoreBoardTable.add(info.getUsername()).pad(10);
+            scoreBoardTable.add(String.valueOf(info.getGold())).pad(10);
+            scoreBoardTable.add(String.valueOf(info.getSkill())).pad(10);
+            scoreBoardTable.row();
+        }
+
+        // Close button row
+        scoreBoardTable.row();
+        scoreBoardTable.add(closeButton).colspan(4).padTop(20);
+    }
+
+
+
 
     private void renderNPC(int startx, int starty, int endx, int endy) {
 
@@ -1594,5 +1765,13 @@ public class GameView {
 
     public void setRobiny(int robiny) {
         this.robiny = robiny;
+    }
+
+    public boolean isShowScoreBoard() {
+        return showScoreBoard;
+    }
+
+    public void setShowScoreBoard(boolean showScoreBoard) {
+        this.showScoreBoard = showScoreBoard;
     }
 }

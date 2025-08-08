@@ -94,7 +94,8 @@ public class Message {
         get_store_stock,
         set_gold,
         set_gold1,
-        set_fishing_stock
+        set_fishing_stock,
+        get_ScoreBoard_info
     }
 
     public enum Menu {

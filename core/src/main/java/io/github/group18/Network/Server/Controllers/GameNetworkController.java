@@ -344,6 +344,17 @@ public class GameNetworkController {
                     }
                 }
                 break;
+            case get_ScoreBoard_info:
+                ArrayList<ScoreBoardPlayerInfo> infos = new ArrayList<>();
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    int skill = player.getExtractionSkill().getLevel() + player.getFarmingSkill().getLevel() + player.getFishingSkill().getLevel() +
+                            player.getForagingSkill().getLevel() + player.getMiningSkill().getLevel();
+                    infos.add(new ScoreBoardPlayerInfo(player.getOwner().getUsername(), skill, player.getGold()));
+                }
+                HashMap<String, Object> board = new HashMap<>();
+                board.put("players", infos);
+                clientConnectionThread.sendMessage(new Message(board, Message.Type.get_ScoreBoard_info, Message.Menu.game));
+                break;
         }
     }
 
