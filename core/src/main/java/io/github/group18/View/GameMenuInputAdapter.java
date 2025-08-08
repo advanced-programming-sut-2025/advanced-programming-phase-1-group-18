@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.google.gson.Gson;
 import io.github.group18.Controller.*;
 
 import java.util.*;
@@ -243,8 +244,8 @@ public class GameMenuInputAdapter extends InputAdapter {
                 }
                 ClientModel.getPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
-                openNpcDialog(screenX, screenY);
-                openNpcPage(screenX, screenY);
+//                openNpcDialog(screenX, screenY);
+//                openNpcPage(screenX, screenY);
                 return true;
             }
             if (button == Input.Buttons.RIGHT) {
@@ -312,9 +313,6 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void openNpcDialog(int screenX, int screenY) {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -329,40 +327,33 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
             return;
         }
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game currentGame = null;
-        NPC sebastian = currentGame.getNPCSEBASTIAN();
-        NPC abigail = currentGame.getNPCABIGAIL();
-        NPC harvey = currentGame.getNPCHARVEY();
-        NPC leah = currentGame.getNPCLEAH();
-        NPC robin = currentGame.getNPCROBIN();
 
-        if (tileX == sebastian.getX() && tileY == sebastian.getY() + 2) {
+        GameView gameView = gameController.getGameMenu().getGameView();
+        if (tileX == gameView.getSebastianx() && tileY == gameView.getSebastiany() + 2) {
             gameController.getGameMenu().getGameView().setSebastian_dialog(true);
-            openDialogPage(sebastian);
+            openDialogPage("Sebastian", gameController);
         }
-        if (tileX == abigail.getX() && tileY == abigail.getY() + 2) {
+        if (tileX == gameView.getAbigailx() && tileY == gameView.getAbigaily() + 2) {
             gameController.getGameMenu().getGameView().setAbigail_dialog(true);
-            openDialogPage(abigail);
+            openDialogPage("ABIGAIL", gameController);
         }
-        if (tileX == harvey.getX() && tileY == harvey.getY() + 2) {
+        if (tileX == gameView.getHarveyx() && tileY == gameView.getHarveyy() + 2) {
             gameController.getGameMenu().getGameView().setHarvey_dialog(true);
-            openDialogPage(harvey);
+            openDialogPage("HARVEY", gameController);
         }
-        if (tileX == leah.getX() && tileY == leah.getY() + 2) {
+        if (tileX == gameView.getLeahx() && tileY == gameView.getLeahy() + 2) {
             gameController.getGameMenu().getGameView().setLeah_dialog(true);
-            openDialogPage(leah);
+            openDialogPage("LEAH", gameController);
         }
-        if (tileX == robin.getX() && tileY == robin.getY() + 2) {
+        if (tileX == gameView.getRobinx() && tileY == gameView.getRobiny() + 2) {
             gameController.getGameMenu().getGameView().setRobin_dialog(true);
-            openDialogPage(robin);
+            openDialogPage("ROBIN", gameController);
         }
     }
 
-    private void openDialogPage(NPC npc) {
+    private void openDialogPage(String npc, GameController gameController) {
         GameView gameView = gameController.getGameMenu().getGameView();
-        gameView.setNpcDialogView(new NPCDialogView(Gdx.input.getInputProcessor(), npc));
+        gameView.setNpcDialogView(new NPCDialogView(Gdx.input.getInputProcessor(), npc, gameController));
         Gdx.input.setInputProcessor(gameView.getNpcDialogView().getStage());
     }
 
@@ -468,9 +459,6 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void gotoMarket(int screenX, int screenY) {
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Game game = null;
         OrthographicCamera camera = gameController.getGameMenu().getGameView().getCamera();
         camera.update();
         Vector3 worldCoordinates = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -485,47 +473,56 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
             return;
         }
-        //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-        Kashi kashi = game.getMap().get(tileX).get(tileY);
-        if (kashi.getInside() instanceof adaptMapMarket) {
-            if (kashi.getInside() instanceof NPC) {
-                //goto NPC
-            } else {
-                GameView gameView = gameController.getGameMenu().getGameView();
-                if (kashi.getInside() instanceof BlackSmithMarket) {
-                    gameView.setBlackSmith(new StoreUI(new BlackSmithController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getBlackSmith().getStage());
-                }
-                if (kashi.getInside() instanceof CarpentersShopMarket) {
-                    gameView.setCarpentersShop(new StoreUI(new CarpentersShopController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getCarpentersShop().getStage());
-                }
-                if (kashi.getInside() instanceof FishShopMarket) {
-                    gameView.setFishShop(new StoreUI(new FishShopController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
-                }
-                if (kashi.getInside() instanceof JojoMartMarket) {
-                    gameView.setJojaMart(new StoreUI(new JojaMartController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getJojaMart().getStage());
-                }
-                if (kashi.getInside() instanceof MarniesRanchMarket) {
-                    gameView.setMarniesRanch(new StoreUI(new MarniesRanchController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getMarniesRanch().getStage());
-                }
-                if (kashi.getInside() instanceof PierresGeneralStoreMarket) {
-                    gameView.setPirresGeneralStore(new StoreUI(new PierresGeneralStoreController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getPirresGeneralStore().getStage());
-                }
-                if (kashi.getInside() instanceof TheStardropSaloonMarket) {
-                    gameView.setTheStarDropSalooon(new StoreUI(new TheStardropSaloonController(), Gdx.input.getInputProcessor()));
-                    Gdx.input.setInputProcessor(gameView.getTheStarDropSalooon().getStage());
-                }
-                //goto store
-            }
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("x", tileX);
+        body.put("y", tileY);
+        Message send = new Message(body, Message.Type.get_kashi_using_x1_y1, Message.Menu.game);
+        Message response = null;
+        while (response == null || response.getType() != Message.Type.get_kashi_using_x1_y1) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
+        Boolean shokhmZadehObj = response.getFromBody("ShokhmZadeh");
+        Boolean entranceObj = response.getFromBody("Enterance");
+        Boolean walkableObj = response.getFromBody("Walkable");
+        String insideState = response.getFromBody("inside");
 
+        Kashi tile = new Kashi();
+        tile.setShokhmZadeh(shokhmZadehObj);
+        tile.setEnterance(entranceObj);
+        tile.setWalkable(walkableObj);
+
+        if ("full".equals(insideState)) {
+            System.out.println("inside: " + response.getFromBody("inside"));
+            System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
+            System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
+            Object insideClassObj = response.getFromBody("insideCLASS");
+            Object insideRaw = response.getFromBody("insideOBJ");
+            if (response.getFromBody("insideCLASS").equals("io.github.group18.Model.FishShopMarketali")) {
+                System.out.println("fish1");
+                tile.setInside(new FishShopMarketali());
+                System.out.println("fish2");
+                GameView gameView = gameController.getGameMenu().getGameView();
+                System.out.println("fish3");
+                ClientModel.setWindowOpen(true);
+                System.out.println("fish3.5");
+                gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
+                System.out.println("fish4");
+                Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
+                System.out.println("fish5");
+            } else if (insideClassObj instanceof Class<?>) {
+                Class<?> clazz = (Class<?>) insideClassObj;
+
+                Gson gson = new Gson();
+                String insideJson = gson.toJson(insideRaw);
+                Object insideDeserialized = gson.fromJson(insideJson, clazz);
+
+                tile.setInside(insideDeserialized);
+            }
+        } else {
+            tile.setInside(null);
+        }
     }
+
 
     private void handleInevtnoryView() {
         gameController.getGameMenu().getInventoryView().toggle();

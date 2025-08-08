@@ -12,8 +12,8 @@ public class NPC implements PictureModel {
     private int y;
     private NPCEnums name;
     private String job;
-    private boolean talkedWithToday;
-    private boolean giftedToday;
+    private Boolean talkedWithToday;
+    private Boolean giftedToday;
     private ArrayList<Friendshipali> friendships;
     private HashMap<Item, NPCItem> quests;
 
@@ -151,11 +151,11 @@ public class NPC implements PictureModel {
         this.quests = quests;
     }
 
-    public boolean isTalkedWithToday() {
+    public Boolean isTalkedWithToday() {
         return talkedWithToday;
     }
 
-    public void setTalkedWithToday(boolean talkedWithToday) {
+    public void setTalkedWithToday(Boolean talkedWithToday) {
         this.talkedWithToday = talkedWithToday;
     }
 
@@ -167,11 +167,11 @@ public class NPC implements PictureModel {
         this.name = name;
     }
 
-    public boolean isGiftedToday() {
+    public Boolean isGiftedToday() {
         return giftedToday;
     }
 
-    public void setGiftedToday(boolean giftedToday) {
+    public void setGiftedToday(Boolean giftedToday) {
         this.giftedToday = giftedToday;
     }
 

@@ -1,23 +1,11 @@
 package io.github.group18.Controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.google.gson.Gson;
 import io.github.group18.Main;
 import io.github.group18.Model.*;
@@ -36,8 +24,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.lang.reflect.Field;
-import java.security.cert.TrustAnchor;
-import java.sql.Struct;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -3733,25 +3719,29 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
     }
 
-    public static Result meetNPC(NPC npc, Player playerrr) {
+    public static Result meetNPC(String npc, Player playerrr) {
 
         Player currentPlayer = playerrr;
 
-        int friendshipLevel = -1;
-        for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-            if (friendship.getPlayer() == currentPlayer) {
-                friendshipLevel = friendship.getFriendshipLevel();
-            }
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("username", playerrr.getOwner().getUsername());
+        body.put("npc", npc);
+        Message send = new Message(body, Message.Type.get_npc_friendship_and_talktoday, Message.Menu.game);
+        Message response = null;
+        while (response == null || response.getType() != Message.Type.get_npc_friendship_and_talktoday) {
+            response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
-        switch (npc.getName()) {
-            case SEBASTIAN:
+        int friendshipLevel = Integer.parseInt(response.getFromBody("friendshipLevel"));
+        Boolean talkedWithToday = response.getFromBody("talkedwithtoday");
+        System.out.println("we got the response from server: " + friendshipLevel + " " + talkedWithToday);
+        switch (npc.toUpperCase()) {
+            case "SEBASTIAN":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3759,11 +3749,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Oh, hey. I don’t think we’ve met. I’m Sebastian. The weather today is "
                             + App.getCurrentGame().getCurrentWeather() + " in " + App.getCurrentGame().getCurrentSeason() + ". What brings you here?");
                     case 1:
-                        if (!App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3772,11 +3761,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             + App.getCurrentGame().getCurrentSeason() + " Day: " + App.getCurrentGame().getCurrentDateTime().getDay() + " Hour: "
                             + App.getCurrentGame().getCurrentDateTime().getHour());
                     case 2:
-                        if (!App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3784,11 +3772,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Hey " + currentPlayer.getOwner().getUsername() + ". It's " + App.getCurrentGame().getCurrentSeason()
                             + ", so of course the weather's " + App.getCurrentGame().getCurrentWeather() + ". Whatever.");
                     case 3:
-                        if (!App.getCurrentGame().getNPCSEBASTIAN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCSEBASTIAN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3798,14 +3785,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case ABIGAIL:
+            case "ABIGAIL":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCABIGAIL().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3813,11 +3799,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Whoa, a stranger! I'm Abigail. It's " + App.getCurrentGame().getCurrentSeason()
                             + ", and the weather's " + App.getCurrentGame().getCurrentWeather() + ". Wanna explore the mines later?");
                     case 1:
-                        if (!App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCABIGAIL().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3825,11 +3810,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Hi " + currentPlayer.getOwner().getUsername() + "! A " + App.getCurrentGame().getCurrentWeather()
                             + " day in " + App.getCurrentGame().getCurrentSeason() + "? Perfect for an adventure!");
                     case 2:
-                        if (!App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCABIGAIL().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3837,11 +3821,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, currentPlayer.getOwner().getUsername() + "!! Let’s do something crazy today! The "
                             + App.getCurrentGame().getCurrentWeather() + " weather won’t stop us!");
                     case 3:
-                        if (!App.getCurrentGame().getNPCABIGAIL().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCABIGAIL().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3851,14 +3834,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case HARVEY:
+            case "HARVEY":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!App.getCurrentGame().getNPCHARVEY().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCHARVEY().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3866,11 +3848,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Ahem, hello. I'm Dr. Harvey. It's " + App.getCurrentGame().getCurrentSeason()
                             + ", and the weather is " + App.getCurrentGame().getCurrentWeather() + ". Please take care of yourself.");
                     case 1:
-                        if (!App.getCurrentGame().getNPCHARVEY().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCHARVEY().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3878,11 +3859,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Oh, " + currentPlayer.getOwner().getUsername() + "! The " + App.getCurrentGame().getCurrentWeather()
                             + " weather might affect your health. Be careful!");
                     case 2:
-                        if (!App.getCurrentGame().getNPCHARVEY().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCHARVEY().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3890,11 +3870,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", I always feel better seeing you, even on this "
                             + App.getCurrentGame().getCurrentWeather() + " day.");
                     case 3:
-                        if (!App.getCurrentGame().getNPCHARVEY().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCHARVEY().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3904,14 +3883,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case LEAH:
+            case "LEAH":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!App.getCurrentGame().getNPCLEAH().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCLEAH().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3919,11 +3897,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Hi there. I’m Leah. The " + App.getCurrentGame().getCurrentSeason()
                             + " air is so inspiring today. The " + App.getCurrentGame().getCurrentWeather() + " just adds to the mood.");
                     case 1:
-                        if (!App.getCurrentGame().getNPCLEAH().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCLEAH().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3932,11 +3909,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             + App.getCurrentGame().getCurrentWeather() + " looks in " + App.getCurrentGame().getCurrentSeason()
                             + " is beautiful, don’t you think?");
                     case 2:
-                        if (!App.getCurrentGame().getNPCLEAH().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCLEAH().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3944,11 +3920,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", you’re like sunshine even on this "
                             + App.getCurrentGame().getCurrentWeather() + " day.");
                     case 3:
-                        if (!App.getCurrentGame().getNPCLEAH().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCLEAH().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3958,14 +3933,13 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
                 break;
 
-            case ROBIN:
+            case "ROBIN":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!App.getCurrentGame().getNPCROBIN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCROBIN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3973,11 +3947,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Hi, dear! I'm Robin. It's " + App.getCurrentGame().getCurrentSeason()
                             + ", and the weather's " + App.getCurrentGame().getCurrentWeather() + "—great day for carpentry!");
                     case 1:
-                        if (!App.getCurrentGame().getNPCROBIN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCROBIN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3985,11 +3958,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, "Hey, " + currentPlayer.getOwner().getUsername() + "! How’s the "
                             + App.getCurrentGame().getCurrentWeather() + " treating you this " + App.getCurrentGame().getCurrentSeason() + "?");
                     case 2:
-                        if (!App.getCurrentGame().getNPCROBIN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCROBIN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
@@ -3997,24 +3969,31 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", sweetie! Even with this "
                             + App.getCurrentGame().getCurrentWeather() + ", you always brighten my day!");
                     case 3:
-                        if (!App.getCurrentGame().getNPCROBIN().isTalkedWithToday()) {
-                            App.getCurrentGame().getNPCROBIN().setTalkedWithToday(true);
+                        if (!talkedWithToday) {
                             for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer() == currentPlayer) {
-                                    friendship.setFriendshipLevel(friendship.getFriendshipLevel() + 20);
+                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
+                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
                                     break;
                                 }
                             }
                         }
                         return new Result(true, "You make everything better, " + currentPlayer.getOwner().getUsername() + ", even a "
                             + App.getCurrentGame().getCurrentWeather() + " day like this.");
-                }
-                break;
 
-            default:
-                return new Result(false, "Invalid NPC name.");
+                }
         }
         return null;
+    }
+
+
+    private static void setFriendshipandTalk(int friendShipLevel, String npc) {
+        HashMap<String, Object> body1 = new HashMap<>();
+        body1.put("npc", npc);
+        body1.put("username", ClientModel.getPlayer().getOwner().getUsername());
+        body1.put("friendshipLevel", String.valueOf(friendShipLevel));
+        body1.put("talkedwithtoday", "TRUE");
+        Message send1 = new Message(body1, Message.Type.set_npc_friendship_and_talktoday, Message.Menu.game);
+        ClientModel.getServerConnectionThread().sendMessage(send1);
     }
 
     public static Result giftNPC(NPC npcName, Item item, int count, Player playerrr) {
@@ -4664,7 +4643,12 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public void cheatAdd(int count, Player playerrr) {
-        playerrr.setGold(playerrr.getGold() + count);
+        HashMap<String,Object> body = new HashMap<>();
+        body.put("username",playerrr.getOwner().getUsername());
+        body.put("gold",String.valueOf(count));
+        Message send = new Message(body, Message.Type.set_gold, Message.Menu.game);
+        ClientModel.getServerConnectionThread().sendMessage(send);
+//        playerrr.setGold(playerrr.getGold() + count);
         System.out.println("new Balance: " + playerrr.getGold());
     }
 

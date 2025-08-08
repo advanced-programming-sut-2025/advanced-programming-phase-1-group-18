@@ -14,7 +14,6 @@ public class FishingPole extends Tool implements Name, Price ,PictureModel {
     private static final int MAX_LEVEL = 5;
     public String Jens;
     public int EnergyUsage;
-    public String usage;
 
     public String use() {
         //Server-TODO

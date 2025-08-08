@@ -103,6 +103,12 @@ public class GameView {
     int gold;
     boolean goldupdated = false;
 
+    boolean npcPositionUpdated = true;
+    int sebastianx, sebastiany;
+    int abigailx, abigaily;
+    int harveyx, harveyy;
+    int leahx, leahy;
+    int robinx, robiny;
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -239,9 +245,8 @@ public class GameView {
         renderInMyHandToolPlayer();
         renderInventory();
         renderClock();
-
         energy.render(batch);
-//        renderMarkets();
+        renderMarkets();
         renderKalagEffect(batch);
         renderBrightness();
         walking = false;
@@ -252,58 +257,55 @@ public class GameView {
 
         GameAssetManager gameAssetManager = GameAssetManager.getGameAssetManager();
         Texture triangle = gameAssetManager.getUpsidedownredtriangle();
-        Message send = new Message(new HashMap<>(), Message.Type.get_npc, Message.Menu.game);
-        Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
-        Gson gson = new Gson();
-        Object sebastianObj = response.getFromBody("sebastian");
-        Object abigailObj = response.getFromBody("abigail");
-        Object harveyObj = response.getFromBody("harvey");
-        Object leahObj = response.getFromBody("leah");
-        Object robinObj = response.getFromBody("robin");
-        String sebastianSTR = gson.toJson(sebastianObj);
-        String abigailSTR = gson.toJson(abigailObj);
-        String harveySTR = gson.toJson(harveyObj);
-        String leahSTR = gson.toJson(leahObj);
-        String robinSTR = gson.toJson(robinObj);
-        NPC sebastian = gson.fromJson(sebastianSTR, NPC.class);
-        NPC abigail = gson.fromJson(abigailSTR, NPC.class);
-        NPC harvey = gson.fromJson(harveySTR, NPC.class);
-        NPC leah = gson.fromJson(leahSTR, NPC.class);
-        NPC robin = gson.fromJson(robinSTR, NPC.class);
 
-        if (sebastian.getX() >= startx && sebastian.getX() <= endx &&
-            sebastian.getY() >= starty && sebastian.getY() <= endy) {
+        if (npcPositionUpdated) {
+            npcPositionUpdated = false;
+
+            Message send = new Message(new HashMap<>(), Message.Type.get_npc_position, Message.Menu.game);
+            Message response = null;
+            while (response == null || response.getType() != Message.Type.get_npc_position) {
+                response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
+            }
+            sebastianx = Integer.parseInt(response.getFromBody("sebastianx"));
+            abigailx = Integer.parseInt(response.getFromBody("abigailx"));
+            harveyx = Integer.parseInt(response.getFromBody("harveyx"));
+            leahx = Integer.parseInt(response.getFromBody("leahx"));
+            robinx = Integer.parseInt(response.getFromBody("robinx"));
+            sebastiany = Integer.parseInt(response.getFromBody("sebastiany"));
+            abigaily = Integer.parseInt(response.getFromBody("abigaily"));
+            harveyy = Integer.parseInt(response.getFromBody("harveyy"));
+            leahy = Integer.parseInt(response.getFromBody("leahy"));
+            robiny = Integer.parseInt(response.getFromBody("robiny"));
+        }
+
+        if (sebastianx >= startx && sebastianx <= endx &&
+            sebastiany >= starty && sebastiany <= endy) {
             Texture npc = gameAssetManager.getSebastian_NPC();
-            batch.draw(npc, sebastian.getX() * ClientModel.TILE_SIZE, sebastian.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            batch.draw(triangle, sebastian.getX() * ClientModel.TILE_SIZE, sebastian.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            drawNPC(triangle, sebastianx, sebastiany, npc);
         }
 
-        if (abigail.getX() >= startx && abigail.getX() <= endx &&
-            abigail.getY() >= starty && abigail.getY() <= endy) {
+        if (abigailx >= startx && abigailx <= endx &&
+            abigaily >= starty && abigaily <= endy) {
             Texture npc = gameAssetManager.getAbigail_NPC();
-            batch.draw(npc, abigail.getX() * ClientModel.TILE_SIZE, abigail.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            batch.draw(triangle, abigail.getX() * ClientModel.TILE_SIZE, abigail.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            drawNPC(triangle, abigailx, abigaily, npc);
         }
 
-        if (harvey.getX() >= startx && harvey.getX() <= endx &&
-            harvey.getY() >= starty && harvey.getY() <= endy) {
+        if (harveyx >= startx && harveyx <= endx &&
+            harveyy >= starty && harveyy <= endy) {
             Texture npc = gameAssetManager.getHarvey_NPC();
-            batch.draw(npc, harvey.getX() * ClientModel.TILE_SIZE, harvey.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            batch.draw(triangle, harvey.getX() * ClientModel.TILE_SIZE, harvey.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            drawNPC(triangle, harveyx, harveyy, npc);
         }
 
-        if (leah.getX() >= startx && leah.getX() <= endx &&
-            leah.getY() >= starty && leah.getY() <= endy) {
+        if (leahx >= startx && leahx <= endx &&
+            leahy >= starty && leahy <= endy) {
             Texture npc = gameAssetManager.getLeah_NPC();
-            batch.draw(npc, leah.getX() * ClientModel.TILE_SIZE, leah.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            batch.draw(triangle, leah.getX() * ClientModel.TILE_SIZE, leah.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            drawNPC(triangle, leahx, leahy, npc);
         }
 
-        if (robin.getX() >= startx && robin.getX() <= endx &&
-            robin.getY() >= starty && robin.getY() <= endy) {
+        if (robinx >= startx && robinx <= endx &&
+            robiny >= starty && robiny <= endy) {
             Texture npc = gameAssetManager.getRobin_NPC();
-            batch.draw(npc, robin.getX() * ClientModel.TILE_SIZE, robin.getY() * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
-            batch.draw(triangle, robin.getX() * ClientModel.TILE_SIZE, robin.getY() * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
+            drawNPC(triangle, robinx, robiny, npc);
         }
 
         if (isSebastian_dialog() || isAbigail_dialog()
@@ -315,6 +317,11 @@ public class GameView {
             isLeah_view() || isRobin_view() || isAbigail_view()) {
             npcView.render();
         }
+    }
+
+    private void drawNPC(Texture triangle, int x, int y, Texture npc) {
+        batch.draw(npc, x * ClientModel.TILE_SIZE, y * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE * 2);
+        batch.draw(triangle, x * ClientModel.TILE_SIZE, y * ClientModel.TILE_SIZE + 2 * ClientModel.TILE_SIZE, ClientModel.TILE_SIZE, ClientModel.TILE_SIZE);
     }
 
     private void renderMarkets() {
@@ -392,7 +399,7 @@ public class GameView {
         drawInitTiles(startX, startY, endX, endY, tiles);
         loadTiles(startX, startY, endX, endY, tiles);
         drawTiles(startX, startY, endX, endY, tiles);
-//        renderNPC(startX, startY, endX, endY);
+        renderNPC(startX, startY, endX, endY);
     }
 
     private void drawInitTiles(int startX, int startY, int endX, int endY, ArrayList<ArrayList<Kashi>> tiles) {
@@ -1008,9 +1015,6 @@ public class GameView {
                 tile.setWalkable(walkableObj);
 
                 if ("full".equals(insideState)) {
-//                    System.out.println("inside: " + response.getFromBody("inside"));
-//                    System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
-//                    System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
                     String className = response.getFromBody("insideCLASS");
                     Object insideRaw = response.getFromBody("insideOBJ");
 
@@ -1502,5 +1506,93 @@ public class GameView {
 
     public void setGoldupdated(boolean goldupdated) {
         this.goldupdated = goldupdated;
+    }
+
+    public boolean isNpcPositionUpdated() {
+        return npcPositionUpdated;
+    }
+
+    public void setNpcPositionUpdated(boolean npcPositionUpdated) {
+        this.npcPositionUpdated = npcPositionUpdated;
+    }
+
+    public int getSebastianx() {
+        return sebastianx;
+    }
+
+    public void setSebastianx(int sebastianx) {
+        this.sebastianx = sebastianx;
+    }
+
+    public int getSebastiany() {
+        return sebastiany;
+    }
+
+    public void setSebastiany(int sebastiany) {
+        this.sebastiany = sebastiany;
+    }
+
+    public int getAbigailx() {
+        return abigailx;
+    }
+
+    public void setAbigailx(int abigailx) {
+        this.abigailx = abigailx;
+    }
+
+    public int getAbigaily() {
+        return abigaily;
+    }
+
+    public void setAbigaily(int abigaily) {
+        this.abigaily = abigaily;
+    }
+
+    public int getHarveyx() {
+        return harveyx;
+    }
+
+    public void setHarveyx(int harveyx) {
+        this.harveyx = harveyx;
+    }
+
+    public int getHarveyy() {
+        return harveyy;
+    }
+
+    public void setHarveyy(int harveyy) {
+        this.harveyy = harveyy;
+    }
+
+    public int getLeahx() {
+        return leahx;
+    }
+
+    public void setLeahx(int leahx) {
+        this.leahx = leahx;
+    }
+
+    public int getLeahy() {
+        return leahy;
+    }
+
+    public void setLeahy(int leahy) {
+        this.leahy = leahy;
+    }
+
+    public int getRobinx() {
+        return robinx;
+    }
+
+    public void setRobinx(int robinx) {
+        this.robinx = robinx;
+    }
+
+    public int getRobiny() {
+        return robiny;
+    }
+
+    public void setRobiny(int robiny) {
+        this.robiny = robiny;
     }
 }

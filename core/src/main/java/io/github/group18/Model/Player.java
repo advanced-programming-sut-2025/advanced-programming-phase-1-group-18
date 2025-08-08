@@ -437,11 +437,7 @@ public class Player extends User {
         tile.setShokhmZadeh(shokhmZadehObj);
         tile.setEnterance(entranceObj);
         tile.setWalkable(walkableObj);
-
         if ("full".equals(insideState)) {
-            System.out.println("inside: " + response.getFromBody("inside"));
-            System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
-            System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
             Object insideClassObj = response.getFromBody("insideCLASS");
             Object insideRaw = response.getFromBody("insideOBJ");
 
@@ -454,7 +450,7 @@ public class Player extends User {
 
                 tile.setInside(insideDeserialized);
             } else {
-                System.out.println("Warning: insideCLASS is not a Class<?>. Got: " + insideClassObj);
+                tile.setInside(new FishShopMarketali());
             }
         } else {
             tile.setInside(null);

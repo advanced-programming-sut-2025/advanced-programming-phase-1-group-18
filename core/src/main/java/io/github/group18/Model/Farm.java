@@ -277,15 +277,19 @@ public class Farm {
         }
         App.getCurrentGame().setBlackSmithMarket(new BlackSmithMarket());
         App.getCurrentGame().getBlackSmithMarket().fillStock();
-        App.getCurrentGame().getBlackSmithMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getBlackSmithEnterancex(),
-            toplefty + ClientModel.getBlackSmithEnterancey(),
-            topleftx + ClientModel.getBlackSmithTopLeftx(),
-            toplefty + ClientModel.getBlackSmithTopLefty(),
-            topleftx + ClientModel.getBlackSmithTopLeftx() + ClientModel.getBlackSmithWidth(),
-            toplefty + ClientModel.getBlackSmithTopLefty() + ClientModel.getBlackSmithHeight()
-        );
+
+
+        ArrayList<Kashi> kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
+
 
         //Carpenter's Shop
         cords = new ArrayList<>();
@@ -296,15 +300,18 @@ public class Farm {
         }
         App.getCurrentGame().setCarpentersShopMarket(new CarpentersShopMarket());
         App.getCurrentGame().getCarpentersShopMarket().fillStock();
-        App.getCurrentGame().getCarpentersShopMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getCarpentersShopEnterancex(),
-            toplefty + ClientModel.getCarpentersShopEnterancey(),
-            topleftx + ClientModel.getCarpentersShopTopLeftx(),
-            toplefty + ClientModel.getCarpentersShopTopLefty(),
-            topleftx + ClientModel.getCarpentersShopTopLeftx() + ClientModel.getCarpentersShopWidth(),
-            toplefty + ClientModel.getCarpentersShopTopLefty() + ClientModel.getCarpentersShopHeight()
-        );
+
+
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
 
         // Fish Shop
         cords = new ArrayList<>();
@@ -315,15 +322,16 @@ public class Farm {
         }
         App.getCurrentGame().setFishShopMarket(new FishShopMarket());
         App.getCurrentGame().getFishShopMarket().fillStock();
-        App.getCurrentGame().getFishShopMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getFishShopEnterancex(),
-            toplefty + ClientModel.getFishShopEnterancey(),
-            topleftx + ClientModel.getFishShopTopLeftx(),
-            toplefty + ClientModel.getFishShopTopLefty(),
-            topleftx + ClientModel.getFishShopTopLeftx() + ClientModel.getFishShopWidth(),
-            toplefty + ClientModel.getFishShopTopLefty() + ClientModel.getFishShopHeight()
-        );
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
         // JojaMart
         cords = new ArrayList<>();
         for (int i = topleftx + ClientModel.getJojoMartTopLeftx(); i < topleftx + ClientModel.getJojoMartTopLeftx() + ClientModel.getJojoMartWidth(); i++) {
@@ -333,15 +341,16 @@ public class Farm {
         }
         App.getCurrentGame().setJojoMartMarket(new JojoMartMarket());
         App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
-        App.getCurrentGame().getJojoMartMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getJojoMartEnterancex(),
-            toplefty + ClientModel.getJojoMartEnterancey(),
-            topleftx + ClientModel.getJojoMartTopLeftx(),
-            toplefty + ClientModel.getJojoMartTopLefty(),
-            topleftx + ClientModel.getJojoMartTopLeftx() + ClientModel.getJojoMartWidth(),
-            toplefty + ClientModel.getJojoMartTopLefty() + ClientModel.getJojoMartHeight()
-        );
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
 
         // Marnie's Ranch
         cords = new ArrayList<>();
@@ -352,15 +361,16 @@ public class Farm {
         }
         App.getCurrentGame().setMarniesRanchMarket(new MarniesRanchMarket());
         App.getCurrentGame().getMarniesRanchMarket().fillStock();
-        App.getCurrentGame().getMarniesRanchMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getMarniesRanchEnterancex(),
-            toplefty + ClientModel.getMarniesRanchEnterancey(),
-            topleftx + ClientModel.getMarniesRanchTopLeftx(),
-            toplefty + ClientModel.getMarniesRanchTopLefty(),
-            topleftx + ClientModel.getMarniesRanchTopLeftx() + ClientModel.getMarniesRanchWidth(),
-            toplefty + ClientModel.getMarniesRanchTopLefty() + ClientModel.getMarniesRanchHeight()
-        );
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
 
         // Pierre's General Store
         cords = new ArrayList<>();
@@ -371,15 +381,16 @@ public class Farm {
         }
         App.getCurrentGame().setPierresGeneralStoreMarket(new PierresGeneralStoreMarket());
         App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
-        App.getCurrentGame().getPierresGeneralStoreMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getPierresGeneralStoreEnterancex(),
-            toplefty + ClientModel.getPierresGeneralStoreEnterancey(),
-            topleftx + ClientModel.getPierresGeneralStoreTopLeftx(),
-            toplefty + ClientModel.getPierresGeneralStoreTopLefty(),
-            topleftx + ClientModel.getPierresGeneralStoreTopLeftx() + ClientModel.getPierresGeneralStoreWidth(),
-            toplefty + ClientModel.getPierresGeneralStoreTopLefty() + ClientModel.getPierresGeneralStoreHeight()
-        );
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
 
         // Stardrop Saloon
         cords = new ArrayList<>();
@@ -390,15 +401,16 @@ public class Farm {
         }
         App.getCurrentGame().setTheStardropSaloonMarket(new TheStardropSaloonMarket());
         App.getCurrentGame().getTheStardropSaloonMarket().fillStock();
-        App.getCurrentGame().getTheStardropSaloonMarket().adaptMap(
-            cords,
-            topleftx + ClientModel.getTheStardropSaloonEnterancex(),
-            toplefty + ClientModel.getTheStardropSaloonEnterancey(),
-            topleftx + ClientModel.getTheStardropSaloonTopLeftx(),
-            toplefty + ClientModel.getTheStardropSaloonTopLefty(),
-            topleftx + ClientModel.getTheStardropSaloonTopLeftx() + ClientModel.getTheStardropSaloonWidth(),
-            toplefty + ClientModel.getTheStardropSaloonTopLefty() + ClientModel.getTheStardropSaloonHeight()
-        );
+        kashis = new ArrayList<>();
+        for (Cord cord : cords) {
+            Kashi kashi = new Kashi();
+            kashi.setShokhmZadeh(false);
+            kashi.setEnterance(false);
+            App.getCurrentGame().getMap().get(cord.getX()).set(cord.getY(), kashi);
+            kashi.setInside(new FishShopMarketali());
+            kashi.setWalkable(true);
+            kashis.add(kashi);
+        }
 
         App.getCurrentGame().setNPCSEBASTIAN(new NPC(NPCEnums.SEBASTIAN, ClientModel.getNPCSEBASTIANx(), ClientModel.getNPCSEBASTIANy()));
 

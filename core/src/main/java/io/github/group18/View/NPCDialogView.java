@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Controller.MarketController;
 import io.github.group18.Controller.MarniesRanchController;
@@ -14,6 +15,7 @@ import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Result;
 import io.github.group18.Model.NPC;
+import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.enums.NPCEnums;
 
 public class NPCDialogView {
@@ -23,13 +25,15 @@ public class NPCDialogView {
     private Table itemTable;
     private Window currentDialog;
     private InputProcessor inputProcessor;
-    private NPC npc;
+    private String npc;
+    private final GameController gameController;
 
-    public NPCDialogView(InputProcessor inputProcessor, NPC npc) {
+    public NPCDialogView(InputProcessor inputProcessor, String npc, GameController gameController) {
         this.stage = new Stage(new ScreenViewport());
         this.inputProcessor = inputProcessor;
         this.npc = npc;
         skin = GameAssetManager.getGameAssetManager().getSkin();
+        this.gameController = gameController;
         createDialogUI();
     }
 
@@ -40,12 +44,13 @@ public class NPCDialogView {
 
         Window npcWindow = new Window("NPC Dialog", skin);
         npcWindow.setModal(true);
-//Server-TODO
-//        Label npctalk = new Label(GameMenuController.meetNPC(npc).getMessage(), skin);
+
+        System.out.println("before going to gamemenucontroller meetnpc: " + npc + " " + ClientModel.getPlayer().getOwner().getUsername());
+        Label npctalk = new Label(GameMenuController.meetNPC(npc, ClientModel.getPlayer()).getMessage(), skin);
 
         Table headerTable = new Table(skin);
-        //Server-TODO
-//        headerTable.add(npctalk).pad(20, 20, 20, 20).row();
+
+        headerTable.add(npctalk).pad(20, 20, 20, 20).row();
 
         npcWindow.add(headerTable).row();
 
@@ -56,25 +61,21 @@ public class NPCDialogView {
                 Gdx.input.setInputProcessor(inputProcessor);
                 npcWindow.remove();
                 Gdx.input.setInputProcessor(inputProcessor);
-                if (npc.getName() == NPCEnums.SEBASTIAN) {
-                    //Server-TODO
-//                    App.getCurrentGame().setSebastian_dialog(false);
+                GameView gameView = gameController.getGameMenu().getGameView();
+                if (npc.equals("SEBASTIAN")) {
+                    gameView.setSebastian_dialog(false);
                 }
-                if (npc.getName() == NPCEnums.ABIGAIL) {
-                    //Server-TODO
-//                    App.getCurrentGame().setAbigail_dialog(false);
+                if (npc.equals("ABIGAIL")) {
+                    gameView.setAbigail_dialog(false);
                 }
-                if (npc.getName() == NPCEnums.HARVEY) {
-                    //Server-TODO
-//                    App.getCurrentGame().setHarvey_dialog(false);
+                if (npc.equals("HARVEY")) {
+                    gameView.setHarvey_dialog(false);
                 }
-                if (npc.getName() == NPCEnums.LEAH) {
-                    //Server-TODO
-//                    App.getCurrentGame().setLeah_dialog(false);
+                if (npc.equals("LEAH")) {
+                    gameView.setLeah_dialog(false);
                 }
-                if (npc.getName() == NPCEnums.ROBIN) {
-                    //Server-TODO
-//                    App.getCurrentGame().setRobin_dialog(false);
+                if (npc.equals("ROBIN")) {
+                    gameView.setRobin_dialog(false);
                 }
             }
         });
@@ -130,25 +131,21 @@ public class NPCDialogView {
         stage.dispose();
         skin.dispose();
         Gdx.input.setInputProcessor(inputProcessor);
-        if (npc.getName() == NPCEnums.SEBASTIAN) {
-            //Server-TODO
-//            App.getCurrentGame().setSebastian_dialog(false);
+        GameView gameView = gameController.getGameMenu().getGameView();
+        if (npc.equals("SEBASTIAN")) {
+            gameView.setSebastian_dialog(false);
         }
-        if (npc.getName() == NPCEnums.ABIGAIL) {
-            //Server-TODO
-//            App.getCurrentGame().setAbigail_dialog(false);
+        if (npc.equals("ABIGAIL")) {
+            gameView.setAbigail_dialog(false);
         }
-        if (npc.getName() == NPCEnums.HARVEY) {
-            //Server-TODO
-//            App.getCurrentGame().setHarvey_dialog(false);
+        if (npc.equals("HARVEY")) {
+            gameView.setHarvey_dialog(false);
         }
-        if (npc.getName() == NPCEnums.LEAH) {
-            //Server-TODO
-//            App.getCurrentGame().setLeah_dialog(false);
+        if (npc.equals("LEAH")) {
+            gameView.setLeah_dialog(false);
         }
-        if (npc.getName() == NPCEnums.ROBIN) {
-            //Server-TODO
-//            App.getCurrentGame().setRobin_dialog(false);
+        if (npc.equals("ROBIN")) {
+            gameView.setRobin_dialog(false);
         }
     }
 
