@@ -1,5 +1,6 @@
 package io.github.group18.Network.Server.App;
 
+import io.github.group18.Model.ChatMessage;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 
@@ -15,7 +16,7 @@ public class ServerModel {
 
     private static ArrayList<User> onlineUsers = new ArrayList<>();
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
-
+    private static ArrayList<ChatMessage> messages = new ArrayList<>();
 
 
     public static ClientConnectionThread getConnectionByUser(User user) {
@@ -132,5 +133,13 @@ public class ServerModel {
             }
         }
         return null;
+    }
+
+    public static ArrayList<ChatMessage> getMessages() {
+        return messages;
+    }
+
+    public static void setMessages(ArrayList<ChatMessage> messages) {
+        ServerModel.messages = messages;
     }
 }
