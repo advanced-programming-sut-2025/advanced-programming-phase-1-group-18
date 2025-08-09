@@ -55,6 +55,10 @@ public class GameMenuInputAdapter extends InputAdapter {
             ClientModel.setWindowOpen(true);
             handleActionMenu();
         }
+        if (keycode == Input.Keys.U){
+            ClientModel.setWindowOpen(true);
+            handleVoteMenu();
+        }
         if (keycode == Input.Keys.R) {
             //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
@@ -742,6 +746,11 @@ public class GameMenuInputAdapter extends InputAdapter {
         gameController.getGameMenu().getActionMenu().setActive(true);
         gameController.getGameMenu().getActionMenu().setGameMenuInputAdapter(this);
         Gdx.input.setInputProcessor(gameController.getGameMenu().getActionMenu().getStage());
+    }
+    private void handleVoteMenu() {
+        gameController.getGameMenu().getVoteMenu().setActive(true);
+        gameController.getGameMenu().getVoteMenu().setGameMenuInputAdapter(this);
+        Gdx.input.setInputProcessor(gameController.getGameMenu().getVoteMenu().getStage());
     }
 
     private void handleCheatCodeDialog() {

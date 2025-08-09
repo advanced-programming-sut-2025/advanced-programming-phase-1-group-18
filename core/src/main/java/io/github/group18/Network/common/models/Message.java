@@ -100,7 +100,10 @@ public class Message {
         get_linked_list,
         move_to_front,
         set_action,
-        action_off
+        action_off,
+        get_players_usernames,
+        vote_user,
+        vote_terminate_game
     }
 
     public enum Menu {

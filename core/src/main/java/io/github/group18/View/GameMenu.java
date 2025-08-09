@@ -51,6 +51,7 @@ public class GameMenu implements Screen {
     private FishingMiniGame fishingMiniGame;
     private CraftingUI craftingUI;
     private ActionMenu actionMenu;
+    private VoteMenu voteMenu;
     private Stage stage;
     private Buff buff;
     private boolean showBuff = false;
@@ -70,6 +71,8 @@ public class GameMenu implements Screen {
         craftingUI.setActive(false);
         this.actionMenu = new ActionMenu();
         actionMenu.setActive(false);
+        this.voteMenu = new VoteMenu();
+        voteMenu.setActive(false);
         initializeGame();
     }
 
@@ -118,6 +121,7 @@ public class GameMenu implements Screen {
         cookingMenu.render();
         craftingUI.render();
         actionMenu.render();
+        voteMenu.render();
 
         stage.act(delta);
         stage.draw();
@@ -401,6 +405,14 @@ public class GameMenu implements Screen {
 
     public void setActionMenu(ActionMenu actionMenu) {
         this.actionMenu = actionMenu;
+    }
+
+    public VoteMenu getVoteMenu() {
+        return voteMenu;
+    }
+
+    public void setVoteMenu(VoteMenu voteMenu) {
+        this.voteMenu = voteMenu;
     }
 
     public void setStage(Stage stage) {
