@@ -350,7 +350,7 @@ public class GameNetworkController {
                 ArrayList<ScoreBoardPlayerInfo> infos = new ArrayList<>();
                 for (Player player : App.getCurrentGame().getPlayers()) {
                     int skill = player.getExtractionSkill().getLevel() + player.getFarmingSkill().getLevel() + player.getFishingSkill().getLevel() +
-                            player.getForagingSkill().getLevel() + player.getMiningSkill().getLevel();
+                        player.getForagingSkill().getLevel() + player.getMiningSkill().getLevel();
                     infos.add(new ScoreBoardPlayerInfo(player.getOwner().getUsername(), skill, player.getGold()));
                 }
                 HashMap<String, Object> board = new HashMap<>();
@@ -402,6 +402,18 @@ public class GameNetworkController {
                         break;
                     }
                 }
+                break;
+            case get_messages:
+                HashMap<String, Object> body_messages = new HashMap<>();
+                body_messages.put("messages", ServerModel.getMessages());
+                clientConnectionThread.sendMessage(new Message(body_messages, Message.Type.get_messages, Message.Menu.game));
+                break;
+            case add_message:
+                Gson gson1 = new Gson();
+                Object chatMessageObject = message.getBody().get("message");
+                String chatMessageJson = gson1.toJson(chatMessageObject);
+                ChatMessage receivedMessage = gson1.fromJson(chatMessageJson, ChatMessage.class);
+                ServerModel.getMessages().add(receivedMessage);
                 break;
         }
     }

@@ -100,7 +100,9 @@ public class Message {
         get_linked_list,
         move_to_front,
         set_action,
-        action_off
+        action_off,
+        get_messages,
+        add_message
     }
 
     public enum Menu {

@@ -128,6 +128,8 @@ public class GameView {
     float scoreboardUpdateTimer = 0f;
     final float scoreboardUpdateInterval = 1.0f;
 
+    private ChatUI chatBox;
+
     public GameView(GameController gameController) {
         this.gameController = gameController;
         batch = new SpriteBatch();
@@ -279,15 +281,79 @@ public class GameView {
                 updateScoreBoard();
             }
         }
+        if (chatBox != null) {
+            chatBox.render();
+        }
         batch.end();
     }
+
+//    private void showChatBox() {
+//        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//        Table table = new Table(skin);
+//
+//        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//        Stage stage = gameController.getGameMenu().getStage();
+//        scoreBoardTable = new Table(skin);
+//        scoreBoardTable.setFillParent(true);
+//        scoreBoardTable.setColor(Color.BLACK);
+//        TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
+//        TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
+//
+//        sortByGoldButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                userChoice[0] = "gold";
+//            }
+//        });
+//
+//        sortBySkillButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                userChoice[0] = "skill";
+//            }
+//        });
+//
+//        scoreBoardTable.add(sortByGoldButton).pad(10);
+//        scoreBoardTable.add(sortBySkillButton).pad(10);
+//
+//
+//        scoreBoardTable.add("Rank").pad(10);
+//        scoreBoardTable.add("Player Name").pad(10);
+//        scoreBoardTable.add("Gold").pad(10);
+//        scoreBoardTable.add("Skill").pad(10);
+//        scoreBoardTable.add("Sort: " + userChoice[0]).pad(10);
+//        scoreBoardTable.row();
+//
+//        updateScoreBoard();
+//
+//
+//        TextButton closeButton = new TextButton("Close", skin);
+//        closeButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                ClientModel.setWindowOpen(false);
+//                showScoreBoard = false;
+//                scoreBoardTable.remove();
+//                scoreBoardTable = null;
+//                scoreboardUpdateTimer = 0f;
+//                Gdx.input.setInputProcessor(null);
+//            }
+//        });
+//
+//
+//        scoreBoardTable.row();
+//        scoreBoardTable.add(closeButton).colspan(4).padTop(20);
+//
+//        stage.addActor(scoreBoardTable);
+//        Gdx.input.setInputProcessor(stage);
+//    }
 
     private void scoreBoardPage() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
         Stage stage = gameController.getGameMenu().getStage();
         scoreBoardTable = new Table(skin);
         scoreBoardTable.setFillParent(true);
-
+        scoreBoardTable.setColor(Color.BLACK);
         TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
         TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
 
@@ -425,9 +491,6 @@ public class GameView {
         scoreBoardTable.row();
         scoreBoardTable.add(closeButton).colspan(4).padTop(20);
     }
-
-
-
 
     private void renderNPC(int startx, int starty, int endx, int endy) {
 
@@ -1803,5 +1866,65 @@ public class GameView {
 
     public void setShowScoreBoard(boolean showScoreBoard) {
         this.showScoreBoard = showScoreBoard;
+    }
+
+    public boolean isActionOn() {
+        return isActionOn;
+    }
+
+    public void setActionOn(boolean actionOn) {
+        isActionOn = actionOn;
+    }
+
+    public float getActionTime() {
+        return actionTime;
+    }
+
+    public void setActionTime(float actionTime) {
+        this.actionTime = actionTime;
+    }
+
+    public Table getScoreBoardTable() {
+        return scoreBoardTable;
+    }
+
+    public void setScoreBoardTable(Table scoreBoardTable) {
+        this.scoreBoardTable = scoreBoardTable;
+    }
+
+    public String[] getUserChoice() {
+        return userChoice;
+    }
+
+    public ArrayList<ScoreBoardPlayerInfo> getInfos() {
+        return infos;
+    }
+
+    public void setInfos(ArrayList<ScoreBoardPlayerInfo> infos) {
+        this.infos = infos;
+    }
+
+    public float getScoreboardUpdateTimer() {
+        return scoreboardUpdateTimer;
+    }
+
+    public void setScoreboardUpdateTimer(float scoreboardUpdateTimer) {
+        this.scoreboardUpdateTimer = scoreboardUpdateTimer;
+    }
+
+    public float getScoreboardUpdateInterval() {
+        return scoreboardUpdateInterval;
+    }
+
+    public void setCameraInitialized(boolean cameraInitialized) {
+        this.cameraInitialized = cameraInitialized;
+    }
+
+    public ChatUI getChatBox() {
+        return chatBox;
+    }
+
+    public void setChatBox(ChatUI chatBox) {
+        this.chatBox = chatBox;
     }
 }

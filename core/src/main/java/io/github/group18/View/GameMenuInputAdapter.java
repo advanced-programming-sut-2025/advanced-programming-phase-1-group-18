@@ -68,20 +68,27 @@ public class GameMenuInputAdapter extends InputAdapter {
             return true;
         }
 
-        if (keycode == Input.Keys.T) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
+//        if (keycode == Input.Keys.T) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//
+//            TalkWindow talkWindow = new TalkWindow(
+//                GameAssetManager.getGameAssetManager().getSkin(),
+//                gameController.getGameMenu().getStage(),
+//                currentPlayer
+//            );
+//
+//            gameController.getGameMenu().getStage().addActor(talkWindow);
+//            return true;
+//        }
 
-            TalkWindow talkWindow = new TalkWindow(
-                GameAssetManager.getGameAssetManager().getSkin(),
-                gameController.getGameMenu().getStage(),
-                currentPlayer
-            );
-
-            gameController.getGameMenu().getStage().addActor(talkWindow);
-            return true;
+        if(keycode == Input.Keys.T){
+            GameView gameView = gameController.getGameMenu().getGameView();
+            ClientModel.setWindowOpen(true);
+            gameView.setChatBox(new ChatUI(Gdx.input.getInputProcessor()));
+            Gdx.input.setInputProcessor(gameView.getChatBox().getStage());
         }
 
         if (keycode == Input.Keys.I) {
@@ -198,8 +205,8 @@ public class GameMenuInputAdapter extends InputAdapter {
         if (keycode == Input.Keys.N) {
             GameView gameView = gameController.getGameMenu().getGameView();
             ClientModel.setWindowOpen(true);
-            System.out.println("n ro zadi pas windowopen ro true kardam");
-            gameView.setShowScoreBoard(true);
+            gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
+            Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
         }
 
 
@@ -502,23 +509,23 @@ public class GameMenuInputAdapter extends InputAdapter {
         tile.setWalkable(walkableObj);
 
         if ("full".equals(insideState)) {
-            System.out.println("inside: " + response.getFromBody("inside"));
-            System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
-            System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
+//            System.out.println("inside: " + response.getFromBody("inside"));
+//            System.out.println("insideOBJ: " + response.getFromBody("insideOBJ"));
+//            System.out.println("insideCLASS: " + response.getFromBody("insideCLASS"));
             Object insideClassObj = response.getFromBody("insideCLASS");
             Object insideRaw = response.getFromBody("insideOBJ");
             if (response.getFromBody("insideCLASS").equals("io.github.group18.Model.FishShopMarketali")) {
-                System.out.println("fish1");
+//                System.out.println("fish1");
                 tile.setInside(new FishShopMarketali());
-                System.out.println("fish2");
+//                System.out.println("fish2");
                 GameView gameView = gameController.getGameMenu().getGameView();
-                System.out.println("fish3");
+//                System.out.println("fish3");
                 ClientModel.setWindowOpen(true);
-                System.out.println("fish3.5");
+//                System.out.println("fish3.5");
                 gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
-                System.out.println("fish4");
+//                System.out.println("fish4");
                 Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
-                System.out.println("fish5");
+//                System.out.println("fish5");
             } else if (insideClassObj instanceof Class<?>) {
                 Class<?> clazz = (Class<?>) insideClassObj;
 
