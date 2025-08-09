@@ -21,15 +21,13 @@ import io.github.group18.Controller.GameController;
 import io.github.group18.Controller.LightningEffect;
 import io.github.group18.Main;
 import io.github.group18.Controller.GameMenuController;
-import io.github.group18.Model.App;
-import io.github.group18.Model.Buff;
-import io.github.group18.Model.Game;
-import io.github.group18.Model.GameAssetManager;
+import io.github.group18.Model.*;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.enums.CraftingRecipesEnums;
 import io.github.group18.enums.SkillEnum;
 import com.badlogic.gdx.InputMultiplexer;
+import io.github.group18.enums.WeatherEnum;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -53,6 +51,10 @@ public class GameMenu implements Screen {
     private Stage stage;
     private Buff buff;
     private boolean showBuff = false;
+    private RainEffect rainEffect;
+    private SnowEffect snowEffect;
+
+
 
 
     public GameMenu(GameController gameController, Game gameModel) {
@@ -77,6 +79,13 @@ public class GameMenu implements Screen {
         Gdx.input.setInputProcessor(gameMenuInputAdapter);
         inventoryView = new InventoryView(GameAssetManager.getGameAssetManager().getSkin());
 
+        rainEffect = new RainEffect("assets/rain_drop.png", 100);
+        rainEffect.setEnabled(false);
+
+        snowEffect = new SnowEffect("assets/snow_drop.png", 100);
+        snowEffect.setEnabled(false);
+
+
         stage.addActor(inventoryView.getWindow());
         stage.addActor(inventoryView.getTooltipLabel());
         stage.addActor(inventoryView.getSkillTooltipLabel());
@@ -100,9 +109,29 @@ public class GameMenu implements Screen {
         gameModel.update(delta);
         lightningEffect.update(delta);
         gameView.render();
+        rainEffect.update(delta);
+        rainEffect.render(Main.getBatch());
+        snowEffect.update(delta);
+        snowEffect.render(gameView.getBatch());
+
+        WeatherEnum currentWeather = gameModel.getWeather().peek();
+
+        if (currentWeather == WeatherEnum.RAIN) {
+            rainEffect.setEnabled(true);
+            snowEffect.setEnabled(false);
+        } else if (currentWeather == WeatherEnum.SNOW) {
+            snowEffect.setEnabled(true);
+            rainEffect.setEnabled(false);
+        } else {
+            rainEffect.setEnabled(false);
+            snowEffect.setEnabled(false);
+        }
+
+
         lightningEffect.render(Main.getBatch());
         gameMenuInputAdapter.update(delta,gameView.getBatch());
         handleNightSleepFade(delta);
+
 
         cheatCodeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         cheatCodeStage.draw();

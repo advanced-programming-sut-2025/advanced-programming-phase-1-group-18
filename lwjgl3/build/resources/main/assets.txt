@@ -1020,6 +1020,8 @@ poles/Bamboo_Pole.png
 poles/Fiberglass_Rod.png
 poles/Iridium_Rod.png
 poles/Training_Rod.png
+rain_drop.png
+snow_drop.png
 testSpriteSheet/clockAtlas.atlas
 testSpriteSheet/clockAtlas.png
 ui/font-list.fnt
