@@ -415,6 +415,26 @@ public class GameNetworkController {
                 ChatMessage receivedMessage = gson1.fromJson(chatMessageJson, ChatMessage.class);
                 ServerModel.getMessages().add(receivedMessage);
                 break;
+            case get_players_usernames:
+                HashMap<String, Object> players = new HashMap<>();
+                players.put("playersNum", App.getCurrentGame().getPlayers().size());
+                for(int a = 0; a < App.getCurrentGame().getPlayers().size(); a++) {
+                    players.put(String.valueOf(a),App.getCurrentGame().getPlayers().get(a).getUsername());
+                }
+                Message res = new Message(players, Message.Type.get_players_usernames, Message.Menu.game);
+                clientConnectionThread.sendMessage(res);
+                break;
+            case vote_terminate_game:
+                int voterId = message.getIntFromBody("voterId");
+                String voteStr = message.getFromBody("vote");
+                boolean vote = voteStr.equals("true");
+                ServerModel.addVoteTerminateGame(voterId, vote);
+                break;
+            case vote_user:
+                int VoterId = message.getIntFromBody("voterId");
+                int playerIndex = message.getIntFromBody("playerIndex");
+                ServerModel.addVoteRemovePlayer(VoterId, playerIndex);
+                break;
         }
     }
 

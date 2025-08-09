@@ -1,11 +1,12 @@
 package io.github.group18.Network.Server.App;
 
 import io.github.group18.Model.ChatMessage;
+import io.github.group18.Model.App;
 import io.github.group18.Model.Lobby;
 import io.github.group18.Model.User;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class ServerModel {
     public static final int TIMEOUT_MILLIS = 500;
@@ -16,6 +17,9 @@ public class ServerModel {
 
     private static ArrayList<User> onlineUsers = new ArrayList<>();
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
+
+    private static HashMap<Integer,Boolean>voteTerminateGame = new HashMap<>();
+    private static HashMap<Integer,Integer>voteRemovePlayer = new HashMap<>();
     private static ArrayList<ChatMessage> messages = new ArrayList<>();
 
 
@@ -142,4 +146,34 @@ public class ServerModel {
     public static void setMessages(ArrayList<ChatMessage> messages) {
         ServerModel.messages = messages;
     }
+    public static void addVoteTerminateGame(int id,boolean isTerminated) {
+        voteTerminateGame.put(id, isTerminated);
+        System.out.println(voteTerminateGame);
+        long terminateVotes = voteTerminateGame.values()
+            .stream()
+            .filter(v -> v)
+            .count();
+        if (terminateVotes > App.getCurrentGame().getPlayers().size()/2) {
+            System.out.println("Terminating game");
+        }
+    }
+    public static void addVoteRemovePlayer(int id,int playerIndex) {
+        voteRemovePlayer.put(id, playerIndex);
+        System.out.println(voteRemovePlayer);
+        for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
+            if (getMostVotedPlayer(i)){
+                System.out.println("Removing player " + playerIndex + " from game");
+            }
+        }
+    }
+    public static boolean getMostVotedPlayer(int playerIndex) {
+        int sum = 0;
+        for (Integer i : voteRemovePlayer.keySet()) {
+            if (voteRemovePlayer.get(i) == playerIndex) {
+                sum++;
+            }
+        }
+        return sum > App.getCurrentGame().getPlayers().size()/2;
+    }
+
 }
