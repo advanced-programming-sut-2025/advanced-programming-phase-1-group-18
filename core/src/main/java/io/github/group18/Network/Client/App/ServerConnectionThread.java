@@ -77,6 +77,9 @@ public class ServerConnectionThread extends ConnectionThread {
             ClientModel.setPlayer(player);
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.player_pos_update) {
             gameView.setPlayerPosUpdated(true);
+        } else if (message.getMenu() == Message.Menu.game && message.getType() == Message.Type.remove_user_from_game) {
+            this.end();
+            System.exit(0);
         }
         return false;
     }

@@ -425,15 +425,15 @@ public class GameNetworkController {
                 clientConnectionThread.sendMessage(res);
                 break;
             case vote_terminate_game:
-                int voterId = message.getIntFromBody("voterId");
+                String voter = message.getFromBody("voter");
                 String voteStr = message.getFromBody("vote");
                 boolean vote = voteStr.equals("true");
-                ServerModel.addVoteTerminateGame(voterId, vote);
+                ServerModel.addVoteTerminateGame(voter, vote);
                 break;
             case vote_user:
-                int VoterId = message.getIntFromBody("voterId");
-                int playerIndex = message.getIntFromBody("playerIndex");
-                ServerModel.addVoteRemovePlayer(VoterId, playerIndex);
+                String Voter = message.getFromBody("voter");
+                String player_exit_name = message.getFromBody("player");
+                ServerModel.addVoteRemovePlayer(Voter, player_exit_name);
                 break;
         }
     }

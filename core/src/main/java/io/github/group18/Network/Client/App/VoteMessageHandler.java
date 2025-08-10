@@ -13,16 +13,16 @@ public class VoteMessageHandler {
         }
         return response;
     }
-    public static void votePlayer(int playerIndex,int voterId) {
+    public static void votePlayer(String playertoRemove,String voter) {
         HashMap<String,Object>body = new HashMap<>();
-        body.put("playerIndex", playerIndex);
-        body.put("voterId", voterId);
+        body.put("player", playertoRemove);
+        body.put("voter", voter);
         Message send = new Message(body, Message.Type.vote_user, Message.Menu.game);
         ClientModel.getServerConnectionThread().sendMessage(send);
     }
-    public static void voteTerminateGame(int voterId,boolean vote) {
+    public static void voteTerminateGame(String voter,boolean vote) {
         HashMap<String,Object>body = new HashMap<>();
-        body.put("voterId", voterId);
+        body.put("voter", voter);
         body.put("vote", vote?"true":"false");
         Message send = new Message(body, Message.Type.vote_terminate_game, Message.Menu.game);
         ClientModel.getServerConnectionThread().sendMessage(send);

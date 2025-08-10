@@ -1,10 +1,10 @@
 package io.github.group18.Network.Server.App;
 
-import io.github.group18.Model.ChatMessage;
-import io.github.group18.Model.App;
-import io.github.group18.Model.Lobby;
-import io.github.group18.Model.User;
+import io.github.group18.Model.*;
+import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.common.models.Message;
 
+import java.nio.channels.ClosedByInterruptException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,8 +18,8 @@ public class ServerModel {
     private static ArrayList<User> onlineUsers = new ArrayList<>();
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
-    private static HashMap<Integer,Boolean>voteTerminateGame = new HashMap<>();
-    private static HashMap<Integer,Integer>voteRemovePlayer = new HashMap<>();
+    private static HashMap<String, Boolean> voteTerminateGame = new HashMap<>();
+    private static ArrayList<Pair<String, String>> voteRemovePlayer = new ArrayList<>();
     private static ArrayList<ChatMessage> messages = new ArrayList<>();
 
 
@@ -146,34 +146,51 @@ public class ServerModel {
     public static void setMessages(ArrayList<ChatMessage> messages) {
         ServerModel.messages = messages;
     }
-    public static void addVoteTerminateGame(int id,boolean isTerminated) {
-        voteTerminateGame.put(id, isTerminated);
-        System.out.println(voteTerminateGame);
-        long terminateVotes = voteTerminateGame.values()
-            .stream()
-            .filter(v -> v)
-            .count();
-        if (terminateVotes > App.getCurrentGame().getPlayers().size()/2) {
-            System.out.println("Terminating game");
-        }
-    }
-    public static void addVoteRemovePlayer(int id,int playerIndex) {
-        voteRemovePlayer.put(id, playerIndex);
-        System.out.println(voteRemovePlayer);
-        for (int i = 0; i < App.getCurrentGame().getPlayers().size(); i++) {
-            if (getMostVotedPlayer(i)){
-                System.out.println("Removing player " + playerIndex + " from game");
+
+    public static void addVoteTerminateGame(String voter, boolean isTerminated) {
+        voteTerminateGame.put(voter, isTerminated);
+        if (voteTerminateGame.size() == App.getCurrentGame().getPlayers().size()) {
+            long terminateVotes = voteTerminateGame.values()
+                .stream()
+                .filter(v -> v)
+                .count();
+            if (terminateVotes > App.getCurrentGame().getPlayers().size() / 2) {
+                System.out.println("Terminating game");
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    ClientConnectionThread clientConnectionThread = getConnectionByUserName(player.getUsername());
+                    clientConnectionThread.sendMessage(new Message(new HashMap<>(), Message.Type.remove_user_from_game, Message.Menu.game));
+                }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.exit(0);
             }
         }
     }
-    public static boolean getMostVotedPlayer(int playerIndex) {
-        int sum = 0;
-        for (Integer i : voteRemovePlayer.keySet()) {
-            if (voteRemovePlayer.get(i) == playerIndex) {
-                sum++;
+
+    public static void addVoteRemovePlayer(String voter, String playerToRemove) {
+        voteRemovePlayer.add(new Pair<>(playerToRemove, voter));
+
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (getMostVotedPlayer(player.getOwner().getUsername())) {
+                App.getCurrentGame().getPlayers().remove(player);
+                ClientConnectionThread clientConnectionThread = getConnectionByUserName(player.getUsername());
+                clientConnectionThread.sendMessage(new Message(new HashMap<>(), Message.Type.remove_user_from_game, Message.Menu.game));
             }
         }
-        return sum > App.getCurrentGame().getPlayers().size()/2;
+    }
+
+    public static boolean getMostVotedPlayer(String username) {
+        int count = 0;
+        for (int i = 0; i < voteRemovePlayer.size(); i++) {
+            Pair<String, String> pair = voteRemovePlayer.get(i);
+            if (pair.first.equals(username)) {
+                count++;
+            }
+        }
+        return count > App.getCurrentGame().getPlayers().size() / 2;
     }
 
 }
