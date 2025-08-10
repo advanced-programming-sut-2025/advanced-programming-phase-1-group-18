@@ -102,7 +102,10 @@ public class Message {
         set_action,
         action_off,
         get_messages,
-        add_message
+        add_message,
+        get_players_usernames,
+        vote_user,
+        vote_terminate_game
     }
 
     public enum Menu {
