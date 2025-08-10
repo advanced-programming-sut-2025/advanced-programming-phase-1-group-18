@@ -49,8 +49,10 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         if (keycode == Input.Keys.Q) {
+            ClientModel.setWindowOpen(true);
             Sell();
         }
+
         if (keycode == Input.Keys.O){
             ClientModel.setWindowOpen(true);
             handleActionMenu();
@@ -59,18 +61,19 @@ public class GameMenuInputAdapter extends InputAdapter {
             ClientModel.setWindowOpen(true);
             handleVoteMenu();
         }
-        if (keycode == Input.Keys.R) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            GiftViewWindow giftViewWindow = new GiftViewWindow(
-                game,
-                GameAssetManager.getGameAssetManager().getSkin(),
-                gameController.getGameMenu().getStage()
-            );
-            return true;
-        }
+
+//        if (keycode == Input.Keys.R) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            GiftViewWindow giftViewWindow = new GiftViewWindow(
+//                game,
+//                GameAssetManager.getGameAssetManager().getSkin(),
+//                gameController.getGameMenu().getStage()
+//            );
+//            return true;
+//        }
 
 //        if (keycode == Input.Keys.T) {
 //            //Server-TODO(ask server for game)
@@ -104,94 +107,94 @@ public class GameMenuInputAdapter extends InputAdapter {
             handleCheatCodeDialog();
         }
 
-        if (keycode == Input.Keys.F) {
-            //Server-TODO(ask server for game)
+//        if (keycode == Input.Keys.F) {
+//            //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            ArrayList<Player> friends = game.getFriendsOf(currentPlayer); // فرض بر این که این متد وجود داره
-
-            FriendsWindow friendsWindow = new FriendsWindow(
-                GameAssetManager.getGameAssetManager().getSkin(),
-                currentPlayer,
-                friends
-            );
-
-            gameController.getGameMenu().getStage().addActor(friendsWindow);
-            return true;
-        }
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            ArrayList<Player> friends = game.getFriendsOf(currentPlayer); // فرض بر این که این متد وجود داره
+//
+//            FriendsWindow friendsWindow = new FriendsWindow(
+//                GameAssetManager.getGameAssetManager().getSkin(),
+//                currentPlayer,
+//                friends
+//            );
+//
+//            gameController.getGameMenu().getStage().addActor(friendsWindow);
+//            return true;
+//        }
 
         //gift Window
-        if (keycode == Input.Keys.G) {
-            //Server-TODO(ask server for game)
+//        if (keycode == Input.Keys.G) {
+//            //Server-TODO(ask server for game)
 //        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
-                gameController.getGameMenu().getStage(),
-                currentPlayer);
-            gameController.getGameMenu().getStage().addActor(giftWindow);
-            return true;
-        }
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
+//                gameController.getGameMenu().getStage(),
+//                currentPlayer);
+//            gameController.getGameMenu().getStage().addActor(giftWindow);
+//            return true;
+//        }
 
-        if (keycode == Input.Keys.H) {
-            Player currentPlayer = ClientModel.getPlayer();
+//        if (keycode == Input.Keys.H) {
+//            Player currentPlayer = ClientModel.getPlayer();
+//
+//            TalkHistoryWindow talkHistoryWindow = new TalkHistoryWindow(
+//                GameAssetManager.getGameAssetManager().getSkin(),
+//                gameController.getGameMenu().getStage(),
+//                currentPlayer
+//            );
+//
+//            gameController.getGameMenu().getStage().addActor(talkHistoryWindow);
+//            return true;
+//        }
 
-            TalkHistoryWindow talkHistoryWindow = new TalkHistoryWindow(
-                GameAssetManager.getGameAssetManager().getSkin(),
-                gameController.getGameMenu().getStage(),
-                currentPlayer
-            );
+//        if (keycode == Input.Keys.J) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//            Stage stage = gameController.getGameMenu().getStage();
+//
+//            GiftHistoryWindow giftHistoryWindow = new GiftHistoryWindow(game, skin);
+//            stage.addActor(giftHistoryWindow);
+//
+//            return true;
+//        }
 
-            gameController.getGameMenu().getStage().addActor(talkHistoryWindow);
-            return true;
-        }
-
-        if (keycode == Input.Keys.J) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-            Stage stage = gameController.getGameMenu().getStage();
-
-            GiftHistoryWindow giftHistoryWindow = new GiftHistoryWindow(game, skin);
-            stage.addActor(giftHistoryWindow);
-
-            return true;
-        }
-
-        if (keycode == Input.Keys.K) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-            Stage stage = gameController.getGameMenu().getStage();
-
-            MarriageResponseWindow window = new MarriageResponseWindow(skin, stage, currentPlayer);
-            stage.addActor(window);
-
-            return true;
-        }
+//        if (keycode == Input.Keys.K) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//            Stage stage = gameController.getGameMenu().getStage();
+//
+//            MarriageResponseWindow window = new MarriageResponseWindow(skin, stage, currentPlayer);
+//            stage.addActor(window);
+//
+//            return true;
+//        }
 
         if (keycode == Input.Keys.Z) {
             handleBuildingView();
         }
 
-        if (keycode == Input.Keys.X) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-            Stage stage = gameController.getGameMenu().getStage();
-
-            FlowerSendWindow flowerSendWindow = new FlowerSendWindow(skin, stage, currentPlayer);
-            stage.addActor(flowerSendWindow);
-
-            return true;
-        }
+//        if (keycode == Input.Keys.X) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//            Stage stage = gameController.getGameMenu().getStage();
+//
+//            FlowerSendWindow flowerSendWindow = new FlowerSendWindow(skin, stage, currentPlayer);
+//            stage.addActor(flowerSendWindow);
+//
+//            return true;
+//        }
 
         if (keycode == Input.Keys.C) {
             ClientModel.setWindowOpen(true);
@@ -202,9 +205,9 @@ public class GameMenuInputAdapter extends InputAdapter {
             ClientModel.getPlayer().pickSelectedItem();
         }
 
-        if (keycode == Input.Keys.B) {
-            handleCraftingMenu();
-        }
+//        if (keycode == Input.Keys.B) {
+//            handleCraftingMenu();
+//        }
 
         if (keycode == Input.Keys.N) {
             GameView gameView = gameController.getGameMenu().getGameView();
@@ -214,18 +217,18 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
 
-        if (keycode == Input.Keys.M) {
-            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-            Game game = null;
-            Player currentPlayer = ClientModel.getPlayer();
-            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-            Stage stage = gameController.getGameMenu().getStage();
-
-            MarriageProposalWindow proposalWindow = new MarriageProposalWindow(skin, stage, currentPlayer);
-            stage.addActor(proposalWindow);
-            return true;
-        }
+//        if (keycode == Input.Keys.M) {
+//            //Server-TODO(ask server for game)
+////        Game game = gameController.getGame();
+//            Game game = null;
+//            Player currentPlayer = ClientModel.getPlayer();
+//            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+//            Stage stage = gameController.getGameMenu().getStage();
+//
+//            MarriageProposalWindow proposalWindow = new MarriageProposalWindow(skin, stage, currentPlayer);
+//            stage.addActor(proposalWindow);
+//            return true;
+//        }
 
         if (keycode == Input.Keys.ESCAPE) {
             handleInevtnoryView();
@@ -670,6 +673,7 @@ public class GameMenuInputAdapter extends InputAdapter {
             @Override
             public void onCancel() {
                 Gdx.input.setInputProcessor(originalInputProcessor);
+                ClientModel.setWindowOpen(false);
             }
         });
     }

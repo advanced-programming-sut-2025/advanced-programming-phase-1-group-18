@@ -99,8 +99,8 @@ public class ChatUI {
 
         chatWindow.pack();
         chatWindow.setPosition(
-            Gdx.graphics.getWidth() / 2 - chatWindow.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - chatWindow.getHeight() / 2
+                Gdx.graphics.getWidth() / 2 - chatWindow.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - chatWindow.getHeight() / 2
         );
 
         stage.addActor(chatWindow);
@@ -125,16 +125,19 @@ public class ChatUI {
         sendButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //check
-                HashMap<String,Object> body = new HashMap<>();
-                body.put("message", new ChatMessage(ClientModel.getPlayer().getOwner().getUsername(), messageTextField.getText(), false));
-                Message send = new Message(body, Message.Type.add_message, Message.Menu.game);
-                ClientModel.getServerConnectionThread().sendMessage(send);
+                try {
+                    //check
+                    HashMap<String, Object> body = new HashMap<>();
+                    body.put("message", new ChatMessage(ClientModel.getPlayer().getOwner().getUsername(), messageTextField.getText(), false));
+                    Message send = new Message(body, Message.Type.add_message, Message.Menu.game);
+                    ClientModel.getServerConnectionThread().sendMessage(send);
 
-                Dialog errorDialog = new Dialog("Error", skin);
-                errorDialog.text("O_o Oops! Something went wrong.");
-                errorDialog.button("OK");
-                errorDialog.show(stage);
+                } catch (Exception e) {
+                    Dialog errorDialog = new Dialog("Error", skin);
+                    errorDialog.text("O_o Oops! Something went wrong.");
+                    errorDialog.button("OK");
+                    errorDialog.show(stage);
+                }
             }
         });
         TextButton cancelButton = new TextButton("Cancel", skin);
@@ -151,8 +154,8 @@ public class ChatUI {
         currentDialog.add(tooble);
         currentDialog.pack();
         currentDialog.setPosition(
-            Gdx.graphics.getWidth() / 2 - currentDialog.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - currentDialog.getHeight() / 2
+                Gdx.graphics.getWidth() / 2 - currentDialog.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - currentDialog.getHeight() / 2
         );
 
         stage.addActor(currentDialog);
@@ -183,7 +186,7 @@ public class ChatUI {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //check
-                HashMap<String,Object> body = new HashMap<>();
+                HashMap<String, Object> body = new HashMap<>();
                 body.put("message", new ChatMessage(ClientModel.getPlayer().getOwner().getUsername(), messageTextField.getText(), true, senderUsernameTextField.getText()));
                 Message send = new Message(body, Message.Type.add_message, Message.Menu.game);
                 ClientModel.getServerConnectionThread().sendMessage(send);
@@ -208,8 +211,8 @@ public class ChatUI {
         currentDialog.add(tooble);
         currentDialog.pack();
         currentDialog.setPosition(
-            Gdx.graphics.getWidth() / 2 - currentDialog.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - currentDialog.getHeight() / 2
+                Gdx.graphics.getWidth() / 2 - currentDialog.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - currentDialog.getHeight() / 2
         );
 
         stage.addActor(currentDialog);
@@ -240,6 +243,11 @@ public class ChatUI {
                 if (chatMessage.receiverUsername.equalsIgnoreCase(ClientModel.getPlayer().getOwner().getUsername())) {
                     label = new Label("Private msg from: " + chatMessage.senderUsername + "\t\t: " + chatMessage.message, skin);
                     label.setColor(Color.RED);
+                } else {
+                    if (chatMessage.senderUsername.equalsIgnoreCase(ClientModel.getPlayer().getOwner().getUsername())) {
+                        label = new Label("Private msg for: " + chatMessage.receiverUsername + "\t\t: " + chatMessage.message, skin);
+                        label.setColor(Color.RED);
+                    }
                 }
             } else {
                 label = new Label("Sender: " + chatMessage.senderUsername + "\t\tMessage: " + chatMessage.message, skin);

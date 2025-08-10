@@ -3,60 +3,39 @@
     "Username": "a",
     "Password": "5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807",
     "Email": "a@a",
-    "Gender": "",
+    "Gender": "male",
     "NickName": "a",
     "stayLoggedIn": false,
     "timesPlayed": 0,
     "highestGold": 0,
     "avatar": "avatar.png",
-    "ID": 5
+    "ID": 1,
+    "isChangedScreen": false
   },
   {
     "Username": "b",
     "Password": "5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807",
-    "Email": "b@b",
-    "Gender": "",
+    "Email": "a@a",
+    "Gender": "male",
     "NickName": "b",
     "stayLoggedIn": false,
     "timesPlayed": 0,
     "highestGold": 0,
     "avatar": "avatar.png",
-    "ID": 6
+    "ID": 2,
+    "isChangedScreen": false
   },
   {
     "Username": "c",
     "Password": "5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807",
-    "Email": "c@c",
-    "Gender": "",
+    "Email": "c@gmail.ocm",
+    "Gender": "male",
     "NickName": "c",
     "stayLoggedIn": false,
     "timesPlayed": 0,
     "highestGold": 0,
     "avatar": "avatar.png",
-    "ID": 8
-  },
-  {
-    "Username": "d",
-    "Password": "5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807",
-    "Email": "d@D",
-    "Gender": "",
-    "NickName": "d",
-    "stayLoggedIn": false,
-    "timesPlayed": 0,
-    "highestGold": 0,
-    "avatar": "avatar.png",
-    "ID": 11
-  },
-  {
-    "Username": "f",
-    "Password": "5a3b764dbd4cf81b46b06dc105e14f6bcb496dc3ebd44e732b1d79d99c431807",
-    "Email": "f@f",
-    "Gender": "",
-    "NickName": "f",
-    "stayLoggedIn": false,
-    "timesPlayed": 0,
-    "highestGold": 0,
-    "avatar": "avatar.png",
-    "ID": 15
+    "ID": 0,
+    "isChangedScreen": false
   }
 ]

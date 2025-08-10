@@ -3155,22 +3155,22 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public static Result sell(Item item, int count, Player playerrr) {
         Player currentPlayer = playerrr;
 
-        try {
-            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
-                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
-
-            } else {
-                return new Result(false, "Please stand near a Satl" + currentPlayer.getX() + " " + currentPlayer.getY());
-            }
-        } catch (Exception e) {
-            return new Result(false, "Don't stand near the borders");
-        }
+//        try {
+//            if ((App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() + 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY()).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX() - 1).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() + 1).getInside() instanceof Satl) ||
+//                (App.getCurrentGame().getMap().get((int) currentPlayer.getX()).get((int) currentPlayer.getY() - 1).getInside() instanceof Satl)) {
+//
+//            } else {
+//                return new Result(false, "Please stand near a Satl" + currentPlayer.getX() + " " + currentPlayer.getY());
+//            }
+//        } catch (Exception e) {
+//            return new Result(false, "Don't stand near the borders");
+//        }
 
         int quantity = count;
 
