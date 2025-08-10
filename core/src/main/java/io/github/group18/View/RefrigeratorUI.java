@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import io.github.group18.Model.*;
+import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
 
 import java.util.HashMap;
@@ -30,11 +31,18 @@ public class RefrigeratorUI {
     private void loadInventoryItems() {
         for (Item item : App.getCurrentGame()
             .getCurrentPlayer().getMyFarm().getMyCottage().getMyRefrigerator().getItems().keySet()) {
-            if (item instanceof PictureModel pictureModel) {
+            if (item instanceof CraftingItem) {
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+                    findRegion(((CraftingItem) item).getCraftingItem().name())));
+            } else if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                try {
+                    textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                } catch (Exception e) {
+                    textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
+                }
             } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
             }
         }
     }

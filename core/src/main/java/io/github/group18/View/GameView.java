@@ -604,8 +604,10 @@ public class GameView {
                     break;
                 case Player.EATING_STATE:
                     currentFrame = playerAnimations.get(6).getKeyFrame(player.getEatingTimer(), false);
-                    Texture buff = showBuffEffect(player.getFoodBuff());
-                    batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
+                    if(player.getFoodBuff()!=null) {
+                        Texture buff = showBuffEffect(player.getFoodBuff());
+                        batch.draw(buff, (float) (first * game.TILE_SIZE), (float) (second * game.TILE_SIZE) + 60);
+                    }
                     break;
             }
 
