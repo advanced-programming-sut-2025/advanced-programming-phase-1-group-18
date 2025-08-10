@@ -23,10 +23,7 @@ import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.*;
 import io.github.group18.Model.Satl;
-import io.github.group18.View.GameMenu;
-import io.github.group18.View.GameMenuMenu;
-import io.github.group18.View.GameView;
-import io.github.group18.View.StartNewGame;
+import io.github.group18.View.*;
 import io.github.group18.enums.*;
 import io.github.group18.enums.Menu;
 
@@ -49,7 +46,8 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
     public void handleGameMenuButtons(GameMenuMenu view) {
         if (view != null) {
             if (view.getExitGame().isPressed()) {
-                exitGame();
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new MainMenu(new MainMenuController(), view.getSkin()));
             } else if (view.getTerminateGame().isPressed()) {
                 voteTerminateGame(new Scanner(System.in));
             } else if (view.getLoadGame().isPressed()) {
@@ -649,8 +647,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             }
 
             for (Player player : App.getCurrentGame().getPlayers()) {
-                if (player.getFoodBuff().getBuffHours() != 0) {
+                if (player.getFoodBuff().getBuffHours() != 0 && player.getFoodBuff()!=null) {
                     player.getFoodBuff().setBuffHours(player.getFoodBuff().getBuffHours() - 1);
+                    System.out.println("Buff decreased 1 hour");
                 }
             }
 
@@ -2999,8 +2998,10 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                             get(App.getCurrentGame().getIndexPlayerinControl()).getEnergy() + foodCooking.getEnergy()));
                         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getInventory().removeItem(item, 1);
                         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).setFoodBuff(foodCooking.getBuff());
-                        showBuffEffect(foodCooking.getBuff());
-                        App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
+                        if (foodCooking.getBuff() != null){
+                            showBuffEffect(foodCooking.getBuff());
+                            App.getGameController().getGameMenu().setBuff(foodCooking.getBuff());
+                        }
 //                        App.getGameController().getGameMenu().
                         return new Result(true, "You ate " + foodName);
                     }

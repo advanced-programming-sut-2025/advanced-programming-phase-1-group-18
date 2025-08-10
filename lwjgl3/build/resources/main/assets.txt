@@ -698,13 +698,6 @@ SkillsIcon/ForagingSkill.png
 SkillsIcon/MiningSkill.png
 SkillsIcon/SkillIcons.atlas
 SkillsIcon/SkillIcons.png
-Skin/1hoursheet.PNG
-Skin/font-export.fnt
-Skin/font-subtitle-export.fnt
-Skin/font-title-export.fnt
-Skin/pixthulhu-ui.atlas
-Skin/pixthulhu-ui.json
-Skin/pixthulhu-ui.png
 Stone.png
 StrawberrySeeds.png
 Tools/36_Backpack.png
@@ -1021,6 +1014,13 @@ poles/Fiberglass_Rod.png
 poles/Iridium_Rod.png
 poles/Training_Rod.png
 rain_drop.png
+skin/1hoursheet.PNG
+skin/font-export.fnt
+skin/font-subtitle-export.fnt
+skin/font-title-export.fnt
+skin/pixthulhu-ui.atlas
+skin/pixthulhu-ui.json
+skin/pixthulhu-ui.png
 snow_drop.png
 testSpriteSheet/clockAtlas.atlas
 testSpriteSheet/clockAtlas.png

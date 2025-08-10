@@ -35,15 +35,18 @@ public class InventoryUI {
     private void loadInventoryItems() {
         for (Item item : App.getCurrentGame()
             .getCurrentPlayer().getInventory().getItems().keySet()) {
-            if (item instanceof CraftingItem){
-                textures.put(item,new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
+            if (item instanceof CraftingItem) {
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getCraftingAtlas().
                     findRegion(((CraftingItem) item).getCraftingItem().name())));
-            }
-            if (item instanceof PictureModel pictureModel) {
+            } else if (item instanceof PictureModel pictureModel) {
                 String path = pictureModel.getPath();
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                try {
+                    textures.put(item, new TextureRegion(new Texture(Gdx.files.internal(path))));
+                } catch (Exception e) {
+                    textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
+                }
             } else {
-                textures.put(item, new TextureRegion(new Texture(Gdx.files.internal("Tools/Gold_Pan.png"))));
+                textures.put(item, new TextureRegion(GameAssetManager.getGameAssetManager().getDefaultInventoryItem()));
             }
         }
     }

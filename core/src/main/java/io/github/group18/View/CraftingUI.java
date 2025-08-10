@@ -380,7 +380,9 @@ public class CraftingUI {
                 if(!result.isSuccessful()){
                     selectedItems.clear();
                 }
-                craftingItem.setProcessing(true);
+                else{
+                    craftingItem.setProcessing(true);
+                }
                 errorDialog.text(result.getMessage());
                 errorDialog.show(window.getStage());
             }
