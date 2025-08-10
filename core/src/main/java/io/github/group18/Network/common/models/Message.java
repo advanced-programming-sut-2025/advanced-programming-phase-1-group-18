@@ -105,7 +105,8 @@ public class Message {
         add_message,
         get_players_usernames,
         vote_user,
-        vote_terminate_game
+        vote_terminate_game,
+        remove_user_from_game
     }
 
     public enum Menu {

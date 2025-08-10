@@ -114,24 +114,25 @@ public class VoteMenu {
         vtYs.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
-               VoteMessageHandler.voteTerminateGame(App.getCurrentUser().getID(),true);
+               VoteMessageHandler.voteTerminateGame(ClientModel.getPlayer().getOwner().getUsername(),true);
                Gdx.input.setInputProcessor(gameMenuInputAdapter);
                setActive(false);
            }
         });
-
         vtNo.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                VoteMessageHandler.voteTerminateGame(App.getCurrentUser().getID(),false);
+                VoteMessageHandler.voteTerminateGame(ClientModel.getPlayer().getOwner().getUsername(),false);
                 Gdx.input.setInputProcessor(gameMenuInputAdapter);
                 setActive(false);
             }
         });
+
+
         vote.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                VoteMessageHandler.votePlayer(players.getSelectedIndex(), App.getCurrentUser().getID());
+                VoteMessageHandler.votePlayer(players.getSelected(), ClientModel.getPlayer().getOwner().getUsername());
                 Gdx.input.setInputProcessor(gameMenuInputAdapter);
                 setActive(false);
             }

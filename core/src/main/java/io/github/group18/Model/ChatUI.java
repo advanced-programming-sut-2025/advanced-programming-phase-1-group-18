@@ -186,15 +186,17 @@ public class ChatUI {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //check
-                HashMap<String, Object> body = new HashMap<>();
-                body.put("message", new ChatMessage(ClientModel.getPlayer().getOwner().getUsername(), messageTextField.getText(), true, senderUsernameTextField.getText()));
-                Message send = new Message(body, Message.Type.add_message, Message.Menu.game);
-                ClientModel.getServerConnectionThread().sendMessage(send);
-
-                Dialog errorDialog = new Dialog("Error", skin);
-                errorDialog.text("O_o Oops! Something went wrong.");
-                errorDialog.button("OK");
-                errorDialog.show(stage);
+                try {
+                    HashMap<String, Object> body = new HashMap<>();
+                    body.put("message", new ChatMessage(ClientModel.getPlayer().getOwner().getUsername(), messageTextField.getText(), true, senderUsernameTextField.getText()));
+                    Message send = new Message(body, Message.Type.add_message, Message.Menu.game);
+                    ClientModel.getServerConnectionThread().sendMessage(send);
+                } catch (Exception e) {
+                    Dialog errorDialog = new Dialog("Error", skin);
+                    errorDialog.text("O_o Oops! Something went wrong.");
+                    errorDialog.button("OK");
+                    errorDialog.show(stage);
+                }
             }
         });
         TextButton cancelButton = new TextButton("Cancel", skin);
