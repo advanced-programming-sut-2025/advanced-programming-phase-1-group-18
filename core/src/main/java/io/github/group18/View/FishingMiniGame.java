@@ -148,6 +148,9 @@ public class FishingMiniGame {
         shapeRenderer.setColor(new Color(0, 0.4f, 0.8f, 1));
         shapeRenderer.rect(barX, 0, BAR_WIDTH, SCREEN_HEIGHT);
 
+
+        //
+
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.rect(barX, greenBarY, BAR_WIDTH, GREEN_BAR_HEIGHT);
 
