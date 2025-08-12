@@ -150,7 +150,7 @@ public class FishingMiniGame {
 
 
         //
-
+ //
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.rect(barX, greenBarY, BAR_WIDTH, GREEN_BAR_HEIGHT);
 
