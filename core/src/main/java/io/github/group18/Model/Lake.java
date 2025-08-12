@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class Lake implements PictureModel
 {
     protected ArrayList<Kashi> insideKashis;
+    private float fishingTimer = 0f;
+    private ArrayList<Cord> cords = new ArrayList<>();
 
     public ArrayList<Kashi> getInsideKashis() {
         return insideKashis;
@@ -15,6 +17,9 @@ public class Lake implements PictureModel
 
     public void adaptMap(ArrayList<Cord> cords)
     {
+        this.cords.clear();
+        this.cords.addAll(cords);
+
         this.insideKashis = new ArrayList<>();
         ArrayList<Kashi> kashis = new ArrayList<>();
         for(Cord cord : cords)
@@ -29,6 +34,31 @@ public class Lake implements PictureModel
         }
         this.insideKashis.addAll(kashis);
         App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl()).getMyFarm().getLakes().add(this);
+    }
+
+    public boolean isPlayerNearForFishing(float deltaTime, float playerX, float playerY) {
+        float minDistance = Float.MAX_VALUE;
+
+
+        for (Cord cord : cords) {
+            float dx = cord.getX() - playerX;
+            float dy = cord.getY() - playerY;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < minDistance) {
+                minDistance = dist;
+            }
+        }
+
+
+        if (minDistance < 2f) {
+            fishingTimer += deltaTime;
+        } else {
+            fishingTimer = 0f;
+        }
+
+
+        return fishingTimer >= 2f;
     }
 
     @Override

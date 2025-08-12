@@ -3,10 +3,7 @@ package io.github.group18.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,10 +21,13 @@ import io.github.group18.Controller.GameMenuController;
 import io.github.group18.Model.*;
 import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Items.CraftingItem;
-import io.github.group18.enums.CraftingRecipesEnums;
-import io.github.group18.enums.SkillEnum;
+import io.github.group18.Model.Items.Fish;
+import io.github.group18.Model.Items.FishingPole;
+import io.github.group18.enums.*;
 import com.badlogic.gdx.InputMultiplexer;
-import io.github.group18.enums.WeatherEnum;
+
+import java.util.List;
+import java.util.Random;
 
 public class GameMenu implements Screen {
     private GameView gameView;
@@ -46,7 +46,7 @@ public class GameMenu implements Screen {
     private LightningEffect lightningEffect;
     private InventoryView inventoryView;
     private InputMultiplexer inputMultiplexer;
-    private FishingMiniGame fishingMiniGame;
+    private FishingMiniGame fishingMiniGame = null;
     private CraftingUI craftingUI;
     private Stage stage;
     private Buff buff;
@@ -54,6 +54,9 @@ public class GameMenu implements Screen {
     private RainEffect rainEffect;
     private SnowEffect snowEffect;
 
+    private boolean fishingMiniGameActive = false;
+    private boolean fishingMiniGameFinished = false;
+    boolean nearLake = false;
 
 
 
@@ -95,6 +98,29 @@ public class GameMenu implements Screen {
         inputMultiplexer.addProcessor(stage);               // UI first
         inputMultiplexer.addProcessor(gameMenuInputAdapter); // then game input
         Gdx.input.setInputProcessor(inputMultiplexer);
+
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("cursor.png"));
+        Pixmap resizedPixmap = resizePixmap(pixmap, 64, 64);
+        Cursor cursor = Gdx.graphics.newCursor(resizedPixmap, 0, 0);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
+        resizedPixmap.dispose();
+    }
+
+
+    public Pixmap resizePixmap(Pixmap original, int targetWidth, int targetHeight) {
+        Pixmap resized = new Pixmap(targetWidth, targetHeight, original.getFormat());
+
+        for (int x = 0; x < targetWidth; x++) {
+            for (int y = 0; y < targetHeight; y++) {
+                int origX = x * original.getWidth() / targetWidth;
+                int origY = y * original.getHeight() / targetHeight;
+                int pixel = original.getPixel(origX, origY);
+                resized.drawPixel(x, y, pixel);
+            }
+        }
+
+        return resized;
     }
 
     @Override
@@ -104,6 +130,32 @@ public class GameMenu implements Screen {
 
     @Override
     public void render(float delta) {
+
+        Player player = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+        if (player.getInMyHandTool() instanceof FishingPole) {
+            for (Lake lake : player.getMyFarm().getLakes()) {
+                if (lake.isPlayerNearForFishing(delta, (float)player.getX(),(float)player.getY())) {
+                    nearLake = true;
+                    break;
+                }
+            }
+        }
+        else {
+            nearLake = false;
+        }
+        if (nearLake && !fishingMiniGameFinished && fishingMiniGame == null) {
+            fishingMiniGame = new FishingMiniGame();
+            fishingMiniGameActive = true;
+        }
+        if (!nearLake) {
+            if (fishingMiniGame != null) {
+                fishingMiniGame.dispose();
+                fishingMiniGame = null;
+            }
+            fishingMiniGameActive = false;
+            fishingMiniGameFinished = false;
+        }
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameModel.update(delta);
@@ -144,8 +196,48 @@ public class GameMenu implements Screen {
 
         inventoryView.update();
 
-        fishingMiniGame.update(delta);
-        fishingMiniGame.render();
+        if (fishingMiniGameActive && fishingMiniGame != null) {
+            fishingMiniGame.update(delta);
+            fishingMiniGame.render();
+
+
+
+            if (fishingMiniGame != null) {
+                if (fishingMiniGame.isFailed()) {
+                    fishingMiniGame.dispose();
+                    fishingMiniGame = null;
+                    fishingMiniGameActive = false;
+                    fishingMiniGameFinished = true;
+                } else if (fishingMiniGame.isSuccess()) {
+                    List<CommonFishesEnums> fishCandidates = CommonFishesEnums.getFishesWithImage();
+                    Random random = new Random();
+                    CommonFishesEnums randomFishEnum = fishCandidates.get(random.nextInt(fishCandidates.size()));
+
+                    Fish caughtFish = new Fish(randomFishEnum.name());
+
+                    Player playerr = App.getCurrentGame().getPlayers().get(App.getCurrentGame().getIndexPlayerinControl());
+
+                    if (fishingMiniGame.isPerfectCatch()) {
+                        caughtFish.setQuality(Quality.Gold);
+                        playerr.getFishingSkill().setLevel(playerr.getFishingSkill().getLevel() + 24);
+                    } else {
+                        caughtFish.setQuality(Quality.Normal);
+                        playerr.getFishingSkill().setLevel(playerr.getFishingSkill().getLevel() + 10);
+                    }
+
+                    Inventory inventory = playerr.getInventory();
+
+                    inventory.addItem(caughtFish, 1);
+                    fishingMiniGame.dispose();
+                    fishingMiniGame = null;
+                    fishingMiniGameActive = false;
+                    fishingMiniGameFinished = true;
+                }
+            }
+
+
+        }
+
     }
 
 

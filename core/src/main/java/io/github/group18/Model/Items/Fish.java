@@ -1,12 +1,13 @@
 package io.github.group18.Model.Items;
 
 import io.github.group18.Model.Name;
+import io.github.group18.Model.PictureModel;
 import io.github.group18.enums.CommonFishesEnums;
 import io.github.group18.enums.LegendaryFishesEnums;
 import io.github.group18.enums.Quality;
 import io.github.group18.enums.Seasons;
 
-public class Fish extends Item implements Name,Price
+public class Fish extends Item implements Name,Price, PictureModel
 {
     protected String Jens;
     protected String name;
@@ -84,4 +85,14 @@ public class Fish extends Item implements Name,Price
     public int getCorrectPrice() {
         return (int)this.basePrice;
     }
+
+    @Override
+    public String getPath() {
+        CommonFishesEnums fishEnum = CommonFishesEnums.getEnum(this.name);
+        if (fishEnum != null && fishEnum.getImagePath() != null) {
+            return fishEnum.getImagePath();
+        }
+        return "assets/fishes/default_fish.png";
+    }
+
 }
