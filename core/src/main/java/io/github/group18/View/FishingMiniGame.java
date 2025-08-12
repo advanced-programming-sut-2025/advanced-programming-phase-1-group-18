@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,10 +16,11 @@ public class FishingMiniGame {
     private float barX;
     private float greenBarY;
     private float orangeBarY;
-    private float progress;
+    private float progress =10;
 
     private static final float BAR_WIDTH = 40;
-    private static final float BAR_HEIGHT = 80;
+    private static final float BAR_HEIGHT = 75;
+    private static final float GREEN_BAR_HEIGHT = 120;
 
     private static final float PROGRESS_BAR_WIDTH = 10;
     private static final float PROGRESS_BAR_HEIGHT = 200;
@@ -31,19 +34,26 @@ public class FishingMiniGame {
     private ShapeRenderer shapeRenderer;
     private SpriteBatch spriteBatch;
     private Texture fishTexture;
-
+    private Texture fishTextureRare;
+    private Texture fishTextureNormal;
     private Random random;
+
+    private boolean perfectCatch;
+
 
     enum FishType {
         MIXED, SMOOTH, SINKER, FLOATER, DART
     }
 
     private FishType fishType;
+    private String fishName;
+
 
     public FishingMiniGame() {
         shapeRenderer = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
-        fishTexture = new Texture("fish.png");
+        fishTextureNormal = new Texture("fish.png");
+        fishTextureRare = new Texture("crownfish.png");
         random = new Random();
         reset();
     }
@@ -52,10 +62,22 @@ public class FishingMiniGame {
         barX = SCREEN_WIDTH / 2f - BAR_WIDTH / 2f;
         greenBarY = SCREEN_HEIGHT / 2f - BAR_HEIGHT / 2f;
         orangeBarY = SCREEN_HEIGHT / 2f - BAR_HEIGHT / 2f;
-        progress = 0;
-        fishSpeed = 100f;
+        progress = 10;
+        fishSpeed = 50f;
         fishTime = 0f;
         fishType = FishType.values()[random.nextInt(FishType.values().length)];
+
+        perfectCatch = true;
+
+        fishTexture = (random.nextFloat() < 1f / 2f) ? fishTextureRare : fishTextureNormal;
+
+        switch (fishType) {
+            case MIXED: fishName = "Mixed"; break;
+            case SMOOTH: fishName = "Smooth"; break;
+            case SINKER: fishName = "Sinker"; break;
+            case FLOATER: fishName = "Floater"; break;
+            case DART: fishName = "Dart"; break;
+        }
     }
 
     public void update(float delta) {
@@ -102,9 +124,14 @@ public class FishingMiniGame {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) greenBarY += moveAmount;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) greenBarY -= moveAmount;
 
-        greenBarY = MathUtils.clamp(greenBarY, 0, SCREEN_HEIGHT - BAR_HEIGHT);
+        greenBarY = MathUtils.clamp(greenBarY, 0, SCREEN_HEIGHT - GREEN_BAR_HEIGHT);
+
 
         boolean overlap = (greenBarY + BAR_HEIGHT > orangeBarY) && (greenBarY < orangeBarY + BAR_HEIGHT);
+
+        if (!overlap) {
+            perfectCatch = false;
+        }
 
         if (overlap) progress += 40 * delta;
         else progress -= 20 * delta;
@@ -118,11 +145,11 @@ public class FishingMiniGame {
         shapeRenderer.setColor(Color.DARK_GRAY);
         shapeRenderer.rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        shapeRenderer.setColor(new Color(0, 0.4f, 0.8f, 1));  // نوار آبی
+        shapeRenderer.setColor(new Color(0, 0.4f, 0.8f, 1));
         shapeRenderer.rect(barX, 0, BAR_WIDTH, SCREEN_HEIGHT);
 
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(barX, greenBarY, BAR_WIDTH, BAR_HEIGHT);
+        shapeRenderer.rect(barX, greenBarY, BAR_WIDTH, GREEN_BAR_HEIGHT);
 
         Color progressColor = (progress < 35) ? Color.RED : Color.PINK;
         shapeRenderer.setColor(progressColor);
@@ -133,6 +160,21 @@ public class FishingMiniGame {
 
         spriteBatch.begin();
         spriteBatch.draw(fishTexture, barX, orangeBarY, BAR_WIDTH, BAR_HEIGHT);
+
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(3f);
+        font.setColor(Color.WHITE);
+
+
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(font, fishName);
+
+
+        float x = (SCREEN_WIDTH - layout.width) / 2f;
+        float y = (SCREEN_HEIGHT + layout.height) / 2f;
+
+        font.draw(spriteBatch, layout, x, y);
+
         spriteBatch.end();
     }
 
@@ -149,4 +191,10 @@ public class FishingMiniGame {
         spriteBatch.dispose();
         fishTexture.dispose();
     }
+
+    public boolean isPerfectCatch() {
+        return perfectCatch && isSuccess();
+    }
+
+
 }
