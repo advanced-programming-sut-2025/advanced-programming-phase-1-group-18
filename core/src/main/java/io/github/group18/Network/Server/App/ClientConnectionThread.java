@@ -68,6 +68,9 @@ public class ClientConnectionThread extends ConnectionThread {
             case game:
                 GameNetworkController.handleMessage(message,this);
                 return true;
+            case trade:
+                return TradeNetworkController.handleMessage(message, this);
+
         }
         return false;
     }
