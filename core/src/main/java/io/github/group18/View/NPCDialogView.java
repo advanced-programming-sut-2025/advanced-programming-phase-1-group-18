@@ -31,6 +31,7 @@ public class NPCDialogView {
     public NPCDialogView(InputProcessor inputProcessor, String npc, GameController gameController) {
         this.stage = new Stage(new ScreenViewport());
         this.inputProcessor = inputProcessor;
+        Gdx.input.setInputProcessor(stage);
         this.npc = npc;
         skin = GameAssetManager.getGameAssetManager().getSkin();
         this.gameController = gameController;
@@ -62,21 +63,22 @@ public class NPCDialogView {
                 npcWindow.remove();
                 Gdx.input.setInputProcessor(inputProcessor);
                 GameView gameView = gameController.getGameMenu().getGameView();
-                if (npc.equals("SEBASTIAN")) {
+                if (npc.equalsIgnoreCase("SEBASTIAN")) {
                     gameView.setSebastian_dialog(false);
                 }
-                if (npc.equals("ABIGAIL")) {
+                if (npc.equalsIgnoreCase("ABIGAIL")) {
                     gameView.setAbigail_dialog(false);
                 }
-                if (npc.equals("HARVEY")) {
+                if (npc.equalsIgnoreCase("HARVEY")) {
                     gameView.setHarvey_dialog(false);
                 }
-                if (npc.equals("LEAH")) {
+                if (npc.equalsIgnoreCase("LEAH")) {
                     gameView.setLeah_dialog(false);
                 }
-                if (npc.equals("ROBIN")) {
+                if (npc.equalsIgnoreCase("ROBIN")) {
                     gameView.setRobin_dialog(false);
                 }
+                ClientModel.setWindowOpen(false);
             }
         });
         npcWindow.add(closeButton).pad(20, 20, 20, 20);
@@ -132,21 +134,22 @@ public class NPCDialogView {
         skin.dispose();
         Gdx.input.setInputProcessor(inputProcessor);
         GameView gameView = gameController.getGameMenu().getGameView();
-        if (npc.equals("SEBASTIAN")) {
+        if (npc.equalsIgnoreCase("SEBASTIAN")) {
             gameView.setSebastian_dialog(false);
         }
-        if (npc.equals("ABIGAIL")) {
+        if (npc.equalsIgnoreCase("ABIGAIL")) {
             gameView.setAbigail_dialog(false);
         }
-        if (npc.equals("HARVEY")) {
+        if (npc.equalsIgnoreCase("HARVEY")) {
             gameView.setHarvey_dialog(false);
         }
-        if (npc.equals("LEAH")) {
+        if (npc.equalsIgnoreCase("LEAH")) {
             gameView.setLeah_dialog(false);
         }
-        if (npc.equals("ROBIN")) {
+        if (npc.equalsIgnoreCase("ROBIN")) {
             gameView.setRobin_dialog(false);
         }
+        ClientModel.setWindowOpen(false);
     }
 
 }

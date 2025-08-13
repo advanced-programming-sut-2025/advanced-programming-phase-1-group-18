@@ -12,6 +12,8 @@ import io.github.group18.Model.Player;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.Client.Controller.ChangeMenuController;
+import io.github.group18.Network.Server.App.GameThread;
+import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.GameMenuInputAdapter;
@@ -57,8 +59,7 @@ public class ServerConnectionThread extends ConnectionThread {
         } else if (message.getMenu() == Message.Menu.CHANGE_MENU) {
             sendMessage(ChangeMenuController.handleMessage(message));
             return true;
-        }
-        else if (message.getType() == Message.Type.RadioUploadChunk) {
+        } else if (message.getType() == Message.Type.RadioUploadChunk) {
 
             RadioMenuController.receiveAndStoreMusicChunk(message);
             return true;
@@ -67,8 +68,7 @@ public class ServerConnectionThread extends ConnectionThread {
             RadioMenuController.receiveAndStoreMusicChunk(message);
 
             return true;
-        }
-        else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
+        } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
 //            System.out.println("server is telling us to go to game screen " + message.getBody().toString());
             Gdx.app.postRunnable(new Runnable() {
                 @Override
@@ -103,13 +103,13 @@ public class ServerConnectionThread extends ConnectionThread {
         if (message.getType() == Message.Type.trade_offer_received && message.getMenu() == Message.Menu.trade) {
             handleTradeOffer(message);
             return true;
-        }
-        else if (message.getMenu() == Message.Menu.trade && message.getType() == Message.Type.trade_history_update) {
+        } else if (message.getMenu() == Message.Menu.trade && message.getType() == Message.Type.trade_history_update) {
             Object historyObj = message.getFromBody("history");
 
             Gson gson = new Gson();
             String json = gson.toJson(historyObj);
-            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<java.util.Map<String, Object>>>() {}.getType();
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<java.util.Map<String, Object>>>() {
+            }.getType();
             java.util.List<java.util.Map<String, Object>> tradeHistory = gson.fromJson(json, listType);
 
 
@@ -183,5 +183,5 @@ public class ServerConnectionThread extends ConnectionThread {
                 sendMessage(new Message(response, Message.Type.trade_response, Message.Menu.trade));
             });
         });
-}
+    }
 }

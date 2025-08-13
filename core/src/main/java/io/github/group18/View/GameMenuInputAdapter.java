@@ -190,11 +190,18 @@ public class GameMenuInputAdapter extends InputAdapter {
 //            handleCraftingMenu();
 //        }
 
+//        if (keycode == Input.Keys.N) {
+//            GameView gameView = gameController.getGameMenu().getGameView();
+//            ClientModel.setWindowOpen(true);
+//            gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
+//            Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
+//        }
+
         if (keycode == Input.Keys.N) {
             GameView gameView = gameController.getGameMenu().getGameView();
             ClientModel.setWindowOpen(true);
-            gameView.setFishShop(new StoreUI("FishShop", Gdx.input.getInputProcessor()));
-            Gdx.input.setInputProcessor(gameView.getFishShop().getStage());
+            System.out.println("n ro zadi pas windowopen ro true kardam");
+            gameView.setShowScoreBoard(true);
         }
 
 
@@ -249,7 +256,7 @@ public class GameMenuInputAdapter extends InputAdapter {
                 }
                 ClientModel.getPlayer().pickSelectedItem();
                 gotoMarket(screenX, screenY);
-//                openNpcDialog(screenX, screenY);
+                openNpcDialog(screenX, screenY);
 //                openNpcPage(screenX, screenY);
                 return true;
             }
@@ -357,6 +364,7 @@ public class GameMenuInputAdapter extends InputAdapter {
     }
 
     private void openDialogPage(String npc, GameController gameController) {
+        ClientModel.setWindowOpen(true);
         GameView gameView = gameController.getGameMenu().getGameView();
         gameView.setNpcDialogView(new NPCDialogView(Gdx.input.getInputProcessor(), npc, gameController));
         Gdx.input.setInputProcessor(gameView.getNpcDialogView().getStage());

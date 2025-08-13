@@ -16,6 +16,7 @@ public class ServerModel {
     private static boolean exitFlag = false;
     private static ListenerThread listenerThread;
     private static boolean isRunning = false;
+    private static GameThread gameThread;
 
     private static ArrayList<User> onlineUsers = new ArrayList<>();
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
@@ -214,4 +215,28 @@ public class ServerModel {
         }
     }
 
+
+    public static GameThread getGameThread() {
+        return gameThread;
+    }
+
+    public static void setGameThread(GameThread gameThread) {
+        ServerModel.gameThread = gameThread;
+    }
+
+    public static HashMap<String, Boolean> getVoteTerminateGame() {
+        return voteTerminateGame;
+    }
+
+    public static void setVoteTerminateGame(HashMap<String, Boolean> voteTerminateGame) {
+        ServerModel.voteTerminateGame = voteTerminateGame;
+    }
+
+    public static ArrayList<Pair<String, String>> getVoteRemovePlayer() {
+        return voteRemovePlayer;
+    }
+
+    public static void setVoteRemovePlayer(ArrayList<Pair<String, String>> voteRemovePlayer) {
+        ServerModel.voteRemovePlayer = voteRemovePlayer;
+    }
 }

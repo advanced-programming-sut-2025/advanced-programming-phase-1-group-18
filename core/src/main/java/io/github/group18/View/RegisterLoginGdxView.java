@@ -68,6 +68,7 @@ public class RegisterLoginGdxView implements Screen {
         BitmapFont font = new BitmapFont();
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = font;
+        style.font.getData().markupEnabled = true;
         style.fontColor = Color.PURPLE;
 
         Label escapeHint = new Label("SHARIF CE 2025", style);

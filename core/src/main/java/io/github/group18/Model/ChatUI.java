@@ -252,7 +252,23 @@ public class ChatUI {
                     }
                 }
             } else {
-                label = new Label("Sender: " + chatMessage.senderUsername + "\t\tMessage: " + chatMessage.message, skin);
+                HorizontalGroup messageGroup = new HorizontalGroup();
+                messageGroup.wrap(true);
+                messageGroup.space(5);
+
+                String[] words = chatMessage.message.split(" ");
+                Label loobel = new Label("Sender: " + chatMessage.senderUsername + "\t\tMessage: ",skin);
+                messageGroup.addActor(loobel);
+                for (String word : words) {
+                    Label wordLabel = new Label(word + " ", skin);
+                    if (word.startsWith("@")) {
+                        wordLabel.setColor(Color.GREEN);
+                    }
+                    messageGroup.addActor(wordLabel);
+                }
+
+                row.add(messageGroup).width(600);
+                label = null;
             }
             if (label != null) {
                 row.add(label).width(600);

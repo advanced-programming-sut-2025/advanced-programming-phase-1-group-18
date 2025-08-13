@@ -10,18 +10,15 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.List;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -79,7 +76,7 @@ public class GameView {
     private boolean leah_view = false;
     private boolean robin_view = false;
 
-    boolean isActionOn =false;
+    boolean isActionOn = false;
     float actionTime = 0f;
 
     private OrthographicCamera camera;
@@ -130,11 +127,16 @@ public class GameView {
 
     private ChatUI chatBox;
 
+    long npcPosUpdateTimer;
+    long clockUpdateTimer;
+
     public GameView(GameController gameController) {
         this.gameController = gameController;
         batch = new SpriteBatch();
         clock = new ClockController();
         energy = new EnergyController();
+        npcPosUpdateTimer = System.currentTimeMillis();
+        clockUpdateTimer = System.currentTimeMillis();
         loadTextures();
         loadFont();
     }
@@ -356,6 +358,7 @@ public class GameView {
         scoreBoardTable.setColor(Color.BLACK);
         TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
         TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
+        TextButton sortByQuestButton = new TextButton("Sort by Quest", skin);
 
         sortByGoldButton.addListener(new ClickListener() {
             @Override
@@ -371,14 +374,22 @@ public class GameView {
             }
         });
 
+        sortByQuestButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "quest";
+            }
+        });
+
         scoreBoardTable.add(sortByGoldButton).pad(10);
         scoreBoardTable.add(sortBySkillButton).pad(10);
-
+        scoreBoardTable.add(sortByQuestButton).pad(10);
 
         scoreBoardTable.add("Rank").pad(10);
         scoreBoardTable.add("Player Name").pad(10);
         scoreBoardTable.add("Gold").pad(10);
         scoreBoardTable.add("Skill").pad(10);
+        scoreBoardTable.add("Quest").pad(10);
         scoreBoardTable.add("Sort: " + userChoice[0]).pad(10);
         scoreBoardTable.row();
 
@@ -417,15 +428,18 @@ public class GameView {
         Gson gson = new Gson();
         Object stockOBJ = response.getBody().get("players");
         String stockArraylist = gson.toJson(stockOBJ);
-        Type userListType = new TypeToken<ArrayList<ScoreBoardPlayerInfo>>() {}.getType();
+        Type userListType = new TypeToken<ArrayList<ScoreBoardPlayerInfo>>() {
+        }.getType();
         this.infos = gson.fromJson(stockArraylist, userListType);
 
         if ("gold".equalsIgnoreCase(userChoice[0])) {
             infos.sort(Comparator.comparingInt(ScoreBoardPlayerInfo::getGold)
                 .thenComparingInt(ScoreBoardPlayerInfo::getSkill).reversed());
         } else {
-            infos.sort(Comparator.comparingInt(ScoreBoardPlayerInfo::getSkill)
-                .thenComparingInt(ScoreBoardPlayerInfo::getGold).reversed());
+            if ("skill".equalsIgnoreCase(userChoice[0])) {
+                infos.sort(Comparator.comparingInt(ScoreBoardPlayerInfo::getSkill)
+                    .thenComparingInt(ScoreBoardPlayerInfo::getGold).reversed());
+            }
         }
 
         // Clear and rebuild the table
@@ -435,6 +449,7 @@ public class GameView {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
         TextButton sortByGoldButton = new TextButton("Sort by Gold", skin);
         TextButton sortBySkillButton = new TextButton("Sort by Skill", skin);
+        TextButton sortByQuestButton = new TextButton("Sort by Quest", skin);
         TextButton closeButton = new TextButton("Close", skin);
 
         sortByGoldButton.addListener(new ClickListener() {
@@ -453,6 +468,14 @@ public class GameView {
             }
         });
 
+        sortByQuestButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                userChoice[0] = "quest";
+                updateScoreBoard();
+            }
+        });
+
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -467,6 +490,7 @@ public class GameView {
 
         scoreBoardTable.add(sortByGoldButton).pad(10);
         scoreBoardTable.add(sortBySkillButton).pad(10);
+        scoreBoardTable.add(sortByQuestButton).pad(10);
         scoreBoardTable.row();
 
         // Header
@@ -474,6 +498,7 @@ public class GameView {
         scoreBoardTable.add("Player Name").pad(10);
         scoreBoardTable.add("Gold").pad(10);
         scoreBoardTable.add("Skill").pad(10);
+        scoreBoardTable.add("Quest").pad(10);
         scoreBoardTable.add("Sort: " + userChoice[0]).pad(10);
         scoreBoardTable.row();
 
@@ -484,6 +509,7 @@ public class GameView {
             scoreBoardTable.add(info.getUsername()).pad(10);
             scoreBoardTable.add(String.valueOf(info.getGold())).pad(10);
             scoreBoardTable.add(String.valueOf(info.getSkill())).pad(10);
+            scoreBoardTable.add("0").pad(10);
             scoreBoardTable.row();
         }
 
@@ -497,9 +523,8 @@ public class GameView {
         GameAssetManager gameAssetManager = GameAssetManager.getGameAssetManager();
         Texture triangle = gameAssetManager.getUpsidedownredtriangle();
 
-        if (npcPositionUpdated) {
-            npcPositionUpdated = false;
-
+        if (System.currentTimeMillis() - npcPosUpdateTimer >= 2000) {
+            npcPosUpdateTimer = System.currentTimeMillis();
             Message send = new Message(new HashMap<>(), Message.Type.get_npc_position, Message.Menu.game);
             Message response = null;
             while (response == null || response.getType() != Message.Type.get_npc_position) {
@@ -925,11 +950,11 @@ public class GameView {
                     batch.draw(buff, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + 60);
                     break;
             }
-            if (actionName!= null){
+            if (actionName != null) {
 
                 TextureRegion actionPop = GameAssetManager.getGameAssetManager().getActionAtlas().
                     findRegion(actionName);
-                batch.draw(actionPop,(float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + currentFrame.getRegionHeight());
+                batch.draw(actionPop, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE) + currentFrame.getRegionHeight());
             }
 
             batch.draw(currentFrame, (float) (first * ClientModel.TILE_SIZE), (float) (second * ClientModel.TILE_SIZE),
@@ -987,7 +1012,8 @@ public class GameView {
 
     private void renderClock() {
         DateTime time;
-        if (!datetimeinit || datetimeupdated) {
+        if (!datetimeinit || System.currentTimeMillis() - clockUpdateTimer >= 60000) {
+            clockUpdateTimer = System.currentTimeMillis();
             Message send = new Message(new HashMap<>(), Message.Type.get_dateTime, Message.Menu.game);
             Message response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
             while (response.getType() != Message.Type.get_dateTime) {
@@ -1229,13 +1255,13 @@ public class GameView {
             camera.position.y = Math.max(halfHeight, Math.min(playerY, ClientModel.mapHeight * ClientModel.TILE_SIZE - halfHeight));
 
             camera.update();
-            if(ClientModel.getPlayer().getAction() != null){
+            if (ClientModel.getPlayer().getAction() != null) {
                 actionTime += deltaTime;
                 if (actionTime >= 5f) {
                     ClientModel.getPlayer().setAction(null);
                     ActionMessageHandler.actionOff(App.getCurrentUser().getID());
                     System.out.println("From Client: stop Action");
-                    actionTime=0f;
+                    actionTime = 0f;
                 }
             }
         }

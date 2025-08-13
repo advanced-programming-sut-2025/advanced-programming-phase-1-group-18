@@ -43,11 +43,11 @@ public class StoreUI {
         try {
             this.marketName = market;
             this.stage = new Stage(new ScreenViewport());
-            System.out.println("fish3.51");
+//            System.out.println("fish3.51");
             this.skin = GameAssetManager.getGameAssetManager().getSkin();
-            System.out.println("fish3.52");
+//            System.out.println("fish3.52");
             this.inputProcessor = inputProcessor;
-            System.out.println("fish3.53");
+//            System.out.println("fish3.53");
             createMainStoreUI();
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,24 +55,24 @@ public class StoreUI {
     }
 
     private void createMainStoreUI() {
-        System.out.println("fish3.531");
+//        System.out.println("fish3.531");
         stage.clear();
-        System.out.println("fish3.532");
+//        System.out.println("fish3.532");
         Window storeWindow = new Window("Store Menu", skin);
         storeWindow.setModal(true);
         storeWindow.setMovable(false);
-        System.out.println("fish3.533");
+//        System.out.println("fish3.533");
         HashMap<String, Object> goldbody = new HashMap<>();
         goldbody.put("username", ClientModel.getPlayer().getOwner().getUsername());
         Message send = new Message(goldbody, Message.Type.get_gold1, Message.Menu.game);
         Message response = null;
-        System.out.println("fish3.534");
+//        System.out.println("fish3.534");
         while (response == null || response.getType() != Message.Type.get_gold1) {
             response = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send, ClientModel.TIMEOUT_MILLIS);
         }
-        System.out.println("fish3.535");
+//        System.out.println("fish3.535");
         int playergold = response.getIntFromBody("gold");
-        System.out.println("fish3.54");
+//        System.out.println("fish3.54");
 
         TextButton toggleButton = new TextButton(showAllItems ? "Show Available" : "Show All", skin);
         toggleButton.addListener(new ClickListener() {
@@ -119,7 +119,7 @@ public class StoreUI {
 //            headerTable.add(animalShopButton).pad(20, 20, 20, 20).row();
 //        }
         storeWindow.add(headerTable).row();
-        System.out.println("fish3.55");
+//        System.out.println("fish3.55");
         itemTable = new Table(skin);
         refreshItemList(playergold);
 
@@ -143,9 +143,9 @@ public class StoreUI {
             Gdx.graphics.getWidth() / 2 - storeWindow.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 - storeWindow.getHeight() / 2
         );
-        System.out.println("fish3.56");
+//        System.out.println("fish3.56");
         stage.addActor(storeWindow);
-        System.out.println("fish3.57");
+//        System.out.println("fish3.57");
     }
 
     private void refreshItemList(int gold) {
@@ -237,7 +237,7 @@ public class StoreUI {
                     }
                 });
             } else {
-                System.out.println("is this gray?");
+//                System.out.println("is this gray?");
                 row.setColor(Color.GRAY);
             }
             row.pad(20, 20, 20, 20);
