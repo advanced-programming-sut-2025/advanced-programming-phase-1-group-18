@@ -1,0 +1,5 @@
+cheat add item -n CommonMushroom -c 1
+cheat add item -n Daffodil -c 1
+cheat add item -n Dandelion -c 1
+cheat add item -n Leek -c 1
+cheat add item -n Morel -c 1

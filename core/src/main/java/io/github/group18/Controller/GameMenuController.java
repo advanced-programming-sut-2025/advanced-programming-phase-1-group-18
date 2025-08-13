@@ -902,7 +902,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 // Check what we have available to remove
                 boolean hasTrees = player.getMyFarm().getAllTrees().size() > 0;
                 boolean hasCrops = player.getMyFarm().getAllCrops().size() > 0;
-
+                System.out.println("hastrees: " + hasTrees + " hascrops: " + hasCrops);
                 if (hasTrees && hasCrops) {
                     // Both available - random choice
                     if (rand.nextBoolean()) {
@@ -918,14 +918,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                     if (App.getCurrentGame().getMap().get(i).get(j).getInside() == allCrop) {
                                         App.getCurrentGame().getMap().get(i).get(j).setInside(null);
                                         player.getMyFarm().getAllCrops().remove(allCrop);
-                                        System.out.println("deleted crop");
+                                        System.out.println("deleted one-time-harvest crop at " + i + " " + j);
                                         break;
                                     }
                                 }
                             }
                         } else {
                             allCrop.setDaysGrowCounter(0);
-                            System.out.println("attacked crop");
+                            System.out.println("attacked multiple-time-harvest crop");
                         }
                     }
                 } else if (hasTrees) {
@@ -941,14 +941,14 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                                 if (App.getCurrentGame().getMap().get(i).get(j).getInside() == allCrop) {
                                     App.getCurrentGame().getMap().get(i).get(j).setInside(null);
                                     player.getMyFarm().getAllCrops().remove(allCrop);
-                                    System.out.println("deleted crop");
+                                    System.out.println("deleted one-time-harvest crop at " + i + " " + j);
                                     break;
                                 }
                             }
                         }
                     } else {
                         allCrop.setDaysGrowCounter(0);
-                        System.out.println("attacked crop");
+                        System.out.println("attacked multiple-time-harvest crop");
                     }
                 }
             }
@@ -2262,6 +2262,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             kashi1.setInside(allCrop1);
 
             currentPlayer.getMyFarm().getAllCrops().add(allCrop1);
+            System.out.println("added the crop to allcrops");
             return new Result(true, "Plant successfully placed");
 
         } catch (Exception eee) {

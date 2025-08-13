@@ -1,3 +1,5 @@
 cheat add item -n JazzSeeds -c 50
-cheat add item -n StrawberrySeeds -c 50
 cheat add item -n BasicRetainingSoil -c 50
+showplant -l 1 1
+cheat advance date 1000d
+showplant -l 1 1

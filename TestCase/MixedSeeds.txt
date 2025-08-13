@@ -1,0 +1,1 @@
+cheat add item -n mixedseeds -c 50
