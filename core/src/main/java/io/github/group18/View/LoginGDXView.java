@@ -50,7 +50,7 @@ public class LoginGDXView implements Screen {
         this.stayLoggedIn = new TextField("no", skin);
         stayLoggedIn.setMessageText("stay logged in:(Just 'Yes' or 'No')");
         this.stayLoggedinerror = new Label("", skin);
-        this.goToRegisterMenu = new TextButton("Go Back to Is_Unique Menu",skin);
+        this.goToRegisterMenu = new TextButton("Go Back to Register Menu",skin);
         this.table = new Table();
         controller.setView(this);
     }

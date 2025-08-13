@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
+import io.github.group18.Model.GameAssetManager;
 import io.github.group18.Model.Player;
 import io.github.group18.Model.User;
 import io.github.group18.Network.Client.Controller.C2SConnectionController;
@@ -14,6 +15,7 @@ import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.View.GameMenuInputAdapter;
 import io.github.group18.View.GameView;
+import io.github.group18.View.TradeHistoryWindow;
 import io.github.group18.View.TradeUI;
 
 import java.io.IOException;
@@ -90,6 +92,35 @@ public class ServerConnectionThread extends ConnectionThread {
             handleTradeOffer(message);
             return true;
         }
+        else if (message.getMenu() == Message.Menu.trade && message.getType() == Message.Type.trade_history_update) {
+            Object historyObj = message.getFromBody("history");
+
+            Gson gson = new Gson();
+            String json = gson.toJson(historyObj);
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<java.util.Map<String, Object>>>() {}.getType();
+            java.util.List<java.util.Map<String, Object>> tradeHistory = gson.fromJson(json, listType);
+
+
+            ClientModel.setTradeHistory(tradeHistory);
+            Gdx.app.postRunnable(() -> {
+                TradeHistoryWindow window = ClientModel.getTradeHistoryWindow();
+                if (window != null && window.isVisible()) {
+                    window.updateHistory(tradeHistory);
+                } else {
+                    ClientModel.setWindowOpen(true);
+                    Stage stage = GameMenuInputAdapter.getGameController().getGameMenu().getStage();
+                    TradeHistoryWindow newWindow = new TradeHistoryWindow(
+                        GameAssetManager.getGameAssetManager().getSkin(),
+                        stage,
+                        tradeHistory
+                    );
+                    stage.addActor(newWindow);
+                    Gdx.input.setInputProcessor(stage);
+                }
+            });
+
+        }
+
         return false;
     }
 
