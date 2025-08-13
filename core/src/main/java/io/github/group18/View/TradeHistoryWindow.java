@@ -51,7 +51,7 @@ public class TradeHistoryWindow extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ClientModel.setWindowOpen(false);
-                remove();
+                setVisible(false);
             }
         });
         add(closeButton).padTop(10);
@@ -82,7 +82,6 @@ public class TradeHistoryWindow extends Window {
             String item = String.valueOf(record.get("item"));
             String amount = String.valueOf(record.get("amount"));
             String msg = String.valueOf(record.get("message"));
-            String time = sdf.format(new Date((Long) record.get("timestamp")));
 
             historyTable.add(new Label(from, skin)).width(120);
             historyTable.add(new Label(to, skin)).width(120);
@@ -90,7 +89,6 @@ public class TradeHistoryWindow extends Window {
             historyTable.add(new Label(item, skin)).width(150);
             historyTable.add(new Label(amount, skin)).width(60);
             historyTable.add(new Label(msg, skin)).width(250);
-            historyTable.add(new Label(time, skin)).width(150);
             historyTable.row();
         }
     }

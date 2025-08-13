@@ -1,8 +1,12 @@
 package io.github.group18.Network.Client.App;
 
 import io.github.group18.Model.Player;
+import io.github.group18.View.TradeHistoryWindow;
 
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ClientModel {
     public static final int TIMEOUT_MILLIS = 500;
@@ -169,6 +173,33 @@ public class ClientModel {
         }
     }
 
+
+    // ================= Trade History =================
+    private static final List<Map<String, Object>> tradeHistory = new ArrayList<>();
+    public static final List<Map<String, Object>> TRADE_HISTORY = new ArrayList<>();
+
+
+    public static synchronized void setTradeHistory(List<Map<String, Object>> history) {
+        tradeHistory.clear();
+        if (history != null) {
+            tradeHistory.addAll(history);
+        }
+    }
+
+    public static synchronized List<Map<String, Object>> getTradeHistory() {
+        return new ArrayList<>(tradeHistory);
+    }
+
+
+    private static TradeHistoryWindow tradeHistoryWindow;
+
+    public static void setTradeHistoryWindow(TradeHistoryWindow window) {
+        tradeHistoryWindow = window;
+    }
+
+    public static TradeHistoryWindow getTradeHistoryWindow() {
+        return tradeHistoryWindow;
+    }
 
     public static String getServerHost() {
         return SERVER_HOST;

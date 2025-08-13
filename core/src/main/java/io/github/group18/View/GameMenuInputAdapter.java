@@ -911,6 +911,7 @@ public class GameMenuInputAdapter extends InputAdapter {
         List<Map<String, Object>> tradeHistory = ServerModel.getTradeHistory();
 
         TradeHistoryWindow tradeHistoryWindow = new TradeHistoryWindow(skin, stage, tradeHistory);
+        ClientModel.setTradeHistoryWindow(tradeHistoryWindow);
         stage.addActor(tradeHistoryWindow);
         Gdx.input.setInputProcessor(stage);
     }
