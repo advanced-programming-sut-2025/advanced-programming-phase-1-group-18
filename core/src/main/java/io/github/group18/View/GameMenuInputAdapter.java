@@ -108,17 +108,15 @@ public class GameMenuInputAdapter extends InputAdapter {
         }
 
         //gift Window
-//        if (keycode == Input.Keys.G) {
-//            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-//            Game game = null;
-//            Player currentPlayer = ClientModel.getPlayer();
-//            GiftWindow giftWindow = new GiftWindow(GameAssetManager.getGameAssetManager().getSkin(),
-//                gameController.getGameMenu().getStage(),
-//                currentPlayer);
-//            gameController.getGameMenu().getStage().addActor(giftWindow);
-//            return true;
-//        }
+        if (keycode == Input.Keys.G) {
+            ClientModel.setWindowOpen(true);
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+            Stage stage = gameController.getGameMenu().getStage();
+            RadioWindow radioWindow = new RadioWindow(skin, stage);
+            stage.addActor(radioWindow);
+            Gdx.input.setInputProcessor(stage);
+            return true;
+        }
 
 //        if (keycode == Input.Keys.H) {
 //            Player currentPlayer = ClientModel.getPlayer();

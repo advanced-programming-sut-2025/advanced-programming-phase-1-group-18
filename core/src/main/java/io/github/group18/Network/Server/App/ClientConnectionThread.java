@@ -70,6 +70,9 @@ public class ClientConnectionThread extends ConnectionThread {
                 return true;
             case trade:
                 return TradeNetworkController.handleMessage(message, this);
+            case Radio:
+                sendMessage(RadioNetworkController.handleMessage(message));
+                return true;
 
         }
         return false;
