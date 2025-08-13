@@ -1,6 +1,7 @@
 package io.github.group18.Network.Client.App;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.google.gson.Gson;
 import io.github.group18.Controller.GameController;
 import io.github.group18.Main;
@@ -11,10 +12,13 @@ import io.github.group18.Network.Client.Controller.C2SConnectionController;
 import io.github.group18.Network.Client.Controller.ChangeMenuController;
 import io.github.group18.Network.common.models.ConnectionThread;
 import io.github.group18.Network.common.models.Message;
+import io.github.group18.View.GameMenuInputAdapter;
 import io.github.group18.View.GameView;
+import io.github.group18.View.TradeUI;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 import static io.github.group18.Network.Client.App.ClientModel.TIMEOUT_MILLIS;
 
@@ -77,9 +81,14 @@ public class ServerConnectionThread extends ConnectionThread {
             ClientModel.setPlayer(player);
         } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.player_pos_update) {
             gameView.setPlayerPosUpdated(true);
+
         } else if (message.getMenu() == Message.Menu.game && message.getType() == Message.Type.remove_user_from_game) {
             this.end();
             System.exit(0);
+        }
+        if (message.getType() == Message.Type.trade_offer_received && message.getMenu() == Message.Menu.trade) {
+            handleTradeOffer(message);
+            return true;
         }
         return false;
     }
@@ -97,4 +106,39 @@ public class ServerConnectionThread extends ConnectionThread {
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
     }
+
+    private void handleTradeOffer(Message message) {
+        System.out.println("handleTradeOffer");
+        String fromUser = (String) message.getFromBody("fromUser");
+        String tradeType = (String) message.getFromBody("tradeType");
+        String mode = (String) message.getFromBody("mode");
+        String item = (String) message.getFromBody("item");
+        int amount = message.getIntFromBody("amount");
+        int price = message.getIntFromBody("price");
+        String targetItem = (String) message.getFromBody("targetItem");
+        int targetAmount = message.getIntFromBody("targetAmount");
+
+        System.out.println(message.getBody());
+
+        Gdx.app.postRunnable(() -> {
+            Stage stage = GameMenuInputAdapter.getGameController().getGameMenu().getStage();
+            ClientModel.setWindowOpen(true);
+            TradeUI tradeUI = new TradeUI(stage);
+            Gdx.input.setInputProcessor(stage);
+            tradeUI.showTradeOffer(fromUser, tradeType, mode, item, amount, price, targetItem, targetAmount, (Boolean accepted) -> {
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("fromUser", fromUser);
+                response.put("accepted", accepted);
+                response.put("tradeType", tradeType);
+                response.put("mode", mode);
+                response.put("item", item);
+                response.put("amount", amount);
+                response.put("price", price);
+                response.put("targetItem", targetItem);
+                response.put("targetAmount", targetAmount);
+                System.out.println("Sending trade response: " + response);
+                sendMessage(new Message(response, Message.Type.trade_response, Message.Menu.trade));
+            });
+        });
+}
 }

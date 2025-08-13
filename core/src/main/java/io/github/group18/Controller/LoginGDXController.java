@@ -48,6 +48,10 @@ public class LoginGDXController {
                     isOkay = false;
                 }
 
+                if(findUserByUsername(username) == null) {
+                    view.setUsernameErrorLabel("Username not found");
+                    isOkay = false;
+                }
                 if (isOkay) {
                     String hashedPassword = RegisterMenuController.hashPasswordSHA256(password);
 

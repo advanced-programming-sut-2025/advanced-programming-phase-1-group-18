@@ -21,17 +21,20 @@ import com.google.gson.Gson;
 import io.github.group18.Controller.*;
 
 import java.util.*;
+import java.util.List;
 
 import io.github.group18.Main;
 import io.github.group18.Model.*;
 import io.github.group18.Model.Items.CraftingItem;
 import io.github.group18.Model.Items.Item;
 import io.github.group18.Network.Client.App.ClientModel;
+import io.github.group18.Network.Client.App.ServerConnectionThread;
+import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.TavilehAnimalEnums;
 
 public class GameMenuInputAdapter extends InputAdapter {
-    private final GameController gameController;
+    private static GameController gameController;
     private final Set<Integer> keysHeld = new HashSet<>();
     private String input;
     private boolean buildingPaceMode = false;
@@ -62,18 +65,10 @@ public class GameMenuInputAdapter extends InputAdapter {
             handleVoteMenu();
         }
 
-//        if (keycode == Input.Keys.R) {
-//            //Server-TODO(ask server for game)
-////        Game game = gameController.getGame();
-//            Game game = null;
-//            Player currentPlayer = ClientModel.getPlayer();
-//            GiftViewWindow giftViewWindow = new GiftViewWindow(
-//                game,
-//                GameAssetManager.getGameAssetManager().getSkin(),
-//                gameController.getGameMenu().getStage()
-//            );
-//            return true;
-//        }
+        if (keycode == Input.Keys.R) {
+            handleTradeWindow();
+            return true;
+        }
 
 //        if (keycode == Input.Keys.T) {
 //            //Server-TODO(ask server for game)
@@ -107,22 +102,10 @@ public class GameMenuInputAdapter extends InputAdapter {
             handleCheatCodeDialog();
         }
 
-//        if (keycode == Input.Keys.F) {
-//            //Server-TODO(ask server for game)
-//        Game game = gameController.getGame();
-//            Game game = null;
-//            Player currentPlayer = ClientModel.getPlayer();
-//            ArrayList<Player> friends = game.getFriendsOf(currentPlayer); // فرض بر این که این متد وجود داره
-//
-//            FriendsWindow friendsWindow = new FriendsWindow(
-//                GameAssetManager.getGameAssetManager().getSkin(),
-//                currentPlayer,
-//                friends
-//            );
-//
-//            gameController.getGameMenu().getStage().addActor(friendsWindow);
-//            return true;
-//        }
+        if (keycode == Input.Keys.F) {
+              handleTradeHistoryWindow();
+              return true;
+        }
 
         //gift Window
 //        if (keycode == Input.Keys.G) {
@@ -158,7 +141,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 //            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 //            Stage stage = gameController.getGameMenu().getStage();
 //
-//            GiftHistoryWindow giftHistoryWindow = new GiftHistoryWindow(game, skin);
+//           GiftHistoryWindow giftHistoryWindow = new GiftHistoryWindow(game, skin);
 //            stage.addActor(giftHistoryWindow);
 //
 //            return true;
@@ -649,7 +632,7 @@ public class GameMenuInputAdapter extends InputAdapter {
 //        gameController.useItem(item, tileX, tileY, game);
     }
 
-    public GameController getGameController() {
+    public static GameController getGameController() {
         return gameController;
     }
 
@@ -902,5 +885,35 @@ public class GameMenuInputAdapter extends InputAdapter {
 
 
     }
+
+
+    private void handleTradeWindow() {
+        ClientModel.setWindowOpen(true);
+        Game game = null;
+        Player currentPlayer = ClientModel.getPlayer();
+        Stage stage = gameController.getGameMenu().getStage();
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        ServerConnectionThread serverConnectionThread = ClientModel.getServerConnectionThread();
+
+        TradeWindow tradeWindow = new TradeWindow(skin, stage, currentPlayer, serverConnectionThread);
+        stage.addActor(tradeWindow);
+        Gdx.input.setInputProcessor(stage);
+
+    }
+
+    private void handleTradeHistoryWindow() {
+        ClientModel.setWindowOpen(true);
+
+        Stage stage = gameController.getGameMenu().getStage();
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        List<Map<String, Object>> tradeHistory = ServerModel.getTradeHistory();
+
+        TradeHistoryWindow tradeHistoryWindow = new TradeHistoryWindow(skin, stage, tradeHistory);
+        stage.addActor(tradeHistoryWindow);
+        Gdx.input.setInputProcessor(stage);
+    }
+
 
 }

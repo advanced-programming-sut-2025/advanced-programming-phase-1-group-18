@@ -16,7 +16,7 @@ import java.util.List;
 public class Game {
     public ArrayList<ArrayList<Kashi>> Map = new ArrayList<>();
     public final User Creator;
-    public ArrayList<Player> Players;
+    public static ArrayList<Player> Players;
     public Seasons CurrentSeason;
     public DateTime currentDateTime;
     public WeatherEnum currentWeather;
@@ -55,8 +55,8 @@ public class Game {
         }
     }
 
-    public Player getPlayerByUsername(String username) {
-        for (Player p : this.Players)
+    public static Player getPlayerByUsername(String username) {
+        for (Player p : Players)
             if (p.getOwner().getUsername().equals(username))
                 return p;
         return null;

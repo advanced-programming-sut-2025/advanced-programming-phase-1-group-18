@@ -106,7 +106,12 @@ public class Message {
         get_players_usernames,
         vote_user,
         vote_terminate_game,
-        remove_user_from_game
+        remove_user_from_game,
+        trade_request,
+        trade_response,
+        trade_offer_received,
+        trade_result,
+        trade_history_update
     }
 
     public enum Menu {
@@ -119,6 +124,7 @@ public class Message {
         CHANGE_MENU,
         game_menu,
         download_request,
-        game
+        game,
+        trade
     }
 }

@@ -7,6 +7,8 @@ import io.github.group18.Network.common.models.Message;
 import java.nio.channels.ClosedByInterruptException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ServerModel {
     public static final int TIMEOUT_MILLIS = 500;
@@ -22,6 +24,7 @@ public class ServerModel {
     private static ArrayList<Pair<String, String>> voteRemovePlayer = new ArrayList<>();
     private static ArrayList<ChatMessage> messages = new ArrayList<>();
 
+    private static final List<Map<String, Object>> tradeHistory = new ArrayList<>();
 
     public static ClientConnectionThread getConnectionByUser(User user) {
         for (ClientConnectionThread connection : connections) {
@@ -191,6 +194,17 @@ public class ServerModel {
             }
         }
         return count > App.getCurrentGame().getPlayers().size() / 2;
+    }
+
+    public static synchronized void addTradeHistory(Map<String, Object> tradeRecord) {
+        tradeHistory.add(tradeRecord);
+        if (tradeHistory.size() > 100) {
+            tradeHistory.remove(0);
+        }
+    }
+
+    public static synchronized List<Map<String, Object>> getTradeHistory() {
+        return new ArrayList<>(tradeHistory);
     }
 
 }
