@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.google.gson.Gson;
 import io.github.group18.Controller.GameController;
+import io.github.group18.Controller.RadioMenuController;
 import io.github.group18.Main;
 import io.github.group18.Model.App;
 import io.github.group18.Model.GameAssetManager;
@@ -56,7 +57,18 @@ public class ServerConnectionThread extends ConnectionThread {
         } else if (message.getMenu() == Message.Menu.CHANGE_MENU) {
             sendMessage(ChangeMenuController.handleMessage(message));
             return true;
-        } else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
+        }
+        else if (message.getType() == Message.Type.RadioUploadChunk) {
+
+            RadioMenuController.receiveAndStoreMusicChunk(message);
+            return true;
+        } else if (message.getType() == Message.Type.RadioBroadcast) {
+
+            RadioMenuController.receiveAndStoreMusicChunk(message);
+
+            return true;
+        }
+        else if (message.getMenu() == Message.Menu.game_menu && message.getType() == Message.Type.load_game_screen) {
 //            System.out.println("server is telling us to go to game screen " + message.getBody().toString());
             Gdx.app.postRunnable(new Runnable() {
                 @Override

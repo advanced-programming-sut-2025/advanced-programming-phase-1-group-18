@@ -111,7 +111,9 @@ public class Message {
         trade_response,
         trade_offer_received,
         trade_result,
-        trade_history_update
+        trade_history_update,
+        RadioBroadcast,
+        RadioUploadChunk
     }
 
     public enum Menu {
@@ -125,6 +127,7 @@ public class Message {
         game_menu,
         download_request,
         game,
-        trade
+        trade,
+        Radio
     }
 }

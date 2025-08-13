@@ -207,4 +207,11 @@ public class ServerModel {
         return new ArrayList<>(tradeHistory);
     }
 
+
+    public static void broadcast(Message msg) {
+        for (ClientConnectionThread connection : connections) {
+            connection.sendMessage(msg);
+        }
+    }
+
 }
