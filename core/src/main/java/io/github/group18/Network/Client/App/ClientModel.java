@@ -88,26 +88,6 @@ public class ClientModel {
     public static final int TheStardropSaloonEnterancex = 827;
     public static final int TheStardropSaloonEnterancey = 232;
 
-    // Sebastian
-    public static final int NPCSEBASTIANTopLeftX = 480;
-    public static final int NPCSEBASTIANTopLeftY = 100;
-
-    // Abigail
-    public static final int NPCABIGAILTopLeftX = 500;
-    public static final int NPCABIGAILTopLeftY = 100;
-
-    // Harvey
-    public static final int NPCHARVEYTopLeftX = 520;
-    public static final int NPCHARVEYTopLeftY = 100;
-
-    // Leah
-    public static final int NPCLEAHTopLeftX = 480;
-    public static final int NPCLEAHTopLeftY = 460;
-
-    // Robin
-    public static final int NPCROBINTopLeftX = 520;
-    public static final int NPCROBINTopLeftY = 460;
-
     public static final int NPCSEBASTIANx = 480;
     public static final int NPCSEBASTIANy = 100;
     public static final int NPCABIGAILx = 500;
@@ -118,6 +98,17 @@ public class ClientModel {
     public static final int NPCLEAHy = 460;
     public static final int NPCROBINx = 520;
     public static final int NPCROBINy = 460;
+
+    public static final int NPCSEBASTIANworkx = 96;
+    public static final int NPCSEBASTIANworky = 100;
+    public static final int NPCABIGAILworkx = 98;
+    public static final int NPCABIGAILworky = 100;
+    public static final int NPCHARVEYworkx = 100;
+    public static final int NPCHARVEYworky = 100;
+    public static final int NPCLEAHworkx = 102;
+    public static final int NPCLEAHworky = 100;
+    public static final int NPCROBINworkx = 104;
+    public static final int NPCROBINworky = 100;
 
     public static final int mapWidth = 1000;
     public static final int mapHeight = 560;
@@ -515,64 +506,6 @@ public class ClientModel {
         return TheStardropSaloonEnterancey;
     }
 
-
-
-    public static int getNPCSEBASTIANTopLeftX() {
-        return NPCSEBASTIANTopLeftX;
-    }
-
-
-
-    public static int getNPCSEBASTIANTopLeftY() {
-        return NPCSEBASTIANTopLeftY;
-    }
-
-
-
-    public static int getNPCABIGAILTopLeftX() {
-        return NPCABIGAILTopLeftX;
-    }
-
-
-
-    public static int getNPCABIGAILTopLeftY() {
-        return NPCABIGAILTopLeftY;
-    }
-
-
-
-    public static int getNPCHARVEYTopLeftX() {
-        return NPCHARVEYTopLeftX;
-    }
-
-
-
-    public static int getNPCHARVEYTopLeftY() {
-        return NPCHARVEYTopLeftY;
-    }
-
-
-
-    public static int getNPCLEAHTopLeftX() {
-        return NPCLEAHTopLeftX;
-    }
-
-
-
-    public static int getNPCLEAHTopLeftY() {
-        return NPCLEAHTopLeftY;
-    }
-
-
-    public static int getNPCROBINTopLeftX() {
-        return NPCROBINTopLeftX;
-    }
-
-    public static int getNPCROBINTopLeftY() {
-        return NPCROBINTopLeftY;
-    }
-
-
     public static int getNPCSEBASTIANx() {
         return NPCSEBASTIANx;
     }
@@ -640,4 +573,6 @@ public class ClientModel {
     public static void setWindowOpen(boolean windowOpen) {
         ClientModel.windowOpen = windowOpen;
     }
+
+
 }

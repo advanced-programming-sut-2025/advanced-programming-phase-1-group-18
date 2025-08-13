@@ -786,168 +786,213 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         return null;
     }
 
-    public static void startNewDay(GameMenu gameMenu, boolean transaction, GameView gameView, Player playerrr) {
+    public static void startNewDay(GameMenu gameMenu, boolean transaction, GameView gameView) {
         if (transaction) {
             gameMenu.startSleepTransition();
             return;
         }
 
         //filling markets
-        App.getCurrentGame().getBlackSmithMarket().fillStock();
-        App.getCurrentGame().getCarpentersShopMarket().fillStock();
-        App.getCurrentGame().getCarpentersShopMarket().fillStock();
-        App.getCurrentGame().getFishShopMarket().fillStock();
-        App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
-        App.getCurrentGame().getMarniesRanchMarket().fillStock();
-        App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
+        fillMarkets();
 
         //going back to cottage
         getBackHome();
 
         //handle energy after gash
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            if (player.getDaysAfterGash() >= 1) {
-                player.setMaxEnergy(200);
-                player.setDaysAfterGash(0);
-            }
-            if (player.getEnergy() != 200) {
-                player.setDaysAfterGash(player.getDaysAfterGash() + 1);
-            }
-            player.setEnergy(player.getMaxEnergy());
-        }
+        handleEnergyafterGash();
+
 
         // handle energy after marriage
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            if (player.getDaysAfterJavabeRad() >= 6) {
-                player.setMaxEnergy(200);
-                player.setDaysAfterJavabeRad(0);
-            }
-            if (player.getMaxEnergyforMarriage() != 200) {
-                player.setDaysAfterJavabeRad(player.getDaysAfterJavabeRad() + 1);
-            }
-            player.setEnergy(player.getMaxEnergyforMarriage());
-        }
+        handleEnergyafterMarriage();
+
 
         //NPC gift player
-        for (Friendshipali friendshipali : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
-                FoodCooking foodCooking = new FoodCooking();
-                foodCooking.setName(FoodCookingEnums.Pizza);
-                foodCooking.setSellPrice(300);
-                foodCooking.setEnergy(150);
-                Random random = new Random();
-                if (random.nextInt(0, 2) == 1) {
-                    friendshipali.getPlayer().getInventory().addItem(foodCooking, 1);
-                }
-            }
-        }
-        for (Friendshipali friendshipali : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
-                Mineral mineral = new Mineral();
-                mineral.setType(ForagingMineralsEnums.IronOre);
-                mineral.setPrice(10);
-                Random random = new Random();
-                if (random.nextInt(0, 2) == 1) {
-                    friendshipali.getPlayer().getInventory().addItem(mineral, 1);
-                }
-            }
-        }
-        for (Friendshipali friendshipali : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
-                Food food = new Food();
-                food.setName("coffee");
-                food.setPrice(200);
-                Random random = new Random();
-                if (random.nextInt(0, 2) == 1) {
-                    friendshipali.getPlayer().getInventory().addItem(food, 1);
-                }
-            }
-        }
-        for (Friendshipali friendshipali : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
-                FoodCooking foodCooking = new FoodCooking();
-                foodCooking.setName(FoodCookingEnums.Salad);
-                foodCooking.setEnergy(113);
-                foodCooking.setSellPrice(110);
-                Random random = new Random();
-                if (random.nextInt(0, 2) == 1) {
-                    friendshipali.getPlayer().getInventory().addItem(foodCooking, 1);
-                }
-            }
-        }
-        for (Friendshipali friendshipali : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
-                Mineral mineral = new Mineral();
-                mineral.setType(ForagingMineralsEnums.IronOre);
-                mineral.setPrice(10);
-                Random random = new Random();
-                if (random.nextInt(0, 2) == 1) {
-                    friendshipali.getPlayer().getInventory().addItem(mineral, 1);
-                }
-            }
-        }
+        npcGiftPlayer();
+
 
         // Sell Satl end of the day
-        for (Item item : playerrr.getMyFarm().getSatl().getItems().keySet()) {
-            //AllCrop+
-            //Fertilizer+
-            //Food+
-            //FoodCooking+
-            //Foraging Crop+
-            //Foraging Seed+
-            //Hay+
-            //Market Products+
-            //MilkPail+
-            //Mineral+
-            //Shear+
-            //TreeSeed+
-            //AllCrop+
-            //AllCrop+
-            if (item.getCorrectPrice() <= 0) {
-                playerrr.setGold(playerrr.getGold() + 100 * playerrr.getMyFarm().getSatl().getItems().get(item));
-            } else {
-                playerrr.setGold(playerrr.getGold() + item.getCorrectPrice() * playerrr.getMyFarm().getSatl().getItems().get(item));
-            }
-            playerrr.getMyFarm().getSatl().removeItem(item, playerrr.getMyFarm().getSatl().getItems().get(item));
+//        addSatlSellMoney();
 
-        }
 
         //grow plants
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            for (AllTree allTree : player.getMyFarm().getAllTrees()) {
-                if (allTree.isFedThisDay() || App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN) {
-                    allTree.setDaysGrowCounter(allTree.getDaysGrowCounter() + 1);
-                }
-            }
-            for (AllCrop allCrop : player.getMyFarm().getAllCrops()) {
-                if (allCrop.isFedThisDay() || App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN) {
-                    allCrop.setDaysGrowCounter(allCrop.getDaysGrowCounter() + 1);
-                }
-            }
-        }
+        growPlants();
+
 
         //set isfedtoday to false
+        hanldePlantFed();
+
+        Random rand = new Random();
+        //handle kalag attack
+        handleKalagAttack(gameView, rand);
+
+
+        //Foraging
+        generateForaging(rand);
+
+
+        //handling new day datetime
+        App.getCurrentGame().setCurrentDateTime(new DateTime(9, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
+
+        //update friendships
+        App.getCurrentGame().endOfDayUpdate();
+
+        //handle weather
+        handleWeather();
+
+
+        //Strike thor if needed
+        strikeThor();
+
+
+        //update animal navazesh
+        handleAnimalNavazesh();
+
+        //send npc back to home
+        sendNPCbackToHome();
+    }
+
+    private static void sendNPCbackToHome() {
+        App.getCurrentGame().getNPCSEBASTIAN().setX(ClientModel.getNPCSEBASTIANx());
+        App.getCurrentGame().getNPCSEBASTIAN().setY(ClientModel.getNPCSEBASTIANy());
+        App.getCurrentGame().getNPCABIGAIL().setX(ClientModel.getNPCABIGAILx());
+        App.getCurrentGame().getNPCABIGAIL().setY(ClientModel.getNPCABIGAILy());
+        App.getCurrentGame().getNPCHARVEY().setX(ClientModel.getNPCHARVEYx());
+        App.getCurrentGame().getNPCHARVEY().setY(ClientModel.getNPCHARVEYy());
+        App.getCurrentGame().getNPCROBIN().setX(ClientModel.getNPCROBINx());
+        App.getCurrentGame().getNPCROBIN().setY(ClientModel.getNPCROBINy());
+        App.getCurrentGame().getNPCLEAH().setX(ClientModel.getNPCLEAHx());
+        App.getCurrentGame().getNPCLEAH().setY(ClientModel.getNPCLEAHy());
+    }
+
+    private static void handleAnimalNavazesh() {
         for (Player player : App.getCurrentGame().getPlayers()) {
-            for (AllTree allTree : player.getMyFarm().getAllTrees()) {
-                allTree.setFedThisDay(false);
-            }
-            for (AllCrop allCrop : player.getMyFarm().getAllCrops()) {
-                allCrop.setFedThisDay(false);
+            ArrayList<Animal> animals = player.getMyBoughtAnimals();
+            for (Animal animal : animals) {
+                // Is Navazeshed or no
+                if (!animal.isTaghzieh()) {
+                    if (animal.getFriendship() - 20 < 0) {
+                        animal.setFriendship(0);
+                    } else {
+                        animal.setFriendship(animal.getFriendship() - 20);
+                    }
+                }
+                // Is Taghzied or no
+                if (!animal.isNavazesh()) {
+                    if ((animal.getFriendship() / 200) - 10 < 0) {
+                        animal.setFriendship(0);
+                    } else {
+                        animal.setFriendship((animal.getFriendship()) / 200 - 10);
+                    }
+                }
+                //
+                if (animal.isOutside()) {
+                    animal.setFriendship(animal.getFriendship() - 20);
+                }
+                animal.setTaghzieh(false);
+                animal.setNavazesh(false);
             }
         }
+    }
 
-        //fill the markets
-        App.getCurrentGame().getPierresGeneralStoreMarket().setLargePackBougth(false);
-        App.getCurrentGame().getPierresGeneralStoreMarket().setDeluxePackBought(false);
-        App.getCurrentGame().getCarpentersShopMarket().setBarn(false);
-        App.getCurrentGame().getCarpentersShopMarket().setBigbarn(false);
-        App.getCurrentGame().getCarpentersShopMarket().setBigcoop(false);
-        App.getCurrentGame().getCarpentersShopMarket().setCoop(false);
-        App.getCurrentGame().getCarpentersShopMarket().setDeluxebarn(false);
-        App.getCurrentGame().getCarpentersShopMarket().setDeluxecoop(false);
+    private static void strikeThor() {
+        if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
+            //Thor thor = new Thor();
+            int farmWide = 50;
+            int farmHeight = 50;
+            int[][] strikePosition = new int[3][2];
+            strikePosition = getRandomPlaces(3, farmWide, farmHeight);
+            //ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
+            Kashi[] kashis = new Kashi[3];
+            for (int i = 0; i < 3; i++) {
+                kashis[i] = new Kashi();
 
-        //handle kalag attack
-        Random rand = new Random();
+                if (App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof AllTree ||
+                    App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof ForagingTree) {
+
+                    Mineral coal = new Mineral();
+                    coal.setType(ForagingMineralsEnums.Coal);
+                    App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
+                }
+            }
+            //Server-TODO
+//            App.getGameController().getGameMenu().getLightningEffect().start();
+////                    thor.setKhordeh(kashiList);
+        }
+    }
+
+    private static void handleWeather() {
+        App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
+        Deque<WeatherEnum> weather = new ArrayDeque<>();
+        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
+            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
+            switch (season2) {
+                case "Spring":
+                    weather.addLast(getRandomWeather(Seasons.Summer));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Summer":
+                    weather.addLast(getRandomWeather(Seasons.Fall));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Fall":
+                    weather.addLast(getRandomWeather(Seasons.Winter));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                case "Winter":
+                    weather.addLast(getRandomWeather(Seasons.Spring));
+                    App.getCurrentGame().setWeather(weather);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+
+            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
+            App.getCurrentGame().setWeather(weather);
+        }
+    }
+
+    private static void generateForaging(Random rand) {
+        for (int j = 0; j < 560; j++) {
+            for (int i = 0; i < 1000; i++) {
+                if ((i >= 0 && i <= 450 && j >= 0 && j <= 200) ||
+                    (i >= 550 && i <= 1000 && j >= 0 && j <= 200) ||
+                    (i >= 0 && i <= 450 && j >= 360 && j <= 560) ||
+                    (i >= 550 && i <= 1000 && j >= 360 && j <= 560)) {
+                    if (App.getCurrentGame().getMap().get(i).get(j).getInside() == null) {
+                        boolean foragingChance = rand.nextInt(100) == 86;
+
+                        //foraging crop
+                        //foraging tree
+                        //foraging mineral
+                        int whichForaging = rand.nextInt(0, 4);
+                        if (foragingChance && whichForaging == 0) {
+                            ForagingCropsEnums[] foragingCropsTypes = ForagingCropsEnums.values();
+                            ForagingCrop foragingCrop = new ForagingCrop();
+                            foragingCrop.setType(foragingCropsTypes[random.nextInt(foragingCropsTypes.length)]);
+                            App.getCurrentGame().getMap().get(i).get(j).setInside(foragingCrop);
+                        } else {
+                            if (foragingChance && whichForaging == 1) {
+                                ForagingTreesEnums[] foragingTreesTypes = ForagingTreesEnums.values();
+                                ForagingTree foragingTree = new ForagingTree();
+                                foragingTree.setType(foragingTreesTypes[random.nextInt(foragingTreesTypes.length)]);
+                                App.getCurrentGame().getMap().get(i).get(j).setInside(foragingTree);
+                            } else {
+                                if (foragingChance && whichForaging == 2) {
+                                    ForagingMineralsEnums[] foragingMineralsTypes = ForagingMineralsEnums.values();
+                                    Mineral mineral = new Mineral();
+                                    mineral.setType(foragingMineralsTypes[random.nextInt(foragingMineralsTypes.length)]);
+                                    App.getCurrentGame().getMap().get(i).get(j).setInside(mineral);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void handleKalagAttack(GameView gameView, Random rand) {
         for (Player player : App.getCurrentGame().getPlayers()) {
             int chanceOfKalag = player.getMyFarm().getAllTrees().size() + player.getMyFarm().getAllCrops().size();
             int threshold = (chanceOfKalag / 16) + 1;
@@ -1019,136 +1064,162 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
                 }
             }
         }
+    }
 
-        //Foraging
-        for (int j = 0; j < 560; j++) {
-            for (int i = 0; i < 1000; i++) {
-                if ((i >= 0 && i <= 450 && j >= 0 && j <= 200) ||
-                    (i >= 550 && i <= 1000 && j >= 0 && j <= 200) ||
-                    (i >= 0 && i <= 450 && j >= 360 && j <= 560) ||
-                    (i >= 550 && i <= 1000 && j >= 360 && j <= 560)) {
-                    if (App.getCurrentGame().getMap().get(i).get(j).getInside() == null) {
-                        boolean foragingChance = rand.nextInt(100) == 86;
-
-                        //foraging crop
-                        //foraging tree
-                        //foraging mineral
-                        int whichForaging = rand.nextInt(0, 4);
-                        if (foragingChance && whichForaging == 0) {
-                            ForagingCropsEnums[] foragingCropsTypes = ForagingCropsEnums.values();
-                            ForagingCrop foragingCrop = new ForagingCrop();
-                            foragingCrop.setType(foragingCropsTypes[random.nextInt(foragingCropsTypes.length)]);
-                            App.getCurrentGame().getMap().get(i).get(j).setInside(foragingCrop);
-                        } else {
-                            if (foragingChance && whichForaging == 1) {
-                                ForagingTreesEnums[] foragingTreesTypes = ForagingTreesEnums.values();
-                                ForagingTree foragingTree = new ForagingTree();
-                                foragingTree.setType(foragingTreesTypes[random.nextInt(foragingTreesTypes.length)]);
-                                App.getCurrentGame().getMap().get(i).get(j).setInside(foragingTree);
-                            } else {
-                                if (foragingChance && whichForaging == 2) {
-                                    ForagingMineralsEnums[] foragingMineralsTypes = ForagingMineralsEnums.values();
-                                    Mineral mineral = new Mineral();
-                                    mineral.setType(foragingMineralsTypes[random.nextInt(foragingMineralsTypes.length)]);
-                                    App.getCurrentGame().getMap().get(i).get(j).setInside(mineral);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //handling new day datetime
-        App.getCurrentGame().setCurrentDateTime(new DateTime(9, App.getCurrentGame().getCurrentDateTime().getDay() + 1));
-
-        //update friendships
-        App.getCurrentGame().endOfDayUpdate();
-
-        //handle weather
-        App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getWeather().pollFirst());
-        Deque<WeatherEnum> weather = new ArrayDeque<>();
-        if (App.getCurrentGame().getCurrentDateTime().getDay() % 28 == 0) {
-            String season2 = App.getCurrentGame().getCurrentDateTime().getSeason();
-            switch (season2) {
-                case "Spring":
-                    weather.addLast(getRandomWeather(Seasons.Summer));
-                    App.getCurrentGame().setWeather(weather);
-                    break;
-                case "Summer":
-                    weather.addLast(getRandomWeather(Seasons.Fall));
-                    App.getCurrentGame().setWeather(weather);
-                    break;
-                case "Fall":
-                    weather.addLast(getRandomWeather(Seasons.Winter));
-                    App.getCurrentGame().setWeather(weather);
-                    break;
-                case "Winter":
-                    weather.addLast(getRandomWeather(Seasons.Spring));
-                    App.getCurrentGame().setWeather(weather);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-
-            weather.addLast(getRandomWeather(App.getCurrentGame().getCurrentSeason()));
-            App.getCurrentGame().setWeather(weather);
-        }
-
-        //Strike thor if needed
-        if (App.getCurrentGame().getCurrentWeather() == WeatherEnum.STORM) {
-            //Thor thor = new Thor();
-            int farmWide = 50;
-            int farmHeight = 50;
-            int[][] strikePosition = new int[3][2];
-            strikePosition = getRandomPlaces(3, farmWide, farmHeight);
-            //ArrayList<ArrayList<Kashi>> map = App.getCurrentGame().getMap();
-            Kashi[] kashis = new Kashi[3];
-            for (int i = 0; i < 3; i++) {
-                kashis[i] = new Kashi();
-
-                if (App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof AllTree ||
-                    App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).getInside() instanceof ForagingTree) {
-
-                    Mineral coal = new Mineral();
-                    coal.setType(ForagingMineralsEnums.Coal);
-                    App.getCurrentGame().getMap().get(strikePosition[i][0]).get(strikePosition[i][1]).setInside(coal);
-                }
-            }
-            //Server-TODO
-//            App.getGameController().getGameMenu().getLightningEffect().start();
-////                    thor.setKhordeh(kashiList);
-        }
-
-        //update animal navazesh
+    private static void hanldePlantFed() {
         for (Player player : App.getCurrentGame().getPlayers()) {
-            ArrayList<Animal> animals = player.getMyBoughtAnimals();
-            for (Animal animal : animals) {
-                // Is Navazeshed or no
-                if (!animal.isTaghzieh()) {
-                    if (animal.getFriendship() - 20 < 0) {
-                        animal.setFriendship(0);
-                    } else {
-                        animal.setFriendship(animal.getFriendship() - 20);
-                    }
-                }
-                // Is Taghzied or no
-                if (!animal.isNavazesh()) {
-                    if ((animal.getFriendship() / 200) - 10 < 0) {
-                        animal.setFriendship(0);
-                    } else {
-                        animal.setFriendship((animal.getFriendship()) / 200 - 10);
-                    }
-                }
-                //
-                if (animal.isOutside()) {
-                    animal.setFriendship(animal.getFriendship() - 20);
-                }
-                animal.setTaghzieh(false);
-                animal.setNavazesh(false);
+            for (AllTree allTree : player.getMyFarm().getAllTrees()) {
+                allTree.setFedThisDay(false);
+            }
+            for (AllCrop allCrop : player.getMyFarm().getAllCrops()) {
+                allCrop.setFedThisDay(false);
             }
         }
+    }
+
+    private static void growPlants() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            for (AllTree allTree : player.getMyFarm().getAllTrees()) {
+                if (allTree.isFedThisDay() || App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN) {
+                    allTree.setDaysGrowCounter(allTree.getDaysGrowCounter() + 1);
+                }
+            }
+            for (AllCrop allCrop : player.getMyFarm().getAllCrops()) {
+                if (allCrop.isFedThisDay() || App.getCurrentGame().getCurrentWeather() == WeatherEnum.RAIN) {
+                    allCrop.setDaysGrowCounter(allCrop.getDaysGrowCounter() + 1);
+                }
+            }
+        }
+    }
+
+    private static void addSatlSellMoney() {
+//        for (Item item : playerrr.getMyFarm().getSatl().getItems().keySet()) {
+//            //AllCrop+
+//            //Fertilizer+
+//            //Food+
+//            //FoodCooking+
+//            //Foraging Crop+
+//            //Foraging Seed+
+//            //Hay+
+//            //Market Products+
+//            //MilkPail+
+//            //Mineral+
+//            //Shear+
+//            //TreeSeed+
+//            //AllCrop+
+//            //AllCrop+
+//            if (item.getCorrectPrice() <= 0) {
+//                playerrr.setGold(playerrr.getGold() + 100 * playerrr.getMyFarm().getSatl().getItems().get(item));
+//            } else {
+//                playerrr.setGold(playerrr.getGold() + item.getCorrectPrice() * playerrr.getMyFarm().getSatl().getItems().get(item));
+//            }
+//            playerrr.getMyFarm().getSatl().removeItem(item, playerrr.getMyFarm().getSatl().getItems().get(item));
+//
+//        }
+    }
+
+    private static void npcGiftPlayer() {
+        for (Friendshipali friendshipali : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
+            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
+                FoodCooking foodCooking = new FoodCooking();
+                foodCooking.setName(FoodCookingEnums.Pizza);
+                foodCooking.setSellPrice(300);
+                foodCooking.setEnergy(150);
+                Random random = new Random();
+                if (random.nextInt(0, 2) == 1) {
+                    friendshipali.getPlayer().getInventory().addItem(foodCooking, 1);
+                }
+            }
+        }
+        for (Friendshipali friendshipali : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
+            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
+                Mineral mineral = new Mineral();
+                mineral.setType(ForagingMineralsEnums.IronOre);
+                mineral.setPrice(10);
+                Random random = new Random();
+                if (random.nextInt(0, 2) == 1) {
+                    friendshipali.getPlayer().getInventory().addItem(mineral, 1);
+                }
+            }
+        }
+        for (Friendshipali friendshipali : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
+            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
+                Food food = new Food();
+                food.setName("coffee");
+                food.setPrice(200);
+                Random random = new Random();
+                if (random.nextInt(0, 2) == 1) {
+                    friendshipali.getPlayer().getInventory().addItem(food, 1);
+                }
+            }
+        }
+        for (Friendshipali friendshipali : App.getCurrentGame().getNPCLEAH().getFriendships()) {
+            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
+                FoodCooking foodCooking = new FoodCooking();
+                foodCooking.setName(FoodCookingEnums.Salad);
+                foodCooking.setEnergy(113);
+                foodCooking.setSellPrice(110);
+                Random random = new Random();
+                if (random.nextInt(0, 2) == 1) {
+                    friendshipali.getPlayer().getInventory().addItem(foodCooking, 1);
+                }
+            }
+        }
+        for (Friendshipali friendshipali : App.getCurrentGame().getNPCROBIN().getFriendships()) {
+            if (friendshipali.getFriendshipLevel() / 200 >= 3) {
+                Mineral mineral = new Mineral();
+                mineral.setType(ForagingMineralsEnums.IronOre);
+                mineral.setPrice(10);
+                Random random = new Random();
+                if (random.nextInt(0, 2) == 1) {
+                    friendshipali.getPlayer().getInventory().addItem(mineral, 1);
+                }
+            }
+        }
+    }
+
+    private static void handleEnergyafterMarriage() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getDaysAfterJavabeRad() >= 6) {
+                player.setMaxEnergy(200);
+                player.setDaysAfterJavabeRad(0);
+            }
+            if (player.getMaxEnergyforMarriage() != 200) {
+                player.setDaysAfterJavabeRad(player.getDaysAfterJavabeRad() + 1);
+            }
+            player.setEnergy(player.getMaxEnergyforMarriage());
+        }
+    }
+
+    private static void handleEnergyafterGash() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getDaysAfterGash() >= 1) {
+                player.setMaxEnergy(200);
+                player.setDaysAfterGash(0);
+            }
+            if (player.getEnergy() != 200) {
+                player.setDaysAfterGash(player.getDaysAfterGash() + 1);
+            }
+            player.setEnergy(player.getMaxEnergy());
+        }
+    }
+
+    private static void fillMarkets() {
+        App.getCurrentGame().getBlackSmithMarket().fillStock();
+        App.getCurrentGame().getCarpentersShopMarket().fillStock();
+        App.getCurrentGame().getCarpentersShopMarket().fillStock();
+        App.getCurrentGame().getFishShopMarket().fillStock();
+        App.getCurrentGame().getJojoMartMarket().fillStock(App.getCurrentGame().getCurrentDateTime().getSeason());
+        App.getCurrentGame().getMarniesRanchMarket().fillStock();
+        App.getCurrentGame().getPierresGeneralStoreMarket().fillStock(App.getCurrentGame().getCurrentSeason());
+        App.getCurrentGame().getPierresGeneralStoreMarket().setLargePackBougth(false);
+        App.getCurrentGame().getPierresGeneralStoreMarket().setDeluxePackBought(false);
+        App.getCurrentGame().getCarpentersShopMarket().setBarn(false);
+        App.getCurrentGame().getCarpentersShopMarket().setBigbarn(false);
+        App.getCurrentGame().getCarpentersShopMarket().setBigcoop(false);
+        App.getCurrentGame().getCarpentersShopMarket().setCoop(false);
+        App.getCurrentGame().getCarpentersShopMarket().setDeluxebarn(false);
+        App.getCurrentGame().getCarpentersShopMarket().setDeluxecoop(false);
     }
 
     public Result time(Player playerrr) {
@@ -1237,7 +1308,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 //            App.getCurrentGame().setWeather(weather);
 //        }
         for (int i = 0; i < hour / 24; i++) {
-            startNewDay(gameMenu, true, gameView, playerrr);
+            startNewDay(gameMenu, true, gameView);
         }
 //        if (hour / 24 >= 1) {
 //            App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
@@ -1282,7 +1353,7 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             App.getCurrentGame().setWeather(weather);
         }
         for (int i = 0; i < day; i++) {
-            startNewDay(gameMenu, true, gameView, playerrr);
+            startNewDay(gameMenu, true, gameView);
         }
         //App.getCurrentGame().getCurrentDateTime().setDay(App.getCurrentGame().getCurrentDateTime().getDay() - 1);
         return new Result(true, "cheatCode: Day changed! New Day: " + newDay);
@@ -3734,151 +3805,77 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
         int friendshipLevel = Integer.parseInt(response.getFromBody("friendshipLevel"));
         Boolean talkedWithToday = response.getFromBody("talkedwithtoday");
         System.out.println("we got the response from server: " + friendshipLevel + " " + talkedWithToday);
+
+        Message send1 = new Message(new HashMap<>(), Message.Type.get_dateTime1, Message.Menu.game);
+        Message response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+        while (response1.getType() != Message.Type.get_dateTime1) {
+            response1 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send1, ClientModel.TIMEOUT_MILLIS);
+        }
+//        System.out.println("server response for datetime(render brightness) " + response.getBody().toString());
+        Gson gson = new Gson();
+        Object dateTimeObj = response1.getFromBody("dateTime");
+        String dateTimeStr = gson.toJson(dateTimeObj);
+        DateTime time = gson.fromJson(dateTimeStr, DateTime.class);
+
+        Message send2 = new Message(new HashMap<>(), Message.Type.get_weather1, Message.Menu.game);
+        Message response2 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send2, ClientModel.TIMEOUT_MILLIS);
+        while (response2.getType() != Message.Type.get_weather1) {
+            response2 = ClientModel.getServerConnectionThread().sendAndWaitForResponse(send2, ClientModel.TIMEOUT_MILLIS);
+        }
+
+        WeatherEnum currentWeather = WeatherEnum.valueOf(response2.getFromBody("weather"));
+        Seasons currentSeason = Seasons.valueOf(time.getSeason());
+        int currentDay = time.getDay();
+        int currentHour = time.getHour();
         switch (npc.toUpperCase()) {
             case "SEBASTIAN":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "Oh, hey. I don’t think we’ve met. I’m Sebastian. The weather today is "
-                            + App.getCurrentGame().getCurrentWeather() + " in " + App.getCurrentGame().getCurrentSeason() + ". What brings you here?");
+                            + currentWeather + " in " + currentSeason + ". What brings you here?");
                     case 1:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Hi, I'm Sebastian. Ugh, another " + App.getCurrentGame().getCurrentWeather() + " day... Season: "
-                            + App.getCurrentGame().getCurrentSeason() + " Day: " + App.getCurrentGame().getCurrentDateTime().getDay() + " Hour: "
-                            + App.getCurrentGame().getCurrentDateTime().getHour());
+                        return new Result(true, "Hi, I'm Sebastian. Ugh, another " + currentWeather + " day... Season: "
+                            + currentSeason + " Day: " + currentDay + " Hour: "
+                            + currentHour);
                     case 2:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Hey " + currentPlayer.getOwner().getUsername() + ". It's " + App.getCurrentGame().getCurrentSeason()
-                            + ", so of course the weather's " + App.getCurrentGame().getCurrentWeather() + ". Whatever.");
+                        return new Result(true, "Hey " + currentPlayer.getOwner().getUsername() + ". It's " + currentSeason
+                            + ", so of course the weather's " + currentWeather + ". Whatever.");
                     case 3:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCSEBASTIAN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "Oh, hey " + currentPlayer.getOwner().getUsername() + ". Honestly? I don’t even mind this "
-                            + App.getCurrentGame().getCurrentWeather() + " weather when you're around.");
+                            + currentWeather + " weather when you're around.");
                 }
                 break;
 
             case "ABIGAIL":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Whoa, a stranger! I'm Abigail. It's " + App.getCurrentGame().getCurrentSeason()
-                            + ", and the weather's " + App.getCurrentGame().getCurrentWeather() + ". Wanna explore the mines later?");
+                        return new Result(true, "Whoa, a stranger! I'm Abigail. It's " + currentSeason
+                            + ", and the weather's " + currentWeather + ". Wanna explore the mines later?");
                     case 1:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Hi " + currentPlayer.getOwner().getUsername() + "! A " + App.getCurrentGame().getCurrentWeather()
-                            + " day in " + App.getCurrentGame().getCurrentSeason() + "? Perfect for an adventure!");
+                        return new Result(true, "Hi " + currentPlayer.getOwner().getUsername() + "! A " + currentWeather
+                            + " day in " + currentSeason + "? Perfect for an adventure!");
                     case 2:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, currentPlayer.getOwner().getUsername() + "!! Let’s do something crazy today! The "
-                            + App.getCurrentGame().getCurrentWeather() + " weather won’t stop us!");
+                            + currentWeather + " weather won’t stop us!");
                     case 3:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCABIGAIL().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "You know, " + currentPlayer.getOwner().getUsername() + ", you're one of my favorite people. "
-                            + App.getCurrentGame().getCurrentWeather() + " days feel way better when you're around.");
+                            + currentWeather + " days feel way better when you're around.");
                 }
                 break;
 
             case "HARVEY":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Ahem, hello. I'm Dr. Harvey. It's " + App.getCurrentGame().getCurrentSeason()
-                            + ", and the weather is " + App.getCurrentGame().getCurrentWeather() + ". Please take care of yourself.");
+                        return new Result(true, "Ahem, hello. I'm Dr. Harvey. It's " + currentSeason
+                            + ", and the weather is " + currentWeather + ". Please take care of yourself.");
                     case 1:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Oh, " + currentPlayer.getOwner().getUsername() + "! The " + App.getCurrentGame().getCurrentWeather()
+                        return new Result(true, "Oh, " + currentPlayer.getOwner().getUsername() + "! The " + currentWeather
                             + " weather might affect your health. Be careful!");
                     case 2:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", I always feel better seeing you, even on this "
-                            + App.getCurrentGame().getCurrentWeather() + " day.");
+                            + currentWeather + " day.");
                     case 3:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCHARVEY().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Ah, " + currentPlayer.getOwner().getUsername() + ". Even the worst " + App.getCurrentGame().getCurrentWeather()
+                        return new Result(true, "Ah, " + currentPlayer.getOwner().getUsername() + ". Even the worst " + currentWeather
                             + " can't ruin my day when I see you.");
                 }
                 break;
@@ -3886,99 +3883,35 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
             case "LEAH":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Hi there. I’m Leah. The " + App.getCurrentGame().getCurrentSeason()
-                            + " air is so inspiring today. The " + App.getCurrentGame().getCurrentWeather() + " just adds to the mood.");
+                        return new Result(true, "Hi there. I’m Leah. The " + currentSeason
+                            + " air is so inspiring today. The " + currentWeather + " just adds to the mood.");
                     case 1:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "Oh, " + currentPlayer.getOwner().getUsername() + "! The way the "
-                            + App.getCurrentGame().getCurrentWeather() + " looks in " + App.getCurrentGame().getCurrentSeason()
+                            + currentWeather + " looks in " + currentSeason
                             + " is beautiful, don’t you think?");
                     case 2:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", you’re like sunshine even on this "
-                            + App.getCurrentGame().getCurrentWeather() + " day.");
+                            + currentWeather + " day.");
                     case 3:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCLEAH().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "You always inspire me, " + currentPlayer.getOwner().getUsername() + ". Even when the weather is "
-                            + App.getCurrentGame().getCurrentWeather() + ", I feel like creating something new.");
+                            + currentWeather + ", I feel like creating something new.");
                 }
                 break;
 
             case "ROBIN":
                 switch (Math.min(friendshipLevel, 799) / 200) {
                     case 0:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
-                        return new Result(true, "Hi, dear! I'm Robin. It's " + App.getCurrentGame().getCurrentSeason()
-                            + ", and the weather's " + App.getCurrentGame().getCurrentWeather() + "—great day for carpentry!");
+                        return new Result(true, "Hi, dear! I'm Robin. It's " + currentSeason
+                            + ", and the weather's " + currentWeather + "—great day for carpentry!");
                     case 1:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "Hey, " + currentPlayer.getOwner().getUsername() + "! How’s the "
-                            + App.getCurrentGame().getCurrentWeather() + " treating you this " + App.getCurrentGame().getCurrentSeason() + "?");
+                            + currentWeather + " treating you this " + currentSeason + "?");
                     case 2:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, currentPlayer.getOwner().getUsername() + ", sweetie! Even with this "
-                            + App.getCurrentGame().getCurrentWeather() + ", you always brighten my day!");
+                            + currentWeather + ", you always brighten my day!");
                     case 3:
-                        if (!talkedWithToday) {
-                            for (Friendshipali friendship : App.getCurrentGame().getNPCROBIN().getFriendships()) {
-                                if (friendship.getPlayer().getUsername().equals(currentPlayer.getUsername())) {
-                                    setFriendshipandTalk(friendship.getFriendshipLevel() + 20, npc);
-                                    break;
-                                }
-                            }
-                        }
                         return new Result(true, "You make everything better, " + currentPlayer.getOwner().getUsername() + ", even a "
-                            + App.getCurrentGame().getCurrentWeather() + " day like this.");
+                            + currentWeather + " day like this.");
 
                 }
         }
@@ -4643,9 +4576,9 @@ public class GameMenuController implements ShowCurrentMenu, MenuEnter {
 
 
     public void cheatAdd(int count, Player playerrr) {
-        HashMap<String,Object> body = new HashMap<>();
-        body.put("username",playerrr.getOwner().getUsername());
-        body.put("gold",String.valueOf(count));
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("username", playerrr.getOwner().getUsername());
+        body.put("gold", String.valueOf(count));
         Message send = new Message(body, Message.Type.set_gold, Message.Menu.game);
         ClientModel.getServerConnectionThread().sendMessage(send);
 //        playerrr.setGold(playerrr.getGold() + count);

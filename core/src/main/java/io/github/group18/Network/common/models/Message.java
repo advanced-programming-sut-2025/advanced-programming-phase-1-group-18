@@ -113,7 +113,9 @@ public class Message {
         trade_result,
         trade_history_update,
         RadioBroadcast,
-        RadioUploadChunk
+        RadioUploadChunk,
+        get_dateTime1,
+        get_weather1
     }
 
     public enum Menu {

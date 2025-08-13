@@ -35,6 +35,45 @@
     "timesPlayed": 0,
     "highestGold": 0,
     "avatar": "avatar.png",
+    "ID": 3,
+    "isChangedScreen": false
+  },
+  {
+    "Username": "register",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "reg@gmail.com",
+    "Gender": "male",
+    "NickName": "reg",
+    "stayLoggedIn": false,
+    "timesPlayed": 0,
+    "highestGold": 0,
+    "avatar": "avatar.png",
+    "ID": 4,
+    "isChangedScreen": false
+  },
+  {
+    "Username": "example",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "ex@gmail.com",
+    "Gender": "male",
+    "NickName": "ex",
+    "stayLoggedIn": false,
+    "timesPlayed": 0,
+    "highestGold": 0,
+    "avatar": "avatar.png",
+    "ID": 0,
+    "isChangedScreen": false
+  },
+  {
+    "Username": "samsam",
+    "Password": "aed6632bb6ce2ae5b76b5a1b64fbf505dc02e4c13e8ae21cf7d300819c49a64a",
+    "Email": "sam@gmail.com",
+    "Gender": "male",
+    "NickName": "sam",
+    "stayLoggedIn": false,
+    "timesPlayed": 0,
+    "highestGold": 0,
+    "avatar": "avatar.png",
     "ID": 0,
     "isChangedScreen": false
   }

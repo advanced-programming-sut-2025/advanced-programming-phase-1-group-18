@@ -140,7 +140,7 @@ public class GameMenu implements Screen {
         if (!advancingDay && sleepAlpha < 1f) {
             sleepAlpha = Math.min(1f, sleepAlpha + delta * FADE_SPEED);
             if (sleepAlpha >= 1f) {
-                GameMenuController.startNewDay(gameController.getGameMenu(), false, gameView, ClientModel.getPlayer());
+                GameMenuController.startNewDay(gameController.getGameMenu(), false, gameView);
                 advancingDay = true;
             }
         } else if (advancingDay && sleepAlpha > 0f) {

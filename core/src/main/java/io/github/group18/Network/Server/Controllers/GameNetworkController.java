@@ -7,6 +7,7 @@ import io.github.group18.Model.*;
 import io.github.group18.Model.Items.FishingPole;
 import io.github.group18.Network.Client.App.ClientModel;
 import io.github.group18.Network.Server.App.ClientConnectionThread;
+import io.github.group18.Network.Server.App.GameThread;
 import io.github.group18.Network.Server.App.ServerModel;
 import io.github.group18.Network.common.models.Message;
 import io.github.group18.enums.ActionEnum;
@@ -85,6 +86,12 @@ public class GameNetworkController {
                 Message send2 = new Message(map2, Message.Type.get_dateTime, Message.Menu.game);
                 clientConnectionThread.sendMessage(send2);
                 break;
+            case get_dateTime1:
+                HashMap<String, Object> map29 = new HashMap<>();
+                map29.put("dateTime", App.getCurrentGame().getCurrentDateTime());
+                Message send29 = new Message(map29, Message.Type.get_dateTime1, Message.Menu.game);
+                clientConnectionThread.sendMessage(send29);
+                break;
             case get_npc_position:
                 HashMap<String, Object> map3 = new HashMap<>();
                 map3.put("sebastianx", String.valueOf(App.getCurrentGame().getNPCSEBASTIAN().getX()));
@@ -140,6 +147,11 @@ public class GameNetworkController {
                 HashMap<String, Object> map6 = new HashMap<>();
                 map6.put("weather", App.getCurrentGame().getCurrentWeather());
                 clientConnectionThread.sendMessage(new Message(map6, Message.Type.get_weather, Message.Menu.game));
+                break;
+            case get_weather1:
+                HashMap<String, Object> map69 = new HashMap<>();
+                map69.put("weather", App.getCurrentGame().getCurrentWeather());
+                clientConnectionThread.sendMessage(new Message(map69, Message.Type.get_weather1, Message.Menu.game));
                 break;
             case player_pos_update:
                 String username = message.getFromBody("username");
@@ -466,6 +478,10 @@ public class GameNetworkController {
                         Message msg = new Message(new HashMap<>(), Message.Type.load_game_screen, Message.Menu.game_menu);
                         connection.sendMessage(msg);
                     }
+                }
+                if (ServerModel.getGameThread() == null) {
+                    ServerModel.setGameThread(new GameThread());
+                    ServerModel.getGameThread().start();
                 }
             } else {
                 System.out.println("game be raft");
